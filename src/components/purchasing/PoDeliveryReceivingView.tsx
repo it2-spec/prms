@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import { Badge, statusColor } from "@/components/ui";
+import { calculateProgressPercent } from "@/lib/progress";
 import {
   Truck,
   PackageCheck,
@@ -629,7 +630,7 @@ export default function PoDeliveryReceivingView({
               (s) => s.item.id === poItem.itemId
             );
             const totalRecv = itemShipments.reduce((acc, s) => acc + s.qtyReceived, 0);
-            const percent = Math.min(100, Math.round((totalRecv / poItem.qty) * 100));
+            const percent = calculateProgressPercent(totalRecv, poItem.qty);
 
             return (
               <div

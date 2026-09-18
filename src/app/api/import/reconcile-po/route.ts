@@ -267,7 +267,9 @@ export async function POST(req: NextRequest) {
           ? Math.round((receivedQty / masterPkgSize) * 100) / 100
           : null;
 
-        const completionPct = orderedQty > 0 ? Math.min(100, Math.round((receivedQty / orderedQty) * 100)) : 0;
+        const completionPct = orderedQty > 0
+          ? (receivedQty >= orderedQty ? 100 : Math.min(99, Math.floor((receivedQty / orderedQty) * 100)))
+          : 0;
         const status = completionPct >= 100 ? ("COMPLETE" as const)
           : completionPct > 0 ? ("PARTIAL" as const)
           : ("PENDING" as const);

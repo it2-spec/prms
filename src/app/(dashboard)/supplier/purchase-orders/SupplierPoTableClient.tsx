@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Card, Badge, statusColor, EmptyState } from "@/components/ui";
+import { calculateProgressPercent } from "@/lib/progress";
 import { Search, Eye, Truck, CheckCircle2, Clock, AlertCircle } from "lucide-react";
 
 const PO_STATUS_LABEL: Record<string, string> = {
@@ -119,11 +120,11 @@ export default function SupplierPoTableClient({
               {filteredPOs.map((po) => {
                 const percentReceived =
                   po.totalOrderedQty > 0
-                    ? Math.min(100, Math.round((po.totalReceivedQty / po.totalOrderedQty) * 100))
+                    ? calculateProgressPercent(po.totalReceivedQty, po.totalOrderedQty)
                     : 0;
                 const percentDelivered =
                   po.totalOrderedQty > 0
-                    ? Math.min(100, Math.round((po.totalDeliveredQty / po.totalOrderedQty) * 100))
+                    ? calculateProgressPercent(po.totalDeliveredQty, po.totalOrderedQty)
                     : 0;
 
                 const isClosed = po.status === "CLOSED";

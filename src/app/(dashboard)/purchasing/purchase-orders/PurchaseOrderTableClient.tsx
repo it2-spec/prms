@@ -53,6 +53,12 @@ function formatDateOnly(d: Date | string | null | undefined): string {
   return new Intl.DateTimeFormat("id-ID", { dateStyle: "medium" }).format(new Date(d));
 }
 
+function calculateProgressPercent(received: number, total: number): number {
+  if (total <= 0) return 0;
+  if (received >= total) return 100;
+  return Math.min(99, Math.floor((received / total) * 100));
+}
+
 function formatMoney(n: number | null | undefined): string {
   if (n == null || isNaN(n)) return "-";
   return new Intl.NumberFormat("id-ID", {
@@ -494,7 +500,7 @@ export default function PurchaseOrderTableClient({
 
     const totalOutstandingAll = Math.max(0, totalQtyAll - totalReceivedAll);
     const overallPercentage =
-      totalQtyAll > 0 ? Math.min(100, Math.round((totalReceivedAll / totalQtyAll) * 100)) : 0;
+      totalQtyAll > 0 ? calculateProgressPercent(totalReceivedAll, totalQtyAll) : 0;
 
     return {
       totalItemsCount,
@@ -536,7 +542,7 @@ export default function PurchaseOrderTableClient({
       for (const d of po.details) {
         if (!d.item) continue;
         const sisa = Math.max(0, d.qty - d.receivedQty);
-        const pct = d.qty > 0 ? Math.min(100, Math.round((d.receivedQty / d.qty) * 100)) : 0;
+        const pct = d.qty > 0 ? calculateProgressPercent(d.receivedQty, d.qty) : 0;
 
         // If search exists, only show matching items if query matches item name or code
         const q = (activeFilters.search || "").toLowerCase().trim();
@@ -1102,7 +1108,7 @@ export default function PurchaseOrderTableClient({
                 {sortedPOs.map((po) => {
                   const totalQty = po.details.reduce((s, d) => s + d.qty, 0);
                   const receivedQty = po.details.reduce((s, d) => s + d.receivedQty, 0);
-                  const percent = totalQty > 0 ? Math.min(100, Math.round((receivedQty / totalQty) * 100)) : 0;
+                  const percent = totalQty > 0 ? calculateProgressPercent(receivedQty, totalQty) : 0;
                   const isClosed = po.status === "CLOSED";
                   const isExpanded = expandedSummaryRows.has(po.id);
 
@@ -1350,7 +1356,7 @@ export default function PurchaseOrderTableClient({
                                       pkgSize > 0 ? Math.ceil(sisa / pkgSize) : sisa;
                                     const itemPct =
                                       d.qty > 0
-                                        ? Math.min(100, Math.round((d.receivedQty / d.qty) * 100))
+                                        ? calculateProgressPercent(d.receivedQty, d.qty)
                                         : 0;
 
                                     let itemStatusBadge = { label: isEnglish ? "Waiting" : "Menunggu", color: "slate" as any };
@@ -1518,7 +1524,7 @@ export default function PurchaseOrderTableClient({
                   const deliveredQty = po.details.reduce((s, d) => s + (d.deliveredQty || 0), 0);
                   const outstandingQty = Math.max(0, totalQty - receivedQty);
                   const percent =
-                    totalQty > 0 ? Math.min(100, Math.round((receivedQty / totalQty) * 100)) : 0;
+                    totalQty > 0 ? calculateProgressPercent(receivedQty, totalQty) : 0;
                   const isExpanded = expandedPoIds.has(po.id);
 
                   return (
@@ -1694,7 +1700,7 @@ export default function PurchaseOrderTableClient({
                                   pkgSize > 0 ? Math.ceil(sisa / pkgSize) : sisa;
                                 const itemPct =
                                   d.qty > 0
-                                    ? Math.min(100, Math.round((d.receivedQty / d.qty) * 100))
+                                    ? calculateProgressPercent(d.receivedQty, d.qty)
                                     : 0;
 
                                 let itemStatusBadge = { label: "Menunggu", color: "slate" as any };

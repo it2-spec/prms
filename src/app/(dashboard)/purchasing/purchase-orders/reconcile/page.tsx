@@ -323,7 +323,9 @@ export default function ReconcilePOPage() {
           const receivedPackageQty = masterPkgSize && masterPkgSize > 0
             ? Math.round((receivedQty / masterPkgSize) * 100) / 100
             : null;
-          const completionPct = i.orderedQty > 0 ? Math.min(100, Math.round((receivedQty / i.orderedQty) * 100)) : 0;
+          const completionPct = i.orderedQty > 0
+            ? (receivedQty >= i.orderedQty ? 100 : Math.min(99, Math.floor((receivedQty / i.orderedQty) * 100)))
+            : 0;
           const status = completionPct >= 100 ? ("COMPLETE" as const) : completionPct > 0 ? ("PARTIAL" as const) : ("PENDING" as const);
 
           return {

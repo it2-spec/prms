@@ -176,3 +176,6 @@ export const RECEIVING_STATUS_LABEL: Record<string, string> = {
 export function normalizeName(name: string): string {
   return name.trim().replace(/\s+/g, " ").toLowerCase();
 }
+
+export { calculateProgressPercent } from "./progress";
+
