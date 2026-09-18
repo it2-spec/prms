@@ -12,11 +12,19 @@ const SCHEMA_VERSION = "2026-09-18-v11-outgoing-status";
 
 function getPool(): Pool {
   if (!globalForPrisma.pgPool) {
+    const isProduction = process.env.NODE_ENV === "production";
+    const dbUrl = process.env.DATABASE_URL || "";
+    const isSupabase =
+      dbUrl.includes("supabase.co") || dbUrl.includes("pooler.supabase.com");
+    // Strip sslmode from URI so pg honors ssl: { rejectUnauthorized: false }
+    const sanitizedUrl = dbUrl.replace(/[?&]sslmode=[^&]+/g, "");
+
     globalForPrisma.pgPool = new Pool({
-      connectionString: process.env.DATABASE_URL,
-      max: 10,
-      idleTimeoutMillis: 10000, // Release idle connections after 10s
-      connectionTimeoutMillis: 5000,
+      connectionString: sanitizedUrl,
+      max: isProduction ? 1 : 10,
+      idleTimeoutMillis: 10000,
+      connectionTimeoutMillis: 10000,
+      ssl: isProduction || isSupabase ? { rejectUnauthorized: false } : undefined,
     });
     globalForPrisma.pgPool.on("error", (err) => {
       console.warn("[pgPool] Client error on idle connection:", err.message);
