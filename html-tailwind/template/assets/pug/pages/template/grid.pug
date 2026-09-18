@@ -1,0 +1,629 @@
+- var page_Title = 'Grid';
+- var theme_customizer      = true;
+- var sidebar               = true;
+- var slick                 = true;
+- var header_slider         = true;
+- var clipboard             = true;
+- var prism                 = true;
+- var customcard            = true;
+- var animate               = true;
+- var scrollbar             = true;
+- var height_equal          = true;
+doctype html
+html(lang='en')
+  include ../../components/header-files
+  body
+    include ../../components/loader
+    include ../../components/taptop
+    // page-wrapper Start
+    #pageWrapper.page-wrapper.compact-wrapper
+      include ../../components/header
+      // Page Body Start
+      .page-body-wrapper
+        include ../../components/sidebar
+        .page-body
+          .container.w-full
+            .page-title
+              .grid.grid-cols-12.mx-2.items-center
+                div(class="col-span-6 sm:col-span-12")
+                  h3
+                    | Grid
+                div(class="col-span-6 sm:col-span-12")
+                  ol.breadcrumb.flex
+                    li.breadcrumb-item
+                      a(href='index.html')                                        
+                        svg.stroke-icon
+                          use(href='../assets/svg/icon-sprite.svg#stroke-home')
+                    li.breadcrumb-item  Ui Kits
+                    li.breadcrumb-item.active Grid
+          // Container-fluid starts
+          .container
+            .grid.grid-cols-12.card-gap
+              div(class="col-span-12")
+                .card
+                  .card-header
+                    h5 Grid Options
+                    p.f-m-light.mt-1
+                      | Bootstrap grid system allow all six breakpoints, and any breakpoints
+                      | you can customize.
+                  .card-body
+                    .overflow-x-auto.custom-scrollbar
+                      table.table.border.table-striped.w-full
+                        thead
+                          tr.border
+                            th
+                            th.text-center
+                              p Extra small
+                              small &lt;576px
+                            th.text-center
+                              p Small
+                              small ≥576px
+                            th.text-center
+                              p Medium
+                              small ≥768px
+                            th.text-center
+                              p Large
+                              small ≥992px
+                            th.text-center
+                              p Extra large
+                              small ≥1200px
+                            th.text-center
+                              p Extra extra large
+                              small.digits ≥1400px
+                        tbody.border
+                          tr
+                            th.text-nowrap(scope='row') Grid behavior
+                            td Horizontal at all times
+                            td(colspan='5') Collapsed to start, horizontal above breakpoints
+                          tr
+                            th.text-nowrap(scope='row') Max container width
+                            td None (auto)
+                            td 575px
+                            td 767px
+                            td 991px
+                            td 1199px
+                            td 1399px
+                          tr
+                            th.text-nowrap(scope='row') Class prefix
+                            td
+                              code .col-span-
+                            td
+                              code sm:col-spam-
+                            td
+                              code md:col-span-
+                            td
+                              code lg:col-span-
+                            td
+                              code xl:col-span-
+                            td
+                              code xxl:col-span-
+                          tr
+                            th.text-nowrap(scope='row') # of columns
+                            td(colspan='6') 12
+                          tr
+                            th.text-nowrap(scope='row') Gutter width
+                            td(colspan='6') 1.5rem (.75rem on left and right)
+                          tr
+                            th.text-nowrap(scope='row') Nestable
+                            td(colspan='6') Yes
+                          tr
+                            th.text-nowrap(scope='row') Offsets
+                            td(colspan='6') Yes
+                          tr
+                            th.text-nowrap(scope='row') Column ordering
+                            td(colspan='6') Yes
+              div(class="col-span-12")
+                .card
+                  .card-header
+                    h5 Grid for Columns
+                    p.mt-1.f-m-light
+                      | Use predefined grid classes. Using 
+                      code md:col-span-* 
+                      | you can set the grid system.
+                  .card-body.grid-showcase
+                    .grid.grid-cols-12.gap-3
+                      div(class="col-span-1 md:col-span-12 text-center")
+                        span md:col-span-1
+                      div(class="col-span-2 md:col-span-12 text-center")
+                        span md:col-span-2
+                      div(class="col-span-2 md:col-span-12 text-center")
+                        span md:col-span-2
+                      div(class="col-span-3 md:col-span-12 text-center")
+                        span md:col-span-3
+                      div(class="col-span-4 md:col-span-12 text-center")
+                        span md:col-span-4
+                      div(class="col-span-5 md:col-span-12 text-center")
+                        span md:col-span-5
+                      div(class="col-span-7 md:col-span-12 text-center")
+                        span md:col-span-7
+                      div(class="col-span-6 md:col-span-12 text-center")
+                        span md:col-span-6
+                      div(class="col-span-6 md:col-span-12 text-center")
+                        span md:col-span-6
+                      div(class="col-span-8 md:col-span-12 text-center")
+                        span md:col-span-8
+                      div(class="col-span-4 md:col-span-12 text-center")
+                        span md:col-span-4
+                      div(class="col-span-9 md:col-span-12 text-center")
+                        span md:col-span-9
+                      div(class="col-span-3 md:col-span-12 text-center")
+                        span md:col-span-3
+                      div(class="col-span-10 md:col-span-12 text-center")
+                        span md:col-span-10
+                      div(class="col-span-2 md:col-span-12 text-center")
+                        span md:col-span-2
+                      div(class="col-span-12 text-center")
+                        span md:col-span-12
+              div(class="col-span-5 xl:col-span-12")
+                .card
+                  .card-header
+                    h5 Enable Flex Behaviors
+                    p.mt-1.f-m-light
+                      | Use 
+                      code flex
+                      |  and 
+                      code  inline-flex
+                      |  classes to set the flex behaviors.
+                    .card-header-right
+                      ul.list-unstyled.card-option
+                        li
+                          i.fa-solid.fa-gear.fa-spin
+                        li
+                          i.view-html.fa-solid.fa-code
+                        li
+                          i.icofont.icofont-maximize.full-card
+                        li
+                          i.icofont.icofont-minus.minimize-card
+                        li
+                          i.icofont.icofont-refresh.reload-card
+                        li
+                          i.icofont.icofont-error.close-card
+                  .card-body
+                    .flex-behaviors
+                      .flex.p-2 I&apos;m a flexbox container!
+                      .inline-flex.p-2 I&apos;m an inline flexbox container!
+                    .code-box-copy
+                      button.code-box-copy__btn.btn-clipboard(data-clipboard-target='#flex-behavior', title='Copy')
+                        i.icofont.icofont-copy-alt
+                      pre.custom-scrollbar
+                        code.language-html#flex-behavior
+                          |&lt;div class="flex-behaviors"&gt;
+                          |  &lt;div class="flex p-2"&gt;I&apos;m a flexbox container!&lt;/div&gt;
+                          |  &lt;div class="inline-flex p-2"&gt;I&apos;m an inline flexbox container!&lt;/div&gt;
+                          |&lt;/div&gt;
+              div(class="col-span-7 xl:col-span-12")
+                .card
+                  .card-header
+                    h5 Horizontal Gutters
+                    p.mt-1.f-m-light
+                      code gx-* 
+                      |  classes can be used to control the horizontal gutter widths. The 
+                      code  container 
+                      |  or 
+                      code  container-fluid 
+                      |  parent may need to be adjusted if larger gutters are used too to avoid unwanted overflow, using a matching padding utility.
+                    .card-header-right
+                      ul.list-unstyled.card-option
+                        li
+                          i.fa-solid.fa-gear.fa-spin
+                        li
+                          i.view-html.fa-solid.fa-code
+                        li
+                          i.icofont.icofont-maximize.full-card
+                        li
+                          i.icofont.icofont-minus.minimize-card
+                        li
+                          i.icofont.icofont-refresh.reload-card
+                        li
+                          i.icofont.icofont-error.close-card
+                  .card-body.h-gutter
+                    .container.px-4.text-center
+                      .grid.grid-cols-12.gap-x-12(class="md:gap-3")
+                        div(class="col-span-6 md:col-span-12 flex-behaviors")
+                          .p-3 
+                            span Custom column padding
+                        div(class="col-span-6 md:col-span-12 flex-behaviors")
+                          .p-3 
+                            span Custom column padding
+                    .code-box-copy
+                      button.code-box-copy__btn.btn-clipboard(data-clipboard-target='#horizontal-gutter', title='Copy')
+                        i.icofont.icofont-copy-alt
+                      pre.custom-scrollbar
+                        code.language-html#horizontal-gutter
+                          |&lt;div class="container px-4 text-center"&gt;
+                          |  &lt;div class="grid grid-cols-12 gap-3"&gt;
+                          |    &lt;div class="col-auto"&gt;
+                          |      &lt;div class="p-3"&gt;&lt;span&gt;Custom column padding&lt;/span&gt;&lt;/div&gt;
+                          |    &lt;/div&gt;
+                          |    &lt;div class="col-auto"&gt;
+                          |      &lt;div class="p-3"&gt;&lt;span&gt;Custom column padding&lt;/span&gt;&lt;/div&gt;
+                          |    &lt;/div&gt;
+                          |  &lt;/div&gt;
+                          |&lt;/div&gt;
+              div(class="col-span-12")
+                .card
+                  .card-header
+                    h5 Vertical Gutters
+                    p.mt-1.f-m-light
+                      | Use
+                      code  gap-* 
+                      |  classes control vertical space between elements in rows, especially when they wrap and wider spacing can overflow the page and wrap the 
+                      code  row
+                      |  with 
+                      code  overflow-hidden
+                      |  to prevent this.
+                    .card-header-right
+                      ul.list-unstyled.card-option
+                        li
+                          i.fa-solid.fa-gear.fa-spin
+                        li
+                          i.view-html.fa-solid.fa-code
+                        li
+                          i.icofont.icofont-maximize.full-card
+                        li
+                          i.icofont.icofont-minus.minimize-card
+                        li
+                          i.icofont.icofont-refresh.reload-card
+                        li
+                          i.icofont.icofont-error.close-card
+                  .card-body.v-gutter  
+                    .container.overflow-hidden.text-center
+                      .grid.grid-cols-12.gap-4
+                        div(class="col-span-6 flex-behaviors")
+                          .p-3 
+                            span Custom column padding
+                        div(class="col-span-6 flex-behaviors")
+                          .p-3 
+                            span Custom column padding
+                        div(class="col-span-6 flex-behaviors")
+                          .p-3 
+                            span Custom column padding
+                        div(class="col-span-6 flex-behaviors")
+                          .p-3 
+                            span Custom column padding
+                    .code-box-copy
+                      button.code-box-copy__btn.btn-clipboard(data-clipboard-target='#vertical-gutter', title='Copy')
+                        i.icofont.icofont-copy-alt
+                      pre.custom-scrollbar
+                        code.language-html#vertical-gutter
+                          |&lt;div class="container overflow-hidden text-center"&gt;
+                          |  &lt;div class="grid grid-cols-12 gap-3"&gt;
+                          |    &lt;div class="col-span-6"&gt;
+                          |      &lt;div class="p-3"&gt;&lt;span&gt;Custom column padding&lt;/span&gt;&lt;/div&gt;
+                          |    &lt;/div&gt;
+                          |    &lt;div class="col-span-6"&gt;
+                          |      &lt;div class="p-3"&gt;&lt;span&gt;Custom column padding&lt;/span&gt;&lt;/div&gt;
+                          |    &lt;/div&gt;
+                          |    &lt;div class="col-span-6"&gt;
+                          |      &lt;div class="p-3"&gt;&lt;span&gt;Custom column padding&lt;/span&gt;&lt;/div&gt;
+                          |    &lt;/div&gt;
+                          |    &lt;div class="col-span-6"&gt;
+                          |      &lt;div class="p-3"&gt;&lt;span&gt;Custom column padding&lt;/span&gt;&lt;/div&gt;
+                          |    &lt;/div&gt;
+                          |  &lt;/div&gt;
+                          |&lt;/div&gt;
+              div(class="col-span-12")
+                .card
+                  .card-header
+                    h5 No Gutters
+                    p.mt-1.f-m-light
+                      | Use 
+                      code gap-0
+                      |   on the 
+                      code  row 
+                      |  to eliminate spacing between columns.
+                      code  container 
+                      |  and use 
+                      code  mx-0 
+                      |  on the 
+                      code  grid 
+                      |  to prevent overflow.
+                    .card-header-right
+                      ul.list-unstyled.card-option
+                        li
+                          i.fa-solid.fa-gear.fa-spin
+                        li
+                          i.view-html.fa-solid.fa-code
+                        li
+                          i.icofont.icofont-maximize.full-card
+                        li
+                          i.icofont.icofont-minus.minimize-card
+                        li
+                          i.icofont.icofont-refresh.reload-card
+                        li
+                          i.icofont.icofont-error.close-card
+                  .card-body.no-gutter
+                    .grid.grid-cols-12.gap-0.text-center
+                      div(class="col-span-6 md:col-span-12 flex-behaviors")
+                        .p-3 
+                          span sm:col-span-6 &  md:col-span-8
+                      div(class="col-span-6 md:col-span-12 flex-behaviors")
+                        .p-3
+                          span.col-span-6 md:col-span-4
+                    .code-box-copy
+                      button.code-box-copy__btn.btn-clipboard(data-clipboard-target='#no-gutter', title='Copy')
+                        i.icofont.icofont-copy-alt
+                      pre.custom-scrollbar
+                        code.language-html#no-gutter
+                          |&lt;div class="grid g-0 text-center"&gt;
+                          |  &lt;div class="col-span-8 md:col-span-6 sm:col-span-12"&gt;
+                          |    &lt;div class="p-3"&gt;&lt;span&gt;sm:col-span-6 & md:col-span-8&lt;/span&gt;&lt;/div&gt;
+                          |  &lt;/div&gt;
+                          |  &lt;div class="col-span-4 md:col-span-12"&gt; 
+                          |    &lt;div class="p-3"&gt;&lt;span class="col-span-6"&gt;md:col-span-4&lt;/span&gt;&lt;/div&gt;
+                          |  &lt;/div&gt;
+                          |&lt;/div&gt;
+              div(class="col-span-12")
+                .card
+                  .card-header
+                    h5 Vertical Alignment
+                    p.mt-1.f-m-light
+                      | Use
+                      code  items-*
+                      |  class
+                      |   to set the vertical alignment.
+                    .card-header-right
+                      ul.list-unstyled.card-option
+                        li
+                          i.fa-solid.fa-gear.fa-spin
+                        li
+                          i.view-html.fa-solid.fa-code
+                        li
+                          i.icofont.icofont-maximize.full-card
+                        li
+                          i.icofont.icofont-minus.minimize-card
+                        li
+                          i.icofont.icofont-refresh.reload-card
+                        li
+                          i.icofont.icofont-error.close-card
+                  .card-body
+                    div.grid-showcase.mb-0
+                      .grid.grid-cols-.gap-3
+                        div(class="col-span-4 lg:col-span-12")
+                          .grid.grid-cols-12.grid-vertical.items-start.m-1.gap-2
+                            div(class="col-span-6")
+                              span(class="!bg-white") one column
+                            div(class="col-span-6")
+                              span(class="!bg-white") two column
+                        div(class="col-span-4 lg:col-span-12")
+                          .grid.grid-cols-12.grid-vertical.items-center.m-1.gap-2
+                            div(class="col-span-6")
+                              span(class="!bg-white") one column
+                            div(class="col-span-6")
+                              span(class="!bg-white") two column
+                        div(class="col-span-4 lg:col-span-12")
+                          .grid.grid-cols-12.grid-vertical.items-end.m-1.gap-2
+                            div(class="col-span-6")
+                              span(class="!bg-white") one column
+                            div(class="col-span-6")
+                              span(class="!bg-white") two column
+                    .code-box-copy
+                      button.code-box-copy__btn.btn-clipboard(data-clipboard-target='#vertical-alignment', title='Copy')
+                        i.icofont.icofont-copy-alt
+                      pre.custom-scrollbar
+                        code.language-html#vertical-alignment
+                          |&lt;div class="grid grid-cols-12"&gt;
+                          |  &lt;div class="col-span-4 lg:col-span-12"&gt;
+                          |    &lt;div class="grid grid-cols-12 grid-vertical align-items-start m-1 gap-2"&gt;
+                          |      &lt;div class="col-span-6"&gt;&lt;span class="bg-white"&gt;one column&lt;/span&gt;&lt;/div&gt;
+                          |      &lt;div class="col-span-6"&gt;&lt;span class="bg-white"&gt;two column&lt;/span&gt;&lt;/div&gt;
+                          |    &lt;/div&gt;
+                          |  &lt;/div&gt;
+                          |  &lt;div class="col-span-4 lg:col-span-12"&gt;
+                          |    &lt;div class="grid grid-cols-12 grid-vertical align-items-center m-1 gap-2"&gt;
+                          |      &lt;div class="col-span-6"&gt;&lt;span class="bg-white"&gt;one column&lt;/span&gt;&lt;/div&gt;
+                          |      &lt;div class="col-span-6"&gt;&lt;span class="bg-white"&gt;two column&lt;/span&gt;&lt;/div&gt;
+                          |    &lt;/div&gt;
+                          |  &lt;/div&gt;
+                          |  &lt;div class="col-span-4 lg:col-span-12"&gt;
+                          |    &lt;div class="grid grid-cols-12 grid-vertical align-items-end m-1 gap-2"&gt;
+                          |      &lt;div class="col-span-6"&gt;&lt;span class="bg-white"&gt;one column&lt;/span&gt;&lt;/div&gt;
+                          |      &lt;div class="col-span-6"&gt;&lt;span class="bg-white"&gt;two column&lt;/span&gt;&lt;/div&gt;
+                          |    &lt;/div&gt;
+                          |  &lt;/div&gt;
+                          |&lt;/div&gt;
+                  .card-footer
+                    .overflow-x-auto.grid-footer
+                      table.w-full
+                        tbody
+                          tr
+                            th  Class
+                            th Value of the class
+                          tr
+                            td
+                              code .items-*
+                            td  start / center / end / baseline / stretch
+              div(class="col-span-12")
+                .card
+                  .card-header
+                    h5 Nesting
+                    p.mt-1.f-m-light
+                      | To nest your content with the default grid, add a new
+                      code  row
+                      |  and set
+                      |  of 
+                      code col-sm-*
+                      |  columns within an existing 
+                      code  col-sm-*
+                      |   column.
+                    .card-header-right
+                      ul.list-unstyled.card-option
+                        li
+                          i.fa-solid.fa-gear.fa-spin
+                        li
+                          i.view-html.fa-solid.fa-code
+                        li
+                          i.icofont.icofont-maximize.full-card
+                        li
+                          i.icofont.icofont-minus.minimize-card
+                        li
+                          i.icofont.icofont-refresh.reload-card
+                        li
+                          i.icofont.icofont-error.close-card
+                  .card-body
+                    div.grid-showcase
+                      .grid.grid-cols-12.gap-3.items-center
+                          div(class="col-span-3")
+                              span Level 1: .col-span-3
+                          div(class="col-span-9")
+                              .grid-wrapper
+                                .grid.grid-cols-12.gap-x-2
+                                  div(class="col-span-5")
+                                    span.border.border-2(class="!mb-0") Level 2: .col-span-5
+                                  div(class="col-span-7")
+                                    span.border.border-2(class="!mb-0") Level 2: .col-span-7
+                          div(class="col-span-8")
+                            .grid-wrapper
+                              .grid.grid-cols-12.gap-x-2
+                                div(class="col-span-2 sm:col-span-4")
+                                  span.border.border-2(class="!mb-0") Level 1: .col-span-2
+                                div(class="col-span-10 sm:col-span-8")
+                                  span.border.border-2(class="!mb-0") Level 1: .col-span-10
+                          div(class="col-span-4")
+                              span Level 2: .col-span-4
+                    .code-box-copy
+                      button.code-box-copy__btn.btn-clipboard(data-clipboard-target='#nesting', title='Copy')
+                        i.icofont.icofont-copy-alt
+                      pre.custom-scrollbar
+                        code.language-html#nesting
+                          |&lt;div class=&quot;grid grid-cols-12 gap-3 items-center&quot;&gt;
+                          |  &lt;div class=&quot;col-span-3&quot;&gt;&lt;span&gt;Level 1: .col-span-3&lt;/span&gt;&lt;/div&gt;
+                          |  &lt;div class=&quot;col-span-9&quot;&gt;
+                          |      &lt;div class=&quot;grid-wrapper pb-0&quot;&gt;
+                          |          &lt;div class=&quot;grid grid-cols-12 gap-x-2&quot;&gt;
+                          |              &lt;div class=&quot;col-span-5&quot;&gt;&lt;span class=&quot;border border-2 !mb-0&quot;&gt;Level 2: .col-span-5&lt;/span&gt;&lt;/div&gt;
+                          |              &lt;div class=&quot;col-span-7&quot;&gt;&lt;span class=&quot;border border-2 !mb-0&quot;&gt;Level 2: .col-span-7&lt;/span&gt;&lt;/div&gt;
+                          |          &lt;/div&gt;
+                          |      &lt;/div&gt;
+                          |  &lt;/div&gt;
+                          |  &lt;div class=&quot;col-span-8&quot;&gt;
+                          |      &lt;div class=&quot;grid-wrapper pb-0&quot;&gt;
+                          |          &lt;div class=&quot;grid grid-cols-12 gap-x-2&quot;&gt;
+                          |              &lt;div class=&quot;col-span-2 sm:col-span-4&quot;&gt;&lt;span class=&quot;border border-2 !mb-0&quot;&gt;Level 1: .col-span-2&lt;/span&gt;&lt;/div&gt;
+                          |              &lt;div class=&quot;col-span-10 sm:col-span-8&quot;&gt;&lt;span class=&quot;border border-2 !mb-0&quot;&gt;Level 1: .col-span-10&lt;/span&gt;&lt;/div&gt;
+                          |          &lt;/div&gt;
+                          |      &lt;/div&gt;
+                          |  &lt;/div&gt;
+                          |  &lt;div class=&quot;col-span-4&quot;&gt;&lt;span&gt;Level 2: .col-span-4&lt;/span&gt;&lt;/div&gt;
+                          |&lt;/div&gt;
+              div(class="col-span-12")
+                .card
+                  .card-header
+                    h5 Order
+                    p.mt-1.f-m-light
+                      | Use 
+                      code order 
+                      | class, you can set the order position.
+                    .card-header-right
+                      ul.list-unstyled.card-option
+                        li
+                          i.fa-solid.fa-gear.fa-spin
+                        li
+                          i.view-html.fa-solid.fa-code
+                        li
+                          i.icofont.icofont-maximize.full-card
+                        li
+                          i.icofont.icofont-minus.minimize-card
+                        li
+                          i.icofont.icofont-refresh.reload-card
+                        li 
+                          i.icofont.icofont-error.close-card
+                  .card-body
+                    div.grid-showcase
+                      .grid.grid-cols-12.gap-2
+                          div(class="col-span-3 order-3")
+                            span First Item (order-3)
+                          div(class="col-span-6 order-first")
+                            span Second Item (order-first)
+                          div(class="col-span-4 order-last")
+                            span Third Item (order-last)
+                          div(class="col-span-3 order-2")
+                            span Fourth Item (order-2)
+                          div(class="col-span-2 sm:col-span-4 order-5")
+                            span fifth Item (order-5)
+                          div(class="col-span-6 sm:col-span-4 order-4")
+                            span sixth Item (order-4)
+                    .code-box-copy
+                      button.code-box-copy__btn.btn-clipboard(data-clipboard-target='#order-grid', title='Copy')
+                        i.icofont.icofont-copy-alt
+                      pre.custom-scrollbar
+                        code.language-html#order-grid
+                          |&lt;div class=&quot;grid grid-cols-12 gap-2&quot;&gt;
+                          |  &lt;div class=&quot;col-span-3 order-3&quot;&gt;&lt;span&gt;First Item (order-3)&lt;/span&gt;&lt;/div&gt;
+                          |  &lt;div class=&quot;col-span-6 order-first&quot;&gt;&lt;span&gt;Second Item (order-first)&lt;/span&gt;&lt;/div&gt;
+                          |  &lt;div class=&quot;col-span-4 order-last&quot;&gt;&lt;span&gt;Third Item (order-last)&lt;/span&gt;&lt;/div&gt;
+                          |  &lt;div class=&quot;col-span-3 order-2&quot;&gt;&lt;span&gt;Fourth Item (order-2)&lt;/span&gt;&lt;/div&gt;
+                          |  &lt;div class=&quot;col-span-2 sm:col-span-4 order-5&quot;&gt;&lt;span&gt;fifth Item (order-5)&lt;/span&gt;&lt;/div&gt;
+                          |  &lt;div class=&quot;col-span-6 sm:col-span-4 order-4&quot;&gt;&lt;span&gt;sixth Item (order-4)&lt;/span&gt;&lt;/div&gt;
+                          |&lt;/div&gt;
+                  .card-footer
+                    .overflow-x-auto.grid-footer
+                      table.w-full
+                        tbody
+                          tr
+                            th  Class
+                            th Value of the class
+                          tr
+                            td
+                              code .order-*
+                            td  first / 2 / 3 / 4 / 5 / last
+              div(class="col-span-12")
+                .card
+                  .card-header
+                    h5 Offset
+                    p.mt-1.f-m-light
+                      | Move columns to the right using 
+                      code sm:col-start-* 
+                      | classes. These classes increase the left margin of a column by 
+                      code * 
+                      | columns.
+                    .card-header-right
+                      ul.list-unstyled.card-option
+                        li
+                          i.fa-solid.fa-gear.fa-spin
+                        li
+                          i.view-html.fa-solid.fa-code
+                        li
+                          i.icofont.icofont-maximize.full-card
+                        li
+                          i.icofont.icofont-minus.minimize-card
+                        li
+                          i.icofont.icofont-refresh.reload-card
+                        li
+                          i.icofont.icofont-error.close-card
+                  .card-body
+                    div.grid-showcase
+                      .grid.grid-cols-12.gap-3
+                        div(class="col-span-5 sm:col-span-4 col-start-3 sm:col-start-3")
+                            span col-5 offset-sm-3
+                        div(class="col-span-4 sm:col-span-4 col-start-10 sm:col-start-2")
+                            span col-2 offset-sm-2
+                        div(class="col-span-4 sm:col-span-5 col-start-2")
+                            span col-4 offset-sm-2
+                        div(class="col-span-3 sm:col-span-4 col-start-8")
+                            span col-3 offset-sm-2
+                    .code-box-copy
+                      button.code-box-copy__btn.btn-clipboard(data-clipboard-target='#offset-grid', title='Copy')
+                        i.icofont.icofont-copy-alt
+                      pre.custom-scrollbar
+                        code.language-html#offset-grid
+                          |&lt;div class=&quot;grid grid-cols-12&quot;&gt;
+                          |  &lt;div class=&quot;col-span-5 sm:col-span-4 col-start-3 sm:col-start-3&quot;&gt;&lt;span&gt;col-5 offset-sm-3&lt;/span&gt;&lt;/div&gt;
+                          |  &lt;div class=&quot;col-span-4 sm:col-span-4 col-start-10 sm:col-start-2&quot;&gt;&lt;span&gt;col-2 offset-sm-2&lt;/span&gt;&lt;/div&gt;
+                          |  &lt;div class=&quot;col-span-4 sm:col-span-5 col-start-2&quot;&gt;&lt;span&gt;col-4 offset-sm-2&lt;/span&gt;&lt;/div&gt;
+                          |  &lt;div class=&quot;col-span-3 sm:col-span-4 col-start-8&quot;&gt;&lt;span&gt;col-3 offset-sm-2&lt;/span&gt;&lt;/div&gt;
+                          |&lt;/div&gt;
+                  .card-footer 
+                    .overflow-x-auto.grid-footer
+                      table.w-full
+                        tbody
+                          tr
+                            th  Class
+                            th Value of the class
+                          tr
+                            td
+                              code .col-start-*
+                            td  1 / 2 / ... / 10 / 11
+          // Container-fluid Ends
+        include ../../components/footer
+    include ../../components/footer-files

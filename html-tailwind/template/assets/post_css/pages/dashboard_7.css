@@ -1,0 +1,701 @@
+@layer components {
+  .increase-content {
+    &.pe-0 {
+      [dir="rtl"] & {
+        @apply pl-0 pr-[30px];
+      }
+    }
+  }
+  .knowledge-wrapper {
+    div {
+      @apply w-4/5;
+      p {
+        @apply mb-4;
+      }
+      button {
+        @apply absolute px-4 py-[5px] bottom-[63px];
+      }
+    }
+    .knowledgebase-wrapper {
+      @apply w-9/12 mt-[-24%] ml-auto;
+      [dir="rtl"] & {
+        @apply ml-[unset] mr-auto -scale-x-100;
+      }
+    }
+  }
+  .count-student {
+    .school-wrapper {
+      @apply flex justify-between items-center;
+      .school-header {
+        h4 {
+          @apply leading-[1.2];
+        }
+        i {
+          @apply text-xs font-semibold;
+        }
+        p {
+          @apply leading-[1.4];
+        }
+      }
+      .school-body {
+        img {
+          @apply w-[calc(62px_+_(70_-_62)_*_((100vw_-_320px)_/_(1920_-_320)))] relative;
+        }
+        .right-line {
+          @apply absolute right-0 bottom-0;
+          [dir="rtl"] & {
+            @apply left-0 right-[unset];
+          }
+          img {
+            @apply w-full h-full;
+            [dir="rtl"] & {
+              @apply -scale-x-100;
+            }
+          }
+        }
+      }
+    }
+  }
+  .income-wrapper {
+    ul {
+      @apply flex justify-between;
+      li {
+        @apply text-center;
+        + li {
+          @apply border-l-[rgba(var(--badge-light-color),30%)] border-l border-dashed;
+          [dir="rtl"] & {
+            @apply border-l-[0px] border-r-[rgba(var(--badge-light-color),30%)] border-r border-dashed;
+          }
+        }
+        h6 {
+          @apply inline-block;
+        }
+        .income-dot {
+          @apply w-2 h-2 inline-block mr-1.5 rounded-[50%];
+          [dir="rtl"] & {
+            @apply ml-1.5 mr-[unset];
+          }
+        }
+      }
+    }
+  }
+  .performance-right {
+    @apply flex items-center gap-2.5;
+    p {
+      @apply text-[rgba(var(--theme-body-font-color),80%)] font-medium;
+    }
+    i {
+      @apply text-sm;
+    }
+  }
+  .attendance-card {
+    @apply flex gap-[15px] items-center p-[15px] rounded-[5px];
+    .left-overview-content {
+      @apply flex gap-[15px] items-center;
+      .svg-box {
+        @apply w-[43px] h-[43px] bg-[rgba(var(--white-bg),1)] shadow-[0px_71.2527px_51.5055px_rgb(229_229_245_/_19%),0px_42.3445px_28.0125px_rgb(229_229_245_/_15%),0px_21.9866px_14.2913px_rgb(229_229_245_/_13%),0px_8.95749px_7.16599px_rgb(229_229_245_/_10%),0px_2.03579px_3.46085px_rgb(229_229_245_/_6%)] flex justify-center items-center rounded-[10px];
+      }
+    }
+    .right-overview-content {
+      @apply flex gap-[25px] items-center justify-between w-[calc(100%_-_43px_-_15px)];
+      h6 {
+        @apply pb-[7px];
+      }
+      span {
+        @apply leading-[18.69px];
+      }
+      .marks-count {
+        @apply flex gap-[23px] items-center;
+        sub {
+          @apply bottom-[-0.8px];
+        }
+      }
+    }
+  }
+  .default-inline-calender {
+    .school-calender {
+      .main-inline-calender {
+        .flatpickr-rContainer {
+          .flatpickr-days {
+            .dayContainer {
+              .flatpickr-day {
+                @apply h-10;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .student-leader-wrapper {
+    .student-leader-content {
+      @apply flex gap-2.5 items-center justify-between flex-wrap p-2.5 last:pb-0 last:border-b-0;
+      border-bottom: 1px solid #e9edf1;
+      img {
+        @apply w-6 h-[27px];
+      }
+      .leader-img {
+        @apply w-[35px] h-[35px] rounded-[5px];
+      }
+      .leader-content-height {
+        span {
+          @apply leading-[18.69px] inline-block;
+        }
+      }
+    }
+  }
+  .task-table {
+    .main-task {
+      @apply flex items-center gap-2.5;
+      .task-progress {
+        @apply w-[100px] h-1.5;
+      }
+    }
+    .recent-table {
+      &.task-table {
+        tr {
+          td {
+            &:first-child {
+              @apply min-w-[312px];
+            }
+            &:nth-child(2) {
+              @apply min-w-[110px];
+            }
+            &:last-child {
+              @apply min-w-[34px] pr-2;
+              [dir="rtl"] & {
+                @apply pl-2 pr-[unset];
+              }
+            }
+          }
+        }
+      }
+      table {
+        tr {
+          &:last-child {
+            td {
+              @apply pb-3;
+              .dropdown {
+                .dropdown-menu {
+                  &.show {
+                    @apply top-[unset] bottom-full;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .main-task-wrapper {
+      tr {
+        td {
+          @apply cursor-pointer;
+          &.icons-box-2 {
+            @apply hidden;
+          }
+          .form-check {
+            &.checkbox-width {
+              @apply p-0;
+            }
+          }
+          a {
+            @apply text-base text-[rgba(var(--body-font-color),1)] font-medium block;
+          }
+        }
+      }
+      .task-icons {
+        @apply flex items-center gap-3;
+        li {
+          &:last-child {
+            @apply border-l-[rgba(var(--gray-60),1)] flex gap-2 pl-2.5 border-l border-solid;
+
+            [dir="rtl"] & {
+              @apply border-l-[0px] border-r-[rgba(var(--gray-60),1)] pl-[unset] pr-2.5 border-r border-solid;
+            }
+          }
+        }
+      }
+      .square-white {
+        @apply w-[34px] h-[34px] bg-[rgba(var(--white),1)] flex justify-center items-center shadow-[0px_71.2527px_51.5055px_rgba(229,229,245,0.189815),0px_42.3445px_28.0125px_rgba(229,229,245,0.151852),0px_21.9866px_14.2913px_rgba(229,229,245,0.125),0px_8.95749px_7.16599px_rgba(229,229,245,0.0981481),0px_2.03579px_3.46085px_rgba(229,229,245,0.0601852)] rounded-sm;
+        i {
+          @apply text-[rgba(var(--badge-light-color),50%)] text-[17px];
+        }
+      }
+      .fill-clock {
+        @apply fill-[rgba(var(--badge-light-color),50%)];
+      }
+      button {
+        @apply px-1.5 py-1;
+      }
+    }
+    .open-options {
+      .dropdown-toggle {
+        &::after {
+          @apply content-[""] hidden;
+        }
+      }
+      .dropdown-menu {
+        @apply bg-[rgba(var(--light2),1)] px-3.5 py-[9px];
+
+        &.show {
+          @apply flex gap-2 min-w-0 right-0;
+        }
+        li {
+          .dropdown-item {
+            &:hover {
+              i {
+                @apply text-[rgba(var(--theme-body-sub-title-color),1)];
+              }
+            }
+          }
+          .dropdown-item {
+            &:hover {
+              @apply bg-[rgba(var(--lighter-white),1)];
+            }
+          }
+        }
+      }
+    }
+  }
+  .notice-board {
+    ul {
+      li {
+        @apply pb-[29px];
+        h6 {
+          @apply text-sm font-medium leading-[18.69px] mb-[5px];
+        }
+        p {
+          @apply text-xs font-normal;
+        }
+      }
+    }
+  }
+  .attendance-student-data {
+    @apply ml-[-15px] mr-0 mt-0 -mb-5;
+  }
+  .attendance-chart {
+    @apply flex justify-center;
+  }
+  .text-ellipsis {
+    @apply block max-w-full overflow-hidden mx-auto my-0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  .unpaid-fees-table {
+    .recent-table {
+      &.overflow-x-auto {
+        table {
+          thead,
+          tbody {
+            th,
+            td {
+              @apply min-w-[auto] text-[rgba(var(--body-font-color),1)];
+              &:first-child {
+                @apply pl-5;
+              }
+              &:last-child {
+                @apply pr-5;
+              }
+              a {
+                @apply text-[rgba(var(--body-font-color),1)];
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .top-student-table {
+    .recent-table {
+      table {
+        thead,
+        tbody {
+          th,
+          td {
+            @apply min-w-[auto] text-[rgba(var(--body-font-color),1)];
+            &:first-child {
+              @apply pl-5;
+            }
+            &:last-child {
+              @apply pr-5;
+            }
+            a {
+              @apply text-[rgba(var(--body-font-color),1)];
+            }
+          }
+        }
+      }
+    }
+  }
+  .new-enroll-student {
+    .recent-table {
+      table {
+        thead,
+        tbody {
+          th,
+          td {
+            @apply min-w-[auto] text-[rgba(var(--body-font-color),1)];
+            &:first-child {
+              @apply pl-5;
+            }
+            &:last-child {
+              @apply pr-5;
+            }
+            a {
+              @apply text-[rgba(var(--body-font-color),1)];
+            }
+          }
+        }
+      }
+    }
+  }
+  .std-class-chart {
+    .apexcharts-legend {
+      @apply gap-[15px];
+    }
+  }
+  @screen xl1800 {
+    .attendance-card .right-overview-content .marks-count {
+      @apply gap-3 flex-wrap;
+    }
+  }
+  @screen xl1800 {
+    .student-leader-wrapper .student-leader-content .leader-img {
+      @apply hidden;
+    }
+  }
+
+  @screen sm {
+    .task-table .main-task-wrapper tr td a {
+      @apply overflow-hidden text-ellipsis whitespace-nowrap max-w-[250px];
+    }
+    .task-table .main-task-wrapper .square-white {
+      @apply w-[30px] h-[30px];
+    }
+    .task-table .main-task-wrapper .square-white i {
+      @apply text-sm;
+    }
+  }
+  @screen xl1800 {
+    .task-table .icons-box {
+      @apply hidden;
+    }
+  }
+
+  @screen md {
+    .attendance-chart {
+      @apply mb-3;
+    }
+  }
+  @screen xl1580 {
+    .apexcharts-legend-series {
+      @apply !mx-1.5 !my-[5px];
+    }
+  }
+  @screen between1660-1200 {
+    .new-enroll-student {
+      .recent-table {
+        table {
+          thead,
+          tbody {
+            th,
+            td {
+              &:nth-child(2) {
+                @apply hidden;
+              }
+            }
+          }
+        }
+      }
+    }
+    .top-student-table {
+      .recent-table {
+        table {
+          thead,
+          tbody {
+            th,
+            td {
+              &:nth-child(2) {
+                @apply hidden;
+              }
+            }
+          }
+        }
+      }
+    }
+    .unpaid-fees-table {
+      .recent-table {
+        &.overflow-x-auto {
+          table {
+            thead,
+            tbody {
+              th,
+              td {
+                &:nth-child(3) {
+                  @apply hidden;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen between1580-1200 {
+    .top-student-table {
+      .recent-table {
+        table {
+          thead,
+          tbody {
+            th,
+            td {
+              &:nth-child(3) {
+                .common-align {
+                  img {
+                    @apply hidden;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .unpaid-fees-table {
+      .recent-table {
+        &.overflow-x-auto {
+          table {
+            thead,
+            tbody {
+              th,
+              td {
+                &:nth-child(4) {
+                  @apply hidden;
+                }
+                &:nth-child(2) {
+                  .common-align {
+                    img {
+                      @apply hidden;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen between1366-1200 {
+    .top-student-table {
+      .recent-table {
+        table {
+          thead,
+          tbody {
+            th,
+            td {
+              &:nth-child(4) {
+                @apply hidden;
+              }
+            }
+          }
+        }
+      }
+    }
+    .unpaid-fees-table {
+      .recent-table {
+        &.overflow-x-auto {
+          table {
+            thead,
+            tbody {
+              th,
+              td {
+                &:nth-child(5) {
+                  @apply hidden;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen xl {
+    .std-class-chart {
+      @apply !my-[0px];
+    }
+    .default-inline-calender .school-calender .main-inline-calender .flatpickr-rContainer .flatpickr-days .dayContainer .flatpickr-day {
+      @apply h-9;
+    }
+    .unpaid-fees-table .recent-table.overflow-x-auto div.dt-container .dt-layout-row .dt-layout-cell .dt-search {
+      @apply relative mb-5 left-5 top-1;
+    }
+    .unpaid-fees-table {
+      .recent-table {
+        &.overflow-x-auto {
+          table {
+            thead,
+            tbody {
+              th,
+              td {
+                &:nth-child(2) {
+                  @apply min-w-[160px];
+                }
+                &:last-child {
+                  @apply min-w-[100px];
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .top-student-table .recent-table.overflow-x-auto div.dt-container .dt-layout-row .dt-layout-cell .dt-search {
+      @apply relative mb-5 left-5 top-1;
+    }
+    .new-enroll-student {
+      .recent-table {
+        table {
+          thead,
+          tbody {
+            th,
+            td {
+              &:first-child {
+                @apply min-w-[154px];
+              }
+              &:last-child {
+                @apply min-w-[124px];
+              }
+            }
+          }
+        }
+      }
+    }
+    .top-student-table {
+      .recent-table {
+        table {
+          thead,
+          tbody {
+            th,
+            td {
+              &:nth-child(3) {
+                @apply min-w-[150px];
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen xl1600 {
+    .top-student-table,
+    .new-enroll-student,
+    .unpaid-fees-table {
+      .recent-table {
+        &.overflow-x-auto {
+          div.dt-container {
+            .dt-layout-row {
+              &:last-child {
+                @apply flex-col;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @screen between1580-1200 {
+    .top-student-table {
+      .recent-table {
+        table {
+          thead,
+          tbody {
+            th,
+            td {
+              &:nth-child(6) {
+                @apply hidden;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @screen xl1500 {
+    .new-enroll-student .recent-table.overflow-x-auto div.dt-container .dt-layout-row .dt-layout-cell .dt-search {
+      @apply relative w-9/12 mb-5 -left-5 top-1;
+    }
+  }
+
+  @screen between1800-1400 {
+    .new-enroll-student {
+      .recent-table {
+        table {
+          thead,
+          tbody {
+            th,
+            td {
+              &:nth-child(4) {
+                @apply hidden;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen between1399-1200 {
+    .student-header .card-header-right-icon {
+      @apply hidden;
+    }
+    .new-enroll-student {
+      .recent-table {
+        table {
+          thead,
+          tbody {
+            th,
+            td {
+              &:nth-child(4) {
+                @apply hidden;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen between1580-1200 {
+    .new-enroll-student {
+      .recent-table {
+        table {
+          thead,
+          tbody {
+            th,
+            td {
+              &:nth-child(3) {
+                @apply hidden;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen xl1660 {
+    .std-class-chart {
+      @apply my-[16px];
+    }
+    .attendance-data ul.balance-data {
+      @apply relative inline-flex left-0 top-0;
+    }
+  }
+  @screen xl1500 {
+    .std-class-chart {
+      @apply my-[55px];
+    }
+  }
+}

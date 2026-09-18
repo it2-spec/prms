@@ -1,0 +1,155 @@
+@layer components {
+  .main-setting {
+    input {
+      &::placeholder {
+        @apply text-[rgba(var(--theme-font-color),0.8)];
+      }
+    }
+
+    .tab-links {
+      @apply gap-[18px] flex flex-col;
+
+      .tab-link {
+        @apply bg-[rgba(var(--gray-60),0.3)] flex justify-start items-center text-[rgba(var(--theme-body-font-color),1)] gap-2 px-4 py-3 rounded-md;
+
+        &.active {
+          svg {
+            @apply !stroke-[rgba(var(--white),1)];
+          }
+        }
+
+        svg {
+          @apply fill-[var(--transparent-color)] stroke-[rgba(var(--badge-light-color),0.8)] w-[29px] h-[20px];
+        }
+      }
+    }
+    .panel-body {
+      .grid {
+        @apply mb-4;
+      }
+    }
+
+    .form-label {
+      @apply font-medium text-[rgba(var(--badge-light-color),1)];
+    }
+
+    .form-control,
+    .form-select {
+      @apply text-sm text-[rgba(var(--body-font-color),1)] bg-[rgba(var(--auth-bg-color),1)];
+    }
+
+    .bootstrap-select {
+      .dropdown-toggle {
+        @apply border-[rgba(var(--light-gray),1)];
+      }
+
+      .dropdown-menu {
+        .inner {
+          @apply max-h-[200px];
+        }
+      }
+    }
+    .input-group {
+      @apply flex-nowrap;
+      .input-group-text {
+        @apply bg-[rgba(var(--lighter-white),0.7)] rounded-[6px_0_0_6px];
+        i {
+          @apply font-normal;
+        }
+      }
+      .form-control {
+        @apply rounded-[0_6px_6px_0];
+      }
+    }
+
+    .form-check {
+      &.form-switch {
+        @apply flex justify-start items-center gap-3.5 m-0 p-0;
+
+        .form-check-input {
+          @apply m-0 !w-[40px] !h-[22px];
+        }
+
+        p {
+          @apply flex justify-center items-center gap-1.5;
+
+          svg {
+            @apply min-w-[15px] min-h-[15px] w-[15px] h-[15px];
+          }
+        }
+      }
+    }
+    .helper-text {
+      p {
+        @apply text-[13px];
+      }
+    }
+
+    .tab-content {
+      .card-gap {
+        @apply mb-6;
+      }
+    }
+    .advance-options {
+      .tab-links {
+        @apply !mb-[30px];
+      }
+    }
+  }
+  @screen sm {
+    .main-setting {
+      .tab-content {
+        .advance-options {
+          .tab-links {
+            @apply mb-[18px] block;
+            .tab-link {
+              @apply mb-3 pt-2.5 block last:mb-0;
+            }
+          }
+        }
+        .card-gap {
+          @apply mb-[1.2rem];
+        }
+      }
+    }
+  }
+  @screen lg {
+    .main-setting {
+      .tab-links {
+        @apply gap-3 flex-nowrap overflow-auto relative flex-row whitespace-nowrap;
+      }
+      .nav-link {
+        @apply whitespace-nowrap;
+      }
+      .advance-options {
+        .tab-links {
+          @apply pb-0;
+          .tab-link {
+            @apply bg-[unset] rounded-none;
+          }
+        }
+      }
+    }
+  }
+  @screen only992 {
+    .main-setting {
+      .tab-content {
+        @apply border-l-[rgba(var(--gray-60),1)] h-full pl-[18px] border-l border-dashed;
+        [dir="rtl"] & {
+          @apply border-r-[rgba(var(--gray-60),1)] pl-[0] pr-[18px] border-l-0 border-r border-dashed;
+        }
+        .advance-options {
+          .tab-links {
+            @apply flex-row pb-0;
+            .tab-link {
+              @apply bg-transparent rounded-none;
+            }
+          }
+          .tab-content {
+            @apply border-[var(--transparent-color)];
+          }
+        }
+      }
+    }
+  }
+}

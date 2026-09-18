@@ -1,0 +1,57 @@
+@layer components {
+  .sortable-handler {
+    ul {
+      li {
+        i {
+          @apply cursor-pointer;
+        }
+      }
+    }
+  }
+  .grid-box-wrapper {
+    @apply flex-wrap flex justify-between items-center;
+  }
+  .grid-box {
+    @apply grid place-items-center p-2 rounded-[10px] h-[100px] w-[100px];
+  }
+  .draggable-filter {
+    ul {
+      li {
+        img {
+          @apply h-[37px] w-[37px];
+        }
+      }
+    }
+  }
+  .stackable-list {
+    .list-group {
+      @apply px-4 py-[11px];
+      .list-group-item {
+        @apply px-4 py-[11px];
+        i {
+          @apply text-[rgba(var(--warning-color),1)];
+        }
+      }
+    }
+  }
+  .nested-1 {
+    @apply bg-[rgba(var(--theme-default),0.03)];
+  }
+  .nested-2 {
+    @apply bg-[rgba(var(--theme-default),0.05)];
+  }
+  .nested-3 {
+    @apply bg-[rgba(var(--theme-default),0.07)];
+  }
+  .nested-4 {
+    @apply bg-[rgba(var(--theme-default),0.09)];
+  }
+  .swap-wrapper {
+    .list-group {
+      @apply px-4 py-[11px];
+      img {
+        @apply h-4 w-auto float-start;
+      }
+    }
+  }
+}

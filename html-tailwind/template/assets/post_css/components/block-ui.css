@@ -1,0 +1,78 @@
+@layer components {
+  .block-main-wrapper,
+  .card-block-wrapper {
+    p {
+      @apply block h-[68px] overflow-hidden text-ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
+  }
+
+  .block-main-wrapper {
+    @apply relative;
+    .button {
+      @apply py-[6px] px-[28px];
+    }
+    .block-wrapper {
+      @apply relative border border-[rgba(var(--chart-dashed-border),1)] mb-3 p-3 border-solid;
+      p {
+        @apply m-0;
+      }
+    }
+  }
+  .block-wrapper {
+    .button {
+      @apply py-[6px] px-[28px];
+    }
+  }
+
+  .card-img-top1,
+  .card-img-top2 {
+    @apply w-full h-[100px] object-cover object-bottom rounded-none;
+  }
+
+  .form-main-wrapper {
+    .form-block-wrapper {
+      @apply relative mb-3;
+      .card-wrapper {
+        &.overlay-bg {
+          @apply cursor-wait;
+          form {
+            .form-control {
+              @apply bg-[transparent] text-[rgba(var(--black),1)] border-[rgba(var(--gray-60),1)];
+            }
+          }
+        }
+      }
+    }
+    .button {
+      @apply py-[6px] px-[28px];
+    }
+  }
+  .overlay-bg {
+    @apply bg-[rgba(var(--black),0.3)];
+  }
+  .page-loader-10 {
+    @apply relative z-[2] bg-[rgba(var(--white),0.8)] w-full h-full opacity-40 left-0 top-0 before:content-[attr(data-text)] before:block before:max-w-[125px] before:absolute before:-translate-x-2/4 before:-translate-y-2/4 before:text-[#343a40] before:text-center before:left-2/4 before:top-2/4 after:content-[''] after:block after:border-[transparent_var(--recent-dashed-border)_var(--recent-dashed-border)_var(--recent-dashed-border)] after:absolute after:animate-[load_0.85s_infinite_linear] after:rounded-[50%] after:border-2 after:border-solid after:left-2/4 after:top-2/4;
+    ::after {
+      @apply w-[35px] h-[35px];
+    }
+  }
+  @keyframes load {
+    0% {
+      transform: translate3d(-50%, -50%, 0) rotate(0deg);
+    }
+    100% {
+      transform: translate3d(-50%, -50%, 0) rotate(360deg);
+    }
+  }
+  .page-loader-12 {
+    @apply animate-[content-loading_2s_linear] relative bg-[rgba(var(--white),0.8)] left-0 top-0 before:content-["Loading..."] before:block before:max-w-[125px] before:absolute before:-translate-x-2/4 before:-translate-y-2/4 before:text-[rgba(var(--body-font-color),1)] before:z-[1] before:text-xl before:bg-[rgba(var(--theme-secondary),1)] before:p-[18px] before:rounded-[25px_0_25px_0] before:left-2/4 before:top-2/4;
+  }
+  @keyframes content-loading {
+    to {
+      @apply opacity-0;
+    }
+  }
+}

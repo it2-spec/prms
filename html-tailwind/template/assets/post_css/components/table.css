@@ -1,0 +1,392 @@
+/**=====================
+    2.29 Table CSS Start
+==========================**/
+@layer components {
+  .table {
+    @apply w-full !mb-0;
+  }
+  thead,
+  tbody,
+  tfoot,
+  tr,
+  td,
+  th {
+    @apply border-[rgba(var(--chart-progress-light),1)];
+  }
+  th {
+    text-align: -webkit-match-parent;
+  }
+  .table > :not(caption) > * > * {
+    @apply !border-b;
+  }
+  .table thead th {
+    @apply border-b-[rgba(var(--light-gray),1)] border-b-2 border-solid;
+  }
+  .align-middle.table {
+    @apply whitespace-pre-wrap !important;
+  }
+  .table {
+    @apply mb-6;
+    tbody,
+    tfoot {
+      tr:last-child {
+        td,
+        th {
+          @apply !border-b-[0];
+        }
+      }
+    }
+    > :not(:last-child) > :last-child > * {
+      @apply border-b-[rgba(var(--light-gray),1)];
+    }
+    th,
+    td {
+      @apply p-3;
+    }
+    &.table-primary {
+      th {
+        @apply text-[rgba(var(--white),1)];
+      }
+    }
+    thead {
+      &.bg-primary {
+        tr {
+          th {
+            @apply text-[rgba(var(--white),1)];
+          }
+        }
+      }
+    }
+    th {
+      @apply text-[rgba(var(--table-heading-color),1)] font-medium;
+      &.c-light {
+        @apply text-[rgba(var(--badge-light-color),1)];
+      }
+    }
+    td {
+      @apply text-[rgba(var(--table-row-color),1)];
+    }
+    [class*="bg-"] {
+      @apply text-[rgba(var(--white),1)];
+    }
+    .bg-light {
+      @apply text-[rgba(var(--theme-body-font-color),1)];
+    }
+    tfoot {
+      @apply font-semibold;
+    }
+  }
+  .pills-component {
+    @apply w-1/5;
+  }
+  #row_create {
+    td {
+      &.highlight {
+        @apply font-medium text-[rgba(var(--theme-default),1)];
+      }
+      &.danger {
+        @apply font-medium text-[rgba(var(--danger-color),1)];
+      }
+    }
+  }
+  .table-dark th {
+    @apply text-[rgba(var(--white),1)];
+  }
+  .table-inverse {
+    @apply text-[rgba(var(--white),1)] bg-[rgba(41,43,44,1)];
+    th,
+    td {
+      @apply text-[rgba(var(--white),1)] border-[rgba(var(--white),1)];
+    }
+    &.table-bordered {
+      @apply border-0;
+    }
+  }
+  .table[class*="bg-"] {
+    th,
+    td {
+      @apply text-[rgba(var(--white),1)];
+    }
+  }
+  .table-hover {
+    > tbody {
+      > tr:hover {
+        --bs-table-accent-bg: #f6f6f6;
+      }
+    }
+    tbody {
+      tr {
+        @apply align-middle hover:bg-[rgba(var(--primary-color),0.1)];
+        td {
+          svg {
+            @apply w-[30px] h-[30px] rounded mr-2.5 p-[5px];
+            [dir="rtl"] & {
+              @apply ml-2.5 mr-[unset];
+            }
+          }
+        }
+      }
+    }
+  }
+  .typography-table {
+    tr {
+      &:last-child {
+        @apply border-b-0;
+        td {
+          @apply border-b-0;
+        }
+      }
+    }
+  }
+  .table-double {
+    @apply border-x-4 border-x-[#dee2e6] border-double;
+    thead,
+    tbody,
+    tfoot,
+    tr,
+    td,
+    th {
+      @apply border-x-0 border-double border-4;
+    }
+  }
+  .table-dotted {
+    @apply border-x-2 border-x-[#dee2e6] border-dotted;
+    thead,
+    tbody,
+    tfoot,
+    tr,
+    td,
+    th {
+      @apply border-x-0 border-dotted border-2;
+    }
+  }
+  .table-dashed {
+    @apply border-x-2 border-x-[#dee2e6] border-dashed;
+    thead,
+    tbody,
+    tfoot,
+    tr,
+    td,
+    th {
+      @apply border-x-0 !border-dashed border-2;
+    }
+    tbody {
+      tr {
+        &:last-child {
+          th,
+          td {
+            @apply border-[rgba(var(--chart-progress-light),1)];
+          }
+        }
+      }
+    }
+  }
+  .table-xl {
+    th,
+    td {
+      @apply text-xl p-6;
+    }
+  }
+  .table-lg {
+    td,
+    th {
+      @apply p-[var(--table-lg-padding)] text-[var(--table-lg-font)];
+    }
+  }
+  .table-de {
+    td,
+    th {
+      @apply p-[var(--table-de-padding)];
+    }
+  }
+  .table-sm {
+    th,
+    td {
+      @apply p-[var(--table-sm-padding)];
+    }
+  }
+  .table-xs {
+    th,
+    td {
+      @apply p-[var(--table-xs-padding)];
+    }
+  }
+  .table-border-horizontal {
+    tr,
+    th,
+    td {
+      @apply p-[var(--horizontal-padding)] border-t-[rgba(var(--horizontal-border-color),1)] border-t border-solid;
+    }
+  }
+  .table-border-vertical {
+    tr,
+    th,
+    td {
+      @apply border-r-[rgba(var(--horizontal-border-color),1)] border-t-0 border-r border-solid;
+    }
+    tr {
+      td {
+        @apply border-b-0 last:border-r-0;
+      }
+    }
+    tbody {
+      tr {
+        th {
+          @apply border-b-0;
+        }
+      }
+    }
+  }
+  .table-bordernone {
+    td {
+      @apply border-0;
+    }
+    thead {
+      th {
+        @apply border-0;
+      }
+    }
+    .u-s-tb {
+      @apply p-[11px];
+    }
+  }
+  .table-striped {
+    thead {
+      tr {
+        th {
+          border-bottom: unset;
+        }
+      }
+    }
+    tbody {
+      tr {
+        &:nth-of-type(odd) > * {
+          @apply !bg-[rgba(var(--light-background),1)];
+          --bs-table-accent-bg: unset;
+        }
+      }
+    }
+  }
+  .table-bordered {
+    thead,
+    tbody,
+    tfoot,
+    tr,
+    td,
+    th {
+      @apply border-[rgba(var(--tw-border-color),1)];
+    }
+  }
+  .common-striped {
+    .table {
+      &.table-striped {
+        &[class*="bg-"] {
+          --tw-table-bg: auto;
+        }
+      }
+    }
+  }
+  .table-components {
+    .table-bordered {
+      .dropdown {
+        .dropdown-menu {
+          &.show {
+            @apply !right-[unset];
+          }
+        }
+      }
+    }
+    .w-50 {
+      @apply w-6/12;
+    }
+    table {
+      @apply border whitespace-nowrap rounded-[0_0_6px_6px] border-solid border-[rgba(var(--black).04)];
+      thead {
+        tr {
+          @apply border-b-[rgba(var(--black),0.04)] border-b border-solid;
+          &:last-child {
+            td {
+              &:first-child {
+                @apply rounded-[0_0_0_10px];
+              }
+            }
+          }
+        }
+      }
+      tbody {
+        tr {
+          @apply border-b-[rgba(var(--black),0.04)] border-b border-solid;
+          &:last-child {
+            td {
+              &:last-child {
+                @apply rounded-[0_0_10px_0];
+              }
+            }
+          }
+        }
+      }
+      td {
+        @apply border-r-[rgba(var(--black),0.04)] border-r border-solid;
+      }
+    }
+    .table-bordered {
+      .dropdown-menu {
+        &.show {
+          @apply bg-[rgba(var(--white),1)];
+        }
+      }
+    }
+    .alert {
+      p {
+        @apply line-clamp-[1];
+      }
+      .btn {
+        @apply absolute z-[2] bg-[url("./../images/close.svg")] bg-no-repeat p-[8px] right-[15px] top-[50%] translate-y-[-50%] brightness-[1] invert-[1];
+      }
+    }
+  }
+  .basic_table {
+    .table {
+      @apply whitespace-nowrap;
+      thead,
+      tbody {
+        tr {
+          @apply border-b-[rgba(var(--black),0.04)] border-b-0 border-solid;
+        }
+      }
+      &.table-striped {
+        &.table-hover {
+          tr {
+            &:hover {
+              @apply !bg-[rgba(var(--theme-secondary),0.2)];
+            }
+          }
+        }
+      }
+    }
+  }
+  .border-bottom-table {
+    tbody {
+      tr {
+        &:last-child {
+          th,
+          td {
+            @apply border-b-0;
+          }
+        }
+      }
+    }
+  }
+  .emphasis-table {
+    --tw-emphasis-color-rgb: 242, 243, 247;
+  }
+  .emphasis-table .table-striped-columns > :not(caption) > tr > :nth-child(2n) {
+    @apply bg-[rgba(var(--course-light-btn),1)];
+  }
+  .emphasis-table .table-active {
+    @apply bg-[rgba(var(--course-light-btn),1)];
+  }
+}
+/**=====================
+    2.29 Table CSS Ends
+==========================**/

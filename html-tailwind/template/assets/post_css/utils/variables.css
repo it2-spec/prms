@@ -1,0 +1,391 @@
+:root {
+  /* General variables */
+  --theme-font-color: 36, 41, 52;
+  --theme-body-font-color: 64, 64, 64;
+  --theme-body-sub-title-color: 117, 117, 138;
+  --body-color: 248, 248, 248;
+  --main-body-color: 247, 248, 249;
+
+  /* Theme colors variables */
+  --theme-default: 115, 102, 255;
+  --primary-color: 115, 102, 255;
+  --theme-secondary: 131, 131, 131;
+  --secondary-color: 131, 131, 131;
+  --success-color: 101, 193, 92;
+  --info-color: 64, 184, 245;
+  --warning-color: 255, 184, 41;
+  --danger-color: 252, 86, 74;
+  --light-color: 244, 244, 244;
+  --badge-light-color: 82, 82, 108;
+  --light-gray: 233, 237, 241;
+  --light-widget-border: 239, 238, 255;
+  --light-semi-gray: 239, 239, 239;
+  --font-gray-color: 108, 117, 125;
+  --dark-light: 36, 41, 52;
+  --dark-gray: 137, 137, 137;
+  --dark-color: 63, 71, 90;
+  --dark-color-light: 103, 107, 116;
+  --gray-60: 204, 204, 204;
+  --card-body-color: 249, 249, 250;
+  --transparent-color: transparent;
+  --auth-bg-color: 250, 250, 250;
+  --light: 253, 254, 255;
+  --semi-dark: 89, 102, 122;
+  --light-text: 153, 153, 153;
+  --light-paragraph: 143, 143, 143;
+  --light-background: 246, 247, 249;
+  --light-font: 162, 170, 186;
+  --light-semi-font: 89, 102, 122;
+  --light-chartist-grid-color: 246, 249, 253;
+  --pitch-color: 254, 138, 125;
+  --color-scarpa: 76, 86, 103;
+  --color-fiord: 69, 90, 100;
+  --black: 0, 0, 0;
+  --white: 255, 255, 255;
+  --white-bg: 255, 255, 255;
+  --ps-light-border: 221, 221, 221;
+  --off-white: 247, 246, 255;
+  --lighter-white: 233, 233, 233;
+  --theme-medium-color: 234, 232, 255;
+  --dropdown-border-color: 145, 142, 153;
+  --light-primary: 232, 229, 255;
+  --light-secondary: 242, 242, 242;
+  --light-success: 220, 241, 218;
+  --light-info: 213, 245, 254;
+  --light-warning: 255, 247, 229;
+  --light-danger: 255, 232, 230;
+  --light-white: 249, 249, 251;
+  --light-dark: 234, 235, 242;
+  --folder-color: 239, 160, 0;
+  --chart-progress-light: 237, 237, 240;
+  --recent-dashed-border: 203, 203, 211;
+  --recent-border: 215, 216, 222;
+  --tw-emphasis-color-rgb: 246, 247, 249;
+  --tw-border-color: 233, 237, 241;
+  --tw-table-bg: 246, 247, 249;
+  --tw-heading-color: 51, 51, 51;
+  --light-bg: 238, 241, 246;
+  --chart-dashed-border: 220, 220, 225;
+  --view-grid-bg: 246, 249, 252;
+  --lighter-gray: 33, 37, 41;
+  --light2: 245, 246, 249;
+  --chart-border: 236, 243, 250;
+  --course-light-btn: 242, 243, 247;
+  --chart-text-color: 117, 116, 136;
+  --recent-chart-bg: 252, 252, 253;
+  --light-shade-primary: 245, 244, 255;
+  --dark-light-color: 61, 59, 130;
+  --course-bg: 247, 247, 247;
+  --light-slate: 245, 246, 249;
+  --primary-70: 157, 151, 251;
+  --warning-70: 254, 191, 134;
+  --success-70: 138, 207, 135;
+  --view-border-marker: 207, 205, 252;
+  --recent-box-bg: 242, 244, 247;
+
+  /* gradient colors */
+  --gradient-primary: linear-gradient(26deg, rgba(var(--theme-default), 1) 0%, #a26cf8 100%);
+  --gradient-bg-primary: linear-gradient(103.75deg, #33b1ee -13.9%, rgba(var(--theme-default), 1) 79.68%);
+
+  /* Social colors */
+  --fb: 80, 89, 142;
+  --twitter: 0, 0, 204;
+  --google-plus: 198, 78, 64;
+  --linkedin: 0, 115, 177;
+
+  /* Social table */
+  --fb-color: 47, 132, 244;
+  --insta-color: 252, 151, 30;
+  --pintrest-color: 255, 51, 100;
+  --twitter-color: 35, 25, 21;
+  --youtube-color: 244, 47, 47;
+  --instagram-color: linear-gradient(45deg, #fee411 11.93%, #fedb16 15.61%, #fec125 21.74%, #fe983d 29.56%, #fe5f5e 38.66%, #fe2181 47.46%, #9000dc 82.98%);
+
+  /*rating*/
+  --normal: 236, 234, 243;
+  --normal-shadow: 217, 216, 227;
+  --normal-mouth: 151, 149, 164;
+  --normal-eye: 89, 88, 97;
+  --active: 248, 218, 105;
+  --active-shadow: 244, 181, 85;
+  --active-mouth: 240, 81, 54;
+  --active-eye: 49, 48, 54;
+  --active-tear: 118, 181, 231;
+  --active-shadow-angry: 233, 79, 29;
+
+  /* error input color start */
+  --light-body-bg-color: 250, 253, 255;
+
+  /* fonts */
+  --font-rubik: Rubik;
+  --font-roboto: Roboto;
+  --font-serif: sans-serif;
+  --landing-cursive: "Caveat", cursive;
+  --font-themify: themify;
+  --font-awesome: "Font Awesome 6 Free";
+  --font-ICO: IcoFont;
+
+  /* General tag settings */
+  --body-font-size: 14px;
+  --body-font-color: 64, 64, 64;
+  --ul-padding-left: 0px;
+  --anchor-color: 115, 102, 255;
+  --btn-focus-box-shadow: none;
+  --all-focus-outline-color: 115, 102, 255;
+  --paragraph-font-size: 14px;
+  --paragraph-line-height: 1.7;
+  --paragraph-letter-spacing: 0.7px;
+  --code-tag-color: 115, 102, 255;
+  --code-tag-bg-color: 251, 250, 255;
+  --code-tag-padding: 3px;
+  --code-tag-margin: 0 3px;
+  --code-tag-border-radius: 2px;
+  --blockquote-padding: 8px;
+  --blockquote-border: 115, 102, 255;
+  --small-tag-padding: 10px;
+  --small-tag-color: 63, 71, 90;
+  --pre-tag-bg-color: 251, 250, 255;
+  --pre-tag-padding: 20px 0;
+  --list-group-active-bg-color: 115, 102, 255;
+  --list-group-active-border-color: 115, 102, 255;
+  --list-group-img-size: 40px;
+  --list-group-margin: 10px;
+  --f-lighter: 127, 129, 131;
+
+  /* Tables settings */
+  --table-b-margin: 0px;
+  --table-heading-color: 64, 64, 64;
+  --table-row-color: 64, 64, 64;
+  --table-footer-font-weight: bold;
+  --table-inverse-color: 255, 255, 255;
+  --table-hover-color: 253, 254, 255;
+  --table-padding: 0.75rem;
+  --table-xl-padding: 1.25rem 2rem;
+  --table-xl-font: 120%;
+  --table-lg-padding: 0.9rem 2rem;
+  --table-lg-font: 110%;
+  --table-de-padding: 0.75rem 2rem;
+  --table-de-font: 100%;
+  --table-sm-padding: 0.5rem 2rem;
+  --table-sm-font: 90%;
+  --table-xs-padding: 0.2rem 2rem;
+  --table-xs-font: 80%;
+  --horizontal-border-color: #f2f4ff;
+  --horizontal-padding: 0.75rem 2rem;
+  --table-inverse-bg-color: #292b2c;
+
+  /* According setting */
+  --according-card-top-margin: 10px;
+  --according-btn-weight: 500;
+  --according-btn-color: 64, 64, 64;
+  --according-card-header-padding: 0.75rem 1.25rem;
+  --according-card-header-icon: var(--font-ICO);
+  --according-open-icon: "\eb73";
+  --according-close-icon: "\eb7a";
+
+  /* Alert settings */
+  --alert-hover-color: 63, 71, 90;
+  --alert-border-radius: 0.15rem;
+  --alert-padding: 15px;
+  --alert-msg-icon-size: 16px;
+
+  /* badge settings */
+  --badge-padding: 0.25em 0.5em;
+  --badge-svg-size: 16px;
+
+  /* form input settings */
+  --form-group-margin-bottom: 1.25em;
+  --col-form-label-font-size: 14px;
+  --form-control-font-size: 14px;
+  --form-control-border-radius: 2px;
+  --form-control-border-color: 233, 237, 241;
+  --breadcrumb-anchor-color: 255, 255, 255;
+  --breadcrumb-anchor-dark-color: 0, 0, 0;
+
+  /* buttons setting */
+  --btn-font-size: 14px;
+  --btn-padding: 0.375rem 1.75rem;
+  --btn-lg-font-size: 18px;
+  --btn-sm-font-size: 12px;
+  --btn-xs-font-size: 11px;
+  --btn-xs-padding: 0.05rem 0.4rem;
+
+  /* Card settings */
+  --card-padding: 20px;
+  --card-margin-bottom: 24px;
+  --card-border-color: 1px solid 233, 237, 241;
+  --card-border-radius: 15px;
+  --common-shadow-color: rgba(var(--info-color), 0.08);
+  --card-box-shadow: 0px 9px 20px rgba(46, 35, 94, 0.07);
+  --card-header-bg-color: 255, 255, 255;
+  --card-header-font-transform: capitalize;
+  --card-header-span-size: 12px;
+  --card-header-span-color: 117, 117, 138;
+  --card-body-bg-color: transparent;
+  --card-footer-bg-color: 255, 255, 255;
+  --card-hover-box-shadow: 0 0 40px rgba(8, 21, 66, 0.05);
+
+  /* According settings */
+  --card-border-width: 0px;
+  --card-header-font-weight: 600;
+  --card-header-font-size: 18px;
+  --card-header-font-color: 64, 64, 64;
+
+  /* footer settings */
+  --footer-dark-color: 36, 41, 52;
+
+  /* form settings */
+  --form-group-margin-bottom: 20px;
+  --sm-form-margin-bottom: 14px;
+  --form-placeholder-color: 137, 137, 137;
+  --form-placeholder-font-size: 14px;
+  --form-placeholder-letter-spacing: 1px;
+  --form-placeholder-font-weight: 100;
+  --form-input-border-color: 239, 239, 239;
+  --form-input-bg-color: 255, 255, 255;
+
+  /* Tour settings */
+  --tour-color: 115, 102, 255;
+
+  /* sidebar main settings */
+  --sidebar-width: 255px;
+  --sidebar-position: fixed;
+  --sidebar-background-color: 255, 255, 255;
+  --sidebar-shadow: 0 0 11px rgba(69, 110, 243, 0.13);
+  --sidebar-overflow: auto;
+  --sidebar-z-index: 9;
+  --sidebar-transition: 0.5s;
+  --sidebar-fill-icon-color: #757589;
+
+  /* sidebar profile settings */
+  --sidebar-profile-edit-icon-size: 14px;
+  --sidebar-profile-name-txt-color: 115, 102, 255;
+  --sidebar-profile-name-txt-transfer: uppercase;
+  --sidebar-profile-name-txt-weight: 600;
+  --sidebar-profile-name-letter-specing: 1.5px;
+  --sidebar-profile-name-margin: 3px;
+  --sidebar-profile-sub-title-font-size: 10px;
+  --sidebar-profile-sub-title-margin: 0px;
+  --sidebar-profile-img-shadow: 0 0 15px rgba(68, 102, 242, 0.3);
+
+  /* Sidebar main menu setting */
+  --sidebar-menu-padding: 15px;
+  --sidebar-menu-list-style: none;
+  --sidebar-menu-list-margin: 0;
+  --sidebar-icon-size: 14px;
+  --sidebar-icon-margin: 14px;
+  --sidebar-icon-stroke-width: 3px;
+  --sidebar-font-size: 14px;
+  --sidebar-letter-spacing: 0.5px;
+  --sidebar-txt-transform: capitalize;
+  --sidebar-font-weight: 600;
+  --sidebar-font-color: 64, 64, 64;
+  --sidebar-padding-top: 12px;
+  --sidebar-padding-bottom: 12px;
+  --sidebar-sub-header-padding: 15px;
+  --sidebar-sub-header-margin: 0;
+  --sidebar-heading-hover-padding: 5px;
+  --sidebar-hover-txt-color: 115, 102, 255;
+  --sidebar-arrow-margin-top: 2px;
+  --sidebar-arrow-size: 15px;
+  --sidebar-arrow-color: 64, 64, 64;
+  --sidebar-open-icon: "\f107";
+  --sidebar-close-icon: "\f105";
+  --sidebar-icon-font-family: var(--font-awesome);
+  --sidebar-height: calc(100vh - 115px);
+  --sidebar-compact-width: 265px;
+
+  /* Header settings */
+  --main-header-position: fixed;
+  --main-header-top: 0;
+  --main-header-shadow: 0 0 20px rgba(var(--semi-dark), 0.1);
+  --main-header-shadow-1: 0px 4px 40px rgba(39, 32, 120, 0.1);
+
+  /* page settings */
+  --page-body-padding: 0 calc(15px + (27 - 15) * ((100vw - 320px) / (1920 - 320))) 0 calc(15px + (27 - 15) * ((100vw - 320px) / (1920 - 320)));
+  --page-body-bg-color: 244, 244, 244;
+  --page-body-margin-bottom: 0px;
+  --page-title-padding: 15px 32px;
+  --common-box-shadow: 2px 3.464px 8px 0px rgba(22, 145, 248, 0.18);
+  --page-title-font-size: 24px;
+  --page-title-margin-bottom: 0;
+  --page-title-text-transform: capitalize;
+  --page-small-title-display: block;
+  --page-small-title-font-size: 12px;
+  --page-small-title-margin-bottom: 5px;
+  --page-small-title-text-transform: capitalize;
+  --page-small-title-text-color: 117, 117, 138;
+  --breadcrumb-size: 16px;
+  --breadcrumb-content: "/";
+
+  /* main header left settings */
+  --main-header-z-index: 8;
+  --header-wrapper-padding: 22px 30px;
+  --header-wrapper-nav-icon-size: 20px;
+  --header-wrapper-nav-icon-color: 36, 41, 52;
+  --header-wrapper-nav-icon-align: middle;
+  --header-size: 136px;
+  --box-layout-space: 42px;
+
+  /* widgets variables */
+  --widget-shadow: 1px 2px 21px -2px rgba(214, 214, 227, 0.83);
+}
+
+.dark-only {
+  --recent-border: 55, 69, 88;
+  --white-bg: 38, 41, 50;
+  --dark-body-background: 29, 30, 38;
+  --dark-card-background: 38, 41, 50;
+  --dark-card-inbox: 50, 56, 70;
+  --dark-small-font-color: 168, 169, 173;
+  --dark-all-font-color: 168, 169, 173;
+  --light-all-font-color: 81, 84, 90;
+  --dark-border-color: 29, 30, 38;
+  --dark-card-border: 55, 69, 88;
+  --dark-editor-document: 43, 43, 43;
+  --tw-heading-color: 190, 191, 194;
+  --bg-dark-color: 31, 37, 51;
+  --dark-datatable-odd: 31, 35, 43;
+  --dark-datatable-sorting: 28, 33, 43;
+  --dark-datatable-sorting-even: 34, 38, 47;
+  --dark-even-hover-sorting: 25, 30, 39;
+  --chart-text-color: 101, 101, 113;
+  --light-background: 31, 32, 40;
+  --light-bg: 29, 30, 38;
+  --ps-light-border: 60, 63, 70;
+  --light2: 29, 30, 38;
+  --course-light-btn: 29, 30, 38;
+  --body-font-color: 168, 169, 173;
+  --chart-dashed-border: 71, 71, 71;
+  --chart-progress-light: 32, 33, 40;
+  --off-white: 38, 41, 50;
+  --badge-light-color: 82, 82, 108;
+  --recent-dashed-border: 52, 54, 66;
+  --light-shade-primary: 46, 53, 67;
+  --course-bg: 31, 32, 40;
+  --chart-border: 55, 69, 88;
+  --light-slate: 28, 29, 38;
+  --recent-chart-bg: 38, 41, 50;
+  --view-border-marker: 79, 79, 99;
+}
+body.dark-sidebar {
+  --dark-body-background: 29, 30, 38;
+  --dark-card-background: 38, 41, 50;
+  --dark-all-font-color: 168, 169, 173;
+  --dark-card-border: 55, 69, 88;
+}
+[data-attr="color-2"] > div {
+  --theme-default: 72, 49, 212;
+}
+[data-attr="color-3"] > div {
+  --theme-default: 214, 77, 207;
+}
+[data-attr="color-4"] > div {
+  --theme-default: 76, 47, 191;
+}
+[data-attr="color-5"] > div {
+  --theme-default: 124, 77, 255;
+}
+[data-attr="color-6"] > div {
+  --theme-default: 57, 73, 171;
+}

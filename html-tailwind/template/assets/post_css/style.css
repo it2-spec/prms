@@ -1,0 +1,130 @@
+/* Variables */
+@import "utils/variables.css";
+
+/* Tailwind */
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* base */
+@import "base/reset.css";
+@import "base/typography.css";
+
+/* components */
+@import "components/buttons.css";
+@import "components/card.css";
+@import "components/table.css";
+@import "components/modal.css";
+@import "components/avatars.css";
+@import "components/badge.css";
+@import "components/alert.css";
+@import "components/popover.css";
+@import "components/dropdown.css";
+@import "components/according.css";
+@import "components/tab.css";
+@import "components/list.css";
+@import "components/scrollbar.css";
+@import "components/tree.css";
+@import "components/block-ui.css";
+@import "components/rating.css";
+@import "components/dropzone.css";
+@import "components/tour_custom.css";
+@import "components/toasts.css";
+@import "components/forms.css";
+@import "components/form-wizard.css";
+@import "components/datatable.css";
+@import "components/ribbon.css";
+@import "components/breadcrumb.css";
+@import "components/range-slider.css";
+@import "components/basic-card.css";
+@import "components/radio.css";
+@import "components/icons.css";
+@import "components/form-input.css";
+@import "components/datepicker.css";
+@import "components/touchspin.css";
+@import "components/switch.css";
+@import "components/print.css";
+@import "components/typeahead-search.css";
+@import "components/loader.css";
+
+/* pages */
+@import "pages/dashboard_default.css";
+@import "pages/divider.css";
+@import "pages/helper.css";
+@import "pages/progress.css";
+@import "pages/placeholders.css";
+@import "pages/offcanvas.css";
+@import "pages/user-profile.css";
+@import "pages/internationalization.css";
+@import "pages/errorpage.css";
+@import "pages/login.css";
+@import "pages/sweet-alert.css";
+@import "pages/dashboard_2.css";
+@import "pages/dashboard_3.css";
+@import "pages/dashboard_4.css";
+@import "pages/dashboard_5.css";
+@import "pages/dashboard_6.css";
+@import "pages/dashboard_7.css";
+@import "pages/dashboard_8.css";
+@import "pages/dashboard_9.css";
+@import "pages/dashboard_10.css";
+@import "pages/dashboard_11.css";
+@import "pages/dashboard_12.css";
+@import "pages/dashboard_13.css";
+@import "pages/page.css";
+@import "pages/pricing.css";
+@import "pages/faq.css";
+@import "pages/ecommerce.css";
+@import "pages/knowledgebase.css";
+@import "pages/gallery.css";
+@import "pages/blog.css";
+@import "pages/projectlist.css";
+@import "pages/mail_box.css";
+@import "pages/job-search.css";
+@import "pages/learning.css";
+@import "pages/reports.css";
+@import "pages/timeline-v.css";
+@import "pages/flash_icons.css";
+@import "pages/megaoption.css";
+@import "pages/chart.css";
+@import "pages/jsgrid.css";
+@import "pages/bookmark-app.css";
+@import "pages/email-application.css";
+@import "pages/social-app.css";
+@import "pages/file-manager.css";
+@import "pages/task.css";
+@import "pages/contacts.css";
+@import "pages/file.css";
+@import "pages/kanban.css";
+@import "pages/add-product.css";
+@import "pages/chat.css";
+@import "pages/sellers.css";
+@import "pages/roles-permission.css";
+@import "pages/order-history.css";
+@import "pages/invoice.css";
+@import "pages/cart.css";
+@import "pages/wishlist.css";
+@import "pages/checkout.css";
+@import "pages/language.css";
+@import "pages/manage-reviews.css";
+@import "pages/settings.css";
+@import "pages/comingsoon.css";
+@import "pages/editors.css";
+@import "pages/landing-page.css";
+
+/* layouts */
+@import "layout/rtl.css";
+@import "layout/header.css";
+@import "layout/sidebar.css";
+@import "layout/footer.css";
+@import "layout/grid.css";
+@import "layout/box-layout.css";
+@import "layout/navs.css";
+@import "layout/select2.css";
+@import "layout/search.css";
+
+/* theme */
+@import "theme/update.css";
+@import "theme/dark.css";
+@import "theme/theme-customizer.css";
+@import "theme/responsive.css";

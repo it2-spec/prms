@@ -1,0 +1,22 @@
+- var page_Title = 'Error 500';
+doctype html
+html(lang='en')
+    include ../../components/header-files
+    body
+        include ../../components/taptop
+        // page-wrapper Start
+        #pageWrapper.page-wrapper.compact-wrapper
+          // error-500 start
+          .error-wrapper
+            .container(class="[@media(min-width:1400px)]:!max-w-[1320px] [@media(min-width:1200px)]:!max-w-[1140px] [@media(min-width:992px)]:!max-w-[960px] [@media(min-width:768px)]:!max-w-[720px]")
+              svg 
+                use(href='../assets/svg/icon-sprite.svg#error-500')
+              .grid.grid-cols-12
+                div(class="col-start-4 md:col-start-0 col-span-6 md:col-span-12")
+                  h3 Server Error
+                  p.sub-content.pb-0
+                    | The server couldn't finish processing your request due to an error.
+              div
+                a.btn.btn-primary.btn-lg.text-white(href='index.html' class="hover:text-white !rounded-lg") BACK TO HOME PAGE
+          // error-500 end
+        include ../../components/footer-files

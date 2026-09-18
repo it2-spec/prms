@@ -1,0 +1,48 @@
+@layer components {
+  .popover {
+    @apply bg-[rgba(var(--white),1)] shadow-[0_0_20px_rgba(var(--primary-color),0.1)] border-0 absolute hidden z-[1000] max-w-[275px] text-sm rounded-[5px];
+    -webkit-box-shadow: 0 0 20px rgba(var(--primary-color), 0.1);
+    .popover-arrow {
+      @apply h-[15px] w-[15px] bg-[rgba(var(--white),1)] border absolute top-[-7px] z-[-1] rotate-45 border-solid border-[rgba(var(--dark-color),0.15)] left-2.5;
+    }
+    .popover-header {
+      @apply bg-[rgba(var(--theme-medium-color),1)] text-[rgba(var(--primary-color),1)] font-medium px-4 py-2 rounded-[5px_5px_0_0] border-b-[none];
+    }
+    .popover-body {
+      @apply text-[rgba(43,43,43,0.7)] p-4 rounded-[0_0_5px_5px];
+    }
+    &.show {
+      @apply block;
+    }
+  }
+  .popover-main {
+    .btn-showcase {
+      a {
+        @apply text-[rgba(var(--white),1)];
+      }
+      button {
+        &:last-child {
+          @apply mr-0;
+        }
+      }
+    }
+  }
+  .svg-tooltip {
+    .common-flex {
+      > div {
+        @apply w-[calc(40px_+_(50_-_40)_*_((100vw_-_320px)_/_(1920_-_320)))] h-[calc(40px_+_(50_-_40)_*_((100vw_-_320px)_/_(1920_-_320)))] border rounded-[10px] border-solid flex items-center justify-center;
+        i {
+          @apply text-[calc(18px_+_(20_-_18)_*_((100vw_-_320px)_/_(1920_-_320)))];
+        }
+        &:hover {
+          i {
+            @apply stroke-[rgba(var(--white),1)];
+          }
+        }
+      }
+      svg {
+        @apply w-[calc(18px_+_(20_-_18)_*_((100vw_-_320px)_/_(1920_-_320)))] h-[calc(18px_+_(20_-_18)_*_((100vw_-_320px)_/_(1920_-_320)))];
+      }
+    }
+  }
+}

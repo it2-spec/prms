@@ -1,0 +1,28 @@
+// footer start
+if footer_dark
+  footer.footer.footer-dark
+       .container.mx-auto.w-full
+            .gird.grid-cols-12
+                div(class="col-span-12").footer-copyright.text-center
+                    p.mb-0 Copyright 
+                      span.year-update 
+                      |  © Cuba Theme By Pixelstrap                  
+                    
+else if footer_fix
+  footer.footer.footer-fix
+       .container.mx-auto.w-full
+            .gird.grid-cols-12
+                div(class="col-span-12").footer-copyright.text-center
+                    p.mb-0 Copyright 
+                      span.year-update 
+                      |  © Cuba Theme By Pixelstrap  
+
+else
+  footer.footer
+       .container.mx-auto.w-full
+            .gird.grid-cols-12
+                div(class="col-span-12").footer-copyright.text-center
+                    p.mb-0 Copyright 
+                      span.year-update 
+                      |  © Cuba Theme By Pixelstrap  
+

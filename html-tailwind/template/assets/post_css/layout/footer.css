@@ -1,0 +1,29 @@
+@layer components {
+  .footer {
+    @apply bg-[rgba(var(--white),1)] shadow-[0_0_20px_rgba(var(--semi-dark),0.1)] ml-[var(--sidebar-compact-width)] transition-[0.5s] p-[15px] left-0 bottom-0;
+  }
+  .footer.footer-dark {
+    @apply bg-[rgba(var(--footer-dark-color),1)];
+  }
+  .footer.footer-dark p {
+    @apply text-[rgba(var(--white),1)];
+  }
+  @screen sm {
+    .footer {
+      p {
+        @apply text-center;
+      }
+    }
+  }
+  @screen sm360 {
+    .footer {
+      @apply px-0;
+      p {
+        @apply text-[12px];
+      }
+    }
+  }
+  .footer-fix {
+    @apply w-[calc(100%_-_var(--sidebar-compact-width))] fixed;
+  }
+}

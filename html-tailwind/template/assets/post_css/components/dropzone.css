@@ -1,0 +1,58 @@
+@layer components {
+  .filepond--drop-label {
+    .filepond--label-action {
+      @apply no-underline text-[rgba(var(--danger-color),1)];
+    }
+  }
+  .dropzone {
+    @apply rounded-md border-2 border-dashed border-[rgba(var(--theme-secondary),1)];
+    .dropzone-wrapper {
+      .dz-message {
+        i {
+          @apply text-[50px];
+        }
+        h6,
+        span{
+          @apply text-center;
+        }
+      }
+    }
+    .dz-message {
+      i {
+        @apply text-[calc(40px_+_10_*_(100vw_-_320px)_/_1600)];
+      }
+      h6,
+      span{
+        @apply text-center;
+      }
+    }
+  }
+  .btn-container {
+    .btn {
+      @apply py-[6px] px-[28px];
+    }
+  }
+  .animated-dropfile {
+    .btn-container {
+      @apply leading-[0] mt-[34px] mb-[60px] mx-0 rounded-[5px];
+      p,
+      .btn{
+        @apply text-center;
+      }
+    }
+    #fileup {
+      @apply opacity-0 w-[200px] cursor-pointer absolute -translate-x-2/4 h-[35px] left-2/4 bottom-[34px];
+    }
+    #namefile {
+      @apply text-[rgba(var(--chart-text-color),1)];
+    }
+    .imgupload {
+      &.ok {
+        @apply hidden text-[rgba(var(--success-color),1)] text-[50px];
+      }
+      &.stop {
+        @apply hidden text-[rgba(var(--danger-color),1)] text-[50px];
+      }
+    }
+  }
+}

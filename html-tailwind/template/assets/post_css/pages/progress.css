@@ -1,0 +1,190 @@
+@layer components {
+  .progress-showcase {
+    .progress {
+      @apply mb-2.5 last:mb-0 !overflow-hidden;
+      &.overflow-visible {
+        @apply !overflow-visible;
+      }
+    }
+  }
+  .sm-progress-bar {
+    @apply h-2;
+  }
+  .lg-progress-bar {
+    @apply h-5;
+  }
+  .progress-number {
+    button {
+      @apply w-8 h-8 text-[rgba(var(--white),1)] border-0 !text-center;
+    }
+    .progress-wrapper {
+      @apply h-px;
+      &.progress {
+        @apply bg-[rgba(var(--recent-dashed-border),1)];
+      }
+      .progress-bar {
+        @apply bg-[rgba(var(--theme-default),1)];
+      }
+    }
+  }
+  button {
+    &.progress-btn {
+      @apply bg-[rgba(var(--light-chartist-grid-color),1)] border-[rgba(var(--light-chartist-grid-color),1)] text-[rgba(var(--body-font-color),1)];
+    }
+  }
+  .small-progressbar {
+    @apply relative overflow-visible after:absolute after:content-[""] after:right-[-9px] after:bg-[rgba(var(--theme-default),1)] after:w-3 after:h-3 after:rounded-[100%] after:-top-0.5;
+    [dir="rtl"] &::after {
+      @apply left-[-9px] right-[unset];
+    }
+    .progress-label {
+      @apply absolute top-[-26px] font-bold -right-1.5;
+      [dir="rtl"] & {
+        @apply -left-1.5 right-[unset];
+      }
+    }
+    .animate-circle {
+      @apply absolute top-[-11px] right-[-18px] h-[30px] w-[30px] border-[rgba(var(--theme-default),0.1)] rounded-[70px] border-[14px] border-solid;
+      animation: heart 1s ease-in-out linear infinite;
+      [dir="rtl"] & {
+        @apply left-[-18px] right-[unset];
+      }
+    }
+  }
+  .progress-b-space {
+    .progress {
+      @apply mb-[35px];
+    }
+  }
+  .sm-progress-bar {
+    @apply !h-2;
+    overflow: unset !important;
+  }
+  .translate-middle {
+    @apply -translate-x-2/4 -translate-y-2/4;
+  }
+  .progress {
+    @apply flex h-[var(--tw-progress-height)] overflow-hidden text-xs bg-[rgba(var(--dropdown-border-color),0.1)] rounded-md;
+    --tw-progress-height: 16px;
+    --tw-progress-font-size: 12px;
+    --tw-progress-bg: rgba(var(--dropdown-border-color), 0.3);
+    --tw-progress-border-radius: var(--tw-border-radius);
+    --tw-progress-box-shadow: var(--tw-box-shadow-inset);
+    --tw-progress-bar-color: rgba(var(--white), 1);
+    --tw-progress-bar-bg: #0d6efd;
+    --tw-progress-bar-transition: width 0.6s ease;
+  }
+  .progress-stacked {
+    @apply flex h-4 overflow-hidden text-xs bg-[rgba(var(--dropdown-border-color),0.3)] rounded-md;
+    --tw-progress-height: 16px;
+    --tw-progress-font-size: 12px;
+    --tw-progress-bg: rgba(var(--dropdown-border-color), 0.3);
+    --tw-progress-border-radius: 6px;
+    --tw-progress-box-shadow: var(--tw-box-shadow-inset);
+    --tw-progress-bar-color: rgba(var(--white), 1);
+    --tw-progress-bar-bg: rgba(var(--primary-color), 1);
+    --tw-progress-bar-transition: width 0.6s ease;
+  }
+  .progress-bar-striped {
+    background-size: 16px 25px;
+    background-image: linear-gradient(120deg, rgba(var(--white), 0.15) 25%, transparent 25%, transparent 50%, rgba(var(--white), 0.15) 50%, rgba(var(--white), 0.15) 75%, transparent 75%, transparent);
+  }
+  .progress-bar-animated {
+    animation: progress-bar-stripes 5s linear infinite;
+  }
+  .step-progress-wrapper {
+    .step-progress-box {
+      ul {
+        @apply overflow-x-auto overflow-y-hidden;
+      }
+    }
+    .progress-box {
+      @apply w-full h-auto flex items-center justify-center;
+    }
+    ul {
+      @apply flex;
+      li {
+        @apply flex-col mx-[30px] my-0 first:ml-0 last:mr-0 flex items-center justify-center;
+        list-style: none;
+        [dir="rtl"] & {
+          @apply first:ml-[30px] first:mr-0;
+        }
+        [dir="rtl"] & {
+          @apply last:ml-0 last:mr-[30px];
+        }
+        svg {
+          @apply text-[rgba(var(--success-color),1)] mx-[30px] my-0;
+        }
+        .p-step {
+          svg {
+            @apply text-[rgba(var(--white),1)] m-0 hidden;
+          }
+        }
+        h6 {
+          @apply tracking-[1px] text-sm font-[bold] text-[rgba(var(--success-color),1)];
+        }
+        .p-step {
+          @apply h-[30px] w-[30px] bg-[rgba(var(--success-color),1)] grid place-items-center relative cursor-pointer mt-4 mb-2.5 mx-0 rounded-[50%];
+          p {
+            @apply text-[rgba(var(--white),1)] m-0;
+          }
+        }
+        .active {
+          @apply bg-[rgba(var(--success-color),1)];
+          &::after {
+            @apply bg-[rgba(var(--success-color),1)];
+          }
+          p {
+            @apply hidden;
+          }
+          svg {
+            @apply flex z-[2] w-3.5 h-3.5;
+          }
+        }
+      }
+    }
+    .p-step::after {
+      @apply content-[""] absolute w-40 h-[3px] bg-transparent right-0;
+      [dir="rtl"] & {
+        @apply left-0 right-[unset];
+      }
+    }
+    .first::after {
+      @apply w-0 h-0;
+    }
+  }
+}
+@keyframes heart {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  25% {
+    transform: scale(0.1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(0.5);
+    opacity: 0.3;
+  }
+
+  75% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+@keyframes progress-bar-stripes {
+  0% {
+    background-position: 40px 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}

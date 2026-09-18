@@ -1,0 +1,99 @@
+- var page_Title = 'Input Mask';
+- var theme_customizer      = true;
+- var sidebar               = true;
+- var slick                 = true;
+- var input_mask            = true;
+- var header_slider         = true;
+- var scrollbar             = true;
+doctype html
+html(lang='en')
+  include ../../components/header-files
+  body
+    include ../../components/loader
+    include ../../components/taptop
+    // page-wrapper Start
+    #pageWrapper.page-wrapper.compact-wrapper
+      include ../../components/header
+      // Page Body Start
+      .page-body-wrapper
+        include ../../components/sidebar
+        .page-body
+          .container.w-full
+            .page-title
+              .grid.grid-cols-12.mx-2.items-center
+                div(class="col-span-6 sm:col-span-12")
+                   h4
+                    | Input Mask
+                div(class="col-span-6 sm:col-span-12")
+                  ol.breadcrumb.flex
+                    li.breadcrumb-item
+                      a(href='index.html')                                        
+                        svg.stroke-icon
+                          use(href='../assets/svg/icon-sprite.svg#stroke-home')
+                    li.breadcrumb-item Form Controls
+                    li.breadcrumb-item.active Input Mask
+          // Container-fluid starts
+          .container
+            .grid.grid-cols-12 
+              div(class="col-span-12")
+                .card
+                  .card-header
+                    h5 Input Masks
+                    p.f-m-light.mt-1 
+                      | Input mask is used for formatting data for consistency and readability (Phone Number, Card Number, Date, Currency...etc)
+                  .card-body
+                    .grid.grid-cols-12.gap-3 
+                      div(class="col-span-6 sm:col-span-12") 
+                        .card-wrapper.custom-border.rounded-3.light-card.checkbox-checked
+                          h6.sub-title Date Format
+                          form.grid.grid-cols-12.gap-3
+                            div(class="col-span-12")
+                              label.col-form-label(for='cleave-date1') Date
+                              input#cleave-date1.form-control(type='text' placeholder='DD-MM-YYYY')
+                            div(class="col-span-12")
+                              label.col-form-label(for='cleave-date2') Date Format Type
+                              input#cleave-date2.form-control(type='text' placeholder='MM-YYYY')
+                      div(class="col-span-6 sm:col-span-12") 
+                        .card-wrapper.custom-border.rounded-3.light-card.checkbox-checked
+                          h6.sub-title Time Format
+                          form.grid.grid-cols-12.gap-3
+                            div(class="col-span-12")
+                              label.col-form-label(for='cleave-time1') Time Format Type
+                              input#cleave-time1.form-control(type='text' placeholder='hh:mm:ss')
+                            div(class="col-span-12") 
+                              label.col-form-label(for='cleave-time2') Hour/month Type
+                              input#cleave-time2.form-control(type='text' placeholder='hh:mm')
+                      div(class="col-span-12")
+                        .card-wrapper.custom-border.rounded-3.light-card.checkbox-checked
+                          h6.sub-title Default Input Mask
+                          form.grid.grid-cols-12.gap-3
+                            div(class="col-span-4 xxl:col-span-6 sm:col-span-12") 
+                              label.col-form-label(for='cleave-number-format') Currency
+                              input#cleave-number-format.form-control(type='text' placeholder='Enter number')
+                            div(class="col-span-4 xxl:col-span-6 sm:col-span-12") 
+                              label.col-form-label(for='cleave-type-prefix') Prefix
+                              input#cleave-type-prefix.form-control(type='text' placeholder='Prefix-xxxx-xxxx-xxxx')
+                            div(class="col-span-4 xxl:col-span-6 sm:col-span-12") 
+                              label.col-form-label(for='cleave-type-delimiter') Delimiter
+                              input#cleave-type-delimiter.form-control(type='text' placeholder='xxx·xxx·xxx')
+                            div(class="col-span-4 xxl:col-span-6 sm:col-span-12")
+                              label.form-label(for='cleave-phone-number') Phone Number
+                              input#cleave-phone-number.form-control(type='text' placeholder='(xxx)xxx-xxxx')
+                            div(class="col-span-4 xxl:col-span-6 sm:col-span-12")
+                              label.form-label(for='cleave-card-number') Card Number
+                              input#cleave-card-number.form-control(type='text' placeholder='xxxx xxxx xxxx xxxx')
+                            div(class="col-span-4 xxl:col-span-6 sm:col-span-12")
+                              label.form-label(for='tailprefix') Tailprefix
+                              input#tailprefix.form-control(type='text' placeholder='0000.00€')
+                            div(class="col-span-4 xxl:col-span-6 sm:col-span-12")
+                              label.form-label(for='cleave-ip-address') IP Address
+                              input#cleave-ip-address.form-control(type='text' placeholder='192.168.38.45')
+                            div(class="col-span-4 xxl:col-span-6 sm:col-span-12")
+                              label.form-label(for='cleave-multiple-delimiter') Use Multiple Delimiters
+                              input#cleave-multiple-delimiter.form-control(type='text' placeholder='489.254.587-47')
+                            div(class="col-span-4 xxl:col-span-6 sm:col-span-12")
+                              label.form-label(for='cleave-multiple-characters') Multiple Characters in Delimiter
+                              input#cleave-multiple-characters.form-control(type='text' placeholder='658 | 785 | GHD | 785')
+          // Container-fluid Ends
+        include ../../components/footer
+    include ../../components/footer-files

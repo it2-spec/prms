@@ -1,0 +1,22 @@
+- var page_Title = 'Error 403';
+doctype html
+html(lang='en')
+    include ../../components/header-files
+    body
+        include ../../components/taptop
+        // page-wrapper Start
+        #pageWrapper.page-wrapper.compact-wrapper
+          // error-403 start
+          .error-wrapper
+            .container
+              svg 
+                use(href='../assets/svg/icon-sprite.svg#error-403')
+              .grid.grid-cols-12
+                div(class="col-start-4 md:col-start-0 col-span-6 md:col-span-12")
+                  h3(class="[@media(max-width:575px)]:text-center") Forbidden Error
+                  p.sub-content(class="[@media(max-width:575px)]:text-center [@media(max-width:767px)]:px-[15px]")
+                    | If you receive a 403 Forbidden error, either verify your access privileges or get in touch with the server administrator to obtain the necessary authorization.
+              div(class="[@media(max-width:575px)]:text-center")
+                a.btn.btn-primary.btn-lg.text-white(href='index.html' class="hover:text-white !rounded-lg") BACK TO HOME PAGE
+          // error-403 end
+        include ../../components/footer-files

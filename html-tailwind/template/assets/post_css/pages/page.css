@@ -1,0 +1,260 @@
+@layer components {
+  .pagination-theme {
+    .page-item {
+      .page-link {
+        @apply text-[rgba(var(--theme-default),1)];
+      }
+      &.active {
+        .page-link {
+          @apply text-white bg-[rgba(var(--theme-default),1)] border-[rgba(var(--theme-default))];
+        }
+      }
+    }
+  }
+  .pagination-primary {
+    .page-item {
+      .page-link {
+        @apply !text-[rgba(var(--theme-default),1)];
+      }
+      &.active {
+        .page-link {
+          @apply text-white !bg-[rgba(var(--theme-default),1)] border-[rgba(var(--theme-default),1)];
+        }
+      }
+    }
+  }
+  .pagination-secondary {
+    .page-item {
+      .page-link {
+        @apply text-[rgba(var(--theme-secondary),1)];
+      }
+      &.active {
+        .page-link {
+          @apply text-white bg-[rgba(var(--theme-secondary),1)] border-[rgba(var(--theme-secondary),1)];
+        }
+      }
+    }
+  }
+  .pagination-success {
+    .page-item {
+      .page-link {
+        @apply !text-[rgba(var(--success-color),1)];
+      }
+      &.active {
+        .page-link {
+          @apply !text-white !bg-[rgba(var(--success-color),1)] border-[rgba(var(--success-color),1)];
+        }
+      }
+    }
+  }
+  .pagination-danger {
+    .page-item {
+      .page-link {
+        @apply !text-[rgba(var(--danger-color),1)];
+      }
+      &.active {
+        .page-link {
+          @apply !text-white !bg-[rgba(var(--danger-color),1)] border-[rgba(var(--danger-color),1)];
+        }
+      }
+    }
+  }
+  .pagination-info {
+    .page-item {
+      .page-link {
+        @apply !text-[rgba(var(--info-color),1)];
+      }
+      &.active {
+        .page-link {
+          @apply text-white bg-[rgba(var(--info-color),1)] border-[rgba(var(--info-color),1)];
+        }
+      }
+    }
+  }
+  .pagination-dark {
+    .page-item {
+      .page-link {
+        @apply text-[rgba(var(--dark-color),1)];
+      }
+      &.active {
+        .page-link {
+          @apply text-white bg-[rgba(var(--dark-color),1)] border-[rgba(var(--dark-color),1)];
+        }
+      }
+    }
+  }
+  .pagination-warning {
+    .page-item {
+      .page-link {
+        @apply !text-[rgba(var(--warning-color),1)];
+      }
+      &.active {
+        .page-link {
+          @apply text-white bg-[rgba(var(--warning-color),1)] border-[rgba(var(--warning-color),1)];
+        }
+      }
+    }
+  }
+  .pagin-border-primary {
+    .page-item {
+      &.active,
+      &:active {
+        @apply bg-[rgba(var(--light-primary),1)];
+      }
+      .page-link {
+        @apply border-[rgba(var(--light-primary),1)] focus:shadow-[unset];
+        &:hover,
+        &:focus {
+          @apply bg-[rgba(var(--light-primary),1)];
+        }
+      }
+    }
+  }
+  .pagin-border-secondary {
+    .page-item {
+      &.active,
+      &:active {
+        @apply bg-[rgba(var(--light-secondary),1)];
+      }
+      .page-link {
+        @apply border-[rgba(var(--light-secondary),1)] focus:shadow-[unset];
+        &:hover,
+        &:focus {
+          @apply bg-[rgba(var(--light-secondary),1)];
+        }
+      }
+    }
+  }
+  .pagin-border-success {
+    .page-item {
+      &.active,
+      &:active {
+        @apply bg-[rgba(var(--light-success),1)];
+      }
+      .page-link {
+        @apply border-[rgba(var(--light-success),1)] focus:shadow-[unset];
+        &:hover,
+        &:focus {
+          @apply bg-[rgba(var(--light-success),1)];
+        }
+      }
+    }
+  }
+  .pagin-border-danger {
+    .page-item {
+      &.active,
+      &:active {
+        @apply bg-[rgba(var(--light-danger),1)];
+      }
+      .page-link {
+        @apply border-[rgba(var(--light-danger),1)] focus:shadow-[unset];
+        &:hover,
+        &:focus {
+          @apply bg-[rgba(var(--light-danger),1)];
+        }
+      }
+    }
+  }
+  .pagin-border-warning {
+    .page-item {
+      &.active,
+      &:active {
+        @apply bg-[rgba(var(--light-warning),1)];
+      }
+      .page-link {
+        @apply border-[rgba(var(--light-warning),1)] focus:shadow-[unset];
+        &:hover,
+        &:focus {
+          @apply bg-[rgba(var(--light-warning),1)];
+        }
+      }
+    }
+  }
+  .pagin-border-info {
+    .page-item {
+      &.active,
+      &:active {
+        @apply bg-[rgba(var(--light-info),1)];
+      }
+      .page-link {
+        @apply border-[rgba(var(--light-info),1)] focus:shadow-[unset];
+        &:hover,
+        &:focus {
+          @apply bg-[rgba(var(--light-info),1)];
+        }
+      }
+    }
+  }
+  .pagin-border-light {
+    .page-item {
+      &.active,
+      &:active {
+        @apply bg-[rgba(var(--light-white),1)];
+      }
+      .page-link {
+        @apply border-[rgba(var(--light-white),1)] focus:shadow-[unset];
+        &:hover,
+        &:focus {
+          @apply bg-[rgba(var(--light-white),1)];
+        }
+      }
+    }
+  }
+  .pagin-border-dark {
+    .page-item {
+      &.active,
+      &:active {
+        @apply bg-[rgba(var(--light-dark),1)];
+      }
+      .page-link {
+        @apply border-[rgba(var(--light-dark),1)] focus:shadow-[unset];
+        &:hover,
+        &:focus {
+          @apply bg-[rgba(var(--light-dark),1)];
+        }
+      }
+    }
+  }
+  .pagination {
+    @apply flex pl-0;
+    .page-item {
+      &:active {
+        @apply bg-[unset];
+      }
+      .page-link {
+        transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+          border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        &.rounded-full {
+          @apply flex justify-center items-center w-[35px] h-[35px];
+        }
+      }
+      &:first-child {
+        .page-link {
+          @apply rounded-tl-[6px] rounded-bl-[6px];
+        }
+      }
+      &:last-child {
+        .page-link {
+          @apply rounded-tr-[6px] rounded-br-[6px];
+        }
+      }
+    }
+  }
+  .pagination-lg {
+    .page-link {
+      @apply relative block px-[24px] py-[12px] text-xl;
+    }
+  }
+  .pagination-sm {
+    .page-link {
+      @apply relative block px-[8px] py-[4px] text-sm;
+    }
+  }
+
+  .page-item:not(:first-child) .page-link {
+    @apply ml-[calc(var(--bs-border-width)_*_-1)];
+  }
+  .page-link {
+    @apply relative block px-[12px] py-[6px] text-base border border-solid border-[rgba(var(--light-primary),1)];
+  }
+}

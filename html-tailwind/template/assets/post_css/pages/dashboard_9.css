@@ -1,0 +1,353 @@
+@layer components {
+  .compare-order {
+    @apply transition-[0.5s] hover:translate-y-[-5px] hover:transition-[0.5s];
+    .compare-icon {
+      @apply w-[calc(40px_+_(45_-_40)_*_((100vw_-_320px)_/_(1920_-_320)))] h-[calc(40px_+_(45_-_40)_*_((100vw_-_320px)_/_(1920_-_320)))] flex justify-center items-center rounded-[10px];
+
+      svg {
+        @apply w-5 h-5 transition-[0.5s];
+      }
+    }
+    .card-body {
+      .common-space {
+        @apply mb-3;
+        h4 {
+          @apply text-[rgba(var(--body-font-color_),1)];
+        }
+      }
+      .progress {
+        @apply h-[9px] mb-2.5;
+        background: linear-gradient(180.36deg, #cfdce8 -32.82%, #ffffff 132.82%);
+      }
+      .user-growth {
+        @apply text-xs mr-1;
+      }
+      .user-text {
+        @apply text-[rgba(var(--badge-light-color),0.8)] text-sm;
+      }
+    }
+    &:hover {
+      .card-header {
+        svg {
+          @apply transition-[0.5s] scale-[1.08];
+        }
+      }
+    }
+  }
+  .card-header-right-icon {
+    .btn {
+      &.btn-light-primary {
+        @apply block;
+      }
+    }
+  }
+  .crm-card {
+    @apply !bg-[url(../images/dashboard-9/bg.jpg)] bg-cover bg-no-repeat bg-center;
+    .card-body {
+      h4 {
+        @apply text-[rgba(var(--white),1)] text-[calc(18px_+_(22_-_18)_*_((100vw_-_320px)_/_(1920_-_320)))];
+      }
+      p {
+        @apply w-[65%] text-[rgba(var(--white),1)] mb-[35px];
+      }
+    }
+    .crm-img {
+      @apply h-[138px] absolute animate-[bounce-effect_3s_infinite_ease] right-3 bottom-2;
+    }
+  }
+  .pipeline-data {
+    @apply flex justify-between items-center;
+    [class*="dotted-"] {
+      @apply w-2 h-2 rounded-[50%];
+    }
+    .common-flex {
+      @apply items-baseline;
+      span {
+        @apply text-[rgba(var(--badge-light-color),0.8)];
+      }
+    }
+  }
+  .revenue-chart-container {
+    @apply mt-[-23px] mb-[-26px] -ml-4 -mr-2.5;
+  }
+  .crm-todo-list {
+    li {
+      @apply cursor-pointer border-b-[rgba(var(--chart-dashed-border),1)] gap-[16px] px-0 py-3 border-b border-solid first:pt-0 last:pb-0 last:border-b-0;
+      .form-check {
+        .form-check-input {
+          @apply border-[rgba(var(--badge-light-color),0.8)] focus:shadow-[unset];
+        }
+      }
+      span {
+        @apply text-[rgba(var(--badge-light-color),0.8)];
+      }
+      .grow {
+        a {
+          @apply text-[rgba(var(--body-font-color),1)] text-sm font-medium tracking-[0.7px] block;
+        }
+      }
+    }
+  }
+  .finance-wrapper {
+    .common-flex {
+      h6 {
+        &:last-child {
+          @apply border-l-[rgba(var(--chart-dashed-border),1)] pl-4 border-l border-solid;
+        }
+      }
+    }
+  }
+  .deal-table {
+    &.recent-table {
+      thead,
+      tbody {
+        tr {
+          th,
+          td {
+            @apply min-w-[auto] text-[rgba(var(--badge-light-color),1)];
+            &:first-child {
+              @apply pl-5;
+            }
+            &:last-child {
+              @apply pr-5;
+            }
+          }
+        }
+      }
+      thead {
+        tr {
+          th {
+            @apply text-[rgba(var(--badge-light-color),1)];
+          }
+        }
+      }
+    }
+  }
+  .lead-table {
+    &.recent-table {
+      &.overflow-x-auto {
+        div.dt-container {
+          .dt-layout-row {
+            .dt-layout-cell {
+              .dt-search {
+                @apply right-[60px];
+              }
+            }
+          }
+        }
+      }
+      thead {
+        tr {
+          th {
+            @apply text-[rgba(var(--badge-light-color),1)];
+          }
+        }
+      }
+      thead,
+      tbody {
+        tr {
+          th,
+          td {
+            @apply min-w-[auto] text-[rgba(var(--badge-light-color),1)];
+            &:first-child {
+              @apply pl-5;
+            }
+            &:last-child {
+              @apply pr-5;
+            }
+            .common-flex {
+              .lead-img {
+                @apply h-9 rounded-lg;
+              }
+            }
+            &:nth-child(4) {
+              .common-flex {
+                @apply gap-[5px];
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .main-lead-source {
+    @apply relative flex justify-center items-center ml-[-100px];
+    .lead-source-1 {
+      @apply w-[200px] h-[200px] relative bg-[rgba(var(--theme-default),0.9)] flex justify-center items-center text-center ml-5 mr-0 mt-10 mb-20 rounded-[50%];
+    }
+    .lead-source-2 {
+      @apply w-[100px] h-[100px] bg-[rgba(var(--warning-color),0.9)] flex justify-center items-center absolute right-[-35%] translate-y-[8%] z-[1] rounded-[50%] top-0;
+    }
+  }
+  .lead-source-3 {
+    @apply w-[150px] h-[150px] bg-[rgba(var(--success-color),0.9)] flex justify-center items-center absolute right-[-90%] -translate-x-2/4 translate-y-2/4 rounded-[50%] bottom-[20%];
+  }
+  .source-txt {
+    span,
+    h5 {
+      @apply text-[rgba(var(--white),1)];
+    }
+    h5 {
+      @apply text-[calc(16px_+_(22_-_16)_*_((100vw_-_320px)_/_(1920_-_320)))];
+    }
+  }
+  #sales-chart {
+    .apexcharts-legend {
+      @apply gap-3;
+    }
+  }
+  .sales-week-container {
+    @apply mt-0 -mb-10 -mx-3;
+  }
+  .pipeline-chart-container {
+    @apply -mb-3;
+  }
+  .main-sale {
+    .sales-chart-wrap {
+      #sales-chart1 {
+        @apply mb-[-30px];
+      }
+    }
+    .sale-details {
+      @apply flex justify-between;
+    }
+  }
+  .sales-data {
+    @apply justify-around items-center;
+    li {
+      .sale-value {
+        @apply w-2.5 h-2.5 rounded-[50%];
+        &.primary-20 {
+          @apply bg-[rgba(var(--theme-default),0.2)];
+        }
+        &.primary-40 {
+          @apply bg-[rgba(var(--theme-default),0.4)];
+        }
+        &.primary-70 {
+          @apply bg-[rgba(var(--theme-default),0.7)];
+        }
+      }
+      span {
+        &:last-child {
+          @apply text-[13px];
+        }
+      }
+    }
+  }
+  .crm-todo-list {
+    li {
+      span {
+        &.l-line-primary {
+          @apply h-12 w-[3px] rounded bg-[rgba(var(--theme-default),1)];
+        }
+        &.l-line-secondary {
+          @apply h-12 w-[3px] rounded bg-[rgba(var(--theme-secondary),1)];
+        }
+        &.l-line-success {
+          @apply h-12 w-[3px] rounded bg-[rgba(var(--success-color),1)];
+        }
+        &.l-line-warning {
+          @apply h-12 w-[3px] rounded bg-[rgba(var(--warning-color),1)];
+        }
+      }
+    }
+  }
+  @screen xl1470 {
+    .crm-card .card-body p {
+      @apply h-11 overflow-hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+  }
+  @screen between991-768 {
+    .crm-card .card-body p {
+      @apply w-[70%];
+    }
+  }
+  @screen md {
+    .crm-card .card-body p {
+      @apply mb-0;
+    }
+    .finance-wrapper .finance-chart-wrapper {
+      @apply -mb-5;
+    }
+    .main-lead-source .lead-source-1 {
+      @apply w-[calc(130px_+_(200_-_130)_*_((100vw_-_320px)_/_(1920_-_320)))] h-[calc(130px_+_(200_-_130)_*_((100vw_-_320px)_/_(1920_-_320)))] ml-5 mr-0 !mt-5 !mb-[70px];
+    }
+    .main-lead-source .lead-source-2 {
+      @apply w-[calc(75px_+_(100_-_75)_*_((100vw_-_320px)_/_(1920_-_320)))] h-[calc(75px_+_(100_-_75)_*_((100vw_-_320px)_/_(1920_-_320)))];
+    }
+    .lead-source-3 {
+      @apply w-[calc(95px_+_(150_-_95)_*_((100vw_-_320px)_/_(1920_-_320)))] h-[calc(95px_+_(150_-_95)_*_((100vw_-_320px)_/_(1920_-_320)))];
+    }
+    .sales-chart-wrapper {
+      @apply -mb-10;
+    }
+  }
+  @screen xl {
+    .deal-table {
+      &.recent-table {
+        thead,
+        tbody {
+          tr {
+            th,
+            td {
+              &:first-child {
+                @apply min-w-[52px];
+              }
+              &:nth-child(2) {
+                @apply min-w-[116px];
+              }
+              &:last-child {
+                @apply min-w-[90px];
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen between1366-1200 {
+    .lead-table {
+      &.recent-table {
+        thead,
+        tbody {
+          tr {
+            th,
+            td {
+              &:nth-child(2) {
+                @apply hidden;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen xl {
+    .lead-table {
+      &.recent-table {
+        thead,
+        tbody {
+          tr {
+            th,
+            td {
+              &:first-child {
+                @apply min-w-[100px];
+              }
+              &:nth-child(4) {
+                @apply min-w-[114px];
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen between1660-1400 {
+    .sales-data {
+      @apply hidden;
+    }
+  }
+}

@@ -1,0 +1,490 @@
+- var page_Title = 'Settings';
+- var theme_customizer      = true;
+- var sidebar               = true;
+- var slick                 = true;
+- var header_slider         = true;
+- var scrollbar             = true;
+- var bs_select             = true;
+- var editors               = true;
+- var bootstrap_multiselect = true;
+- var custom_setting        = true;
+
+doctype html
+html(lang='en')
+  include ../../components/header-files
+  body
+    include ../../components/loader
+    include ../../components/taptop
+    // page-wrapper Start
+    #pageWrapper.page-wrapper.compact-wrapper
+      include ../../components/header
+      // Page Body Start
+      .page-body-wrapper
+        include ../../components/sidebar
+        .page-body
+          .container.w-full
+            .page-title
+              .grid.grid-cols-12.mx-2.items-center
+                div(class="col-span-6 sm:col-span-12")
+                  h3
+                    | Settings
+                div(class="col-span-6 sm:col-span-12")
+                  ol.breadcrumb.flex
+                    li.breadcrumb-item
+                      a(href='index.html')                                        
+                        svg.stroke-icon
+                          use(href='../assets/svg/icon-sprite.svg#stroke-home')
+                    li.breadcrumb-item Ecommerce
+                    li.breadcrumb-item.active Settings
+          // Container-fluid starts
+          .container.main-setting 
+            .grid.grid-cols-12.card-gap
+                div(class="col-span-12") 
+                    .card 
+                        .card-header
+                            h5 E-commerce Settings
+                        .card-body
+                            .grid.grid-cols-12.gap-4.tabs
+                                div(class="col-span-3 lg:col-span-12")
+                                    .tab-links.nav-primary
+                                        a.tab-link.active(data-tabfilter="1" class="[@media(max-width:330px)]:w-[252px]") 
+                                            svg.stroke-icon 
+                                                use(href='../assets/svg/icon-sprite.svg#general-setting')
+                                            | General
+                                        a.tab-link(data-tabfilter="2" class="[@media(max-width:330px)]:w-[252px]") 
+                                            svg.stroke-icon 
+                                                use(href='../assets/svg/icon-sprite.svg#activation-setting')
+                                            | Activation
+                                        a.tab-link(data-tabfilter="3" class="[@media(max-width:330px)]:w-[252px]") 
+                                            svg.stroke-icon 
+                                                use(href='../assets/svg/icon-sprite.svg#wallet-point')
+                                            | Wallet Points 
+                                        a.tab-link(data-tabfilter="4" class="[@media(max-width:330px)]:w-[252px]") 
+                                            svg.stroke-icon 
+                                                use(href='../assets/svg/icon-sprite.svg#seller-commission')
+                                            | Seller Commissions
+                                        a.tab-link(data-tabfilter="5" class="[@media(max-width:330px)]:w-[252px]") 
+                                            svg.stroke-icon 
+                                                use(href='../assets/svg/icon-sprite.svg#setting-refund')
+                                            | Refund
+                                        a.tab-link(data-tabfilter="6" class="[@media(max-width:330px)]:w-[252px]") 
+                                            svg.stroke-icon 
+                                                use(href='../assets/svg/icon-sprite.svg#complete-deliver')
+                                            | Delivery
+                                        a.tab-link(data-tabfilter="7" class="[@media(max-width:330px)]:w-[252px]") 
+                                            svg.stroke-icon 
+                                                use(href='../assets/svg/icon-sprite.svg#setting-payment')
+                                            | Payment Method
+                                        a.tab-link(data-tabfilter="8" class="[@media(max-width:330px)]:w-[252px]")
+                                            svg.stroke-icon 
+                                                use(href='../assets/svg/icon-sprite.svg#setting-analytics')
+                                            | Analytics
+                                div(class="col-span-9 lg:col-span-12")
+                                    .tab-content
+                                        .tab-pan.fade.show.active(data-tabcontent="1")
+                                            .grid.grid-cols-12.card-gap
+                                                div(class="col-span-3 md:col-span-12")
+                                                    label.form-label Meta Title
+                                                div(class="col-span-9 md:col-span-12") 
+                                                    input.form-control(type='text' placeholder='Enter meta title' required='')
+                                            .grid.grid-cols-12.card-gap
+                                                div(class="col-span-3 md:col-span-12")
+                                                    label.form-label Meta Description
+                                                div(class="col-span-9 md:col-span-12")
+                                                    .toolbar-box
+                                                      #toolbar14
+                                                        button.ql-bold Bold 
+                                                        button.ql-italic Italic 
+                                                        button.ql-underline underline
+                                                        button.ql-strike Strike 
+                                                        button.ql-list(value="ordered") List 
+                                                        button.ql-list(value="bullet") 
+                                                        button.ql-indent(value="-1") 
+                                                        button.ql-indent(value="+1")
+                                                        button.ql-link
+                                                      #editor14
+                                            .grid.grid-cols-12.card-gap
+                                                div(class="col-span-3 md:col-span-12")
+                                                    label.form-label Currency 
+                                                div(class="col-span-9 md:col-span-12")
+                                                    select.form-select
+                                                        option(value='usd' selected='') USD
+                                                        option(value='inr') INR
+                                                        option(value='gbp') GBP
+                                                        option(value='eur') EUR
+                                            .grid.grid-cols-12.card-gap.mb-3
+                                                div(class="col-span-3 md:col-span-12")
+                                                    label.form-label Timezone
+                                                div(class="col-span-9 md:col-span-12")
+                                                    select.selectpicker(data-live-search='true')
+                                                        option(value='1' selected) UTC
+                                                        option(value='2') Abidjan
+                                                        option(value='3') Accra
+                                                        option(value='4') Bamako
+                                                        option(value='5') Bangui
+                                                        option(value='6') Banjul 
+                                                        option(value='7') Cairo
+                                                        option(value='8') Ceuta
+                                                        option(value='9') Douala
+                                                        option(value='10') Juba
+                                                        option(value='11') Kigali
+                                                        option(value='12') Lome
+                                                        option(value='13') Tripoli
+                                                        option(value='14') Adak
+                                                        option(value='15') Salta 
+                                                        option(value='16') Tucuman
+                                                        option(value='17') Aruba
+                                                        option(value='18') Bahia
+                                                        option(value='19') Boise
+                                                        option(value='20') Cancun 
+                                                        option(value='21') Denver
+                                                        option(value='22') Grenada
+                                                        option(value='23') Knox
+                                                        option(value='24') Vevay
+                                                        option(value='25') Lima
+                                                        option(value='26') Samara
+                                            .grid.grid-cols-12.card-gap
+                                                div(class="col-span-3 md:col-span-12")
+                                                    label.form-label Min Order Amount
+                                                div(class="col-span-9 md:col-span-12") 
+                                                    .input-group
+                                                        span#minOrder.input-group-text
+                                                            i.fa-solid.fa-dollar-sign
+                                                        input.form-control(type='number' value="0" placeholder='Enter min order amount')
+                                                    .helper-text 
+                                                        p.italic.c-o-light *Please enter the minimum amount required for an order to be processed.
+                                            .grid.grid-cols-12.card-gap
+                                                div(class="col-span-3 md:col-span-12")
+                                                    label.form-label Min Order Free Shipping
+                                                div(class="col-span-9 md:col-span-12") 
+                                                    .input-group
+                                                        span#minOrderShipping.input-group-text
+                                                            i.fa-solid.fa-dollar-sign
+                                                        input.form-control(type='number' value="55" placeholder='Enter min order free shipping')
+                                                    .helper-text 
+                                                        p.italic.c-o-light *Please enter the minimum order amount for free shipping.
+   
+                                        .tab-pan.fade(data-tabcontent="2")
+                                            .grid.grid-cols-12.card-gap
+                                                div(class="col-span-3 md:col-span-12")
+                                                    label.form-label.mb-0 Multivendor
+                                                div(class="col-span-9 md:col-span-12")
+                                                    .form-check.form-switch.form-check-inline
+                                                        input.form-check-input.switch-primary.check-size(type='checkbox' role='switch' checked='')
+                                                        p
+                                                            i(data-feather="info")
+                                                            | *Enable or disable external vendors access to our online store.
+                                            .grid.grid-cols-12.card-gap
+                                                div(class="col-span-3 md:col-span-12")
+                                                    label.form-label.mb-0 Enable Wallet
+                                                div(class="col-span-9 md:col-span-12")
+                                                    .form-check.form-switch.form-check-inline
+                                                        input.form-check-input.switch-primary.check-size(type='checkbox' role='switch' checked='')
+                                                        p
+                                                            i(data-feather="info")
+                                                            | *Enable the use of wallet balance for payment during checkout.
+                                            
+                                            .grid.grid-cols-12.card-gap
+                                                div(class="col-span-3 md:col-span-12")
+                                                    label.form-label.mb-0 Enable Point
+                                                div(class="col-span-9 md:col-span-12")
+                                                    .form-check.form-switch.form-check-inline
+                                                        input.form-check-input.switch-primary.check-size(type='checkbox' role='switch' checked='')
+                                                        p
+                                                            i(data-feather="info")
+                                                            | *Enable the use of points for payment during checkout.
+                                            .grid.grid-cols-12.card-gap
+                                                div(class="col-span-3 md:col-span-12")
+                                                    label.form-label.mb-0 Coupon Enable
+                                                div(class="col-span-9 md:col-span-12")
+                                                    .form-check.form-switch.form-check-inline
+                                                        input.form-check-input.switch-primary.check-size(type='checkbox' role='switch' checked='')
+                                                        p
+                                                            i(data-feather="info")
+                                                            | *Allow customers to use coupons for payment at checkout.
+                                            .grid.grid-cols-12.card-gap
+                                                div(class="col-span-3 md:col-span-12")
+                                                    label.form-label.mb-0 Hide Stock Product
+                                                div(class="col-span-9 md:col-span-12")
+                                                    .form-check.form-switch.form-check-inline
+                                                        input.form-check-input.switch-primary.check-size(type='checkbox' role='switch')
+                                                        p
+                                                            i(data-feather="info")
+                                                            | *Decide whether to show product stock or not.
+                                        .tab-pan.fade(data-tabcontent="3")
+                                            .grid.grid-cols-12.card-gap
+                                                div(class="col-span-3 md:col-span-12")
+                                                    label.form-label Signup Points
+                                                div(class="col-span-9 md:col-span-12") 
+                                                    .input-group
+                                                        span#minPerOrder.input-group-text 
+                                                            i.fa-regular.fa-gem
+                                                        input.form-control(type='number' value="150" placeholder='Enter signup points')
+                                                    .helper-text 
+                                                        p.italic.c-o-light *Provide points to new users as a signup incentive.
+                                            .grid.grid-cols-12.card-gap
+                                                div(class="col-span-3 md:col-span-12")    
+                                                    label.form-label Min Per Order Amount
+                                                div(class="col-span-9 md:col-span-12") 
+                                                    .input-group
+                                                        span#collectPointOrder.input-group-text 
+                                                            i.fa-solid.fa-dollar-sign
+                                                        input.form-control(type='number' value="100" placeholder='Enter min per order amount')
+                                                    .helper-text 
+                                                        p.italic.c-o-light *Collect points when orders meet or exceed the minimum value.
+                                            .grid.grid-cols-12.card-gap
+                                                div(class="col-span-3 md:col-span-12")    
+                                                    label.form-label Point Currency Ratio
+                                                div(class="col-span-9 md:col-span-12") 
+                                                    input.form-control(type='number' value="30" placeholder='Enter point current ratio')
+                                                    .helper-text 
+                                                        p.italic.c-o-light *Determine the conversion factor from points to currency.
+                                            .grid.grid-cols-12.card-gap
+                                                div(class="col-span-3 md:col-span-12")    
+                                                    label.form-label Reward Per Order Point
+                                                div(class="col-span-9 md:col-span-12") 
+                                                    input.form-control(type='number' value="10" placeholder='Enter reward per order point')
+                                                    .helper-text 
+                                                        p.italic.c-o-light *Earn reward points based on each orders value.
+                                                            br
+                                                            |(Rewards Points = (Total Order Amount / Min Per Order Amount) * Reward Per Order Point)
+
+                                        .tab-pan.fade(data-tabcontent="4")
+                                            .grid.grid-cols-12.card-gap
+                                                div(class="col-span-3")
+                                                    label.form-label.mb-0 Status
+                                                div(class="col-span-9")
+                                                    .form-check.form-switch.form-check-inline
+                                                        input.form-check-input.switch-primary.check-size(type='checkbox' role='switch')
+                                            .grid.grid-cols-12.card-gap
+                                                div(class="col-span-3 md:col-span-12")
+                                                    label.form-label.mb-0 Min Withdraw Amount
+                                                div(class="col-span-9 md:col-span-12")
+                                                    .input-group
+                                                        span#commissionRate.input-group-text
+                                                            i.fa-solid.fa-dollar-sign
+                                                        input.form-control(type='number' placeholder='Enter min withdraw amount')
+                                                    .helper-text 
+                                                        p.italic.c-o-light *Payout Minimum for Sellers: Specify the min amount sellers can request for withdrawal.
+                                            .grid.grid-cols-12.card-gap
+                                                div(class="col-span-3 md:col-span-12")
+                                                    label.form-label.mb-0 Commission Rate
+                                                div(class="col-span-9 md:col-span-12")
+                                                    .input-group
+                                                        input.form-control(type='number' class="rounded-l-lg rounded-none" placeholder='Enter default commission rate')
+                                                        span#categoryCommission.input-group-text(class="rounded-r-lg rounded-none") %
+                                                    .helper-text
+                                                        p.italic.c-o-light *Set the rate at which admin receives a commission from seller earnings.
+                                            .grid.grid-cols-12.card-gap
+                                                div(class="col-span-3 md:col-span-12")
+                                                    label.form-label.mb-0 Category Based Commission
+                                                div(class="col-span-9 md:col-span-12")
+                                                    .input-group(class="!block")
+                                                        .form-check.form-switch.form-check-inline
+                                                            input.form-check-input.switch-primary.check-size(type='checkbox' role='switch')
+                                                        .helper-text
+                                                            p.italic.c-o-light *Enable the functionality to apply commissions based on product categories. To configure, navigate to the Product Category module and set the respective commission rates.
+
+
+                                        .tab-pan.fade(data-tabcontent="5")
+                                            .grid.grid-cols-12.card-gap
+                                                div(class="col-span-3")
+                                                        label.form-label.mb-0 Status
+                                                div(class="col-span-9 ")
+                                                    .form-check.form-switch.form-check-inline
+                                                        input.form-check-input.switch-primary.check-size(type='checkbox' role='switch')
+                                            .grid.grid-cols-12.card-gap
+                                                div(class="col-span-3 md:col-span-12")
+                                                    label.form-label Refundable Days
+                                                div(class="col-span-9 md:col-span-12") 
+                                                    input.form-control(type='number' placeholder='Enter refundable days')
+                                                    .helper-text
+                                                        p.italic.c-o-light *Define the period within which users can initiate refund requests for delivered items If left blank, this functionality will be disabled.
+
+                                        .tab-pan.fade(data-tabcontent="6")
+                                            .grid.grid-cols-12.card-gap
+                                                div(class="col-span-3 md:col-span-12")    
+                                                    label.form-label Title
+                                                div(class="col-span-9 md:col-span-12") 
+                                                    input.form-control(type='text' value="Standard Delivery" placeholder='Enter title')
+                                            .grid.grid-cols-12.card-gap
+                                                div(class="col-span-3 md:col-span-12")    
+                                                    label.form-label Description
+                                                div(class="col-span-9 md:col-span-12") 
+                                                    input.form-control(type='text' value="Approx 2 to 5 Days" placeholder='Enter description')
+                                            .grid.grid-cols-12.card-gap 
+                                                div(class="col-span-3 md:col-span-4 sm:col-span-12")
+                                                    label.form-label.mb-0 Same Day Delivery
+                                                div(class="col-span-9 md:col-span-8 sm:col-span-12")
+                                                    .form-check.form-switch.form-check-inline
+                                                        input.form-check-input.switch-primary.check-size(type='checkbox' role='switch' checked='')
+                                            .grid.grid-cols-12.card-gap 
+                                                div(class="col-span-12")
+                                                    .grid.grid-cols-12.card-gap 
+                                                        div(class="col-span-3 md:col-span-12")    
+                                                            label.form-label Title
+                                                        div(class="col-span-9 md:col-span-12") 
+                                                            input.form-control(type='text' value="Express Delivery" placeholder='Enter title')
+                                                    .grid.grid-cols-12.card-gap 
+                                                        div(class="col-span-3 md:col-span-12")    
+                                                            label.form-label Description
+                                                        div(class="col-span-9 md:col-span-12") 
+                                                            input.form-control(type='text' value="Schedule" placeholder='Enter description')
+                                                    .grid.grid-cols-12.card-gap 
+                                                        div(class="col-span-3 md:col-span-12")    
+                                                            label.form-label Default Delivery
+                                                        div(class="col-span-9 md:col-span-12") 
+                                                            .panel.panel-default
+                                                                .panel-body
+                                                                    #delivery_fields
+                                                                    .grid.grid-cols-12.gap-2
+                                                                        div(class="col-span-6 sm:col-span-12")
+                                                                            input#baseItemName.form-control(type='text' name='baseItemName[]' value='Morning' placeholder='Enter title')
+                                                                        div(class="col-span-6 sm:col-span-12")
+                                                                            input#basePrice.form-control(type='text' name='basePrice[]' value='8.00 AM - 12.00 AM' placeholder='Enter description')
+                                                                        div(class="col-span-12") 
+                                                                            .input-group-btn
+                                                                                button.btn.btn-success.text-white(type='button' onclick='delivery_fields();')
+                                                                                    span.fa-solid.fa-plus.me-1(aria-hidden='true')
+                                                                                    | Add
+                                                                        .clear
+
+                                        .tab-pan.fade(data-tabcontent="7")
+                                            .advance-options.tabs
+                                                ul.nav.tab-links.border-tab.flex.gap-0
+                                                    li
+                                                        a.tab-link.active(data-tabfilter="1")
+                                                            | Paypal
+                                                    li
+                                                        a.tab-link(data-tabfilter="2")
+                                                            | Razorpay
+                                                    li
+                                                        a.tab-link(data-tabfilter="3")
+                                                            | Mollie
+                                                    li
+                                                        a.tab-link(data-tabfilter="4")
+                                                            | COD
+                                                    li
+                                                        a.tab-link(data-tabfilter="5")
+                                                            | Stripe
+                                                .tab-content
+                                                    .tab-pan.fade.show.active(data-tabcontent="1")
+                                                        .grid.grid-cols-12.card-gap
+                                                            div(class="col-span-3 md:col-span-12")
+                                                                label.form-label.mb-0 Status
+                                                            div(class="col-span-9 md:col-span-12")
+                                                                .form-check.form-switch.form-check-inline
+                                                                    input.form-check-input.switch-primary.check-size(type='checkbox' role='switch')
+                                                        .grid.grid-cols-12.card-gap
+                                                            div(class="col-span-3 md:col-span-12")
+                                                                label.form-label.mb-0 Sandbox Mode
+                                                            div(class="col-span-9 md:col-span-12")
+                                                                .form-check.form-switch.form-check-inline
+                                                                    input.form-check-input.switch-primary.check-size(type='checkbox' role='switch')
+                                                        .grid.grid-cols-12.card-gap
+                                                            div(class="col-span-3 md:col-span-12")    
+                                                                label.form-label Client ID
+                                                            div(class="col-span-9 md:col-span-12") 
+                                                                input.form-control(type='text' placeholder='Enter client Id')
+                                                        .grid.grid-cols-12.card-gap
+                                                            div(class="col-span-3 md:col-span-12")    
+                                                                label.form-label Secret
+                                                            div(class="col-span-9 md:col-span-12") 
+                                                                input.form-control(type='text' placeholder='Enter secret')
+                                                    .tab-pan.fade(data-tabcontent="2")
+                                                        .grid.grid-cols-12.card-gap
+                                                            div(class="col-span-3 md:col-span-12")
+                                                                label.form-label.mb-0 Status
+                                                            div(class="col-span-9 md:col-span-12")
+                                                                .form-check.form-switch.form-check-inline
+                                                                    input.form-check-input.switch-primary.check-size(type='checkbox' role='switch')
+                                                        .grid.grid-cols-12.card-gap
+                                                            div(class="col-span-3 md:col-span-12")    
+                                                                label.form-label Key 
+                                                            div(class="col-span-9 md:col-span-12") 
+                                                                input.form-control(type='text' placeholder='Enter key')
+                                                        .grid.grid-cols-12.card-gap
+                                                            div(class="col-span-3 md:col-span-12")    
+                                                                label.form-label Secret
+                                                            div(class="col-span-9 md:col-span-12") 
+                                                                input.form-control(type='text' placeholder='Enter secret')
+                                                    .tab-pan.fade(data-tabcontent="3")
+                                                        .grid.grid-cols-12.card-gap
+                                                            div(class="col-span-3 md:col-span-12")
+                                                                label.form-label.mb-0 Status
+                                                            div(class="col-span-9 md:col-span-12")
+                                                                .form-check.form-switch.form-check-inline
+                                                                    input.form-check-input.switch-primary.check-size(type='checkbox' role='switch')
+                                                        .grid.grid-cols-12.card-gap
+                                                            div(class="col-span-3 md:col-span-12")    
+                                                                label.form-label Key 
+                                                            div(class="col-span-9 md:col-span-12") 
+                                                                input.form-control(type='text' placeholder='Enter key')
+                                                        .grid.grid-cols-12.card-gap
+                                                            div(class="col-span-3 md:col-span-12")    
+                                                                label.form-label Secret
+                                                            div(class="col-span-9 md:col-span-12") 
+                                                                input.form-control(type='text' placeholder='Enter secret')
+                                                    .tab-pan.fade(data-tabcontent="4")
+                                                        .grid.grid-cols-12.card-gap
+                                                            div(class="col-span-3 md:col-span-12")
+                                                                label.form-label.mb-0 Status
+                                                            div(class="col-span-9 md:col-span-12")
+                                                                .form-check.form-switch.form-check-inline
+                                                                    input.form-check-input.switch-primary.check-size(type='checkbox' role='switch')
+                                                    .tab-pan.fade(data-tabcontent="5")
+                                                        .grid.grid-cols-12.card-gap
+                                                            div(class="col-span-3 md:col-span-12")
+                                                                label.form-label.mb-0 Status
+                                                            div(class="col-span-9 md:col-span-12")
+                                                                .form-check.form-switch.form-check-inline
+                                                                    input.form-check-input.switch-primary.check-size(type='checkbox' role='switch')
+                                                        .grid.grid-cols-12.card-gap
+                                                            div(class="col-span-3 md:col-span-12")    
+                                                                label.form-label Key 
+                                                            div(class="col-span-9 md:col-span-12") 
+                                                                input.form-control(type='text' placeholder='Enter key')
+                                                        .grid.grid-cols-12.card-gap
+                                                            div(class="col-span-3 md:col-span-12")    
+                                                                label.form-label Secret
+                                                            div(class="col-span-9 md:col-span-12") 
+                                                                input.form-control(type='text' placeholder='Enter secret')
+                                        .tab-pan.fade(data-tabcontent="8")
+                                            .advance-options.tabs
+                                                ul.tab-links.border-tab
+                                                    li
+                                                        a.tab-link.active(data-tabfilter="1")
+                                                            | Facebook Pixel
+                                                    li
+                                                        a.tab-link(data-tabfilter="2")
+                                                            | Google Analytics
+                                                .tab-content
+                                                    .tab-pan.fade.show.active(data-tabcontent="1")
+                                                        .grid.grid-cols-12.card-gap
+                                                            div(class="col-span-3 md:col-span-12")
+                                                                label.form-label.mb-0 Status
+                                                            div(class="col-span-9 md:col-span-12")
+                                                                .form-check.form-switch.form-check-inline
+                                                                    input.form-check-input.switch-primary.check-size(type='checkbox' role='switch' checked='')
+                                                        .grid.grid-cols-12.card-gap
+                                                            div(class="col-span-3 md:col-span-12")
+                                                                label.form-label Pixel Id
+                                                            div(class="col-span-9 md:col-span-12") 
+                                                                input.form-control(type='number' value="5899947538419005" placeholder='Enter pixel id')
+                                                    .tab-pan.fade(data-tabcontent="2")
+                                                        .grid.grid-cols-12.card-gap
+                                                            div(class="col-span-3 md:col-span-12")
+                                                                label.form-label.mb-0 Status
+                                                            div(class="col-span-9 md:col-span-12")
+                                                                .form-check.form-switch.form-check-inline
+                                                                    input.form-check-input.switch-primary.check-size(type='checkbox' role='switch')
+                                                        .grid.grid-cols-12.card-gap
+                                                            div(class="col-span-3 md:col-span-12")    
+                                                                label.form-label Measurement Id
+                                                            div(class="col-span-9 md:col-span-12") 
+                                                                input.form-control(type='text' value="G-47FG4DEV34" placeholder='Enter measurement id')
+                                                        
+                            button.btn.btn-primary.ms-auto.block.text-white Save
+          // Container-fluid Ends
+        include ../../components/footer
+    include ../../components/footer-files

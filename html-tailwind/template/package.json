@@ -1,0 +1,27 @@
+{
+  "name": "cuba-vite",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "npm-run-all --parallel watch:tailwind serve",
+    "serve": "vite",
+    "watch:tailwind": "npx tailwindcss -i ./assets/post_css/style.css -o ./assets/css/style.css --watch",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "@tailwindcss/line-clamp": "^0.4.2",
+    "autoprefixer": "^10.4.20",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.4.49",
+    "postcss-import": "^16.1.0",
+    "postcss-simple-vars": "^7.0.1",
+    "sass": "^1.77.6",
+    "tailwindcss": "^3.4.17",
+    "tailwindcss-flip": "^1.0.0",
+    "vite": "^6.0.1",
+    "vite-plugin-pug": "^0.4.1"
+  },
+  "dependencies": {
+    "20": "^3.1.9"
+  }
+}

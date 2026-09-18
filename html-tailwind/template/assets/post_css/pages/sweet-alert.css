@@ -1,0 +1,155 @@
+@layer components {
+  .swal2-container {
+    .swal2-image {
+      @apply mb-0 !w-[calc(70px+50*(100vw-320px)/1600)] !h-[calc(70px+50*(100vw-320px)/1600)];
+    }
+    .swal2-html-container {
+      @apply !text-base mt-2;
+    }
+    .swal2-input {
+      @apply cursor-pointer;
+      &:focus,
+      &:focus-visible {
+        @apply shadow-[unset] !border-[rgba(var(--chart-dashed-border),1)];
+      }
+    }
+    .swal2-title {
+      @apply text-[calc(18px_+_(20_-_18)_*_((100vw_-_320px)_/_(1920_-_320)))] font-medium;
+    }
+    .swal2-question {
+      @apply border-[rgba(var(--info-color),1)] text-[rgba(var(--info-color),1)];
+    }
+    .swal2-actions {
+      @apply gap-3;
+      .swal2-confirm {
+        @apply !bg-[rgba(var(--theme-default),1)] hover:bg-[rgba(var(--theme-default),1)];
+        &:focus{
+          box-shadow: unset !important;
+        }
+        &.btn {
+          &.btn-success {
+            @apply bg-[rgba(var(--success-color),1)] text-[rgba(var(--white),1)];
+          }
+        }
+      }
+      .swal2-deny {
+        @apply bg-[rgba(var(--danger-color),1)];
+      }
+      .swal2-cancel {
+        @apply bg-[rgba(var(--dark-gray),1)] text-[rgba(var(--white),1)];
+        &:focus{
+          box-shadow: unset !important;
+        }
+      }
+    }
+    .swal2-close {
+      @apply text-[rgba(var(--light-paragraph),1)];
+    }
+    .swal2-error {
+      @apply border-[rgba(var(--danger-color),1)] text-[rgba(var(--danger-color),1)];
+      .swal2-x-mark {
+        span {
+          @apply bg-[rgba(var(--danger-color),1)];
+        }
+      }
+    }
+    .swal2-warning {
+      @apply border-[rgba(var(--warning-color),1)] text-[rgba(var(--warning-color),1)];
+      .swal2-icon-content {
+        @apply text-[rgba(var(--warning-color),1)];
+      }
+    }
+    div:where(.swal2-icon).swal2-success .swal2-success-ring {
+      @apply border-[rgba(var(--success-color),0.3)] border-[0.25em] border-solid;
+    }
+    div:where(.swal2-icon).swal2-success [class^="swal2-success-line"] {
+      @apply bg-[rgba(var(--success-color),1)];
+    }
+    div:where(.swal2-icon) {
+      &.swal2-info {
+        @apply border-[rgba(var(--info-color),1)] text-[rgba(var(--info-color),1)];
+      }
+    }
+    .swal2-loader {
+      @apply border-[rgba(var(--light-paragraph),1)_rgba(var(--black),0)_rgba(var(--light-paragraph),1)_rgba(var(--black),0)];
+    }
+    button {
+      @apply !text-sm font-normal text-[rgba(var(--theme-default),1)] m-0 px-7 py-1.5;
+    }
+    button {
+      &.swal2-close {
+        @apply !text-[40px];
+        &:focus,
+        &:hover {
+          box-shadow: unset;
+        }
+      }
+    }
+    .swal2-wrapper {
+      @apply flex flex-col text-left;
+      .swal2-select {
+        @apply p-0;
+        label {
+          @apply text-base;
+        }
+        .swal2-input {
+          @apply border border-[rgba(var(--recent-dashed-border),1)] text-base text-[rgba(var(--theme-body-sub-title-color),1)] rounded-[5px] border-solid;
+          option {
+            @apply text-sm;
+          }
+        }
+      }
+      label {
+        @apply mb-1.5 m-0;
+      }
+      .swal2-input {
+        @apply m-0 {
+          &:focus {
+            @apply shadow-[unset] !border-[rgba(var(--recent-dashed-border),1)];
+          }
+        }
+      }
+      .swal2-genders {
+        @apply flex gap-3 mx-0 my-[18px];
+        label {
+          @apply m-0;
+        }
+      }
+      .swal2-radio-group,
+      .swal2-checkbox {
+        @apply flex gap-2;
+      }
+      .form-control,
+      .form-select {
+        @apply border-[rgba(var(--gray-60),1)];
+      }
+    }
+  }
+  div:where(.swal2-container) button:where(.swal2-close) {
+    &:hover {
+      @apply text-[rgba(var(--theme-default),1)];
+    }
+  }
+  div:where(.swal2-container) {
+    button:where(.swal2-styled) {
+      .swal2-confirm {
+        &:focus {
+          @apply !shadow-none;
+        }
+      }
+      .swal2-default-outline {
+        &:focus {
+          @apply !shadow-none;
+        }
+      }
+    }
+    input:where(.swal2-input) {
+      &:focus {
+        @apply !shadow-none;
+      }
+      &::placeholder{
+        @apply text-[rgba(var(--gray-60),1)];
+      }
+    }
+  }
+}

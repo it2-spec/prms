@@ -1,0 +1,119 @@
+- var page_Title = 'Gallery Grid';
+- var theme_customizer      = true;
+- var photo_swipe           = true;
+- var sidebar               = true;
+- var slick                 = true;
+- var header_slider         = true;
+- var scrollbar             = true;
+doctype html
+html(lang='en')
+  include ../../components/header-files
+  body
+    include ../../components/loader
+    include ../../components/taptop
+    // page-wrapper Start
+    #pageWrapper.page-wrapper.compact-wrapper
+      include ../../components/header
+      // Page Body Start
+      .page-body-wrapper
+        include ../../components/sidebar
+        .page-body
+          .container.w-full
+            .page-title
+              .grid.grid-cols-12.mx-2.items-center
+                div(class="col-span-6 sm:col-span-12")
+                  h3
+                    | Gallery
+
+                div(class="col-span-6 sm:col-span-12")
+                  ol.breadcrumb.flex
+                    li.breadcrumb-item
+                      a(href='index.html')                                        
+                        svg.stroke-icon
+                          use(href='../assets/svg/icon-sprite.svg#stroke-home')
+                    li.breadcrumb-item Gallery
+                    li.breadcrumb-item.active Gallery
+          // Container-fluid starts
+          .container
+            .grid.grid-cols-12
+              div(class="col-span-12")
+                .card
+                  .card-header
+                    h5 IMAGE GALLERY
+                  .gallery.my-gallery.card-body.grid.grid-cols-12.card-gap(itemscope='' class="!mb-[30px] !pb-0")
+                    figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xl:col-span-4 md:col-span-6")
+                      a(href='../assets/images/big-lightgallery/01.jpg', itemprop='contentUrl', data-size='1600x950')
+                        img.img-thumbnail(src='../assets/images/lightgallery/01.jpg', itemprop='thumbnail', alt='Image description')
+                      figcaption(itemprop='caption description') Image caption  1
+                    figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xl:col-span-4 md:col-span-6")
+                      a(href='../assets/images/big-lightgallery/02.jpg', itemprop='contentUrl', data-size='1600x950')
+                        img.img-thumbnail(src='../assets/images/lightgallery/02.jpg', itemprop='thumbnail', alt='Image description')
+                      figcaption(itemprop='caption description') Image caption  2
+                    figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xl:col-span-4 md:col-span-6")
+                      a(href='../assets/images/big-lightgallery/03.jpg', itemprop='contentUrl', data-size='1600x950')
+                        img.img-thumbnail(src='../assets/images/lightgallery/03.jpg', itemprop='thumbnail', alt='Image description')
+                      figcaption(itemprop='caption description') Image caption  3
+                    figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xl:col-span-4 md:col-span-6")
+                      a(href='../assets/images/big-lightgallery/04.jpg', itemprop='contentUrl', data-size='1600x950')
+                        img.img-thumbnail(src='../assets/images/lightgallery/04.jpg', itemprop='thumbnail', alt='Image description')
+                      figcaption(itemprop='caption description') Image caption  4
+                    figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xl:col-span-4 md:col-span-6")
+                      a(href='../assets/images/big-lightgallery/05.jpg', itemprop='contentUrl', data-size='1600x950')
+                        img.img-thumbnail(src='../assets/images/lightgallery/05.jpg', itemprop='thumbnail', alt='Image description')
+                      figcaption(itemprop='caption description') Image caption  5
+                    figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xl:col-span-4 md:col-span-6")
+                      a(href='../assets/images/big-lightgallery/06.jpg', itemprop='contentUrl', data-size='1600x950')
+                        img.img-thumbnail(src='../assets/images/lightgallery/06.jpg', itemprop='thumbnail', alt='Image description')
+                      figcaption(itemprop='caption description') Image caption  8
+                    figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xl:col-span-4 md:col-span-6")
+                      a(href='../assets/images/big-lightgallery/07.jpg', itemprop='contentUrl', data-size='1600x950')
+                        img.img-thumbnail(src='../assets/images/lightgallery/07.jpg', itemprop='thumbnail', alt='Image description')
+                      figcaption(itemprop='caption description') Image caption  9
+                    figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xl:col-span-4 md:col-span-6")
+                      a(href='../assets/images/big-lightgallery/08.jpg', itemprop='contentUrl', data-size='1600x950')
+                        img.img-thumbnail(src='../assets/images/lightgallery/08.jpg', itemprop='thumbnail', alt='Image description')
+                      figcaption(itemprop='caption description') Image caption  10
+                    figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xl:col-span-4 md:col-span-6")
+                      a(href='../assets/images/big-lightgallery/09.jpg', itemprop='contentUrl', data-size='1600x950')
+                        img.img-thumbnail(src='../assets/images/lightgallery/09.jpg', itemprop='thumbnail', alt='Image description')
+                      figcaption(itemprop='caption description') Image caption  11
+                    figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xl:col-span-4 md:col-span-6")
+                      a(href='../assets/images/big-lightgallery/010.jpg', itemprop='contentUrl', data-size='1600x950')
+                        img.img-thumbnail(src='../assets/images/lightgallery/010.jpg', itemprop='thumbnail', alt='Image description')
+                      figcaption(itemprop='caption description') Image caption  12
+                    figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xl:col-span-4 md:col-span-6")
+                      a(href='../assets/images/big-lightgallery/011.jpg', itemprop='contentUrl', data-size='1600x950')
+                        img.img-thumbnail(src='../assets/images/lightgallery/011.jpg', itemprop='thumbnail', alt='Image description')
+                      figcaption(itemprop='caption description') Image caption  11
+                    figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xl:col-span-4 md:col-span-6")
+                      a(href='../assets/images/big-lightgallery/012.jpg', itemprop='contentUrl', data-size='1600x950')
+                        img.img-thumbnail(src='../assets/images/lightgallery/012.jpg', itemprop='thumbnail', alt='Image description')
+                      figcaption(itemprop='caption description') Image caption  12
+                  // Root element of PhotoSwipe. Must have class pswp.
+                  .pswp(tabindex='-1', role='dialog', aria-hidden='true')
+                    .pswp__bg
+                    .pswp__scroll-wrap
+                      .pswp__container
+                        .pswp__item
+                        .pswp__item
+                        .pswp__item
+                      .pswp__ui.pswp__ui--hidden
+                        .pswp__top-bar
+                          .pswp__counter
+                          button.pswp__button.pswp__button--close(title='Close (Esc)')
+                          button.pswp__button.pswp__button--share(title='Share')
+                          button.pswp__button.pswp__button--fs(title='Toggle fullscreen')
+                          button.pswp__button.pswp__button--zoom(title='Zoom in/out')
+                          .pswp__preloader
+                            .pswp__preloader__icn
+                              .pswp__preloader__cut
+                                .pswp__preloader__donut
+                        .pswp__share-modal.pswp__share-modal--hidden.pswp__single-tap
+                          .pswp__share-tooltip
+                        button.pswp__button.pswp__button--arrow--left(title='Previous (arrow left)')
+                        button.pswp__button.pswp__button--arrow--right(title='Next (arrow right)')
+                        .pswp__caption
+                          .pswp__caption__center
+          // Container-fluid Ends
+        include ../../components/footer
+    include ../../components/footer-files

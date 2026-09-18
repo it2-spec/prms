@@ -1,0 +1,69 @@
+@layer components {
+  .main-offcanvas-wrapper {
+    .card-body {
+      [class*="offcanvas-"] {
+        .offcanvas-body {
+          .form-select,
+          .form-control {
+            @apply text-[13px] text-[rgba(var(--badge-light-color),1)];
+          }
+
+          .form-label {
+            @apply text-[rgba(var(--theme-font-color),1)];
+          }
+        }
+      }
+    }
+  }
+  .common-offcanvas {
+    .offcanvas {
+      @apply fixed bg-[rgba(var(--white-bg),1)] z-[1045];
+
+      &.offcanvas-start {
+        &.show {
+          @apply shadow-[8px_0_8px_-2px_rgba(var(--dark-gray),0.1)];
+        }
+      }
+
+      .offcanvas-body {
+        svg {
+          @apply text-[rgba(var(--body-font-color),1)];
+        }
+      }
+    }
+  }
+  .offcanvas.show:not(.hiding),
+  .offcanvas.showing {
+    transform: none;
+  }
+  .offcanvas {
+    &.offcanvas-start {
+      @apply w-[400px] border-r-[rgba(var(--dark-gray),0.1)] -translate-x-full border-r border-solid left-0 top-0;
+    }
+    &.offcanvas-top {
+      @apply h-[30vh] max-h-full border-b-[rgba(var(--dark-gray),0.1)] -translate-y-full border-b border-solid top-0 inset-x-0;
+    }
+    &.offcanvas-end {
+      @apply w-[400px] border-r-[rgba(var(--dark-gray),0.1)] translate-x-full border-r border-solid right-0 top-0;
+    }
+    &.offcanvas-bottom {
+      @apply h-[30vh] max-h-full border-b-[rgba(var(--dark-gray),0.1)] translate-y-full border-b border-solid inset-x-0;
+    }
+  }
+  .offcanvas {
+    @apply fixed z-[1045] flex flex-col max-w-full text-[rgba(var(--black),1)] invisible bg-[rgba(var(--white),1)] bg-clip-padding transition-transform duration-[0.4s] ease-[ease-in-out] bottom-0;
+    outline: 0;
+    .offcanvas-header {
+      @apply flex items-center justify-between p-4;
+    }
+    .offcanvas-body {
+      @apply overflow-y-auto p-4;
+      p {
+        @apply mb-4;
+      }
+    }
+  }
+  .offcanvas-backdrop {
+    @apply fixed z-[1040] w-screen h-screen bg-[rgba(var(--black),0.5)] transition-all duration-[0.3s] ease-[ease-in-out] left-0 top-0;
+  }
+}

@@ -1,0 +1,120 @@
+@layer components {
+  .toast-container {
+    @apply !z-[9];
+    position: unset;
+    .toast-header {
+      @apply text-[rgba(var(--lighter-gray),0.75)] rounded-t-md;
+    }
+    .toast-body {
+      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 6px;
+    }
+  }
+  .toast {
+    .btn-close {
+      @apply shadow-[unset];
+      &:hover {
+        @apply text-[rgba(var(--bs-btn-close-color),1)] no-underline opacity-[0.75];
+      }
+    }
+    .btn-close-white {
+      @apply invert-[1] grayscale brightness-[200%];
+    }
+  }
+  .toast {
+    @apply w-[350px] max-w-full text-sm pointer-events-auto bg-[rgba(var(--white),0.85)] bg-clip-padding border shadow-[0_0.5rem_1rem_rgb(var(--black),0.15)] rounded border-solid border-[rgba(var(--black),0.1)];
+    -webkit-box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
+  }
+  .live-toast {
+    .toast {
+      @apply bg-[rgba(var(--white),0.98)];
+    }
+  }
+  .toast-index {
+    @apply z-[12];
+    &.toast:not(.showing):not(.show) {
+      @apply opacity-0;
+    }
+    &.toast-fade {
+      @apply transition-opacity duration-[0.15s] ease-linear;
+    }
+    &.show {
+      @apply block;
+    }
+  }
+  .toast-img {
+    img {
+      @apply w-[30px] h-[30px];
+    }
+  }
+  .bd-example-toasts {
+    @apply min-h-[400px];
+  }
+  .toast:not(.showing):not(.show) {
+    @apply opacity-0;
+  }
+  .toast-content {
+    @apply block max-w-full h-[65px] overflow-hidden text-ellipsis mx-auto my-0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+  .toast-rtl {
+    &.toast-dark form {
+      .form-select {
+        @apply text-sm;
+      }
+    }
+  }
+  .toast-icons {
+    @apply mr-1.5 w-[20px] h-[20px];
+  }
+  .common-toasts {
+    @apply relative;
+    .toast {
+      @apply border-0;
+      div[class*="alert-light-"] {
+        @apply gap-2.5 p-3;
+      }
+    }
+    .toast-body {
+      @apply gap-2 p-0 flex justify-center items-center;
+    }
+  }
+  .animated-toast-box {
+    @apply fixed p-4 right-0 bottom-0;
+    .toast-body {
+      @apply bg-[rgba(var(--light-background),1)];
+    }
+  }
+  .toast-body {
+    @apply p-3;
+    svg {
+      @apply w-6;
+    }
+  }
+  .toast-header {
+    @apply flex items-center bg-[rgba(var(--white),1)] border-b-[rgba(var(--gray-60),0.4)] px-3 py-2 border-b border-solid;
+    .btn-close {
+      @apply mr-[calc(-0.5_*_12px)] ml-3;
+    }
+  }
+  .toast-container > :not(:last-child) {
+    @apply mb-6;
+  }
+  .bg-dark {
+    &.toast-rtl {
+      @apply text-[rgba(var(--theme-body-font-color),1)];
+    }
+  }
+  .card-body {
+    .btn {
+      @apply tracking-[0];
+    }
+  }
+  @screen lg {
+    .toast {
+      @apply w-auto;
+    }
+  }
+}

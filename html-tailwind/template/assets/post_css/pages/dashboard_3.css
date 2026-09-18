@@ -1,0 +1,640 @@
+@layer components {
+  .welcome-card {
+    @apply bg-[url(../images/dashboard-3/bg.jpg)] bg-cover bg-no-repeat bg-center text-[rgba(var(--white),1)];
+    h4 {
+      @apply text-[rgba(var(--white),1)];
+      img {
+        @apply animate-[hand-move_5s_infinite_ease-in] -mt-1.5;
+      }
+    }
+    p {
+      @apply w-[70%] text-[rgba(var(--white),1)];
+    }
+    .welcome-img {
+      @apply h-[170px] absolute bottom-[-26px] right-0;
+      [dir="rtl"] & {
+        @apply left-0 right-[unset];
+      }
+    }
+  }
+  .get-image {
+    img {
+      @apply h-[158px];
+    }
+  }
+  .course-box {
+    @apply overflow-hidden hover:translate-y-[-5px] hover:transition-[0.5s];
+    .card-body {
+      @apply px-[15px] py-[25px];
+    }
+    &:hover {
+      .course-icon {
+        svg {
+          animation: tada 1.5s ease infinite;
+        }
+      }
+    }
+  }
+  .course-widget {
+    @apply flex gap-2;
+    .course-icon {
+      @apply relative w-[54px] h-[54px] flex items-center justify-center;
+      clip-path: polygon(40% 7.67949%, 43.1596% 6.20615%, 46.52704% 5.30384%, 50% 5%, 53.47296% 5.30384%, 56.8404% 6.20615%, 60% 7.67949%, 81.65064% 20.17949%, 84.50639% 22.17911%, 86.97152% 24.64425%, 88.97114% 27.5%, 90.44449% 30.6596%, 91.34679% 34.02704%, 91.65064% 37.5%, 91.65064% 62.5%, 91.34679% 65.97296%, 90.44449% 69.3404%, 88.97114% 72.5%, 86.97152% 75.35575%, 84.50639% 77.82089%, 81.65064% 79.82051%, 60% 92.32051%, 56.8404% 93.79385%, 53.47296% 94.69616%, 50% 95%, 46.52704% 94.69616%, 43.1596% 93.79385%, 40% 92.32051%, 18.34936% 79.82051%, 15.49361% 77.82089%, 13.02848% 75.35575%, 11.02886% 72.5%, 9.55551% 69.3404%, 8.65321% 65.97296%, 8.34936% 62.5%, 8.34936% 37.5%, 8.65321% 34.02704%, 9.55551% 30.6596%, 11.02886% 27.5%, 13.02848% 24.64425%, 15.49361% 22.17911%, 18.34936% 20.17949%);
+      background: linear-gradient(310.31deg, #ff3364 14.71%, #ff7f9e 100%);
+      svg {
+        @apply w-[26px] h-[26px] fill-[rgba(var(--white),1)];
+      }
+      &.warning {
+        background: linear-gradient(297.08deg, #ff9e2a -4.53%, #ffa941 98.25%);
+      }
+    }
+    .btn-light {
+      @apply border-[none] bg-[rgba(var(--course-light-btn),1)];
+    }
+    a {
+      @apply flex items-center mt-[25px] px-3 py-2;
+      span {
+        @apply block mb-[-5px];
+      }
+      svg {
+        @apply w-[13px] h-[13px];
+      }
+    }
+  }
+  .get-card {
+    .card-header {
+      @apply px-5;
+    }
+  }
+  .square-group {
+    @apply absolute -scale-x-100 right-0 bottom-0;
+    [dir="rtl"] & {
+      @apply left-0 right-[unset];
+    }
+    .square-1 {
+      @apply w-3 h-[18px];
+    }
+    .square-2 {
+      @apply w-3 h-2.5 -mb-2.5;
+    }
+    .square-3 {
+      @apply w-[18px] h-2.5 ml-2.5;
+      [dir="rtl"] & {
+        @apply ml-[unset] mr-2.5;
+      }
+    }
+    .square-4 {
+      @apply w-4 h-4 absolute right-[-15px] top-5;
+      [dir="rtl"] & {
+        @apply left-[-15px] right-[unset];
+      }
+    }
+    .square-5 {
+      @apply w-1.5 h-1.5 absolute -right-px bottom-[22px];
+      [dir="rtl"] & {
+        @apply -left-px right-[unset];
+      }
+    }
+    .square-6,
+    .square-7 {
+      @apply absolute w-1 h-1;
+    }
+    .square-6 {
+      @apply right-[-23px] bottom-[5px];
+      [dir="rtl"] & {
+        @apply left-[-23px] right-[unset];
+      }
+    }
+    .square-7 {
+      @apply right-2 bottom-[45px];
+      [dir="rtl"] & {
+        @apply left-2 right-[unset];
+      }
+    }
+    .warning1 {
+      @apply bg-[#ffd497];
+    }
+    .warning {
+      @apply bg-[#ffa73b];
+    }
+    .primary {
+      @apply bg-[rgba(var(--theme-default),1)];
+    }
+    .danger {
+      @apply bg-[rgba(var(--danger-color),1)];
+    }
+    .light {
+      @apply bg-[rgba(var(--light-color),1)];
+    }
+    .success {
+      @apply bg-[rgba(var(--success-color),1)];
+    }
+  }
+  .progress-chart-wrap {
+    @apply mb-[-22px] -mt-10 mx-0;
+    [dir="rtl"] & {
+      direction: ltr;
+    }
+    .apexcharts-canvas {
+      @apply mx-auto my-0;
+      .apexcharts-datalabels-group {
+        .apexcharts-datalabel-label {
+          @apply fill-[rgba(var(--chart-text-color),1)];
+        }
+      }
+    }
+  }
+  .get-card {
+    .btn {
+      @apply flex items-center mt-[15px] px-[15px] py-2;
+      &:hover {
+        svg {
+          @apply translate-x-[5px] transition-[0.5s];
+        }
+      }
+      svg {
+        @apply w-[13px] h-[13px] fill-[rgba(var(--white),1)] transition-[0.5s];
+        vertical-align: -2px;
+      }
+    }
+  }
+  .default-inline-calender {
+    .main-inline-calender {
+      .form-control {
+        @apply hidden;
+      }
+      .flatpickr-calendar {
+        @apply shadow-none;
+        .flatpickr-months {
+          .flatpickr-prev-month,
+          .flatpickr-next-month {
+            svg {
+              @apply stroke-[rgba(var(--body-font-color),1)];
+            }
+          }
+          .flatpickr-month {
+            .flatpickr-monthDropdown-months,
+            .numInputWrapper {
+              @apply text-[rgba(var(--body-font-color),1)];
+            }
+          }
+          .flatpickr-monthDropdown-months {
+            @apply pr-[18px];
+          }
+        }
+      }
+      .flatpickr-rContainer {
+        .flatpickr-weekdays {
+          .flatpickr-weekdaycontainer {
+            .flatpickr-weekday {
+              @apply text-[rgba(var(--chart-text-color),1)];
+            }
+          }
+        }
+        .flatpickr-days {
+          .dayContainer {
+            .flatpickr-day {
+              @apply h-9;
+              &.selected {
+                @apply text-[rgba(var(--white),1)];
+              }
+              &.today {
+                @apply bg-[rgba(var(--success-color),1)] text-[rgba(var(--white),1)] before:content-[""] before:w-2 before:h-2 before:bg-[rgba(var(--danger-color),1)] before:absolute before:rounded-[50%] before:-right-0.5 before:-top-0.5;
+                border: unset;
+              }
+            }
+          }
+        }
+        .flatpickr-current-month {
+          .flatpickr-monthDropdown-months {
+            option {
+              @apply text-sm hover:bg-[rgba(var(--badge-light-color),1)];
+            }
+          }
+        }
+      }
+    }
+  }
+  .learning-wrap {
+    @apply ml-[-15px] -mr-2.5 -my-6;
+  }
+  .activity-wrap {
+    @apply mt-[-22px] mb-[-22px] -ml-7 mr-0;
+    [dir="rtl"] & {
+      @apply mt-[-22px] mb-[-22px] ml-0 -mr-7;
+    }
+  }
+  .upcoming-event-wrap {
+    @apply mb-[-39px] -ml-6;
+  }
+  .course-card {
+    .dropdown {
+      .dropdown-toggle {
+        @apply w-[125px];
+      }
+    }
+  }
+  .course-wrapper {
+    @apply text-center;
+    .course-icon-box {
+      @apply relative p-2;
+      .icon-wrap {
+        @apply w-[117px] h-[92px] bg-[rgba(var(--course-bg),1)] flex items-center justify-center shadow-[-18px_15px_20px_rgba(119,119,119,0.25)] mx-auto my-0 rounded-lg;
+        img {
+          @apply w-20;
+        }
+      }
+      .arrow-bg {
+        @apply absolute w-[calc(100%_+_20px)] h-full left-0 top-0;
+        [dir="rtl"] & {
+          @apply -scale-x-100 left-[unset] right-0;
+        }
+      }
+    }
+    h6 {
+      @apply mt-[25px] mb-0;
+    }
+  }
+  .course-main-card {
+    @apply flex gap-5 justify-center;
+    .course-wrapper {
+      &:last-child {
+        .arrow-bg {
+          @apply w-full;
+        }
+      }
+    }
+  }
+  .schedule-list {
+    @apply flex flex-col gap-5;
+    li {
+      @apply flex items-center;
+      h6 {
+        @apply text-sm;
+      }
+      ul {
+        @apply gap-x-5;
+        column-count: 2;
+        column-rule-style: solid;
+        column-rule-color: rgba(var(--chart-text-color), 1);
+        column-rule-width: 1px;
+        li {
+          @apply gap-1.5;
+        }
+      }
+      img {
+        @apply w-[37px] h-[37px] p-[3px] rounded-[100%];
+      }
+      svg {
+        @apply w-[15px] h-[15px];
+        &.f-success {
+          @apply fill-[rgba(var(--success-color),1)];
+        }
+      }
+    }
+    > li {
+      @apply shadow-[4px_7px_17px_5px_rgba(46,35,94,0.05)] gap-2.5 relative px-5 py-[15px] rounded-[10px] before:absolute before:content-[""] before:w-[5px] before:h-full before:rounded-[15px_0_0_15px] before:left-0 before:top-0;
+      &::before {
+        [dir="rtl"] & {
+          @apply rounded-[0_15px_15px_0] left-[unset] right-0;
+        }
+      }
+      &.primary {
+        &::before {
+          @apply bg-[rgba(var(--theme-default),1)];
+        }
+        img {
+          @apply border border-[rgba(var(--theme-default),1)] border-solid;
+        }
+      }
+      &.warning {
+        &::before {
+          @apply bg-[rgba(var(--warning-color),1)];
+        }
+        img {
+          @apply border border-[rgba(var(--warning-color),1)] border-solid;
+        }
+      }
+    }
+  }
+  .link-only {
+    @apply flex items-center gap-2 text-[rgba(var(--theme-body-sub-title-color),1)];
+    svg {
+      @apply w-4 h-4;
+    }
+  }
+  .lessons-lists {
+    li {
+      @apply flex items-center gap-2.5 px-0 py-3 first:pt-0 last:pb-0;
+      img {
+        @apply transition-[0.5s];
+      }
+      + li {
+        @apply border-t-[rgba(var(--chart-dashed-border),1)] border-t border-solid;
+      }
+      &:hover {
+        img {
+          @apply transition-[0.5s] scale-110;
+        }
+      }
+    }
+  }
+  .lesson-wrap {
+    @apply w-[50px] mb-[-11px] -mt-1.5;
+    .apexcharts-canvas {
+      .apexcharts-datalabel-label {
+        @apply hidden;
+      }
+    }
+  }
+  .t-top-mentor {
+    thead,
+    tbody {
+      tr {
+        th,
+        td {
+          @apply min-w-[auto] text-[rgba(var(--body-font-color),1)];
+          &:first-child {
+            @apply pl-5;
+          }
+          &:last-child {
+            @apply pr-5;
+          }
+          a {
+            @apply text-[rgba(var(--body-font-color),1)];
+          }
+          img {
+            @apply h-10;
+          }
+        }
+      }
+    }
+    thead {
+      tr {
+        th {
+          @apply text-[rgba(var(--badge-light-color),1)];
+        }
+      }
+    }
+  }
+  .completed-course-table {
+    thead,
+    tbody {
+      tr {
+        th,
+        td {
+          @apply min-w-[auto] text-[rgba(var(--body-font-color),1)];
+          &:first-child {
+            @apply pl-5;
+          }
+          &:last-child {
+            @apply pr-5;
+          }
+          a {
+            @apply text-[rgba(var(--body-font-color),1)];
+          }
+          img {
+            @apply h-10 rounded-lg;
+          }
+        }
+      }
+    }
+    thead {
+      tr {
+        th {
+          @apply text-[rgba(var(--badge-light-color),1)];
+        }
+      }
+    }
+  }
+  @screen between1800-1400 {
+    .welcome-card p {
+      @apply w-[62%];
+    }
+  }
+  @screen xl1660 {
+    .learning-wrap {
+      @apply mt-[0] mb-[0];
+    }
+  }
+  @screen xl1470 {
+    .welcome-card p {
+      @apply h-[52px] line-clamp-[2];
+    }
+  }
+  @screen sm480 {
+    .welcome-card p {
+      @apply w-full;
+    }
+    .welcome-card .welcome-img {
+      @apply hidden;
+    }
+  }
+  @screen md640 {
+    .schedule-card .card-header-right-icon .btn {
+      @apply !hidden;
+    }
+  }
+  @screen xl1660 {
+    .course-box .card-body {
+      @apply px-[15px] py-4;
+    }
+    .course-box.widget-course .card-body {
+      @apply px-[15px] py-[25px];
+    }
+    .default-inline-calender {
+      .main-inline-calender {
+        .flatpickr-rContainer {
+          .flatpickr-days {
+            .dayContainer {
+              .flatpickr-day {
+                @apply h-[2.75rem];
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen xxl {
+    .results-box {
+      @apply hidden;
+    }
+  }
+  @screen between1399-1200 {
+    .completed-course-table {
+      thead,
+      tbody {
+        tr {
+          th,
+          td {
+            &:nth-child(4) {
+              @apply hidden;
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen between1660-1200 {
+    .completed-course-table {
+      thead,
+      tbody {
+        tr {
+          th,
+          td {
+            &:last-child {
+              @apply hidden;
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen between1580-1200 {
+    .t-top-mentor {
+      thead,
+      tbody {
+        tr {
+          th,
+          td {
+            &:nth-child(3) {
+              @apply hidden;
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen lg {
+    .progress-chart-wrap {
+      @apply mt-[-18px];
+    }
+  }
+  @screen md {
+    .course-wrapper .course-icon-box .icon-wrap {
+      @apply shadow-none;
+    }
+    .course-wrapper .course-icon-box {
+      @apply p-0;
+    }
+    .course-wrapper .course-icon-box .arrow-bg {
+      @apply hidden;
+    }
+    .course-main-card {
+      @apply gap-3 flex-nowrap;
+    }
+    .schedule-list {
+      @apply flex-row;
+    }
+    .welcome-card .welcome-img {
+      @apply h-[140px] bottom-[-18px];
+    }
+  }
+  @screen sm {
+    .course-wrapper .course-icon-box .icon-wrap {
+      @apply w-[92px] h-[82px];
+    }
+    .course-wrapper .course-icon-box .icon-wrap img {
+      @apply w-[70px];
+    }
+    .course-wrapper h6 {
+      @apply mt-[15px];
+    }
+    .course-main-card {
+      @apply gap-5 flex-wrap;
+    }
+    .schedule-list {
+      @apply flex-col;
+    }
+  }
+  @screen xl {
+    .schedule-list li ul {
+      @apply flex flex-wrap;
+    }
+    .t-top-mentor {
+      thead,
+      tbody {
+        tr {
+          th,
+          td {
+            &:nth-child(2) {
+              @apply min-w-[135px];
+            }
+            &:nth-child(3) {
+              @apply min-w-[108px];
+            }
+            &:nth-child(4) {
+              @apply min-w-[60px];
+            }
+          }
+        }
+      }
+    }
+    .completed-course-table {
+      thead,
+      tbody {
+        tr {
+          th,
+          td {
+            &:nth-child(2) {
+              @apply min-w-[155px];
+            }
+            &:nth-child(3) {
+              @apply min-w-[96px];
+            }
+            &:nth-child(4) {
+              @apply min-w-[121px];
+            }
+            &:last-child {
+              @apply min-w-[99px];
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen xl1280 {
+    .t-top-mentor .overflow-x-auto div.dt-container .dt-layout-row .dt-layout-cell .dt-search {
+      @apply relative mb-5 left-0 right-[unset] top-1  w-[80%];
+      label {
+        @apply ml-[20px];
+      }
+    }
+    .completed-course-table .overflow-x-auto div.dt-container .dt-layout-row .dt-layout-cell .dt-search {
+      @apply relative mb-5 left-0 right-[unset] top-1 w-[80%];
+      label {
+        @apply ml-[20px];
+      }
+    }
+  }
+  @screen xl1600 {
+    .t-top-mentor .overflow-x-auto div.dt-container .dt-layout-row:last-child {
+      @apply flex-col;
+    }
+    .completed-course-table .overflow-x-auto div.dt-container .dt-layout-row:last-child {
+      @apply flex-col;
+    }
+  }
+}
+@keyframes hand-move {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  20% {
+    transform: rotate(15deg);
+  }
+
+  50% {
+    transform: rotate(0deg);
+  }
+
+  80% {
+    transform: rotate(-15deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}

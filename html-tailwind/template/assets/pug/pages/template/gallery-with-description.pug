@@ -1,0 +1,224 @@
+- var page_Title = 'Gallery Grid Description';
+- var theme_customizer      = true;
+- var photo_swipe           = true;
+- var sidebar               = true;
+- var slick                 = true;
+- var header_slider         = true;
+- var scrollbar             = true;
+doctype html
+html(lang='en')
+  include ../../components/header-files
+  body
+    include ../../components/loader
+    include ../../components/taptop
+    // page-wrapper Start
+    #pageWrapper.page-wrapper.compact-wrapper
+      include ../../components/header
+      // Page Body Start
+      .page-body-wrapper
+        include ../../components/sidebar
+        .page-body
+          .container.w-full
+            .page-title
+              .grid.grid-cols-12.mx-2.items-center
+                div(class="col-span-6 sm:col-span-12")
+                  h3
+                    | Gallery Grid With Description
+
+                div(class="col-span-6 sm:col-span-12")
+                  ol.breadcrumb.flex
+                    li.breadcrumb-item
+                      a(href='index.html')                                        
+                        svg.stroke-icon
+                          use(href='../assets/svg/icon-sprite.svg#stroke-home')
+                    li.breadcrumb-item Gallery
+                    li.breadcrumb-item.active  Gallery Grid With Description
+          // Container-fluid starts
+          .container
+            .grid.grid-cols-12
+              div(class="col-span-12")
+                .card
+                  .card-header
+                    h5 IMAGE GALLERY WITH DESCRIPTION
+                  .my-gallery.card-body.gallery-with-description(itemscope='' class="!mb-[30px] !pb-0")
+                    .grid.grid-cols-12.card-gap
+                      figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xl:col-span-6 sm:col-span-12")
+                        a(href='../assets/images/big-lightgallery/01.jpg', itemprop='contentUrl', data-size='1600x950')
+                          img(src='../assets/images/lightgallery/01.jpg', itemprop='thumbnail', alt='Image description')
+                          .caption
+                            h4 Portfolio Title
+                            p
+                              | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                        figcaption(itemprop='caption description')
+                          h4 Portfolio Title
+                          p
+                            | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                      figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xl:col-span-6 sm:col-span-12")
+                        a(href='../assets/images/big-lightgallery/02.jpg', itemprop='contentUrl', data-size='1600x950')
+                          img(src='../assets/images/lightgallery/02.jpg', itemprop='thumbnail', alt='Image description')
+                          .caption
+                            h4 Portfolio Title
+                            p
+                              | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                        figcaption(itemprop='caption description')
+                          h4 Portfolio Title
+                          p
+                            | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                      figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xl:col-span-6 sm:col-span-12")
+                        a(href='../assets/images/big-lightgallery/03.jpg', itemprop='contentUrl', data-size='1600x950')
+                          img(src='../assets/images/lightgallery/03.jpg', itemprop='thumbnail', alt='Image description')
+                          .caption
+                            h4 Portfolio Title
+                            p
+                              | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                        figcaption(itemprop='caption description')
+                          h4 Portfolio Title
+                          p
+                            | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                      figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xl:col-span-6 sm:col-span-12")
+                        a(href='../assets/images/big-lightgallery/04.jpg', itemprop='contentUrl', data-size='1600x950')
+                          img(src='../assets/images/lightgallery/04.jpg', itemprop='thumbnail', alt='Image description')
+                          .caption
+                            h4 Portfolio Title
+                            p
+                              | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                        figcaption(itemprop='caption description')
+                          h4 Portfolio Title
+                          p
+                            | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                      figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xl:col-span-6 sm:col-span-12")
+                        a(href='../assets/images/big-lightgallery/05.jpg', itemprop='contentUrl', data-size='1600x950')
+                          img(src='../assets/images/lightgallery/05.jpg', itemprop='thumbnail', alt='Image description')
+                          .caption
+                            h4 Portfolio Title
+                            p
+                              | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                        figcaption(itemprop='caption description')
+                          h4 Portfolio Title
+                          p
+                            | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                      figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xl:col-span-6 sm:col-span-12")
+                        a(href='../assets/images/big-lightgallery/06.jpg', itemprop='contentUrl', data-size='1600x950')
+                          img(src='../assets/images/lightgallery/06.jpg', itemprop='thumbnail', alt='Image description')
+                          .caption
+                            h4 Portfolio Title
+                            p
+                              | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                        figcaption(itemprop='caption description')
+                          h4 Portfolio Title
+                          p
+                            | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                      figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xl:col-span-6 sm:col-span-12")
+                        a(href='../assets/images/big-lightgallery/07.jpg', itemprop='contentUrl', data-size='1600x950')
+                          img(src='../assets/images/lightgallery/07.jpg', itemprop='thumbnail', alt='Image description')
+                          .caption
+                            h4 Portfolio Title
+                            p
+                              | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                        figcaption(itemprop='caption description')
+                          h4 Portfolio Title
+                          p
+                            | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                      figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xl:col-span-6 sm:col-span-12")
+                        a(href='../assets/images/big-lightgallery/08.jpg', itemprop='contentUrl', data-size='1600x950')
+                          img(src='../assets/images/lightgallery/08.jpg', itemprop='thumbnail', alt='Image description')
+                          .caption
+                            h4 Portfolio Title
+                            p
+                              | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                        figcaption(itemprop='caption description')
+                          h4 Portfolio Title
+                          p
+                            | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.                            // Root element of PhotoSwipe. Must have class pswp.
+                      figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xl:col-span-6 sm:col-span-12")
+                        a(href='../assets/images/big-lightgallery/09.jpg', itemprop='contentUrl', data-size='1600x950')
+                          img(src='../assets/images/lightgallery/09.jpg', itemprop='thumbnail', alt='Image description')
+                          .caption
+                            h4 Portfolio Title
+                            p
+                              | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                        figcaption(itemprop='caption description')
+                          h4 Portfolio Title
+                          p
+                            | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                      figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xl:col-span-6 sm:col-span-12")
+                        a(href='../assets/images/big-lightgallery/010.jpg', itemprop='contentUrl', data-size='1600x950')
+                          img(src='../assets/images/lightgallery/010.jpg', itemprop='thumbnail', alt='Image description')
+                          .caption
+                            h4 Portfolio Title
+                            p
+                              | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                        figcaption(itemprop='caption description')
+                          h4 Portfolio Title
+                          p
+                            | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                      figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xl:col-span-6 sm:col-span-12")
+                        a(href='../assets/images/big-lightgallery/011.jpg', itemprop='contentUrl', data-size='1600x950')
+                          img(src='../assets/images/lightgallery/011.jpg', itemprop='thumbnail', alt='Image description')
+                          .caption
+                            h4 Portfolio Title
+                            p
+                              | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                        figcaption(itemprop='caption description')
+                          h4 Portfolio Title
+                          p
+                            | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                      figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xl:col-span-6 sm:col-span-12")
+                        a(href='../assets/images/big-lightgallery/012.jpg', itemprop='contentUrl', data-size='1600x950')
+                          img(src='../assets/images/lightgallery/012.jpg', itemprop='thumbnail', alt='Image description')
+                          .caption
+                            h4 Portfolio Title
+                            p
+                              | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                        figcaption(itemprop='caption description')
+                          h4 Portfolio Title
+                          p
+                            | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                      figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xl:col-span-6 sm:col-span-12")
+                        a(href='../assets/images/big-lightgallery/013.jpg', itemprop='contentUrl', data-size='1600x950')
+                          img(src='../assets/images/lightgallery/013.jpg', itemprop='thumbnail', alt='Image description')
+                          .caption
+                            h4 Portfolio Title
+                            p
+                              | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                        figcaption(itemprop='caption description')
+                          h4 Portfolio Title
+                          p
+                            | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                      figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xl:col-span-6 sm:col-span-12")
+                        a(href='../assets/images/big-lightgallery/014.jpg', itemprop='contentUrl', data-size='1600x950')
+                          img(src='../assets/images/lightgallery/014.jpg', itemprop='thumbnail', alt='Image description')
+                          .caption
+                            h4 Portfolio Title
+                            p
+                              | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                        figcaption(itemprop='caption description')
+                          h4 Portfolio Title
+                          p
+                            | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                      figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xl:col-span-6 sm:col-span-12")
+                        a(href='../assets/images/big-lightgallery/015.jpg', itemprop='contentUrl', data-size='1600x950')
+                          img(src='../assets/images/lightgallery/015.jpg', itemprop='thumbnail', alt='Image description')
+                          .caption
+                            h4 Portfolio Title
+                            p
+                              | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                        figcaption(itemprop='caption description')
+                          h4 Portfolio Title
+                          p
+                            | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                      figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xl:col-span-6 sm:col-span-12")
+                        a(href='../assets/images/big-lightgallery/016.jpg', itemprop='contentUrl', data-size='1600x950')
+                          img(src='../assets/images/lightgallery/016.jpg', itemprop='thumbnail', alt='Image description')
+                          .caption
+                            h4 Portfolio Title
+                            p
+                              | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                        figcaption(itemprop='caption description')
+                          h4 Portfolio Title
+                          p
+                            | Using a camera's lens to record moments in time is the art form known as photography. To produce aesthetically striking photos, it entails the deft use of light, composition, and subject matter.
+                    
+          // Container-fluid Ends
+        include ../../components/footer
+    include ../../components/footer-files

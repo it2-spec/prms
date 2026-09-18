@@ -1,0 +1,67 @@
+@layer components {
+  .custom-border {
+    @apply border border-solid border-[rgba(var(--light-gray),1)];
+  }
+  .custom-border-t {
+    @apply border-t border-solid border-[rgba(var(--light-gray),1)];
+  }
+  .custom-border-l {
+    @apply border-l border-solid border-[rgba(var(--light-gray),1)];
+  }
+  .custom-border-r {
+    @apply border-r border-solid border-[rgba(var(--light-gray),1)];
+  }
+  .custom-border-b {
+    @apply border-b border-solid border-[rgba(var(--light-gray),1)];
+  }
+  .helper-common-box {
+    @apply flex items-center gap-2 mb-[16px] last:mb-0;
+    &.helper-p-wrapper {
+      @apply gap-3 flex-wrap mb-0;
+    }
+    .border-common-box {
+      @apply w-auto h-[50px] bg-[rgba(var(--light-background),1)] border-[rgba(var(--recent-dashed-border),1)] p-3 rounded-[10px];
+    }
+    .border {
+      --tw-border-color: var(--recent-border) !important;
+    }
+    [class*="border-"] {
+      --tw-border-color: var(--recent-border) !important;
+    }
+  }
+  .txt-space {
+    div {
+      @apply mb-4;
+      &:nth-child(7) {
+        @apply mb-0;
+      }
+    }
+  }
+  .border-wrapper {
+    @apply p-5;
+  }
+  .fill-wrapper {
+    @apply bg-[rgba(var(--light-color),1)];
+  }
+  .gradient-border {
+    @apply flex gap-[22px] flex-wrap items-center;
+  }
+  .radius-wrapper {
+    @apply bg-[rgba(var(--light-semi-gray),1)];
+  }
+  .font-wrapper {
+    @apply flex items-center px-5 py-3;
+  }
+  .helper-padding {
+    @apply flex flex-col gap-3;
+  }
+  .helper-p-box {
+    @apply flex items-center justify-center;
+    span {
+      @apply text-[rgba(var(--body-font-color),1)];
+    }
+  }
+  .common-p-box {
+    @apply flex flex-col gap-3 items-start;
+  }
+}

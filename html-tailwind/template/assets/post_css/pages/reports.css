@@ -1,0 +1,292 @@
+@layer components {
+  .product-report-wrapper,
+  .sale-report-wrapper,
+  .sale-return-wrapper,
+  .customer-order-wrapper,
+  .subscribed-user {
+    .flatpickr-input {
+      span {
+        @apply border border-[rgba(var(--badge-light-color),0.3)] text-[rgba(var(--badge-light-color),0.8)] w-[215px] px-3 py-1.5 rounded-md border-solid;
+      }
+
+      #rangeButtons {
+        @apply flex-col absolute z-[1] hidden shadow-[0px_0px_28px_6px_rgba(235,235,235,0.4)] top-10;
+
+        &.range-option {
+          @apply flex w-[210px];
+        }
+
+        button {
+          @apply text-left bg-[rgba(var(--white),1)] text-[rgba(var(--badge-light-color),1)] px-6 py-2 border-[unset];
+
+          &:hover {
+            @apply text-[rgba(var(--theme-default),1)];
+          }
+
+          &.active {
+            @apply bg-[rgba(var(--theme-default),1)] text-[rgba(var(--white),1)];
+
+            &:hover {
+              @apply text-[rgba(var(--white),1)];
+            }
+          }
+        }
+      }
+    }
+
+    .top-body {
+      @apply relative p-5;
+
+      .bootstrap-select {
+        &.dropdown-toggle {
+          @apply min-w-[100px];
+        }
+      }
+
+      .form-label {
+        @apply mb-0;
+      }
+
+      ~ {
+        .product-report,
+        .sale-return-report,
+        .sale-report,
+        .customer-order-report,
+        .subscribed-user-wrapper {
+          .dt-container {
+            .dt-layout-row {
+              .dt-buttons,
+              .dt-search {
+                @apply m-0;
+              }
+
+              &:first-child {
+                @apply absolute flex justify-start items-center flex-row-reverse gap-5 right-5 top-5;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .product-report,
+    .sale-return-report,
+    .sale-report,
+    .customer-order-report,
+    .subscribed-user-wrapper {
+      .recent-table {
+        div.dt-container {
+          .dt-layout-row {
+            .dt-search {
+              @apply relative inset-[unset];
+
+              .dt-input {
+                @apply w-auto opacity-100 p-1.5 rounded-md;
+
+                &:focus {
+                  &::placeholder {
+                    @apply opacity-0;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .form-control {
+      @apply text-sm text-[rgba(var(--badge-light-color),0.8)];
+    }
+
+    .product-report {
+      .recent-table {
+        table {
+          thead,
+          tbody {
+            tr {
+              th,
+              td {
+                @apply text-[rgba(var(--body-font-color),1)] min-w-[auto];
+
+                &:first-child {
+                  @apply pl-5;
+                }
+
+                &:last-child {
+                  @apply min-w-[82px] pr-5;
+                }
+
+                &:nth-child(n + 3) {
+                  @apply text-center;
+                }
+
+                &:nth-child(2) {
+                  @apply min-w-[215px];
+                }
+
+                &:nth-child(4) {
+                  @apply min-w-[138px];
+                }
+
+                &:nth-child(5) {
+                  @apply min-w-[78px];
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .sale-report-wrapper {
+    .sale-report {
+      .recent-table {
+        table {
+          thead,
+          tbody {
+            tr {
+              th,
+              td {
+                @apply text-[rgba(var(--body-font-color),1)] min-w-[auto];
+
+                &:first-child {
+                  @apply pl-5;
+                }
+
+                &:last-child {
+                  @apply min-w-[155px] pr-5;
+                }
+
+                &:nth-child(n + 3) {
+                  @apply text-center;
+                }
+
+                &:nth-child(2) {
+                  @apply min-w-[96px];
+                }
+
+                &:nth-child(3) {
+                  @apply min-w-[104px];
+                }
+
+                &:nth-child(4) {
+                  @apply min-w-[173px];
+                }
+
+                &:nth-child(5) {
+                  @apply min-w-[92px];
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .sale-return-wrapper {
+    .sale-return-report {
+      .recent-table {
+        table {
+          thead,
+          tbody {
+            tr {
+              th,
+              td {
+                @apply text-[rgba(var(--body-font-color),1)] min-w-[auto];
+
+                &:first-child {
+                  @apply pl-5;
+                }
+
+                &:last-child {
+                  @apply min-w-[104px] pr-5;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .customer-order-wrapper {
+    .customer-order-report {
+      .recent-table {
+        table {
+          thead,
+          tbody {
+            tr {
+              th,
+              td {
+                @apply text-[rgba(var(--body-font-color),1)] min-w-[auto];
+
+                &:first-child {
+                  @apply pl-5;
+                }
+
+                &:last-child {
+                  @apply pr-5;
+                }
+
+                .customer-details {
+                  @apply flex justify-start items-center gap-3;
+
+                  img {
+                    @apply h-[42px] rounded-[50%];
+                  }
+
+                  a {
+                    @apply text-[rgba(var(--dark-color),1)] font-medium;
+                  }
+
+                  &:hover {
+                    a {
+                      @apply text-[rgba(var(--theme-default),1)];
+                    }
+                  }
+                }
+
+                .customer-group {
+                  li {
+                    .common-circle {
+                      @apply w-[34px] h-[34px];
+                    }
+
+                    + li {
+                      @apply -ml-2.5;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen md640 {
+    .product-report-wrapper,
+    .sale-report-wrapper,
+    .sale-return-wrapper,
+    .customer-order-wrapper,
+    .subscribed-user {
+      .product-report,
+      .sale-return-report,
+      .sale-report,
+      .customer-order-report,
+      .subscribed-user-wrapper {
+        .recent-table {
+          div {
+            &.dt-container {
+              .dt-layout-row {
+                .dt-search {
+                  @apply top-1;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

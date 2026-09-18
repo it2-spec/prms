@@ -1,0 +1,161 @@
+@layer components {
+  .login-card {
+    @apply min-h-screen flex items-center justify-center bg-center mx-auto my-0 px-3 py-[30px];
+    background: url("../images/login/login_bg.jpg");
+    .logo {
+      @apply block text-center mb-[30px];
+    }
+    .btn-showcase {
+      @apply text-center;
+      .btn {
+        @apply leading-none m-0 px-[15px] py-2.5;
+        & + .btn {
+          @apply ml-2;
+        }
+        i {
+          @apply text-lg text-[rgba(var(--dark-color),1)];
+        }
+        svg {
+          @apply h-4 align-bottom;
+        }
+      }
+    }
+    .login-main {
+      @apply w-[450px] shadow-[0_0_37px_rgba(8,21,66,0.05)] bg-[rgba(var(--white),1)] mx-auto my-0 p-[40px] rounded-[10px];
+      .form-check-input {
+        &[type="checkbox"] {
+          @apply mt-0;
+        }
+      }
+      .theme-form {
+        h4 {
+          @apply mb-[5px];
+        }
+        label {
+          @apply text-[15px] tracking-[0.4px] mb-[0];
+        }
+        .show-hide {
+          @apply top-[50%];
+        }
+        .checkbox {
+          label {
+            &::before {
+              @apply bg-[rgba(var(--card-body-color),1)] border border-solid border-[#dfdfdf];
+            }
+          }
+        }
+        .or {
+          @apply relative before:content-[""] before:absolute before:w-[65%] before:h-0.5 before:bg-[#f3f3ff] before:z-0 before:right-0 before:top-[9px];
+        }
+        input {
+          @apply bg-[#f3f3ff] transition-all duration-[0.3s] ease-[ease];
+          &::-webkit-input-placeholder {
+            @apply text-[rgba(var(--light-text),1)];
+          }
+          &:hover,
+          &:focus {
+            @apply border border-[rgba(var(--semi-dark),35%)] shadow-none transition-all duration-[0.3s] ease-[ease] border-solid;
+          }
+        }
+        .form-input {
+          &.relative {
+            input[type="password"],
+            input[type="text"] {
+              @apply py-[12px] pb-[12px] pl-[12px] pr-[48px];
+            }
+          }
+        }
+        p {
+          @apply text-sm text-[rgba(var(--dark-gray),1)] mb-[25px];
+        }
+        .form-group {
+          @apply relative mb-2.5;
+          .btn {
+            @apply mt-[10px];
+          }
+        }
+        .link {
+          @apply absolute right-0 top-0;
+        }
+        label {
+          @apply text-[rgba(var(--body-font-size),1)];
+        }
+        .reset-password-link{
+          .underline{
+            @apply decoration-[rgba(var(--danger-color),1)];
+          }
+        }
+      }
+      &.create-account {
+        .theme-form {
+          .or {
+            &:before {
+              @apply content-[""] w-[38%];
+            }
+          }
+        }
+      }
+    }
+    .restricted-account {
+      .login-main {
+        @apply text-center;
+        .theme-form {
+          h2 {
+            @apply mb-3;
+          }
+          img {
+            @apply h-[calc(200px_+_(345_-_200)_*_((100vw_-_320px)_/_(1920_-_320)))] block mt-[calc(40px_+_(50_-_40)_*_((100vw_-_320px)_/_(1920_-_320)))] m-auto;
+          }
+        }
+      }
+      div {
+        @apply flex;
+        .logo {
+          @apply mx-[auto] mb-[30px];
+        }
+      }
+    }
+    .unlock-logo {
+      @apply flex;
+      .logo {
+        @apply mx-[auto] mb-[30px];
+      }
+    }
+  }
+  .authentication-main {
+    .login-card {
+      .unlock-logo {
+        @apply flex;
+        .logo {
+          @apply mx-[auto] mb-[30px];
+        }
+      }
+    }
+  }
+  .show-hide {
+    @apply absolute -translate-y-2/4 right-5 top-[52px];
+    span {
+      @apply cursor-pointer text-[13px] text-[rgba(var(--theme-default),1)] before:content-["\f070"] before:font-black before:text-[rgba(var(--light-text),1)];
+      &.show:before {
+        @apply content-["\f06e"] font-[900] text-[rgba(var(--light-text),1)];
+        font-family: var(--font-awesome);
+      }
+    }
+    span {
+      &:before {
+        font-family: var(--font-awesome);
+      }
+    }
+  }
+  .needs-validation {
+    .invalid-feedback {
+      @apply text-[rgba(var(--dark-gray),1)];
+    }
+    .show-hide {
+      @apply right-[30px];
+    }
+    .invalid-tooltip {
+      @apply right-2.5 top-2.5;
+    }
+  }
+}

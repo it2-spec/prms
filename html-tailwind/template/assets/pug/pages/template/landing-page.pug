@@ -1,0 +1,1369 @@
+- var landing_sticky        = true;
+- var wow                   = true;
+- var animate               = true;
+- var tooltip               = true;
+- var jarallax_libs         = true;
+- var landing_icon          = true;
+- var slick                 = true;
+- var landing_slider        = true;
+- var landing_font          = true;
+doctype html
+html(lang='en')
+  include ../../components/landing-header
+  body.landing-page
+    include ../../components/taptop
+    // page-wrapper Start
+    div.landing-page
+      // Page Body Start            
+      .landing-home
+        .container
+          .sticky-header
+            header                        
+              nav#sidebar-menu.navbar.navbar-b.navbar-dark.navbar-trans.navbar-expand-xl.fixed-top.nav-padding
+                a.navbar-brand.p-0(href='#')
+                  img.max-w-full.h-auto(src='../assets/images/landing/landing_logo.png', alt='')
+                button.navbar-toggler.navabr_btn-set.custom_nav(type='button', data-bs-toggle='collapse', data-bs-target='#navbarDefault', aria-controls='navbarDefault', aria-expanded='false', aria-label='Toggle navigation')
+                  span
+                  span
+                  span
+                #navbarDefault.navbar-collapse.justify-center.collapse.hidenav(style='')
+                  ul.navbar-nav.navbar_nav_modify#scroll-spy
+                    li.nav-item
+                      ul.landing-tab
+                        li 
+                          a(href='https://admin.pixelstrap.com/cuba/template/landing-page.html' target="_blank") 
+                            h6 Bootstrap
+                        li 
+                          a.active(href="#") 
+                            h6 Tailwind
+                          
+                    li.nav-item
+                      a.nav-link(class="[@media(max-width:1440px)]:!text-base [@media(max-width:1440px)]:!px-[7px] [@media(max-width:1440px)]:!py-3")(href='#documentation') Documentation
+                    li.nav-item
+                      a.nav-link(class="[@media(max-width:1440px)]:!text-base [@media(max-width:1440px)]:!px-[7px] [@media(max-width:1440px)]:!py-3")(href='#faq') Faq
+                    li.nav-item
+                      a.nav-link(class="[@media(max-width:1440px)]:!text-base [@media(max-width:1440px)]:!px-[7px] [@media(max-width:1440px)]:!py-3")(href='https://www.pixelstrap.com/hire-us') Hire Us
+                    li.nav-item
+                      a.nav-link(class="[@media(max-width:1440px)]:!text-base [@media(max-width:1440px)]:!px-[7px] [@media(max-width:1440px)]:!py-3")(href='https://www.pixelstrap.com/' target="_blank") Premium theme
+                .buy-btn(class="!rounded-full [@media(max-width:1440px)]:!leading-[1]")
+                  a.nav-link.js-scroll(class="[@media(max-width:1440px)]:!px-[7px] [@media(max-width:1440px)]:!leading-[1] [@media(max-width:1440px)]:!py-3")(href='https://1.envato.market/3GVzd' target="_blank") Buy Now
+          .grid.grid-cols-12
+            div(class="col-span-8 col-start-3 lg:col-start-0 lg:col-span-12")
+              .content.text-center
+                div
+                  h6.content-title                                                               
+                    img.arrow-decore(src="../assets/images/landing/decore/arrow.svg" alt="")
+                    span.sub-title Introducing 
+                  h1.wow.fadeIn Scalable Admin template with 
+                    span trending 
+                    |  designs
+                  p.mt-3.wow.fadeIn Welcome to Cuba - the leading landing page templates, built with Angular No jQuery!
+                  .btn-grp.mt-4
+                    a.wow.pulse(href="index.html" target="_blank" data-bs-placement='top', data-bs-toggle='tooltip', title='HTML') 
+                      img(src="../assets/images/landing/icon/html/html.png" alt="")
+                    a.wow.pulse(href="https://angular.pixelstrap.com/cuba-tailwind/dashboard/default?layout=dubai" target="_blank" data-bs-placement='top', data-bs-toggle='tooltip', title='Angular') 
+                      img(src="../assets/images/landing/icon/angular/angular.png" alt="")
+            div(class="col-span-8 col-start-3 lg:col-start-0 lg:col-span-12")                
+              img.screen1(src="../assets/images/landing/screen1.png" class="max-w-full.h-auto" alt="")
+      section.section-space.premium-wrap
+        .container 
+          ul.decoration
+            li.flower-gif
+              .mesh-loader
+                .set-one
+                  .circle
+                  .circle
+                .set-two
+                  .circle
+                  .circle
+            li.wavy-gif
+              svg(xmlns='http://www.w3.org/2000/svg' viewBox='0 0 251 38')
+                path(fill='none' stroke-width='10' stroke-miterlimit='10' d='M0,9C17.93,9,17.93,29,35.85,29S53.78,9,71.71,9s17.92,20,35.85,20S125.49,9,143.42,9s17.93,20,35.86,20S197.21,9,215.14,9,233.07,29,251,29')
+          .grid.grid-cols-12.justify-center
+            div(class="col-span-12") 
+              .landing-title
+                h5.sub-title Faster, Lighter & Dev. Friendly
+                h2 
+                  span.gradient-1 Benefits 
+                  |  of cuba
+                p Cuba admin template is a premium and clean admin template. it is a complete platform for base apps or dashboards, with many pre-built screens included. 
+              .vector-image 
+                img(src="../assets/images/landing/vectors/1.svg", alt="")
+            div(class="col-span-8 col-start-3 xl:col-span-12")
+              .grid.grid-cols-12.gap-3
+                div(class="col-span-3 md:col-span-12")
+                  .benefit-box.pink
+                    svg
+                      use(href='../assets/svg/landing-icons.svg#tag')
+                    h2.mb-0 4,620
+                    h6.mb-0 Sales
+                div(class="col-span-3 md:col-span-12")
+                  .benefit-box.purple
+                    svg
+                      use(href='../assets/svg/landing-icons.svg#ratings')
+                    h2.mb-0 4,088
+                    h6.mb-0 5 Stars Ratings
+                div(class="col-span-3 md:col-span-12")
+                  .benefit-box.red
+                    svg
+                      use(href='../assets/svg/landing-icons.svg#user_circle')
+                    h2.mb-0 3K
+                    h6.mb-0 End Users
+                div(class="col-span-3 md:col-span-12")
+                  .benefit-box.warning
+                    svg
+                      use(href='../assets/svg/landing-icons.svg#gear')
+                    h2.mb-0 6 Years
+                    h6.mb-0 Development
+           
+      section#layout.section-space.cuba-demo-section.layout(class="!pt-0")
+        .container
+          ul.decoration
+            li.line-gif
+              img(src="../assets/images/landing/gifs/3.gif", alt="")
+            li.wavy-line-gif
+              img(src="../assets/images/landing/gifs/4.gif", alt="")
+          .grid.grid-cols-12
+            div(class="col-span-12 wow pulse")
+              .cuba-demo-content
+                .couting
+                  h2 12
+                .landing-title(class="[@media(max-width:360px)]:!mb-[30px]")
+                  h5.sub-title Trending & Clean Design Collection
+                  h2 
+                    span.gradient-2 Creative & unique 
+                    |  Admin layouts
+                  p We are providing 12 different layouts only on one click.there are no different folders for each layouts Angular, Html Admin Dashboard Template
+        .container-fluid.fluid-space
+          .grid.grid-cols-12.demo-imgs
+            div(class="col-span-4 xl:col-span-6 md:col-span-12 demo-content")
+              .cuba-demo-img
+                ul.dot-group 
+                  li
+                  li
+                  li
+                .title-wrapper
+                  h3.theme-name.mb-0 
+                    span Demo 1 - 
+                    | Dubai
+                  svg.title-svg(width='51' height='13' viewBox='0 0 51 13' fill='none' xmlns='http://www.w3.org/2000/svg')
+                    path(fill-rule='evenodd' clip-rule='evenodd' d='M45.441 5.23769C45.1147 5.6996 44.7795 6.29315 44.4287 6.79516C44.0566 7.32282 43.6848 7.82319 43.4063 8.39596C42.3695 10.5523 44.9675 9.32014 45.564 8.02855C46.1179 6.84286 46.9246 5.87434 47.5859 4.84618C47.7395 4.60397 47.9033 4.26383 48.0568 4.02163C48.5763 3.17147 49.2516 2.53511 49.937 1.82812C50.1291 1.63094 51.1206 0.323924 50.2276 0.271093C49.8167 0.249553 48.2922 0.5361 47.7883 0.639651C46.0126 0.994835 44.8002 0.761651 43.2136 0.879502C41.3566 1.01618 40.2674 1.03208 39.4223 2.48705C38.6443 3.82331 39.9175 3.32601 40.6023 3.28698C40.9682 3.2651 42.689 3.16192 42.8406 3.24726C41.0738 4.30895 39.0645 5.02824 37.0996 5.92744C35.3375 6.72902 32.5247 7.59153 30.5216 8.08443C26.1768 9.14676 21.4529 9.72998 17.427 9.37823C11.8143 8.89224 6.34249 7.27448 2.66916 3.3266C2.36354 3.00658 1.08682 1.31053 0.829574 1.29887C-0.0667404 1.26048 0.320466 3.42074 0.776292 4.07177C2.88672 7.11634 6.19576 9.41621 9.11681 10.5305C12.2801 11.735 16.1782 12.6293 20.1937 12.5475C25.0767 12.443 28.6501 11.8499 33.6912 10.4322C36.8488 9.54622 39.9123 8.1382 42.764 6.70735C43.2704 6.44645 45.1753 5.30309 45.441 5.23769Z' fill='#41B883')
+                .overflow-hidden
+                  a(href="#") 
+                    img.max-w-full(src="../assets/images/landing/layout-images/dubai.jpg" alt="default")
+                .hover-link
+                  .link-btn(data-bs-toggle='tooltip', data-bs-placement='top', title='HTML with bootstrap 5')
+                    a.default-view(href="index.html" data-attr="default" target='_blank') 
+                      img(src="../assets/images/landing/stroke-icon/1.svg", alt="")
+                  .link-btn(data-bs-toggle='tooltip', data-bs-placement='top', title='Angular')
+                    a(href="https://angular.pixelstrap.com/cuba-tailwind/dashboard/default?layout=dubai" target='_blank') 
+                      img(src="../assets/images/landing/stroke-icon/2.svg", alt="")
+            div(class="col-span-4 xl:col-span-6 md:col-span-12 demo-content")
+              .cuba-demo-img
+                ul.dot-group 
+                  li
+                  li
+                  li
+                .title-wrapper
+                  h3.theme-name.mb-0 
+                    span Demo 2 - 
+                    | Paris
+                  svg.title-svg(width='51' height='13' viewBox='0 0 51 13' fill='none' xmlns='http://www.w3.org/2000/svg')
+                    path(fill-rule='evenodd' clip-rule='evenodd' d='M45.441 5.23769C45.1147 5.6996 44.7795 6.29315 44.4287 6.79516C44.0566 7.32282 43.6848 7.82319 43.4063 8.39596C42.3695 10.5523 44.9675 9.32014 45.564 8.02855C46.1179 6.84286 46.9246 5.87434 47.5859 4.84618C47.7395 4.60397 47.9033 4.26383 48.0568 4.02163C48.5763 3.17147 49.2516 2.53511 49.937 1.82812C50.1291 1.63094 51.1206 0.323924 50.2276 0.271093C49.8167 0.249553 48.2922 0.5361 47.7883 0.639651C46.0126 0.994835 44.8002 0.761651 43.2136 0.879502C41.3566 1.01618 40.2674 1.03208 39.4223 2.48705C38.6443 3.82331 39.9175 3.32601 40.6023 3.28698C40.9682 3.2651 42.689 3.16192 42.8406 3.24726C41.0738 4.30895 39.0645 5.02824 37.0996 5.92744C35.3375 6.72902 32.5247 7.59153 30.5216 8.08443C26.1768 9.14676 21.4529 9.72998 17.427 9.37823C11.8143 8.89224 6.34249 7.27448 2.66916 3.3266C2.36354 3.00658 1.08682 1.31053 0.829574 1.29887C-0.0667404 1.26048 0.320466 3.42074 0.776292 4.07177C2.88672 7.11634 6.19576 9.41621 9.11681 10.5305C12.2801 11.735 16.1782 12.6293 20.1937 12.5475C25.0767 12.443 28.6501 11.8499 33.6912 10.4322C36.8488 9.54622 39.9123 8.1382 42.764 6.70735C43.2704 6.44645 45.1753 5.30309 45.441 5.23769Z' fill='#41B883')
+                .overflow-hidden
+                  a(href="#") 
+                    img.max-w-full(src="../assets/images/landing/layout-images/paris.jpg" alt="classicSidebar")
+                .hover-link
+                  .link-btn(data-bs-toggle='tooltip', data-bs-placement='top', title='HTML with bootstrap 5')
+                    a.html.paris-view(href="index.html?layout=paris" target='_blank' data-attr="dark-sidebar")
+                      img(src="../assets/images/landing/stroke-icon/1.svg", alt="")
+                  .link-btn(data-bs-toggle='tooltip', data-bs-placement='top', title='Angular')
+                    a(href="https://angular.pixelstrap.com/cuba-tailwind/dashboard/default?layout=paris" target='_blank') 
+                      img(src="../assets/images/landing/stroke-icon/2.svg", alt="")
+            div(class="col-span-4 xl:col-span-6 md:col-span-12 demo-content")     
+              .cuba-demo-img
+                ul.dot-group 
+                  li
+                  li
+                  li
+                .title-wrapper
+                  h3.theme-name.mb-0 
+                    span Demo 3 - 
+                    | Los Angeles
+                  svg.title-svg(width='51' height='13' viewBox='0 0 51 13' fill='none' xmlns='http://www.w3.org/2000/svg')
+                    path(fill-rule='evenodd' clip-rule='evenodd' d='M45.441 5.23769C45.1147 5.6996 44.7795 6.29315 44.4287 6.79516C44.0566 7.32282 43.6848 7.82319 43.4063 8.39596C42.3695 10.5523 44.9675 9.32014 45.564 8.02855C46.1179 6.84286 46.9246 5.87434 47.5859 4.84618C47.7395 4.60397 47.9033 4.26383 48.0568 4.02163C48.5763 3.17147 49.2516 2.53511 49.937 1.82812C50.1291 1.63094 51.1206 0.323924 50.2276 0.271093C49.8167 0.249553 48.2922 0.5361 47.7883 0.639651C46.0126 0.994835 44.8002 0.761651 43.2136 0.879502C41.3566 1.01618 40.2674 1.03208 39.4223 2.48705C38.6443 3.82331 39.9175 3.32601 40.6023 3.28698C40.9682 3.2651 42.689 3.16192 42.8406 3.24726C41.0738 4.30895 39.0645 5.02824 37.0996 5.92744C35.3375 6.72902 32.5247 7.59153 30.5216 8.08443C26.1768 9.14676 21.4529 9.72998 17.427 9.37823C11.8143 8.89224 6.34249 7.27448 2.66916 3.3266C2.36354 3.00658 1.08682 1.31053 0.829574 1.29887C-0.0667404 1.26048 0.320466 3.42074 0.776292 4.07177C2.88672 7.11634 6.19576 9.41621 9.11681 10.5305C12.2801 11.735 16.1782 12.6293 20.1937 12.5475C25.0767 12.443 28.6501 11.8499 33.6912 10.4322C36.8488 9.54622 39.9123 8.1382 42.764 6.70735C43.2704 6.44645 45.1753 5.30309 45.441 5.23769Z' fill='#41B883')
+                .overflow-hidden
+                  a(href="#") 
+                    img.max-w-full(src="../assets/images/landing/layout-images/los-angle.png" alt="material")
+                .hover-link
+                  .link-btn(data-bs-toggle='tooltip', data-bs-placement='top', title='HTML with bootstrap 5')
+                    a.html.los-view(href="index.html?layout=los_angeles" target='_blank' data-attr="material-layout") 
+                      img(src="../assets/images/landing/stroke-icon/1.svg", alt="")
+                  .link-btn(data-bs-toggle='tooltip', data-bs-placement='top', title='Angular')
+                    a(href="https://angular.pixelstrap.com/cuba-tailwind/dashboard/default?layout=los-angeles" target='_blank') 
+                     img(src="../assets/images/landing/stroke-icon/2.svg", alt="")
+            div(class="col-span-4 xl:col-span-6 md:col-span-12 demo-content")
+              .cuba-demo-img
+                ul.dot-group 
+                  li
+                  li
+                  li
+                .title-wrapper
+                  h3.theme-name.mb-0 
+                    span Demo 4 - 
+                    | Tokyo
+                  svg.title-svg(width='51' height='13' viewBox='0 0 51 13' fill='none' xmlns='http://www.w3.org/2000/svg')
+                    path(fill-rule='evenodd' clip-rule='evenodd' d='M45.441 5.23769C45.1147 5.6996 44.7795 6.29315 44.4287 6.79516C44.0566 7.32282 43.6848 7.82319 43.4063 8.39596C42.3695 10.5523 44.9675 9.32014 45.564 8.02855C46.1179 6.84286 46.9246 5.87434 47.5859 4.84618C47.7395 4.60397 47.9033 4.26383 48.0568 4.02163C48.5763 3.17147 49.2516 2.53511 49.937 1.82812C50.1291 1.63094 51.1206 0.323924 50.2276 0.271093C49.8167 0.249553 48.2922 0.5361 47.7883 0.639651C46.0126 0.994835 44.8002 0.761651 43.2136 0.879502C41.3566 1.01618 40.2674 1.03208 39.4223 2.48705C38.6443 3.82331 39.9175 3.32601 40.6023 3.28698C40.9682 3.2651 42.689 3.16192 42.8406 3.24726C41.0738 4.30895 39.0645 5.02824 37.0996 5.92744C35.3375 6.72902 32.5247 7.59153 30.5216 8.08443C26.1768 9.14676 21.4529 9.72998 17.427 9.37823C11.8143 8.89224 6.34249 7.27448 2.66916 3.3266C2.36354 3.00658 1.08682 1.31053 0.829574 1.29887C-0.0667404 1.26048 0.320466 3.42074 0.776292 4.07177C2.88672 7.11634 6.19576 9.41621 9.11681 10.5305C12.2801 11.735 16.1782 12.6293 20.1937 12.5475C25.0767 12.443 28.6501 11.8499 33.6912 10.4322C36.8488 9.54622 39.9123 8.1382 42.764 6.70735C43.2704 6.44645 45.1753 5.30309 45.441 5.23769Z' fill='#41B883')
+                .overflow-hidden
+                  a(href="#") 
+                    img.max-w-full(src="../assets/images/landing/layout-images/tokyo.jpg" alt="compact")
+                .hover-link
+                  .link-btn(data-bs-toggle='tooltip', data-bs-placement='top', title='HTML with bootstrap 5')
+                    a.html.tokyo-view(href="index.html?layout=tokyo" target='_blank' data-attr="compact-wrap")
+                      img(src="../assets/images/landing/stroke-icon/1.svg", alt="")
+                  .link-btn(data-bs-toggle='tooltip', data-bs-placement='top', title='Angular')
+                    a(href="https://angular.pixelstrap.com/cuba-tailwind/dashboard/default?layout=tokyo" target='_blank')
+                      img(src="../assets/images/landing/stroke-icon/2.svg", alt="")
+            div(class="col-span-4 xl:col-span-6 md:col-span-12 demo-content")
+              .cuba-demo-img
+                ul.dot-group 
+                  li
+                  li
+                  li
+                .title-wrapper
+                  h3.theme-name.mb-0 
+                    span Demo 5 - 
+                    | Moscow
+                  svg.title-svg(width='51' height='13' viewBox='0 0 51 13' fill='none' xmlns='http://www.w3.org/2000/svg')
+                    path(fill-rule='evenodd' clip-rule='evenodd' d='M45.441 5.23769C45.1147 5.6996 44.7795 6.29315 44.4287 6.79516C44.0566 7.32282 43.6848 7.82319 43.4063 8.39596C42.3695 10.5523 44.9675 9.32014 45.564 8.02855C46.1179 6.84286 46.9246 5.87434 47.5859 4.84618C47.7395 4.60397 47.9033 4.26383 48.0568 4.02163C48.5763 3.17147 49.2516 2.53511 49.937 1.82812C50.1291 1.63094 51.1206 0.323924 50.2276 0.271093C49.8167 0.249553 48.2922 0.5361 47.7883 0.639651C46.0126 0.994835 44.8002 0.761651 43.2136 0.879502C41.3566 1.01618 40.2674 1.03208 39.4223 2.48705C38.6443 3.82331 39.9175 3.32601 40.6023 3.28698C40.9682 3.2651 42.689 3.16192 42.8406 3.24726C41.0738 4.30895 39.0645 5.02824 37.0996 5.92744C35.3375 6.72902 32.5247 7.59153 30.5216 8.08443C26.1768 9.14676 21.4529 9.72998 17.427 9.37823C11.8143 8.89224 6.34249 7.27448 2.66916 3.3266C2.36354 3.00658 1.08682 1.31053 0.829574 1.29887C-0.0667404 1.26048 0.320466 3.42074 0.776292 4.07177C2.88672 7.11634 6.19576 9.41621 9.11681 10.5305C12.2801 11.735 16.1782 12.6293 20.1937 12.5475C25.0767 12.443 28.6501 11.8499 33.6912 10.4322C36.8488 9.54622 39.9123 8.1382 42.764 6.70735C43.2704 6.44645 45.1753 5.30309 45.441 5.23769Z' fill='#41B883')
+                .overflow-hidden
+                  a(href="#") 
+                    img.max-w-full(src="../assets/images/landing/layout-images/moscow.jpg" alt="collapse")
+                .hover-link
+                  .link-btn(data-bs-toggle='tooltip', data-bs-placement='top', title='HTML with bootstrap 5')
+                    a.html.moscow-view(href="index.html?layout=moscow" target='_blank' data-attr="compact-small")
+                      img(src="../assets/images/landing/stroke-icon/1.svg", alt="")
+                  .link-btn(data-bs-toggle='tooltip', data-bs-placement='top', title='Angular')
+                    a(href="https://angular.pixelstrap.com/cuba-tailwind/dashboard/default?layout=moscow" target='_blank')
+                      img(src="../assets/images/landing/stroke-icon/2.svg", alt="")
+            div(class="col-span-4 xl:col-span-6 md:col-span-12 demo-content")
+              .cuba-demo-img
+                ul.dot-group 
+                  li
+                  li
+                  li
+                .title-wrapper
+                  h3.theme-name.mb-0 
+                    span Demo 6 - 
+                    | Singapore
+                  svg.title-svg(width='51' height='13' viewBox='0 0 51 13' fill='none' xmlns='http://www.w3.org/2000/svg')
+                    path(fill-rule='evenodd' clip-rule='evenodd' d='M45.441 5.23769C45.1147 5.6996 44.7795 6.29315 44.4287 6.79516C44.0566 7.32282 43.6848 7.82319 43.4063 8.39596C42.3695 10.5523 44.9675 9.32014 45.564 8.02855C46.1179 6.84286 46.9246 5.87434 47.5859 4.84618C47.7395 4.60397 47.9033 4.26383 48.0568 4.02163C48.5763 3.17147 49.2516 2.53511 49.937 1.82812C50.1291 1.63094 51.1206 0.323924 50.2276 0.271093C49.8167 0.249553 48.2922 0.5361 47.7883 0.639651C46.0126 0.994835 44.8002 0.761651 43.2136 0.879502C41.3566 1.01618 40.2674 1.03208 39.4223 2.48705C38.6443 3.82331 39.9175 3.32601 40.6023 3.28698C40.9682 3.2651 42.689 3.16192 42.8406 3.24726C41.0738 4.30895 39.0645 5.02824 37.0996 5.92744C35.3375 6.72902 32.5247 7.59153 30.5216 8.08443C26.1768 9.14676 21.4529 9.72998 17.427 9.37823C11.8143 8.89224 6.34249 7.27448 2.66916 3.3266C2.36354 3.00658 1.08682 1.31053 0.829574 1.29887C-0.0667404 1.26048 0.320466 3.42074 0.776292 4.07177C2.88672 7.11634 6.19576 9.41621 9.11681 10.5305C12.2801 11.735 16.1782 12.6293 20.1937 12.5475C25.0767 12.443 28.6501 11.8499 33.6912 10.4322C36.8488 9.54622 39.9123 8.1382 42.764 6.70735C43.2704 6.44645 45.1753 5.30309 45.441 5.23769Z' fill='#41B883')
+                .overflow-hidden
+                  a(href="#") 
+                    img.max-w-full(src="../assets/images/landing/layout-images/singapore.jpg" alt="enterprise")
+                .hover-link
+                  .link-btn(data-bs-toggle='tooltip', data-bs-placement='top', title='HTML with bootstrap 5')
+                    a.html.singapore-view(href="index.html?layout=singapore" target='_blank' data-attr="enterprice-type")
+                      img(src="../assets/images/landing/stroke-icon/1.svg", alt="")
+                  .link-btn(data-bs-toggle='tooltip', data-bs-placement='top', title='Angular')
+                    a(href="https://angular.pixelstrap.com/cuba-tailwind/dashboard/default?layout=singapore" target='_blank')
+                      img(src="../assets/images/landing/stroke-icon/2.svg", alt="")
+            div(class="col-span-4 xl:col-span-6 md:col-span-12 demo-content")
+              .cuba-demo-img
+                ul.dot-group 
+                  li
+                  li
+                  li
+                .title-wrapper
+                  h3.theme-name.mb-0 
+                    span Demo 7 - 
+                    | New York
+                  svg.title-svg(width='51' height='13' viewBox='0 0 51 13' fill='none' xmlns='http://www.w3.org/2000/svg')
+                    path(fill-rule='evenodd' clip-rule='evenodd' d='M45.441 5.23769C45.1147 5.6996 44.7795 6.29315 44.4287 6.79516C44.0566 7.32282 43.6848 7.82319 43.4063 8.39596C42.3695 10.5523 44.9675 9.32014 45.564 8.02855C46.1179 6.84286 46.9246 5.87434 47.5859 4.84618C47.7395 4.60397 47.9033 4.26383 48.0568 4.02163C48.5763 3.17147 49.2516 2.53511 49.937 1.82812C50.1291 1.63094 51.1206 0.323924 50.2276 0.271093C49.8167 0.249553 48.2922 0.5361 47.7883 0.639651C46.0126 0.994835 44.8002 0.761651 43.2136 0.879502C41.3566 1.01618 40.2674 1.03208 39.4223 2.48705C38.6443 3.82331 39.9175 3.32601 40.6023 3.28698C40.9682 3.2651 42.689 3.16192 42.8406 3.24726C41.0738 4.30895 39.0645 5.02824 37.0996 5.92744C35.3375 6.72902 32.5247 7.59153 30.5216 8.08443C26.1768 9.14676 21.4529 9.72998 17.427 9.37823C11.8143 8.89224 6.34249 7.27448 2.66916 3.3266C2.36354 3.00658 1.08682 1.31053 0.829574 1.29887C-0.0667404 1.26048 0.320466 3.42074 0.776292 4.07177C2.88672 7.11634 6.19576 9.41621 9.11681 10.5305C12.2801 11.735 16.1782 12.6293 20.1937 12.5475C25.0767 12.443 28.6501 11.8499 33.6912 10.4322C36.8488 9.54622 39.9123 8.1382 42.764 6.70735C43.2704 6.44645 45.1753 5.30309 45.441 5.23769Z' fill='#41B883')
+                .overflow-hidden
+                  a(href="#")   
+                    img.max-w-full(src="../assets/images/landing/layout-images/newyork.png" alt="centralize")
+                .hover-link
+                  .link-btn(data-bs-toggle='tooltip', data-bs-placement='top', title='HTML with bootstrap 5')
+                    a.html.newyork-view(href="index.html?layout=new_york" target='_blank' data-attr="box-layout")
+                      img(src="../assets/images/landing/stroke-icon/1.svg", alt="")
+                  .link-btn(data-bs-toggle='tooltip', data-bs-placement='top', title='Angular')
+                    a(href="https://angular.pixelstrap.com/cuba-tailwind/dashboard/default?layout=newyork" target='_blank')
+                      img(src="../assets/images/landing/stroke-icon/2.svg", alt="")
+            div(class="col-span-4 xl:col-span-6 md:col-span-12 demo-content")
+              .cuba-demo-img
+                ul.dot-group 
+                  li
+                  li
+                  li
+                .title-wrapper
+                  h3.theme-name.mb-0 
+                    span Demo 8 - 
+                    | Barcelona
+                  svg.title-svg(width='51' height='13' viewBox='0 0 51 13' fill='none' xmlns='http://www.w3.org/2000/svg')
+                    path(fill-rule='evenodd' clip-rule='evenodd' d='M45.441 5.23769C45.1147 5.6996 44.7795 6.29315 44.4287 6.79516C44.0566 7.32282 43.6848 7.82319 43.4063 8.39596C42.3695 10.5523 44.9675 9.32014 45.564 8.02855C46.1179 6.84286 46.9246 5.87434 47.5859 4.84618C47.7395 4.60397 47.9033 4.26383 48.0568 4.02163C48.5763 3.17147 49.2516 2.53511 49.937 1.82812C50.1291 1.63094 51.1206 0.323924 50.2276 0.271093C49.8167 0.249553 48.2922 0.5361 47.7883 0.639651C46.0126 0.994835 44.8002 0.761651 43.2136 0.879502C41.3566 1.01618 40.2674 1.03208 39.4223 2.48705C38.6443 3.82331 39.9175 3.32601 40.6023 3.28698C40.9682 3.2651 42.689 3.16192 42.8406 3.24726C41.0738 4.30895 39.0645 5.02824 37.0996 5.92744C35.3375 6.72902 32.5247 7.59153 30.5216 8.08443C26.1768 9.14676 21.4529 9.72998 17.427 9.37823C11.8143 8.89224 6.34249 7.27448 2.66916 3.3266C2.36354 3.00658 1.08682 1.31053 0.829574 1.29887C-0.0667404 1.26048 0.320466 3.42074 0.776292 4.07177C2.88672 7.11634 6.19576 9.41621 9.11681 10.5305C12.2801 11.735 16.1782 12.6293 20.1937 12.5475C25.0767 12.443 28.6501 11.8499 33.6912 10.4322C36.8488 9.54622 39.9123 8.1382 42.764 6.70735C43.2704 6.44645 45.1753 5.30309 45.441 5.23769Z' fill='#41B883')
+                .overflow-hidden
+                  a(href="#") 
+                    img.max-w-full(src="../assets/images/landing/layout-images/barcelona.jpg" alt="further")
+                .hover-link
+                  .link-btn(data-bs-toggle='tooltip', data-bs-placement='top', title='HTML with bootstrap 5')
+                    a.html.barcelona-view(href="index.html?layout=barcelona" target='_blank' data-attr="advance-type")
+                      img(src="../assets/images/landing/stroke-icon/1.svg", alt="")
+                  .link-btn(data-bs-toggle='tooltip', data-bs-placement='top', title='Angular')
+                    a(href="https://angular.pixelstrap.com/cuba-tailwind/dashboard/default?layout=barcelona" target='_blank')
+                      img(src="../assets/images/landing/stroke-icon/2.svg", alt="")
+            div(class="col-span-4 xl:col-span-6 md:col-span-12 demo-content")
+              .cuba-demo-img
+                ul.dot-group 
+                  li
+                  li
+                  li
+                .title-wrapper
+                  h3.theme-name.mb-0 
+                    span Demo 9 - 
+                    | Madrid
+                  svg.title-svg(width='51' height='13' viewBox='0 0 51 13' fill='none' xmlns='http://www.w3.org/2000/svg')
+                    path(fill-rule='evenodd' clip-rule='evenodd' d='M45.441 5.23769C45.1147 5.6996 44.7795 6.29315 44.4287 6.79516C44.0566 7.32282 43.6848 7.82319 43.4063 8.39596C42.3695 10.5523 44.9675 9.32014 45.564 8.02855C46.1179 6.84286 46.9246 5.87434 47.5859 4.84618C47.7395 4.60397 47.9033 4.26383 48.0568 4.02163C48.5763 3.17147 49.2516 2.53511 49.937 1.82812C50.1291 1.63094 51.1206 0.323924 50.2276 0.271093C49.8167 0.249553 48.2922 0.5361 47.7883 0.639651C46.0126 0.994835 44.8002 0.761651 43.2136 0.879502C41.3566 1.01618 40.2674 1.03208 39.4223 2.48705C38.6443 3.82331 39.9175 3.32601 40.6023 3.28698C40.9682 3.2651 42.689 3.16192 42.8406 3.24726C41.0738 4.30895 39.0645 5.02824 37.0996 5.92744C35.3375 6.72902 32.5247 7.59153 30.5216 8.08443C26.1768 9.14676 21.4529 9.72998 17.427 9.37823C11.8143 8.89224 6.34249 7.27448 2.66916 3.3266C2.36354 3.00658 1.08682 1.31053 0.829574 1.29887C-0.0667404 1.26048 0.320466 3.42074 0.776292 4.07177C2.88672 7.11634 6.19576 9.41621 9.11681 10.5305C12.2801 11.735 16.1782 12.6293 20.1937 12.5475C25.0767 12.443 28.6501 11.8499 33.6912 10.4322C36.8488 9.54622 39.9123 8.1382 42.764 6.70735C43.2704 6.44645 45.1753 5.30309 45.441 5.23769Z' fill='#41B883')
+                .overflow-hidden
+                  a(href="#") 
+                    img.max-w-full(src="../assets/images/landing/layout-images/madrid.jpg" alt="revolutionary")
+                .hover-link
+                  .link-btn(data-bs-toggle='tooltip', data-bs-placement='top', title='HTML with bootstrap 5')
+                    a.html.madrid-view(href="index.html?layout=madrid" target='_blank' data-attr="color-sidebar")
+                      img(src="../assets/images/landing/stroke-icon/1.svg", alt="")
+                  .link-btn(data-bs-toggle='tooltip', data-bs-placement='top', title='Angular')
+                    a(href="https://angular.pixelstrap.com/cuba-tailwind/dashboard/default?layout=madrid" target='_blank')
+                      img(src="../assets/images/landing/stroke-icon/2.svg", alt="")
+            div(class="col-span-4 xl:col-span-6 md:col-span-12 demo-content")
+              .cuba-demo-img
+                ul.dot-group 
+                  li
+                  li
+                  li
+                .title-wrapper
+                  h3.theme-name.mb-0 
+                    span Demo 10 - 
+                    | Rome
+                  svg.title-svg(width='51' height='13' viewBox='0 0 51 13' fill='none' xmlns='http://www.w3.org/2000/svg')
+                    path(fill-rule='evenodd' clip-rule='evenodd' d='M45.441 5.23769C45.1147 5.6996 44.7795 6.29315 44.4287 6.79516C44.0566 7.32282 43.6848 7.82319 43.4063 8.39596C42.3695 10.5523 44.9675 9.32014 45.564 8.02855C46.1179 6.84286 46.9246 5.87434 47.5859 4.84618C47.7395 4.60397 47.9033 4.26383 48.0568 4.02163C48.5763 3.17147 49.2516 2.53511 49.937 1.82812C50.1291 1.63094 51.1206 0.323924 50.2276 0.271093C49.8167 0.249553 48.2922 0.5361 47.7883 0.639651C46.0126 0.994835 44.8002 0.761651 43.2136 0.879502C41.3566 1.01618 40.2674 1.03208 39.4223 2.48705C38.6443 3.82331 39.9175 3.32601 40.6023 3.28698C40.9682 3.2651 42.689 3.16192 42.8406 3.24726C41.0738 4.30895 39.0645 5.02824 37.0996 5.92744C35.3375 6.72902 32.5247 7.59153 30.5216 8.08443C26.1768 9.14676 21.4529 9.72998 17.427 9.37823C11.8143 8.89224 6.34249 7.27448 2.66916 3.3266C2.36354 3.00658 1.08682 1.31053 0.829574 1.29887C-0.0667404 1.26048 0.320466 3.42074 0.776292 4.07177C2.88672 7.11634 6.19576 9.41621 9.11681 10.5305C12.2801 11.735 16.1782 12.6293 20.1937 12.5475C25.0767 12.443 28.6501 11.8499 33.6912 10.4322C36.8488 9.54622 39.9123 8.1382 42.764 6.70735C43.2704 6.44645 45.1753 5.30309 45.441 5.23769Z' fill='#41B883')
+                .overflow-hidden
+                  a(href="#") 
+                    img.max-w-full(src="../assets/images/landing/layout-images/rome.jpg" alt="statistics")
+                .hover-link
+                  .link-btn(data-bs-toggle='tooltip', data-bs-placement='top', title='HTML with bootstrap 5')
+                    a.html.rome-view(href="index.html?layout=rome" target='_blank' data-attr="material-icon")
+                      img(src="../assets/images/landing/stroke-icon/1.svg", alt="")
+                  .link-btn(data-bs-toggle='tooltip', data-bs-placement='top', title='Angular')
+                    a(href="https://angular.pixelstrap.com/cuba-tailwind/dashboard/default?layout=rome" target='_blank')
+                      img(src="../assets/images/landing/stroke-icon/2.svg", alt="")
+            div(class="col-span-4 xl:col-span-6 md:col-span-12 demo-content")
+              .cuba-demo-img
+                ul.dot-group 
+                  li
+                  li
+                  li
+                .title-wrapper
+                  h3.theme-name.mb-0 
+                    span Demo 11 - 
+                    | Seoul
+                  svg.title-svg(width='51' height='13' viewBox='0 0 51 13' fill='none' xmlns='http://www.w3.org/2000/svg')
+                    path(fill-rule='evenodd' clip-rule='evenodd' d='M45.441 5.23769C45.1147 5.6996 44.7795 6.29315 44.4287 6.79516C44.0566 7.32282 43.6848 7.82319 43.4063 8.39596C42.3695 10.5523 44.9675 9.32014 45.564 8.02855C46.1179 6.84286 46.9246 5.87434 47.5859 4.84618C47.7395 4.60397 47.9033 4.26383 48.0568 4.02163C48.5763 3.17147 49.2516 2.53511 49.937 1.82812C50.1291 1.63094 51.1206 0.323924 50.2276 0.271093C49.8167 0.249553 48.2922 0.5361 47.7883 0.639651C46.0126 0.994835 44.8002 0.761651 43.2136 0.879502C41.3566 1.01618 40.2674 1.03208 39.4223 2.48705C38.6443 3.82331 39.9175 3.32601 40.6023 3.28698C40.9682 3.2651 42.689 3.16192 42.8406 3.24726C41.0738 4.30895 39.0645 5.02824 37.0996 5.92744C35.3375 6.72902 32.5247 7.59153 30.5216 8.08443C26.1768 9.14676 21.4529 9.72998 17.427 9.37823C11.8143 8.89224 6.34249 7.27448 2.66916 3.3266C2.36354 3.00658 1.08682 1.31053 0.829574 1.29887C-0.0667404 1.26048 0.320466 3.42074 0.776292 4.07177C2.88672 7.11634 6.19576 9.41621 9.11681 10.5305C12.2801 11.735 16.1782 12.6293 20.1937 12.5475C25.0767 12.443 28.6501 11.8499 33.6912 10.4322C36.8488 9.54622 39.9123 8.1382 42.764 6.70735C43.2704 6.44645 45.1753 5.30309 45.441 5.23769Z' fill='#41B883')
+                .overflow-hidden
+                  a(href="#") 
+                    img.max-w-full(src="../assets/images/landing/layout-images/seoul.jpg" alt="trendy")
+                .hover-link
+                  .link-btn(data-bs-toggle='tooltip', data-bs-placement='top', title='HTML with bootstrap 5')
+                    a.html.seoul-view(href="index.html?layout=seoul" target='_blank' data-attr="modern-layout")
+                      img(src="../assets/images/landing/stroke-icon/1.svg", alt="")
+                  .link-btn(data-bs-toggle='tooltip', data-bs-placement='top', title='Angular')
+                    a(href="https://angular.pixelstrap.com/cuba-tailwind/dashboard/default?layout=seoul" target='_blank')
+                      img(src="../assets/images/landing/stroke-icon/2.svg", alt="")
+            div(class="col-span-4 xl:col-span-6 md:col-span-12 demo-content")
+              .cuba-demo-img
+                ul.dot-group 
+                  li
+                  li
+                  li
+                .title-wrapper
+                  h3.theme-name.mb-0 
+                    span Demo 12 - 
+                    | London
+                  svg.title-svg(width='51' height='13' viewBox='0 0 51 13' fill='none' xmlns='http://www.w3.org/2000/svg')
+                    path(fill-rule='evenodd' clip-rule='evenodd' d='M45.441 5.23769C45.1147 5.6996 44.7795 6.29315 44.4287 6.79516C44.0566 7.32282 43.6848 7.82319 43.4063 8.39596C42.3695 10.5523 44.9675 9.32014 45.564 8.02855C46.1179 6.84286 46.9246 5.87434 47.5859 4.84618C47.7395 4.60397 47.9033 4.26383 48.0568 4.02163C48.5763 3.17147 49.2516 2.53511 49.937 1.82812C50.1291 1.63094 51.1206 0.323924 50.2276 0.271093C49.8167 0.249553 48.2922 0.5361 47.7883 0.639651C46.0126 0.994835 44.8002 0.761651 43.2136 0.879502C41.3566 1.01618 40.2674 1.03208 39.4223 2.48705C38.6443 3.82331 39.9175 3.32601 40.6023 3.28698C40.9682 3.2651 42.689 3.16192 42.8406 3.24726C41.0738 4.30895 39.0645 5.02824 37.0996 5.92744C35.3375 6.72902 32.5247 7.59153 30.5216 8.08443C26.1768 9.14676 21.4529 9.72998 17.427 9.37823C11.8143 8.89224 6.34249 7.27448 2.66916 3.3266C2.36354 3.00658 1.08682 1.31053 0.829574 1.29887C-0.0667404 1.26048 0.320466 3.42074 0.776292 4.07177C2.88672 7.11634 6.19576 9.41621 9.11681 10.5305C12.2801 11.735 16.1782 12.6293 20.1937 12.5475C25.0767 12.443 28.6501 11.8499 33.6912 10.4322C36.8488 9.54622 39.9123 8.1382 42.764 6.70735C43.2704 6.44645 45.1753 5.30309 45.441 5.23769Z' fill='#41B883')
+                .overflow-hidden
+                  a(href="#") 
+                    img.max-w-full(src="../assets/images/landing/layout-images/landon.png" alt="blank")
+                .hover-link
+                  .link-btn(data-bs-toggle='tooltip', data-bs-placement='top', title='HTML with bootstrap 5')
+                    a.html.landon-view(href="index.html?layout=london" target='_blank' data-attr="default-body")
+                      img(src="../assets/images/landing/stroke-icon/1.svg", alt="")
+                  .link-btn(data-bs-toggle='tooltip', data-bs-placement='top', title='Angular')
+                    a(href="https://angular.pixelstrap.com/cuba-tailwind/dashboard/default?layout=london" target='_blank')
+                      img(src="../assets/images/landing/stroke-icon/2.svg", alt="")
+      section.section-space.customer-support.overflow-hidden
+        .container 
+          ul.decoration.d-sm-block.hidden
+            li.round-gif
+              img(src="../assets/images/landing/gifs/5.gif", alt="")
+          .grid.grid-cols-12.justify-content-center 
+            div(class="col-span-12") 
+              .landing-title.text-center(class="[@media(max-width:360px)]:!mb-[30px]")
+                .rating-title.gap-2
+                  img.decore-1(src="../assets/images/landing/decore/arrow-3.svg", alt="")
+                  ul.flex.ratings.gap-1
+                    li 
+                      i.fa.fa-star
+                    li 
+                      i.fa.fa-star
+                    li 
+                      i.fa.fa-star
+                    li 
+                      i.fa.fa-star
+                    li 
+                      i.fa.fa-star
+                  h6.rating-title.mb-0 4.5 
+                    span.f-light (110 rating)
+                h2 
+                  span.gradient-1 Thousands 
+                  |  of customers love us
+                p The marketer's goal is to help customers feel confident about their choice. Just providing more information often doesn't help
+            div(class="col-span-10 col-start-2 xxl:col-span-12")
+              .grid.grid-cols-12.gap-3.customer-wrap
+                div(class="col-span-3 md:col-span-6")
+                  .customer-wrapper
+                    .customer-box 
+                      img(src="../assets/images/landing/customers/1.svg", alt="")
+                      h6.f-light.mb-0.mt-2 Top rated template
+                    img.outline-box(src="../assets/images/landing/decore/arrow-style-1.svg", alt="")
+                div(class="col-span-3 md:col-span-6")
+                  .customer-wrapper
+                    .customer-box 
+                      img(src="../assets/images/landing/customers/2.svg", alt="")
+                      h6.f-light.mb-0.mt-2 Highest selling template
+                    img.outline-box(src="../assets/images/landing/decore/arrow-style-2.svg", alt="")
+                div(class="col-span-3 md:col-span-6")
+                  .customer-wrapper
+                    .customer-box 
+                      img(src="../assets/images/landing/customers/3.svg", alt="")
+                      h6.f-light.mb-0.mt-2 Super easy to deploy
+                    img.outline-box(src="../assets/images/landing/decore/arrow-style-3.svg", alt="")
+                div(class="col-span-3 md:col-span-6")
+                  .customer-wrapper
+                    .customer-box 
+                      img(src="../assets/images/landing/customers/4.svg", alt="")
+                      h6.f-light.mb-0.mt-2 Fast Customer Support
+                    img.outline-box(src="../assets/images/landing/decore/arrow-style-4.svg", alt="")
+      section.customization-wrap 
+        .container  
+          .grid.grid-cols-12 
+            div(class="col-span-6 lg:col-span-12") 
+              .landing-title.text-start
+                h5.sub-title Theme Customization
+                h2 
+                  span.gradient-3 Real-time 
+                  |  customization & preview
+                p.m-0 The live customizer offers everything you need to customize.there is no coding required.
+              .customization-accordion 
+                #accordionExample.accordion
+                  .accordion-item
+                    h2#headingOne.accordion-header
+                      button.accordion-button.collapsed(type='button' data-bs-toggle='collapse' data-bs-target='#collapseOne' aria-expanded='false' aria-controls='collapseOne')
+                        | Sidebar Builder
+                    #collapseOne.accordion-collapse.collapse(aria-labelledby='headingOne' data-bs-parent='#accordionExample')
+                      .accordion-body.f-light
+                        | Cuba admin provide two types of sidebar variation which is horizontal and vertical sidebar.you can check sidebar type customization option in our template
+                  .accordion-item
+                    h2#headingTwo.accordion-header
+                      button.accordion-button(type='button' data-bs-toggle='collapse' data-bs-target='#collapseTwo' aria-expanded='true' aria-controls='collapseTwo')
+                        | Unlimited color
+                    #collapseTwo.accordion-collapse.collapse.show(aria-labelledby='headingTwo' data-bs-parent='#accordionExample')
+                      .accordion-body.f-light
+                        | Change primary and secondary theme colors using this customization option.we are providing this settings for primary and secondary colors
+                  .accordion-item
+                    h2#headingThree.accordion-header
+                      button.accordion-button.collapsed(type='button' data-bs-toggle='collapse' data-bs-target='#collapseThree' aria-expanded='false' aria-controls='collapseThree')
+                        | Layout type
+                    #collapseThree.accordion-collapse.collapse(aria-labelledby='headingThree' data-bs-parent='#accordionExample')
+                      .accordion-body.f-light 
+                        | Cuba admin provides two layouts which is rtl and box layout. Also supports dark layout.
+            div(class="col-span-6 lg:col-span-12") 
+              .customization-img 
+                img.max-w-full(src="../assets/images/landing/customiztion.svg", alt="")
+      section#applications.section-space.app-section
+        .container-fluid.fluid-space
+          ul.decoration
+            li.wavy-gif
+              svg(xmlns='http://www.w3.org/2000/svg' viewBox='0 0 251 38')
+                path(fill='none' stroke-width='10' stroke-miterlimit='10' d='M0,9C17.93,9,17.93,29,35.85,29S53.78,9,71.71,9s17.92,20,35.85,20S125.49,9,143.42,9s17.93,20,35.86,20S197.21,9,215.14,9,233.07,29,251,29')
+          .grid.grid-cols-12
+            div(class="col-span-12 wow pulse")
+              .landing-title(class="[@media(max-width:360px)]:!mb-[30px]")
+                h5.sub-title Trending & Clean Design Collection
+                h2 
+                  | Fast & powerful 
+                  span.gradient-4 Applications
+                p Cuba admin template provides 3 workable application and designs of other applications. 
+          .grid.grid-cols-12.gap-4
+            div(class="col-span-4 xl:col-span-6 md:col-span-12") 
+              .app-box.app-bg-1 
+                h6
+                  span.app-title Social App
+                  span.line
+                .app-image
+                  ul.dot-group
+                    li
+                    li
+                    li
+                  .img-effect
+                    a(href='../template/social-app.html' target='_blank')
+                      img.max-w-full.cuba-img(src='../assets/images/landing/social-app.jpg' alt='')
+            div(class="col-span-4 xl:col-span-6 md:col-span-12") 
+              .app-box.app-bg-2 
+                h6
+                  span.app-title knowledgebase
+                  span.line
+                .app-image
+                  ul.dot-group
+                    li
+                    li
+                    li
+                  .img-effect
+                    a(href='../template/knowledgebase.html' target='_blank')
+                      img.max-w-full.cuba-img(src='../assets/images/landing/knowlagebase-app.jpg' alt='')
+            div(class="col-span-4 xl:col-span-6 md:col-span-12") 
+              .app-box.app-bg-3 
+                h6
+                  span.app-title kanban
+                  span.line
+                .app-image
+                  ul.dot-group
+                    li
+                    li
+                    li
+                  .img-effect
+                    a(href='../template/kanban.html' target='_blank')
+                      img.max-w-full.cuba-img(src='../assets/images/landing/apps/kanban.jpg' alt='')
+            div(class="col-span-4 xl:col-span-6 md:col-span-12") 
+              .app-box.app-bg-4 
+                h6
+                  span.app-title Ecommerce
+                  span.line
+                .app-image
+                  ul.dot-group
+                    li
+                    li
+                    li
+                  .img-effect
+                    a(href='../template/product-details.html' target='_blank')
+                      img.max-w-full.cuba-img(src='../assets/images/landing/ecommerce-app.jpg' alt='')
+            div(class="col-span-4 xl:col-span-6 md:col-span-12") 
+              .app-box.app-bg-5.h-full
+                h6
+                  span.app-title Chat
+                  span.line
+                .app-image
+                  ul.dot-group
+                    li
+                    li
+                    li
+                  .img-effect
+                    a(href='../template/private-chat.html' target='_blank')
+                      img.max-w-full.cuba-img(src='../assets/images/landing/apps/chat.jpg' alt='')
+            div(class="col-span-4 xl:col-span-6 md:col-span-12") 
+              .app-box.app-bg-6.h-full
+                h6
+                  span.app-title File manager
+                  span.line
+                .app-image
+                  ul.dot-group
+                    li
+                    li
+                    li
+                  .img-effect
+                    a(href='../template/file-manager.html' target='_blank')
+                      img.max-w-full.cuba-img(src='../assets/images/landing/apps/file.jpg' alt='')
+        marquee.text-marqee(direction='left') 
+            h2.big-title Faster, Lighter & Friendly  
+                       
+      section.section-space.feature-section(class="!pt-0")
+        ul.decoration
+          li.round-gif
+            img(src="../assets/images/landing/gifs/5.gif", alt="")
+        .container
+          .grid.grid-cols-12 
+            div(class="col-span-12 wow pulse")
+              .landing-title
+                h5.sub-title Why you choose Cuba
+                h2 
+                  | Introducing our 
+                  span.gradient-5 Core Features
+                p Many more amazing features are available in cuba admin template and also clean responsive.we are using scss 7-1 tire folder structure for this admin template.
+              .vector-image 
+                img(src="../assets/images/landing/vectors/2.svg", alt="vector women")
+          .grid.grid-cols-12.gap-4
+            div(class="col-span-3 xxl:col-span-4 lg:col-span-6 sm:col-span-12") 
+              .feature-box.common-card.bg-feature-1
+                .feature-icon 
+                  img(src="../assets/images/landing/feature-icon/1.svg", alt="")
+                h5 Quality & Clean Code
+                p.mb-0.f-light All you need to know of using clean code as a manager to make your team and your software awesome. 
+            div(class="col-span-3 xxl:col-span-4 lg:col-span-6 sm:col-span-12") 
+              .feature-box.common-card.bg-feature-2
+                .feature-icon 
+                  img(src="../assets/images/landing/feature-icon/2.svg", alt="")
+                h5 Tailwind Css
+                p.mb-0.f-light  A utility-first CSS framework packed with classes that can be composed to build any design, directly in your markup.
+            div(class="col-span-3 xxl:col-span-4 lg:col-span-6 sm:col-span-12") 
+              .feature-box.common-card.bg-feature-3
+                .feature-icon 
+                  img(src="../assets/images/landing/feature-icon/3.svg", alt="")
+                h5 Handmade Icons
+                p.mb-0.f-light Let's learn how to use our own SVG icons in cuba admin template.Icon System with SVG Sprites
+            div(class="col-span-3 xxl:col-span-4 lg:col-span-6 sm:col-span-12") 
+              .feature-box.common-card.bg-feature-4
+                .feature-icon 
+                  img(src="../assets/images/landing/feature-icon/4.svg", alt="")
+                h5 Limitless Components
+                p.mb-0.f-light The limitless layout collection and UI kit library is the biggest collection of layouts for web design
+            div(class="col-span-3 xxl:col-span-4 lg:col-span-6 sm:col-span-12") 
+              .feature-box.common-card.bg-feature-5
+                .feature-icon 
+                  img(src="../assets/images/landing/feature-icon/5.svg", alt="")
+                h5 Easy Customizable
+                p.mb-0.f-light Easy Step-By-Step Guide for Beginners.customize your layout, settings and content
+            div(class="col-span-3 xxl:col-span-4 lg:col-span-6 sm:col-span-12") 
+              .feature-box.common-card.bg-feature-6
+                .feature-icon 
+                  img(src="../assets/images/landing/feature-icon/6.svg", alt="")
+                h5 Responsive & User-Friendly
+                p.mb-0.f-light Use Responsive Design to Connect with all Device Users 
+            div(class="col-span-3 xxl:col-span-4 lg:col-span-6 sm:col-span-12") 
+              .feature-box.common-card.bg-feature-7
+                .feature-icon 
+                  img(src="../assets/images/landing/feature-icon/7.svg", alt="")
+                h5 Premium Support
+                p.mb-0.f-light We are always be their for your support and you are facing some issues you can create ticket.
+            div(class="col-span-3 xxl:col-span-4 lg:col-span-6 sm:col-span-12") 
+              .feature-box.common-card.bg-feature-8
+                .feature-icon 
+                  img(src="../assets/images/landing/feature-icon/8.svg", alt="")
+                h5 Colors Options
+                p.mb-0.f-light Cuba provide unlimited main color option.other colors you can change easily using scss variables
+      section.build-section 
+        .container
+          ul.decoration
+            li.loader-gif
+              span.loader-1 
+          .grid.grid-cols-12 
+            div(class="col-span-12 wow pulse") 
+              .landing-title.text-start
+                h2 Build stunning and powerful landing page with 
+                  span.gradient-6 customizable and easy 
+                  |  to understand.
+                img.title-img.block(class="sm:hidden" src="../assets/images/landing/decore/arrow-4.svg", alt="")
+                h4.block.sub-title.rotate-title.mb-0(class="sm:hidden") The Biggest template Collection Ever Build.
+          .grid.grid-cols-12.gap-4 
+            div(class="col-span-6 md:col-span-12") 
+              .build-image 
+                img(src="../assets/images/landing/sale.png", alt="")
+            div(class="col-span-6 md:col-span-12") 
+              .build-content.text-end 
+                p.f-light.mb-0 Create unique combinations using a variety of section blocks from the ultimate collection of design created by world-class designers.import a pre-built section block with a single click or save your own custom block to reuse on other pages.
+      
+      section.section-space.framework-section#frameworks
+        .container
+          ul.decoration
+            li.loader-line-gif
+              img(src="../assets/images/landing/gifs/6.gif", alt="")
+            li.wavy-gif
+              svg(xmlns='http://www.w3.org/2000/svg' viewBox='0 0 251 38')
+                path(fill='none' stroke-width='10' stroke-miterlimit='10' d='M0,9C17.93,9,17.93,29,35.85,29S53.78,9,71.71,9s17.92,20,35.85,20S125.49,9,143.42,9s17.93,20,35.86,20S197.21,9,215.14,9,233.07,29,251,29')
+          .grid.grid-cols-12 
+            div(class="col-span-12") 
+              .landing-title
+                h5.sub-title 10+ frameworks available
+                h2 Latest Updates in 
+                  span.gradient-7 All Frameworks
+                p Html, Angular all this versions available in cuba admin template
+            div(class="col-span-12") 
+              .tabs
+                ul#myTab.nav.nav-tabs.tab-links.justify-center.frame-tab(role='tablist')
+                  li.nav-item(role='presentation')
+                    button#html-tab.tab-link.active(data-tabfilter="1") 
+                      img(src='../assets/images/landing/icon/html/html.png' alt='')
+                      span HTML
+                  li.nav-item(role='presentation')
+                    button#angular-tab.tab-link(data-tabfilter="2") 
+                      img(src='../assets/images/landing/icon/angular/angular.png' alt='')
+                      span Angular
+                .tab-content
+                  #html.tab-pan.fade.show.active(data-tabContent="1")
+                    .grid.grid-cols-12(class="gap-[40px] xl:gap-[15px]")
+                      div(class="col-span-4 xxl:col-span-6 md:col-span-12") 
+                        .framework-box
+                          .frame-icon 
+                            img(src="../assets/images/landing/icon/html/sass.png", alt="")
+                          .frame-details
+                            h5 SCSS
+                            p.f-light The superset CSS makes it simple to develop and 
+                              | usefulness 
+                              | with variables, selectors, and nesting.
+                      div(class="col-span-4 xxl:col-span-6 md:col-span-12") 
+                        .framework-box
+                          .frame-icon 
+                            img(src="../assets/images/landing/icon/html/tailwind.png", alt="")
+                          .frame-details
+                            h5 Tailwind Css
+                            p.f-light A utility-first CSS framework for building modern designs with composable classes.
+                              | that is mobile-friendly.
+                      div(class="col-span-4 xxl:col-span-6 md:col-span-12") 
+                        .framework-box
+                          .frame-icon 
+                            img(src="../assets/images/landing/icon/html/pug.png", alt="")
+                          .frame-details
+                            h5 PUG
+                            p.f-light Pug.js enables generating dynamic data and developing adaptable 
+                              | HTML code.The overall productivity increases.
+                      div(class="col-span-4 xxl:col-span-6 md:col-span-12") 
+                        .framework-box
+                          .frame-icon 
+                            img(src="../assets/images/landing/icon/html/vite.png", alt="")
+                          .frame-details
+                            h5 Vite
+                            p.f-light Vite is a modern build tool for faster development and optimized production builds.
+                      div(class="col-span-4 xxl:col-span-6 md:col-span-12") 
+                        .framework-box
+                          .frame-icon 
+                            img(src="../assets/images/landing/icon/html/forms.png", alt="")
+                          .frame-details
+                            h5 Form
+                            p.f-light To facilitate 
+                              | form access and modification, the fields and field labels are 
+                              | logically arranged.
+                      div(class="col-span-4 xxl:col-span-6 md:col-span-12") 
+                        .framework-box
+                          .frame-icon 
+                            img(src="../assets/images/landing/icon/angular/6.png", alt="")
+                          .frame-details
+                            h5 Apex chart
+                            p.f-light It also has its own special 
+                              | characteristics that will make the data genuinely interactive.
+                      div(class="col-span-4 xxl:col-span-6 md:col-span-12") 
+                        .framework-box
+                          .frame-icon 
+                            img(src="../assets/images/landing/icon/angular/7.png", alt="")
+                          .frame-details
+                            h5 Chart.js
+                            p.f-light It makes data visualisation simple. It offers 8 different chart kinds, 
+                              | all of which are responsive.
+                      div(class="col-span-4 xxl:col-span-6 md:col-span-12") 
+                        .framework-box
+                          .frame-icon 
+                            img(src="../assets/images/landing/icon/angular/8.png", alt="")
+                          .frame-details
+                            h5 Chartist
+                            p.f-light Chartist gives designers and developers the chance to 
+                              | make charts that are cross-browser compatible.
+                      div(class="col-span-4 xxl:col-span-6 md:col-span-12") 
+                        .framework-box
+                          .frame-icon 
+                            img(src="../assets/images/landing/icon/html/apps.png", alt="")
+                          .frame-details
+                            h5 Apps
+                            p.f-light Assist you in building the most user-friendly, dynamic websites 
+                              | and applications with cutting-edge designs
+                      div(class="col-span-4 xxl:col-span-6 md:col-span-12") 
+                        .framework-box
+                          .frame-icon 
+                            img(src="../assets/images/landing/icon/angular/10.png", alt="")
+                          .frame-details
+                            h5 Gallery
+                            p.f-light You also have the option to enable animated thumbnails from the settings. Zoom & Fullscreen.
+                      div(class="col-span-4 xxl:col-span-6 md:col-span-12") 
+                        .framework-box
+                          .frame-icon 
+                            img(src="../assets/images/landing/icon/html/iconset.png", alt="")
+                          .frame-details
+                            h5 Icons
+                            p.f-light We have provide 4 & 5 types of different icons.most trending icons like font awesome, feather icons.
+                      div(class="col-span-4 xxl:col-span-6 md:col-span-12") 
+                        .framework-box
+                          .frame-icon 
+                            img(src="../assets/images/landing/icon/html/layout.png", alt="")
+                          .frame-details
+                            h5 Layout
+                            p.f-light Those that seamlessly adjust to different screen sizes and responsive layouts for your business.
+                      div(class="col-span-4 xxl:col-span-6 md:col-span-12") 
+                        .framework-box
+                          .frame-icon 
+                            img(src="../assets/images/landing/icon/html/uikits.png", alt="")
+                          .frame-details
+                            h5 Ui kits
+                            p.f-light We are provide bunch of ui kits for create easy design and reusable components
+                  #angular.tab-pan.fade(data-tabContent="2")
+                    .grid.grid-cols-12(class="gap-[40px] xl:gap-[15px]")
+                      div(class="col-span-4 xxl:col-span-6 md:col-span-12") 
+                        .framework-box
+                          .frame-icon 
+                            img(src="../assets/images/landing/icon/angular/angular.png", alt="")
+                          .frame-details
+                            h5 Angular
+                            p.f-light Angular 19 simplifies web development by providing a modular structure, two-way data binding, and powerful CLI tools.
+                      div(class="col-span-4 xxl:col-span-6 md:col-span-12")
+                        .framework-box
+                          .frame-icon 
+                            img(src="../assets/images/landing/icon/html/tailwind.png", alt="")
+                          .frame-details
+                            h5 Tailwind Css
+                            p.f-light A utility-first CSS framework for building modern designs with composable classes. that is mobile-friendly.
+                      div(class="col-span-4 xxl:col-span-6 md:col-span-12")
+                        .framework-box
+                          .frame-icon 
+                            img(src="../assets/images/landing/icon/html/sass.png", alt="")
+                          .frame-details
+                            h5 SCSS
+                            p.f-light To make it easier of designers to style our website. It allows us to use things like variables , inline imports and many other things.
+                      div(class="col-span-4 xxl:col-span-6 md:col-span-12")
+                        .framework-box
+                          .frame-icon 
+                            img(src="../assets/images/landing/icon/angular/4.png", alt="")
+                          .frame-details
+                            h5 Router
+                            p.f-light Router attaches components to some paths, through this paths , components can now be viewed.
+                      div(class="col-span-4 xxl:col-span-6 md:col-span-12")
+                        .framework-box
+                          .frame-icon 
+                            img(src="../assets/images/landing/icon/angular/5.png", alt="")
+                          .frame-details
+                            h5 Form
+                            p.f-light Admin requires many pages with input fields to enter and manage the data. Many forms styles and functionalities related to it has been included.
+                      div(class="col-span-4 xxl:col-span-6 md:col-span-12")
+                        .framework-box
+                          .frame-icon 
+                            img(src="../assets/images/landing/icon/angular/6.png", alt="")
+                          .frame-details
+                            h5 Apex Chart
+                            p.f-light To visualize data in more attractive manner, we have provided Apex charts. Many different chart options are available in apex chart.
+                      div(class="col-span-4 xxl:col-span-6 md:col-span-12")
+                        .framework-box
+                          .frame-icon 
+                            img(src="../assets/images/landing/icon/angular/7.png", alt="")
+                          .frame-details
+                            h5 Chart.js
+                            p.f-light Not happy with just one chart option? We have got more. Chart.js has also been given as an alternative to create beautiful charts.
+                      div(class="col-span-4 xxl:col-span-6 md:col-span-12")
+                        .framework-box
+                          .frame-icon 
+                            img(src="../assets/images/landing/icon/angular/8.png", alt="")
+                          .frame-details
+                            h5 Chartist
+                            p.f-light You want more ha? We knew it, so we included chartist charts as well. Now you won't run out of options that easily.
+                      div(class="col-span-4 xxl:col-span-6 md:col-span-12")
+                        .framework-box
+                          .frame-icon 
+                            img(src="../assets/images/landing/icon/angular/9.png", alt="")
+                          .frame-details
+                            h5 Google maps
+                            p.f-light Frankly we would be lost without them. But no worries, many of them are given in our theme.
+                      div(class="col-span-4 xxl:col-span-6 md:col-span-12")
+                        .framework-box
+                          .frame-icon 
+                            img(src="../assets/images/landing/icon/angular/10.png", alt="")
+                          .frame-details
+                            h5 Gallery
+                            p.f-light You have many pictures , we have ways to display them. With multiple gallery options, managing pictures is now easy.
+                      div(class="col-span-4 xxl:col-span-6 md:col-span-12")
+                        .framework-box
+                          .frame-icon 
+                            img(src="../assets/images/landing/icon/angular/11.png", alt="")
+                          .frame-details
+                            h5 Ecommerce
+                            p.f-light Ecommerce is just one of theme. Explore our theme and you will find multiple uses for it.
+                      div(class="col-span-4 xxl:col-span-6 md:col-span-12")
+                        .framework-box
+                          .frame-icon 
+                            img(src="../assets/images/landing/icon/angular/14.png", alt="")
+                          .frame-details
+                            h5 Chat
+                            p.f-light A Design of a chat application has been given, so that you can create your own chat app in your theme.
+      section#components.section-space.components-section.cuba-demo-section(class="!pt-0")
+        .container
+          ul.decoration
+            li.flower-gif
+              .mesh-loader
+                .set-one
+                  .circle
+                  .circle
+                .set-two
+                  .circle
+                  .circle
+          .grid.grid-cols-12
+            div(class="col-span-12 wow pulse")
+              .cuba-demo-content
+                .couting
+                  h2 90+
+                .landing-title
+                  h5.sub-title Usable Components
+                  h2
+                    span.gradient-8 UI components 
+                    |  is first class
+                  p
+                    | The UI components will facilitate you in developing the most user-friendly, 
+                    | interactive websites and applications with cutting-edge design features.
+              .vector-image 
+                img(src="../assets/images/landing/vectors/3.svg", alt="vector women")
+        .container-fluid.overflow-hidden
+          .grid.grid-cols-12.component_responsive.gap-3.mb-3(data-jarallax-element="0 100")
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/1.svg' alt='')
+                h6.m-0.Pt-4 SweetAlert2
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/2.svg' alt='')
+                h6.m-0 Avatar
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/3.svg' alt='')
+                h6.m-0 Scrollable
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/4.svg' alt='')
+                h6.m-0 Tree view
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/5.svg' alt='')
+                h6.m-0 Bootstrap notify
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/6.svg' alt='')
+                h6.m-0 Rating 
+          .grid.grid-cols-12.component_responsive.gap-3.mb-3(data-jarallax-element="0 -150")
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/7.svg' alt='')
+                h6.m-0 Dropzone
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/8.svg' alt='')
+                h6.m-0 Tour
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/9.svg' alt='')
+                h6.m-0 Animated modal
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/10.svg' alt='')
+                h6.m-0 Owl Carousel
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/11.svg' alt='')
+                h6.m-0 Ribbons 
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/12.svg' alt='')
+                h6.m-0 Pagination 
+          .grid.grid-cols-12.component_responsive.gap-3.mb-3(data-jarallax-element="0 100")
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/13.svg' alt='')
+                h6.m-0 Steps 
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/14.svg' alt='')
+                h6.m-0 Breadcrumb  
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/15.svg' alt='')
+                h6.m-0 Range Slider 
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/16.svg' alt='')
+                h6.m-0 image cropper 
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/17.svg' alt='')
+                h6.m-0 Sticky 
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/18.svg' alt='')
+                h6.m-0 Progress 
+          .grid.grid-cols-12.component_responsive.gap-3.mb-3(data-jarallax-element="0 -150")
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/19.svg' alt='')
+                h6.m-0 Tooltip 
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/20.svg' alt='')
+                h6.m-0 Spinners 
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/21.svg' alt='')
+                h6.m-0 Dropdown 
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/22.svg' alt='')
+                h6.m-0 Tabs 
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/23.svg' alt='')
+                h6.m-0 Accordion  
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/24.svg' alt='')
+                h6.m-0 Navs
+          .grid.grid-cols-12.component_responsive.gap-3(data-jarallax-element="0 100")
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/25.svg' alt='')
+                h6.m-0 Shadow
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/26.svg' alt='')
+                h6.m-0 state color
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/27.svg' alt='')
+                h6.m-0 List  
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/28.svg' alt='')
+                h6.m-0 Grid 
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/29.svg' alt='')
+                h6.m-0 Helper classes 
+            div(class="col-span-2 xxl:col-span-3 lg:col-span-4 md:col-span-6 component-col-set")
+              .component-hover-effect
+                img(src='../assets/images/landing/icon/30.svg' alt='')
+                h6.m-0 Typography
+      section.section-space.cuba-demo-section.bg-Widget.overflow-hidden(class="!pt-0")
+        .container
+          .grid.grid-cols-12
+            div(class="col-span-12 wow pulse")
+              .landing-title(class="[@media(max-width:360px)]:!mb-[30px]")
+                h5.sub-title Our cards
+                h2
+                  | Introducing Our 
+                  span.gradient-9 Cards collections
+                p
+                  | Utilise the adaptable and practical templates to make your web application 
+                  | outstanding and more creative that provides you a competitive advantage.
+        .container-fluid.overflow-hidden
+          .grid.grid-cols-12.landing-cards
+            div(class="col-span-12")
+              .animate-slider
+                .cards-image 
+                  img(src="../assets/images/landing/cards.png", alt="")
+                .cards-image 
+                  img(src="../assets/images/landing/cards.png", alt="")
+      section.section-space.document-section.feature-section#documentation(class="!pt-0")
+        .container 
+          .grid.grid-cols-12
+            div(class="col-span-12 wow pulse")
+              .landing-title(class="[@media(max-width:360px)]:!mb-[30px]")
+                h5.sub-title Our Documentation
+                h2
+                  span.gradient-5 Well 
+                  |  Documented
+                p
+                  | Html, Angular all this versions documentation available in cuba admin template
+          .grid.grid-cols-12.gap-4  
+            div(class="col-span-3 col-start-4 xl:col-span-4 lg:col-span-6 sm:col-span-12")
+              a(href="https://docs.pixelstrap.com/cuba/tailwind/document/" target="_blank").document-box
+                .doc-icon.bg-icon1
+                  img(src="../assets/images/landing/icon/django/bootstrap.png", alt="html logo")
+                h5 Bootstrap 5
+            div(class="col-span-3 xl:col-span-4 lg:col-span-6 sm:col-span-12")
+              a(href="https://docs.pixelstrap.com/cuba-tailwind/angular/document/" target="_blank").document-box
+                .doc-icon.bg-icon2
+                  img(src="../assets/images/landing/icon/angular/angular.png", alt="angular logo")
+                h5 Angular
+      .bottom-section-grad
+        section.section-space.about-section.pb-0 
+          .container-fluid.fluid-space
+            .grid.grid-cols-12  
+              div(class="col-span-12")
+                .landing-title.text-center(class="[@media(max-width:360px)]:!mb-[30px]")
+                  h5.sub-title Best Customer Feedback
+                  h2 The opinions of our 
+                    span.gradient-10 valuable  
+                    |  Customers
+                  p
+                    | we are always be there for your issues and support.if any query you can ask us on our theme supports
+              div(class="col-span-12") 
+                .testimonial-slider  
+                  .testimonial-box.common-card 
+                    .rating-content 
+                      ul.flex.ratings.gap-1
+                        li
+                          i.fa.fa-star
+                        li
+                          i.fa.fa-star
+                        li
+                          i.fa.fa-star
+                        li
+                          i.fa.fa-star
+                        li
+                          i.fa.fa-star
+                      h6.mb-0
+                        | Feature Availability
+                    p.f-light Great Template, bought two in less than a week. For this price it is ridiculous not to purchase it. Beautiful design all across. Prebuilt integration with firebase auth, light and dark theme.
+                    p.f-light A very very good template.
+                    .text-end.mt-2  
+                      h5 flucadetena
+                      span.font-primary CUSTOMER
+                    .customer-img
+                      img(src="../assets/images/landing/testimonial/1.svg", alt="vector men")
+                  .testimonial-box.common-card 
+                      .rating-content 
+                        ul.flex.ratings.gap-1
+                          li
+                            i.fa.fa-star
+                          li
+                            i.fa.fa-star
+                          li
+                            i.fa.fa-star
+                          li
+                            i.fa.fa-star
+                          li
+                            i.fa.fa-star
+                        h6.mb-0
+                          | Design Quality
+                      p.f-light I really love the Design.
+                      p.f-light  I am using the React Option btw.
+                      p.f-light  The Documentation is great and for 5$ you can't do anything wrong here.Its pretty easy to swap out the default design or implement a dark mode. I wish there was a tsx version(React Typescript) out of the box. But even wighout its great to work with.
+                      .text-end.mt-2  
+                        h5 MenschenToaster
+                        span.font-primary CUSTOMER
+                      .customer-img
+                        img(src="../assets/images/landing/testimonial/2.svg", alt="vector men") 
+                  .testimonial-box.common-card 
+                      .rating-content 
+                        ul.flex.ratings.gap-1
+                          li
+                            i.fa.fa-star
+                          li
+                            i.fa.fa-star
+                          li
+                            i.fa.fa-star
+                          li
+                            i.fa.fa-star
+                          li
+                            i.fa.fa-star
+                        h6.mb-0
+                          | Code Quality
+                      p.f-light Design, code quality, documentation, features, and best part is easy to integrate in project. This is a great product with great support. I loved the code quality which reduced my project time.
+                      .text-end.mt-2 
+                        h5 manthandesai999 
+                        span.font-primary CUSTOMER
+                      .customer-img
+                        img(src="../assets/images/landing/testimonial/3.svg", alt="vector women")
+                  .testimonial-box.common-card 
+                      .rating-content 
+                        ul.flex.ratings.gap-1
+                          li
+                            i.fa.fa-star
+                          li
+                            i.fa.fa-star
+                          li
+                            i.fa.fa-star
+                          li
+                            i.fa.fa-star
+                          li
+                            i.fa.fa-star
+                        h6.mb-0
+                          | Code Quality
+                      p.f-light This is amazing! Seriously great job right here. Please increase price because you are simply offering this nearly for free.
+                      .text-end.mt-2 
+                        h5 maidot
+                        span.font-primary CUSTOMER
+                      .customer-img
+                        img(src="../assets/images/landing/testimonial/1.svg", alt="vector men")      
+                  .testimonial-box.common-card 
+                      .rating-content 
+                        ul.flex.ratings.gap-1
+                          li
+                            i.fa.fa-star
+                          li
+                            i.fa.fa-star
+                          li
+                            i.fa.fa-star
+                          li
+                            i.fa.fa-star
+                          li
+                            i.fa.fa-star
+                        h6.mb-0
+                          | Customer Support
+                      p.f-light Customer support is excelent. whenever have problem and not uderstand their support section always helps me. and Admin panel is very nice. Thanks
+                      .text-end.mt-2 
+                        h5 mahbuburriad
+                        span.font-primary CUSTOMER
+                      .customer-img
+                        img(src="../assets/images/landing/testimonial/2.svg", alt="vector men")
+        section.faq-section.section-space#faq
+          .container
+            .grid.grid-cols-12  
+              div(class="col-span-12")
+                .landing-title.text-center
+                  h5.sub-title Frequently Ask Question
+                  h2 Do you have  
+                    span.gradient-11 any Question? 
+                    |  Look Here
+                  p
+                    | You can freely reach out to us at any time with any questions! We'd always be happy to serve you.
+                .vector-image 
+                  img(src="../assets/images/landing/vectors/4.svg", alt="vector women")
+              div(class="col-span-12") 
+                #faqaccordion.accordion
+                  .accordion-item
+                    h2#faq1.accordion-header
+                      button.accordion-button(type='button' data-bs-toggle='collapse' data-bs-target='#faqOne' aria-expanded='true' aria-controls='faqOne')
+                        | How can you assist me in achieving the ideal user behaviour?
+                        i.fa-solid.fa-caret-down
+                    #faqOne.accordion-collapse.collapse.show(aria-labelledby='faq1' data-bs-parent='#faqaccordion')
+                      .accordion-body.f-light
+                        | Our team will assess the industry and undertake in-depth user 
+                        | research. We'll design templates and different website 
+                        | demonstrations, drive engagement, and do A/B tests to determine 
+                        | whether they are operating at their peak capacity. 
+                  .accordion-item
+                    h2#faq2.accordion-header
+                      button.accordion-button.collapsed(type='button' data-bs-toggle='collapse' data-bs-target='#faqTwo' aria-expanded='false' aria-controls='faqTwo')
+                        | How long will the website's design take?
+                        i.fa-solid.fa-caret-down
+                    #faqTwo.accordion-collapse.collapse(aria-labelledby='faq2' data-bs-parent='#faqaccordion')
+                      .accordion-body.f-light
+                        | Well, it certainly depends on what the clients want, therefore we 
+                        | really pay close attention to what the "X Factor" is that the 
+                        | customer or company needs to distinguish itself from the  
+                        | competition.
+                  .accordion-item
+                    h2#faq3.accordion-header
+                      button.accordion-button.collapsed(type='button' data-bs-toggle='collapse' data-bs-target='#faqThree' aria-expanded='false' aria-controls='faqThree')
+                        | Are there any hidden fees?
+                        i.fa-solid.fa-caret-down
+                    #faqThree.accordion-collapse.collapse(aria-labelledby='faq3' data-bs-parent='#faqaccordion')
+                      .accordion-body.f-light
+                        | The pricing is the entire sum that you will have to pay. There are 
+                        | no setup fees, cancellation fees, or other extra or hidden costs. 
+                        | Everything you need to pay for, including all taxes, is included in 
+                        | the package.
+                  .accordion-item
+                    h2#faq4.accordion-header
+                      button.accordion-button.collapsed(type='button' data-bs-toggle='collapse' data-bs-target='#faqFour' aria-expanded='false' aria-controls='faqFour')
+                        | What do you mean by item and end product?
+                        i.fa-solid.fa-caret-down
+                    #faqFour.accordion-collapse.collapse(aria-labelledby='faq4' data-bs-parent='#faqaccordion')
+                      .accordion-body.f-light
+                        | The item is what you purchase from Envato Market. The end product is what you build with that item.
+                  .accordion-item
+                    h2#faq5.accordion-header
+                      button.accordion-button.collapsed(type='button' data-bs-toggle='collapse' data-bs-target='#faqFive' aria-expanded='false' aria-controls='faqFive')
+                        | Can I use an item as an element of my logo or branding?
+                        i.fa-solid.fa-caret-down
+                    #faqFive.accordion-collapse.collapse(aria-labelledby='faq5' data-bs-parent='#faqaccordion')
+                      .accordion-body.f-light
+                        | Only items from the logo category on GraphicRiver are intended to be used as logos. Other items can't be used in logos or branding. None of our items, not even logos, can be trademarked.
+        section.pricing-section.section-space(class="!pt-0")
+          ul.decoration
+            li.loader-line-gif
+              img(src="../assets/images/landing/gifs/6.gif", alt="")
+            li.loader-gif
+              span.loader-1
+          .container
+            .grid.grid-cols-12
+              div(class="col-span-5 lg:col-span-12")
+                .landing-title.text-start(class="[@media(max-width:360px)]:!mb-[30px]")
+                  h5.sub-title Our license
+                  h2 Take a Look at Our 
+                    span.gradient-12 Engagement Models
+                  p.mx-0
+                    | We've made it simple for customers to get in touch with us and get their 
+                    | solutions woven. We definitely make sure to present ourselves in the best light 
+                    | and provide the most value for the money.
+              div(class="col-span-7 lg:col-span-12") 
+                .grid.grid-cols-12.gap-5
+                  div(class="col-span-6 sm:col-span-12") 
+                    .pricing-box 
+                      h4 Regular License
+                      p Use by you in a single product where user 
+                        span.font-primary are not charged.
+                      ul.license-list 
+                        li 
+                          img(src="../assets/images/landing/icon/right.svg", alt="Right icon")
+                          h6.f-light Support for 6 months
+                        li 
+                          img(src="../assets/images/landing/icon/right.svg", alt="Right icon")
+                          h6.f-light Free future template updates
+                        li 
+                          img(src="../assets/images/landing/icon/wrong.png", alt="Wrong icon")
+                          h6.f-light Use in an end product that's sold
+                      .purchase-details
+                        h2 $24.00
+                        a.btn.btn-primary.btn-lg.rounded-pill.purchase-btn.text-white.rounded-md(href="https://1.envato.market/3GVzd") Purchase now
+                  div(class="col-span-6 sm:col-span-12") 
+                    .pricing-box 
+                      h4 Extended License
+                      p Use by you in a single product where user 
+                        span.font-primary are charged.
+                      ul.license-list
+                        li 
+                          img(src="../assets/images/landing/icon/right.svg", alt="Right icon")
+                          h6.f-light Support for 6 months
+                        li 
+                          img(src="../assets/images/landing/icon/right.svg", alt="Right icon")
+                          h6.f-light Free future template updates
+                        li 
+                          img(src="../assets/images/landing/icon/right.svg", alt="Right icon")
+                          h6.f-light Use in an end product that's sold
+                      .purchase-details
+                        h2 $499.00
+                        a.btn.btn-primary.btn-lg.rounded-pill.purchase-btn.text-white.rounded-md(href="https://1.envato.market/3GVzd") Purchase now     
+      footer.footer-bg
+        .container
+          .landing-center.ptb50
+            .feature-content
+              ul 
+                li 
+                  h4 Trending Template
+                  img(src="../assets/images/landing/feature-img.png", alt="leaf golden")
+                li 
+                  h4 Overall Best rated Template
+                  img(src="../assets/images/landing/feature-img.png", alt="leaf golden")
+                li 
+                  h4 Weekly Best Seller
+                  img(src="../assets/images/landing/feature-img.png", alt="leaf golden")
+            .landing-title
+              h2 Build a 
+                span.gradient-13 stunning site 
+                |  today
+              p The Cuba Bootstrap Admin Theme Trusted By Many Developers World Wide.If You like Our Template So Please Rate Us.
+            .footer-content
+              ul.license-list
+                li 
+                  img(src="../assets/images/landing/icon/right.svg", alt="Right icon")
+                  h6 Free future template updates
+                li 
+                  img(src="../assets/images/landing/icon/right.svg", alt="Right icon")
+                  h6 Premium bundled plugins
+                li 
+                  img(src="../assets/images/landing/icon/right.svg", alt="Right icon")
+                  h6 Quality checked by Envato
+              a.btn.btn-lg.btn-primary.rounded-full.purchase-btn.text-white(target='_blank' href='https://1.envato.market/3GVzd') Buy Now 
+          .sub-footer.grid.grid-cols-12.g-2
+            div(class="col-span-6 md:col-span-12") 
+              h6.mb-0 Copyright © 2025 Cuba, All rights reserved.
+            div(class="col-span-6 md:col-span-12") 
+              ul 
+                li 
+                  h6.mb-0 Find us on
+                li 
+                  a(href="https://www.facebook.com/")
+                    i.fa-brands.fa-square-facebook
+                li
+                  a(href="https://twitter.com/login") 
+                    i.fa-brands.fa-square-x-twitter
+    
+    include ../../components/landing-footer-files

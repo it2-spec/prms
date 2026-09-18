@@ -1,0 +1,67 @@
+@layer components {
+  .loader-wrapper {
+    @apply h-full w-full flex items-center justify-center fixed bg-[rgba(var(--white),1)] z-[11] top-0;
+
+    .loader-index {
+      @apply flex items-center justify-center relative after:content-[""] after:w-[4em] after:h-[4em] after:absolute after:animate-[grow_2s_cubic-bezier(.14,0.05,0.55,0.5)_infinite_alternate] after:rounded-[50%] after:scale-50 after:bg-[rgba(var(--theme-default),1)];
+      filter: url("#goo");
+
+      span {
+        @apply w-[2em] h-[2em] bg-[rgba(var(--theme-secondary),1)] relative translate-x-[7em] animate-[move_4s_ease-in-out_infinite] mr-[2em] rounded-[50%] before:content-[""] before:w-[2em] before:h-[2em] before:absolute before:translate-x-[0em] before:animate-[shrink_2s_ease-in-out_infinite] before:rounded-[50%] before:left-[3em] before:bg-[rgba(var(--theme-default),1)] after:content-[""] after:w-[2em] after:h-[2em] after:absolute after:translate-x-[0em] after:animate-[shrink_2s_ease-in-out_infinite] after:rounded-[50%] after:right-[3em] after:bg-[rgba(var(--info-color),1)];
+      }
+    }
+    svg {
+      @apply w-0 h-0;
+    }
+
+    body {
+      @apply min-h-screen grid place-content-center m-0 bg-[rgba(var(--black),1)];
+      font-family: sans;
+    }
+
+    h1 {
+      @apply text-[rgba(var(--white),1)] text-center tracking-[3px] relative z-[2] mb-[2em] before:absolute before:content-[""] before:h-px before:text-[rgba(var(--white),1)] before:w-[2.5em] before:font-normal before:text-[0.5em] before:left-[0.75em] before:top-[2.75em];
+
+      &:before {
+        background: linear-gradient(
+          to right,
+          var(--theme-secondary),
+          var(--theme-default),
+          var(--info-color)
+        );
+        font-variant: small-caps;
+      }
+    }
+  }
+  @keyframes grow {
+    0% {
+      transform: scale(0.5);
+      background: var(--info-color);
+    }
+
+    50% {
+      transform: scale(1);
+      background: var(--theme-secondary);
+    }
+  }
+
+  @keyframes move {
+    0% {
+      transform: translateX(7em);
+    }
+
+    50% {
+      transform: translateX(-5em);
+    }
+  }
+
+  @keyframes shrink {
+    0% {
+      transform: translateX(0em);
+    }
+
+    50% {
+      transform: translateX(-1em);
+    }
+  }
+}

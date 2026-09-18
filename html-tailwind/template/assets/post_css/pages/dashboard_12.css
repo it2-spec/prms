@@ -1,0 +1,509 @@
+@layer components {
+  .small-stats {
+    .card {
+      .card-body {
+        .project-state {
+          @apply w-[66px] h-[67px] grid place-items-center rounded-[50%];
+          svg {
+            @apply h-[33px] w-[33px];
+          }
+        }
+      }
+      [class^="font-"] {
+        @apply pt-[9px];
+        span {
+          @apply ml-0.5;
+          [dir="rtl"] & {
+            @apply ml-[unset] mr-0.5;
+          }
+        }
+      }
+    }
+  }
+  .tasks-card {
+    .arrow-group {
+      @apply flex gap-[5px] absolute z-[2] right-[60px] top-[15px];
+      [dir="rtl"] & {
+        @apply left-[60px] right-[unset];
+      }
+      .next,
+      .prev {
+        @apply bg-[rgba(var(--light-color),1)] rounded-[5px] flex items-center justify-center h-[35px] w-[35px];
+        &.swiper-button-disabled {
+          @apply opacity-50;
+        }
+      }
+    }
+    .task-box {
+      .common-space {
+        @apply gap-1.5;
+      }
+      h6 {
+        @apply max-w-full h-auto overflow-hidden text-ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
+      p {
+        @apply text-[rgba(var(--badge-light-color),0.8)] font-normal m-0;
+        a {
+          @apply font-medium text-[rgba(var(--badge-light-color),0.8)] underline;
+        }
+        &:nth-last-child(1) {
+          @apply pt-[15px];
+        }
+      }
+      .project-link {
+        @apply pt-[9px] pb-[17px] px-0;
+      }
+      .badge {
+        @apply text-sm font-normal px-3 py-1 rounded-[3px];
+      }
+      .project-member {
+        @apply pb-2 flex justify-between items-center;
+        .customers {
+          @apply text-end flex justify-end;
+          li {
+            img {
+              @apply transition-[0.5s] hover:-translate-y-1 hover:transition-[0.5s] hover:scale-[1.02] h-[28px] w-[28px];
+            }
+            + li {
+              @apply ml-[-13%];
+              [dir="rtl"] & {
+                @apply mr-[-13%] ml-[unset];
+              }
+            }
+          }
+        }
+      }
+      .progress {
+        @apply h-1.5;
+        background: linear-gradient(180.36deg, #cfdce8 -32.82%, #ffffff 132.82%);
+      }
+      .swiper-wrapper {
+        .swiper-slide {
+          @apply border-l-[rgba(var(--badge-light-color),0.38)] pl-5 border-l border-dashed;
+          [dir="rtl"] & {
+            @apply border-r-[rgba(var(--badge-light-color),0.38)] !ml-5 !mr-[unset] !pl-[unset] pr-5 !border-l-[0px] border-r border-dashed;
+          }
+          &.swiper-slide-active {
+            @apply pl-0 border-l-0;
+            [dir="rtl"] & {
+              @apply pl-[unset];
+            }
+          }
+        }
+      }
+      [class^="col-"] {
+        + [class^="col-"] {
+          @apply border-l-[rgba(var(--badge-light-color),0.38)] border-l border-dashed;
+          [dir="rtl"] & {
+            @apply border-r-[rgba(var(--badge-light-color),0.38)] border-l-[unset] border-r border-dashed;
+          }
+        }
+      }
+    }
+  }
+  .task-card {
+    .common-space {
+      @apply border-b-[rgba(var(--badge-light-color),0.1)] gap-1.5 pt-[17px] pb-[18px] px-0 border-b border-solid first:pt-0 last:pb-0 last:border-b-0;
+      > div {
+        @apply flex gap-6;
+        span {
+          &:last-child {
+            @apply overflow-hidden text-ellipsis whitespace-nowrap;
+          }
+        }
+      }
+      &:nth-child(2),
+      &:nth-child(3) {
+        svg {
+          @apply fill-[rgba(var(--theme-default),1)];
+        }
+      }
+      svg {
+        @apply fill-[rgba(var(--body-font-color),1)] h-[22px] w-[22px];
+      }
+      &:nth-child(2),
+      &:nth-child(3) {
+        @apply text-[rgba(var(--badge-light-color),0.8)];
+        span {
+          &:last-child {
+            @apply line-through;
+          }
+        }
+      }
+    }
+  }
+  .all-project-table {
+    .recent-table {
+      table {
+        thead,
+        tbody {
+          tr {
+            th,
+            td {
+              @apply min-w-[auto];
+              a {
+                @apply text-[rgba(var(--body-font-color),1)];
+              }
+              &:first-child {
+                @apply pl-5;
+              }
+              &:last-child {
+                @apply pr-5;
+              }
+              img {
+                @apply h-10;
+              }
+              .badge {
+                @apply text-sm leading-[16.59px] font-normal px-[7px] py-1 rounded-sm;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .team-performance-table {
+    .recent-table {
+      table {
+        thead,
+        tbody {
+          tr {
+            th,
+            td {
+              @apply min-w-[auto];
+              a {
+                @apply text-[rgba(var(--body-font-color),1)];
+              }
+              img {
+                @apply h-[33px];
+              }
+              &:first-child {
+                @apply pl-5;
+              }
+              &:last-child {
+                @apply pr-5;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .main-expenses {
+    h6 {
+      @apply text-[26px] pb-1.5;
+    }
+    span {
+      &[class^="font-"] {
+        @apply text-lg;
+      }
+      svg {
+        @apply align-text-top h-[18px] w-[18px];
+      }
+    }
+    .monthly-expense-wrapper {
+      @apply mt-[-34px] mb-[-65px] mx-0;
+    }
+    .yearly-expense-wrapper {
+      @apply mb-[-70px];
+    }
+  }
+  .estimated-project {
+    @apply -ml-5;
+  }
+  .upcoming-datatable {
+    .recent-table {
+      table {
+        thead,
+        tbody {
+          tr {
+            th,
+            td {
+              @apply min-w-[auto];
+              a {
+                @apply text-[rgba(var(--body-font-color),1)];
+              }
+              &:first-child {
+                @apply pl-5;
+              }
+              &:last-child {
+                @apply pr-5;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .recent-activity-table {
+    .recent-table {
+      table {
+        thead,
+        tbody {
+          tr {
+            th,
+            td {
+              @apply min-w-[auto];
+              a {
+                @apply text-[rgba(var(--body-font-color),1)];
+              }
+              &:first-child {
+                @apply pl-5;
+              }
+              &:last-child {
+                @apply pr-5;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen xl1400 {
+    .dashboard-12 {
+      .small-stats {
+        .card {
+          .card-body {
+            .project-state {
+              @apply w-[calc(48px_+_(66_-_48)_*_((100vw_-_1400px)_/_(1920_-_1400)))] h-[calc(49px_+_(67_-_49)_*_((100vw_-_1400px)_/_(1920_-_1400)))];
+              svg {
+                @apply w-[calc(_22px_+_(33_-_22)_*_((100vw_-_1400px)_/_(1920_-_1400))_)] h-[calc(_22px_+_(33_-_22)_*_((100vw_-_1400px)_/_(1920_-_1400))_)];
+              }
+            }
+          }
+        }
+      }
+    }
+    .dashboard-12 {
+      .tasks-card {
+        .arrow-group {
+          .next,
+          .prev {
+            @apply w-[calc(30px_+_(35_-_30)_*_((100vw_-_1400px)_/_(1920_-_1400)))] h-[calc(30px_+_(35_-_30)_*_((100vw_-_1400px)_/_(1920_-_1400)))];
+            i {
+              @apply text-[calc(_12px_+_(14_-_12)_*_((100vw_-_1400px)_/_(1920_-_1400))_)];
+            }
+          }
+        }
+      }
+    }
+    .dashboard-12 .tasks-card .task-box .badge {
+      @apply text-[calc(_13px_+_(14_-_13)_*_((100vw_-_1400px)_/_(1920_-_1400))_)];
+    }
+    .dashboard-12 .task-card .common-space > div {
+      @apply gap-[calc(12px_+_(24_-_12)_*_((100vw_-_1400px)_/_(1920_-_1400)))];
+    }
+    .main-expenses h6 {
+      @apply text-[calc(21px_+_(26_-_21)_*_((100vw_-_1400px)_/_(1920_-_1400)))];
+    }
+  }
+  @screen md {
+    .dashboard-12 {
+      .small-stats {
+        .card {
+          .card-body {
+            .project-state {
+              @apply w-[calc(48px_+_(66_-_48)_*_((100vw_-_320px)_/_(1920_-_320)))] h-[calc(49px_+_(67_-_49)_*_((100vw_-_320px)_/_(1920_-_320)))];
+              svg {
+                @apply w-[calc(24px_+_(33_-_24)_*_((100vw_-_320px)_/_(1920_-_320)))] h-[calc(24px_+_(33_-_24)_*_((100vw_-_320px)_/_(1920_-_320)))];
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @screen sm {
+    .dashboard-12 {
+      .tasks-card {
+        .arrow-group {
+          .next,
+          .prev {
+            @apply w-[calc(28px_+_(35_-_28)_*_((100vw_-_320px)_/_(1920_-_320)))] h-[calc(28px_+_(35_-_28)_*_((100vw_-_320px)_/_(1920_-_320)))];
+            i {
+              @apply text-[calc(_12px_+_(14_-_12)_*_((100vw_-_320px)_/_(1920_-_320))_)];
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @screen xl1500 {
+    .dashboard-12 .task-card .common-space > div span:first-child {
+      @apply hidden;
+    }
+  }
+  @screen xl {
+    .team-performance-table {
+      .recent-table {
+        table {
+          thead,
+          tbody {
+            tr {
+              th,
+              td {
+                &:first-child {
+                  @apply min-w-[130px];
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .dashboard-12 {
+      .all-project-table {
+        .recent-table {
+          table {
+            thead,
+            tbody {
+              tr {
+                th,
+                td {
+                  img {
+                    @apply h-[calc(_30px_+_(40_-_30)_*_((100vw_-_320px)_/_(1920_-_320))_)];
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .main-expenses h6 {
+      @apply text-[calc(20px_+_(26_-_20)_*_((100vw_-_320px)_/_(1920_-_320)))];
+    }
+  }
+  @screen between1490-1400 {
+    .team-performance-table {
+      .recent-table {
+        table {
+          thead,
+          tbody {
+            tr {
+              th,
+              td {
+                &:first-child {
+                  span,
+                  a {
+                    @apply block w-[71px] line-clamp-[1];
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen between1399-1200 {
+    .main-expenses .monthly-expense-wrapper {
+      @apply mt-[-54px] -mb-12 mx-0;
+    }
+  }
+  @screen md {
+    .main-expenses .monthly-expense-wrapper {
+      @apply mt-[-30px] mb-[-50px] mx-0;
+    }
+  }
+  @screen sm360 {
+    .main-expenses .monthly-expense-wrapper {
+      @apply mt-[-50px] mb-[-63px] mx-0;
+    }
+  }
+  @screen xxl {
+    .main-expenses .card .card-body {
+      @apply pt-0;
+    }
+  }
+  @screen lg {
+    .recent-activity-table {
+      .recent-table {
+        table {
+          thead,
+          tbody {
+            tr {
+              th,
+              td {
+                &:nth-child(2) {
+                  @apply min-w-[225px];
+                }
+                &:nth-child(3) {
+                  @apply min-w-[100px];
+                }
+                &:nth-child(4) {
+                  @apply min-w-[122px];
+                }
+                &:nth-child(5) {
+                  @apply min-w-[90px];
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .upcoming-datatable {
+      .recent-table {
+        table {
+          thead {
+            tr {
+              th {
+                &:nth-child(2) {
+                  @apply min-w-[100px];
+                }
+                &:nth-child(3) {
+                  @apply min-w-[160px];
+                }
+                &:last-child {
+                  @apply min-w-[90px];
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .dashboard-12 {
+      .all-project-table {
+        .recent-table {
+          table {
+            thead,
+            tbody {
+              tr {
+                th,
+                td {
+                  &:nth-child(3) {
+                    @apply min-w-[110px];
+                  }
+                  &:nth-child(4) {
+                    @apply min-w-[108px];
+                  }
+                  &:nth-child(5) {
+                    @apply min-w-[100px];
+                  }
+                  &:nth-child(6) {
+                    @apply min-w-[100px];
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen between1399-1200 {
+    .sales-report .balance-data {
+      @apply hidden;
+    }
+    .main-expenses h6 {
+      @apply text-[calc(20px_+_(26_-_20)_*_((100vw_-_1200px)_/_(1920_-_1200)))];
+    }
+  }
+}

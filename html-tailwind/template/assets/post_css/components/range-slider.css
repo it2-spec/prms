@@ -1,0 +1,149 @@
+@layer components {
+  .irs--square {
+    @apply w-full;
+    .irs {
+      @apply w-full;
+    }
+    .irs-bar {
+      @apply bg-[rgba(var(--success-color),1)];
+    }
+    .irs-handle {
+      @apply border-[3px] border-solid border-[rgba(var(--success-color),1)];
+    }
+    .irs-from {
+      @apply bg-[rgba(var(--success-color),1)];
+    }
+    .irs-to {
+      @apply bg-[rgba(var(--success-color),1)];
+    }
+  }
+  .irs--flat {
+    .irs-from,
+    .irs-to,
+    .irs-single,
+    .irs-bar {
+      @apply bg-[rgba(var(--primary-color),1)];
+      &::before {
+        @apply border-t-[rgba(var(--primary-color),1)];
+      }
+    }
+    .irs-handle {
+      i {
+        &:first-child {
+          @apply bg-[rgba(var(--primary-color),1)];
+        }
+      }
+    }
+  }
+  .irs--round {
+    .irs-single {
+      @apply bg-[rgba(var(--secondary-color),1)];
+
+      &::before {
+        @apply border-t-[rgba(var(--secondary-color),1)];
+      }
+    }
+
+    .irs-handle {
+      @apply border-[rgba(var(--secondary-color),1)] border-4 border-solid;
+    }
+
+    .irs-bar {
+      @apply bg-[rgba(var(--secondary-color),1)];
+    }
+  }
+
+  .irs--flat,
+  .irs--square,
+  .irs--round,
+  .irs--big,
+  .irs--modern,
+  .irs--sharp {
+    .irs-line {
+      @apply !block;
+    }
+  }
+
+  .irs--sharp {
+    .irs-from,
+    .irs-to {
+      &::before {
+        @apply border-t-[rgba(var(--info-color),1)];
+      }
+    }
+
+    .irs-min,
+    .irs-max,
+    .irs-from,
+    .irs-to,
+    .irs-bar {
+      @apply bg-[rgba(var(--info-color),1)];
+    }
+
+    .irs-line {
+      @apply bg-[rgba(var(--gray-60),1)];
+    }
+
+    .irs-handle {
+      @apply bg-[rgba(var(--info-color),1)];
+
+      i {
+        &:first-child {
+          @apply border-t-[rgba(var(--info-color),1)];
+        }
+      }
+    }
+  }
+  .irs--big {
+    .irs-bar {
+      @apply border shadow-[unset] border-solid;
+      background: rgba(var(--warning-color), 1) !important;
+      border-color: rgba(var(--warning-color), 1) !important;
+    }
+
+    .irs-from,
+    .irs-to {
+      @apply bg-[rgba(var(--warning-color),1)];
+      background: unset;
+    }
+
+    .irs-handle {
+      @apply bg-[rgba(var(--warning-color),1)];
+    }
+
+    .irs-grid-pol {
+      @apply bg-[rgba(var(--warning-color),1)];
+    }
+
+    .irs-grid-text {
+      @apply text-[rgba(var(--warning-color),1)];
+    }
+  }
+  .irs--modern {
+    .irs-single {
+      background: rgba(var(--danger-color), 1) !important;
+
+      &::before {
+        @apply border-t-[rgba(var(--danger-color),1)];
+      }
+    }
+
+    .irs-bar {
+      background: rgba(var(--danger-color), 1) !important;
+    }
+
+    .irs-grid-text {
+      @apply text-[rgba(var(--danger-color),1)];
+    }
+  }
+  .range-slider {
+    .irs {
+      @apply !w-[100%];
+    }
+  }
+  .form-group {
+    .irs {
+      @apply !w-[100%] !block;
+    }
+  }
+}

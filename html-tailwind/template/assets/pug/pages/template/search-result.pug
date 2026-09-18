@@ -1,0 +1,806 @@
+- var page_Title = 'Search Result';
+- var theme_customizer      = true;
+- var photo_swipe           = true;
+- var sidebar               = true;
+- var slick                 = true;
+- var header_slider         = true;
+- var animate               = true;
+- var scrollbar             = true;
+- var tooltip               = true;
+- var swiper                = true;
+- var custom_search         = true;
+- var like_option           = true;
+
+doctype html  
+html(lang='en')
+  include ../../components/header-files
+  body
+    include ../../components/loader
+    include ../../components/taptop
+    // page-wrapper Start
+    #pageWrapper.page-wrapper.compact-wrapper
+      include ../../components/header 
+      // Page Body Start
+      .page-body-wrapper
+        include ../../components/sidebar
+        .page-body
+          .container.w-full
+            .page-title
+              .grid.grid-cols-12.mx-2.items-center
+                div(class="col-span-6 sm:col-span-12")
+                  h3
+                    | Search Result
+                div(class="col-span-6 sm:col-span-12")
+                  ol.breadcrumb.flex
+                    li.breadcrumb-item
+                      a(href='index.html')                                        
+                        svg.stroke-icon
+                          use(href='../assets/svg/icon-sprite.svg#stroke-home')
+                    li.breadcrumb-item Search Pages
+                    li.breadcrumb-item.active Search Result
+          // Container-fluid starts
+          .container.search-page
+            .grid.grid-cols-12
+              div(class="col-span-12")
+                .card
+                  .card-header
+                    form.theme-form
+                      .input-group.m-0.flex-nowrap
+                        input.form-control-plaintext(type='search', placeholder='Pixelstrap ..')
+                        span.btn.btn-primary.input-group-text.text-white Search
+                  .card-body.tabs  
+                    div.text-center  
+                      ul.tab-links.search-list(class="[@media(max-width:320px)]:!mb-[30px]")
+                        li.tab-link.active(data-tabfilter="1")
+                            i.icon-target
+                            | All
+                        li.tab-link(data-tabfilter="2")
+                            i.icon-image
+                            | Images
+                        li.tab-link(data-tabfilter="3")
+                            i.icon-video-clapper
+                            | Videos
+                        li.tab-link(data-tabfilter="4")
+                            i.icon-music-alt
+                            | Audios
+                        li.tab-link(data-tabfilter="5")
+                            i.icon-settings
+                            | Settings
+                    .tab-content 
+                      div(class="tab-pan fade search-links active show" data-tabcontent="1")                      
+                        .grid.grid-cols-12.card-gap
+                          div(class="col-span-8 xxl:col-span-6 xl:col-span-12 box-col-6")
+                            h6.mb-2 Search result for "Pixelstrap"
+                            .info-block
+                              a(href='' class="[@media(max-width:320px)]:break-words") https://themeforest.net/user/pixelstrap/portfolio/
+                              h6 
+                                a(href="https://themeforest.net/user/pixelstrap/portfolio/" target="_blank") PixelStrap - Portfolio | ThemeForest
+                              p
+                                | 2020's Best Selling Creative WP Themes. The #1 Source of Premium WP Themes! ThemeForest 45,000+ WP Themes & Website Templates From $2. Check it Out! 
+                              .star-ratings
+                                ul.search-info
+                                  li
+                                    i.icofont.icofont-ui-rating
+                                    i.icofont.icofont-ui-rating
+                                    i.icofont.icofont-ui-rating
+                                    i.icofont.icofont-ui-rate-blank
+                                    i.icofont.icofont-ui-rate-blank
+                                  li 200 Votes
+                                  li Theme
+                            .info-block
+                              a(href='') PixelStrap - Portfolio | ThemeForestthemeforest.net › user › 
+                              h6
+                                a(href="http://surl.li/smxomj" target="_blank")  Yuri- HTML, React, Angular,Django,Vue & Next Js Admin ...
+                              p
+                                | The #1 marketplace for premium website templates, including themes for WordPress, Magento, Drupal, Joomla, and more. Create a website, fast.
+                              .star-ratings
+                                ul.search-info
+                                  li
+                                    i.icofont.icofont-ui-rating
+                                    i.icofont.icofont-ui-rating
+                                    i.icofont.icofont-ui-rating
+                                    i.icofont.icofont-ui-rate-blank
+                                    i.icofont.icofont-ui-rate-blank
+                                  li 400 Votes
+                                  li Theme
+                            .info-block
+                              a(href='' class="[@media(max-width:320px)]:break-words") https://themeforest.net/user/pixelstrap/portfolio
+                              h6 
+                                a(href="https://themeforest.net/user/pixelstrap/portfolio" target="_blank") Pixelstrap Flutter Full App from ThemeForest
+                              p
+                                | Pixel presents its offerings for IELTS, TOEFL, GRE, GMAT, and SAT coaching in India.
+                              .star-ratings
+                                ul.search-info
+                                  li
+                                    i.icofont.icofont-ui-rating
+                                    i.icofont.icofont-ui-rating
+                                    i.icofont.icofont-ui-rating
+                                    i.icofont.icofont-ui-rate-blank
+                                    i.icofont.icofont-ui-rate-blank
+                                  li 350 Votes
+                                  li Theme
+                            .info-block
+                              a(href='' class="[@media(max-width:320px)]:break-words") https://themeforest.net/user/pixelstrap/portfolio
+                              h6 
+                                a(href="https://themeforest.net/user/pixelstrap/portfolio" target="_blank") Pixelstrap Admin Theme from ThemeForest
+                              p
+                                | The IELTS, TOEFL, GRE, GMAT, and SAT coaching services offered in India are presented by pixel.
+                              .star-ratings
+                                ul.search-info
+                                  li
+                                    i.icofont.icofont-ui-rating
+                                    i.icofont.icofont-ui-rating
+                                    i.icofont.icofont-ui-rating
+                                    i.icofont.icofont-ui-rate-blank
+                                    i.icofont.icofont-ui-rate-blank
+                                  li 266 Votes
+                                  li Theme
+                            .info-block
+                              a(href='' class="[@media(max-width:320px)]:break-words") https://themeforest.net/user/pixelstrap/portfolio
+                              h6 
+                                a(href="http://surl.li/nmvziy" target="_blank") Riho &hyphen; React Nextjs Admin &amp; Dashboard Template
+                              p
+                                | Riho Admin is a full featured, multipurpose, premium Nextjs admin template built with Nextjs &amp; Bootstrap 5 Framework.
+                              .star-ratings
+                                ul.search-info
+                                  li
+                                    i.icofont.icofont-ui-rating
+                                    i.icofont.icofont-ui-rating
+                                    i.icofont.icofont-ui-rating
+                                    i.icofont.icofont-ui-rate-blank
+                                    i.icofont.icofont-ui-rate-blank
+                                  li 450 Votes
+                                  li Theme
+
+                          div(class="col-span-4 xxl:col-span-6 xl:col-span-12 box-col-6 mt-4")
+                            .card.overflow-hidden
+                              .blog-box.blog-shadow
+                                img.max-w-full(src='../assets/images/blog/blog.jpg', alt='')
+                                .blog-details
+                                  p 25 July 2025
+                                  h4 An Exploration of the Most Entertaining Cities on Earth.
+                                  ul.blog-social
+                                    li
+                                      i.icofont.icofont-user
+                                      | William C. Jennings
+                                    li
+                                      i.icofont.icofont-thumbs-up
+                                      | 02 Hits
+                            .grid.grid-cols-12.gap-3 
+                              div(class="col-span-6 sm:col-span-12 xl-100")
+                                .audio-card
+                                  .audio-image
+                                    img.max-w-full(src="../assets/images/search/1.jpg", alt="")
+                                  .audio-content
+                                    .grow
+                                      h6 Hip Hop
+                                      span Beats from the city
+                                    .shrink-0
+                                      i.fa-solid.fa-circle-play
+                                      i.fa-regular.fa-heart
+                              div(class="col-span-6 sm:col-span-12 xl-100")
+                                .audio-card
+                                  .audio-image
+                                    img.max-w-full(src="../assets/images/search/4.jpg", alt="")
+                                  .audio-content
+                                    .grow
+                                      h6 Lofi Hip Hop
+                                      span Relaxing music
+                                    .shrink-0
+                                      i.fa-solid.fa-circle-play
+                                      i.fa-regular.fa-heart
+                            .info-block.m-t-20
+                              iframe.w-full.h-full(width='100', height='100', src='https://www.youtube.com/embed/CJnfAXlBRTE')
+                              .grow
+                                a(href='') https://themeforest.net/user/pixelstrap/portfolio
+                                h6 Utilize HTML, CSS, JavaScript, and UX design to create a to-do list.
+                                .star-ratings
+                                  ul.search-info
+                                    li 3 stars
+                                    li 590 votes
+                                    li Theme
+
+                          div(class="col-span-12 mt-7")
+                            nav(aria-label='...')
+                              ul.pagination.pagination-primary(class="justify-end sm:justify-center")
+                                li.page-item.disabled
+                                  a.page-link(href='#!', tabindex='-1') Previous
+                                li.page-item.active
+                                  a.page-link(href='#!') 1
+                                li.page-item
+                                  a.page-link(href='#!')
+                                    | 2
+                                    span.sr-only (current)
+                                li.page-item
+                                  a.page-link(href='#!') 3
+                                li.page-item
+                                  a.page-link(href='#!') Next
+                      div(class="tab-pan fade" data-tabcontent="2")
+                        div
+                          h6.mb-2 About 12,120 results (0.50 seconds)
+                          #aniimated-thumbnials.my-gallery.gallery-with-description(itemscope='')
+                            .grid.grid-cols-12.gap-4
+                              figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xxl:col-span-4 lg:col-span-6 sm:col-span-12 box-col-4")
+                                a(href='../assets/images/big-lightgallery/01.jpg', itemprop='contentUrl', data-size='1600x950')
+                                  img(src='../assets/images/lightgallery/01.jpg', itemprop='thumbnail', alt='Image description')
+                                  .caption
+                                    h4 Andew Jon
+                                    p
+                                      | Gather and handle user reviews straight from the administrative dashboard to ensure ongoing development.
+                                figcaption(itemprop='caption description')
+                                  h4 Andew Jon
+                                  p
+                                    | Gather and handle user reviews straight from the administrative dashboard to ensure ongoing development.
+                              figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xxl:col-span-4 lg:col-span-6 sm:col-span-12 box-col-4")
+                                a(href='../assets/images/big-lightgallery/02.jpg', itemprop='contentUrl', data-size='1600x950')
+                                  img(src='../assets/images/lightgallery/02.jpg', itemprop='thumbnail', alt='Image description')
+                                  .caption
+                                    h4 Bucky Barnes
+                                    p
+                                      | With scheduled backup and simple restore options for important data, you can guarantee data security.
+                                figcaption(itemprop='caption description')
+                                  h4 Bucky Barnes
+                                  p
+                                    | With scheduled backup and simple restore options for important data, you can guarantee data security.
+                              figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xxl:col-span-4 lg:col-span-6 sm:col-span-12 box-col-4")
+                                a(href='../assets/images/big-lightgallery/03.jpg', itemprop='contentUrl', data-size='1600x950')
+                                  img(src='../assets/images/lightgallery/03.jpg', itemprop='thumbnail', alt='Image description')
+                                  .caption
+                                    h4 Sarah Loren
+                                    p
+                                      | Use our built-in live streaming function to go live and share experiences with your followers in real time.
+                                figcaption(itemprop='caption description')
+                                  h4 Sarah Loren
+                                  p
+                                    | Use our built-in live streaming function to go live and share experiences with your followers in real time.
+                              figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xxl:col-span-4 lg:col-span-6 sm:col-span-12 box-col-4")
+                                a(href='../assets/images/big-lightgallery/04.jpg', itemprop='contentUrl', data-size='1600x950')
+                                  img(src='../assets/images/lightgallery/04.jpg', itemprop='thumbnail', alt='Image description')
+                                  .caption
+                                    h4 Leo Macias
+                                    p
+                                      | Customize your accounts with cover photographs, biographies, and profile pictures to express who you are.
+                                figcaption(itemprop='caption description')
+                                  h4 Leo Macias
+                                  p
+                                    | Customize your accounts with cover photographs, biographies, and profile pictures to express who you are.
+                              figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xxl:col-span-4 lg:col-span-6 sm:col-span-12 box-col-4")
+                                a(href='../assets/images/big-lightgallery/05.jpg', itemprop='contentUrl', data-size='1600x950')
+                                  img(src='../assets/images/lightgallery/05.jpg', itemprop='thumbnail', alt='Image description')
+                                  .caption
+                                    h4 Comeren Diaz
+                                    p
+                                      | With a personalized activity feed that includes posts, images, and updates, you can stay in touch with friends and follow trends.
+                                figcaption(itemprop='caption description')
+                                  h4 Comeren Diaz
+                                  p
+                                    | With a personalized activity feed that includes posts, images, and updates, you can stay in touch with friends and follow trends.
+                              figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xxl:col-span-4 lg:col-span-6 sm:col-span-12 box-col-4")
+                                a(href='../assets/images/big-lightgallery/011.jpg', itemprop='contentUrl', data-size='1600x950')
+                                  img(src='../assets/images/lightgallery/011.jpg', itemprop='thumbnail', alt='Image description')
+                                  .caption
+                                    h4 Gwen Rice
+                                    p
+                                      | With just a few clicks, create thorough reports that provide insightful information about your business activities.
+                                figcaption(itemprop='caption description')
+                                  h4 Gwen Rice
+                                  p
+                                    | With just a few clicks, create thorough reports that provide insightful information about your business activities.
+                              figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xxl:col-span-4 lg:col-span-6 sm:col-span-12 box-col-4")
+                                a(href='../assets/images/big-lightgallery/010.jpg', itemprop='contentUrl', data-size='1600x950')
+                                  img(src='../assets/images/lightgallery/010.jpg', itemprop='thumbnail', alt='Image description')
+                                  .caption
+                                    h4 Dev John
+                                    p
+                                      | Effectively manage users with our user-friendly dashboard, which includes customisable widgets and real-time data metrics.
+                                figcaption(itemprop='caption description')
+                                  h4 Dev John
+                                  p
+                                    | Effectively manage users with our user-friendly dashboard, which includes customisable widgets and real-time data metrics.
+                              figure(itemprop='associatedMedia', itemscope='' class="col-span-3 xxl:col-span-4 lg:col-span-6 sm:col-span-12 box-col-4")
+                                a(href='../assets/images/big-lightgallery/08.jpg', itemprop='contentUrl', data-size='1600x950')
+                                  img(src='../assets/images/lightgallery/08.jpg', itemprop='thumbnail', alt='Image description')
+                                  .caption
+                                    h4 Johan Deo
+                                    p
+                                      | An admin theme is a visually beautiful and practical design template created especially for a website's or application's backend.
+                                figcaption(itemprop='caption description')
+                                  h4 Johan Deo
+                                  p
+                                    | An admin theme is a visually beautiful and practical design template created especially for a website's or application's backend.
+                            // Root element of PhotoSwipe. Must have class pswp.
+                            .pswp(tabindex='-1', role='dialog', aria-hidden='true')
+                              //
+                                Background of PhotoSwipe.
+                                It's a separate element, as animating opacity is faster than rgba().
+                              .pswp__bg
+                              // Slides wrapper with overflow:hidden.
+                              .pswp__scroll-wrap
+                                // Container that holds slides. PhotoSwipe keeps only 3 slides in DOM to save memory.
+                                // don't modify these 3 pswp__item elements, data is added later on.
+                                .pswp__container
+                                  .pswp__item
+                                  .pswp__item
+                                  .pswp__item
+                                // Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed.
+                                .pswp__ui.pswp__ui--hidden
+                                  .pswp__top-bar
+                                    // Controls are self-explanatory. Order can be changed.
+                                    .pswp__counter
+                                    button.pswp__button.pswp__button--close(title='Close (Esc)')
+                                    button.pswp__button.pswp__button--share(title='Share')
+                                    button.pswp__button.pswp__button--fs(title='Toggle fullscreen')
+                                    button.pswp__button.pswp__button--zoom(title='Zoom in/out')
+                                    // Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR
+                                    // element will get class pswp__preloader-active when preloader is running
+                                    .pswp__preloader
+                                      .pswp__preloader__icn
+                                        .pswp__preloader__cut
+                                          .pswp__preloader__donut
+                                  .pswp__share-modal.pswp__share-modal--hidden.pswp__single-tap
+                                    .pswp__share-tooltip
+                                  button.pswp__button.pswp__button--arrow--left(title='Previous (arrow left)')
+                                  button.pswp__button.pswp__button--arrow--right(title='Next (arrow right)')
+                                  .pswp__caption
+                                    .pswp__caption__center
+                        .mt-7
+                          nav(aria-label='...')
+                            ul.pagination.pagination-primary(class="justify-end sm:justify-center")
+                              li.page-item.disabled
+                                a.page-link(href='#', tabindex='-1') Previous
+                              li.page-item
+                                a.page-link(href='#') 1
+                              li.page-item.active
+                                a.page-link(href='#')
+                                  | 2 
+                                  span.sr-only (current)
+                              li.page-item
+                                a.page-link(href='#') 3
+                              li.page-item
+                                a.page-link(href='#') Next
+                      div(class="tab-pan fade" data-tabcontent="3")
+                        .grid.grid-cols-12.gap-4
+                          div(class="col-span-6 xxl:col-span-12 box-col-12")
+                            h6.mb-2 About 6,000 results (0.60 seconds)
+                            .flex.info-block
+                              iframe.me-3(width='200', height='100', src='https://www.youtube.com/embed/CJnfAXlBRTE')
+                              .grow
+                                a(href='') https://themeforest.net/user/pixelstrap/portfolio
+                                h6 Utilize HTML, CSS, JavaScript, and UX design to create a to-do list.
+                                .star-ratings
+                                  ul.search-info
+                                    li 3 stars
+                                    li 520 votes
+                                    li Theme
+                            .flex.info-block
+                              iframe.me-3(width='200', height='100', src='https://www.youtube.com/embed/wpmHZspl4EM')
+                              .grow
+                                a(href='') https://themeforest.net/user/pixelstrap/portfolio
+                                h6 Tips for gaining proficiency in UI/UX design.
+
+                                .star-ratings
+                                  ul.search-info
+                                    li 5 stars
+                                    li 500 votes
+                                    li Figma
+                            .flex.info-block
+                              iframe.me-3(width='200', height='100', src='https://www.youtube.com/embed/-L4gEk7cOfk')
+                              .grow
+                                a(href='') https://themeforest.net/user/pixelstrap/portfolio
+                                h6
+                                  | Tips for gaining proficiency in CSS.
+                                .star-ratings
+                                  ul.search-info
+                                    li 4 stars
+                                    li 450 votes
+                                    li Theme
+                          div(class="col-span-6 xxl:col-span-12 box-col-12")
+                            h6.mb-2 About 6,000 results (0.60 seconds)
+                            .flex.info-block
+                              iframe.me-3(width='200', height='100', src='https://www.youtube.com/embed/CJnfAXlBRTE')
+                              .grow
+                                a(href='') https://themeforest.net/user/pixelstrap/portfolio
+                                h6 Utilize HTML, CSS, JavaScript, and UX design to create a to-do list.
+                                .star-ratings
+                                  ul.search-info
+                                    li 5 stars
+                                    li 420 votes
+                                    li Theme
+                            .flex.info-block
+                              iframe.me-3(width='200', height='100', src='https://www.youtube.com/embed/-L4gEk7cOfk')
+                              .grow
+                                a(href='') https://themeforest.net/user/pixelstrap/portfolio
+                                h6
+                                  | This article offers pointers for improving your CSS skills.
+
+                                .star-ratings
+                                  ul.search-info
+                                    li 5 stars
+                                    li 490 votes
+                                    li Theme
+                            .flex.info-block
+                              iframe.me-3(width='200', height='100', src='https://www.youtube.com/embed/wpmHZspl4EM')
+                              .grow
+                                a(href='') https://themeforest.net/user/pixelstrap/portfolio
+                                h6 Some suggestions to enhance UI/UX usability testing.
+
+                                .star-ratings
+                                  ul.search-info
+                                    li 5 stars
+                                    li 500 votes
+                                    li Figma
+                          div(class="col-span-12 mt-7")    
+                            div
+                              nav(aria-label='...')
+                                ul.pagination.pagination-primary(class="justify-end sm:justify-center")
+                                  li.page-item.disabled
+                                    a.page-link(href='#', tabindex='-1') Previous
+                                  li.page-item
+                                    a.page-link(href='#') 1
+                                  li.page-item.active
+                                    a.page-link(href='#')
+                                      | 2 
+                                      span.sr-only (current)
+                                  li.page-item
+                                    a.page-link(href='#') 3
+                                  li.page-item
+                                    a.page-link(href='#') Next
+                      div(class="tab-pan fade" data-tabcontent="4")
+                        .grid.grid-cols-12.gap-4.audio-wrapper
+                          div(class="col-span-12")
+                            h6.mb-2 About 2,000 results (0.45 seconds)
+                            .grid.grid-cols-12.gap-3
+                              div(class="col-span-4 xxl:col-span-6 md:col-span-12 box-col-6")
+                                .audio-box
+                                  .grow.common-f-start
+                                    img.max-w-full(src="../assets/images/search/6.png", alt="song profile1")
+                                    div 
+                                      h6 Ocean Waves
+                                      span.c-o-light(class="[@media(max-width:480px)]:!line-clamp-[1]") inspiration in the soothing sounds of the sea
+                                  .shrink-0
+                                    i.fa-solid.fa-circle-play
+                              div(class="col-span-4 xxl:col-span-6 md:col-span-12 box-col-6")
+                                .audio-box
+                                  .grow.common-f-start
+                                    img.max-w-full(src="../assets/images/search/2.png", alt="song profile2")
+                                    div 
+                                      h6 Electrical Dreams
+                                      span.c-o-light(class="[@media(max-width:480px)]:!line-clamp-[1]") a lively electronic song with appealing synth lines
+                                  .shrink-0
+                                    i.fa-solid.fa-circle-play
+                              div(class="col-span-4 xxl:col-span-6 md:col-span-12 box-col-6")
+                                .audio-box
+                                  .grow.common-f-start
+                                    img.max-w-full(src="../assets/images/search/3.png", alt="song profile3")
+                                    div 
+                                      h6 Midnight Beat
+                                      span.c-o-light(class="[@media(max-width:480px)]:!line-clamp-[1]") Jazz composition perfect for listening late at night
+                                  .shrink-0
+                                    i.fa-solid.fa-circle-play
+                              div(class="col-span-4 xxl:col-span-6 md:col-span-12 box-col-6")
+                                .audio-box
+                                  .grow.common-f-start
+                                    img.max-w-full(src="../assets/images/search/1.png", alt="song profile4")
+                                    div 
+                                      h6 Whispering Winds
+                                      span.c-o-light(class="[@media(max-width:480px)]:!line-clamp-[1]") Practicing meditation and relaxation techniques
+                                  .shrink-0
+                                    i.fa-solid.fa-compact-disc.fa-spin
+                              div(class="col-span-4 xxl:col-span-6 md:col-span-12 box-col-6")
+                                .audio-box
+                                  .grow.common-f-start
+                                    img.max-w-full(src="../assets/images/search/4.png", alt="song profile5")
+                                    div 
+                                      h6 Ancient Echoes
+                                      span.c-o-light(class="[@media(max-width:480px)]:!line-clamp-[1]") Combining ambient sounds and classical instruments
+                                  .shrink-0
+                                    i.fa-solid.fa-circle-play
+                              div(class="col-span-4 xxl:col-span-6 md:col-span-12 box-col-6")
+                                .audio-box
+                                  .grow.common-f-start
+                                    img.max-w-full(src="../assets/images/search/5.png", alt="song profile6")
+                                    div 
+                                      h6 Pulse in Rhythm
+                                      span.c-o-light(class="[@media(max-width:480px)]:!line-clamp-[1]") A dancing with lots of intensity and driving beats
+                                  .shrink-0
+                                    i.fa-solid.fa-circle-play
+                          div(class="col-span-12") 
+                            .common-title.px-0
+                              h5 Your Top Songs 
+                            .slider-wrapper.arrow-round
+                              .swiper-button-next
+                              .swiper-button-prev
+                              .swiper.audio-slider
+                                .swiper-wrapper
+                                  .swiper-slide
+                                    .audio-card
+                                      .audio-image
+                                        img.max-w-full(src="../assets/images/search/1.jpg", alt="")
+                                      .audio-content
+                                        .grow
+                                          h6 Hip Hop
+                                          span Beats from the city
+                                        .shrink-0
+                                          i.fa-solid.fa-circle-play
+                                          i.fa-regular.fa-heart
+                                  .swiper-slide
+                                    .audio-card
+                                      .audio-image
+                                        img.max-w-full(src="../assets/images/search/2.jpg", alt="")
+                                      .audio-content
+                                        .grow
+                                          h6 Horror
+                                          span Stories from the shadows
+                                        .shrink-0
+                                          i.fa-solid.fa-circle-pause
+                                          i.fa-regular.fa-heart
+                                  .swiper-slide
+                                    .audio-card
+                                      .audio-image
+                                        img.max-w-full(src="../assets/images/search/3.jpg", alt="")
+                                      .audio-content
+                                        .grow
+                                          h6 Jazz
+                                          span Mellow & seductive music
+                                        .shrink-0
+                                          i.fa-solid.fa-circle-play
+                                          i.fa-regular.fa-heart
+                                  .swiper-slide
+                                    .audio-card
+                                      .audio-image
+                                        img.max-w-full(src="../assets/images/search/4.jpg", alt="")
+                                      .audio-content
+                                        .grow
+                                          h6 Lofi Hip Hop
+                                          span Relaxing music
+                                        .shrink-0
+                                          i.fa-solid.fa-circle-play
+                                          i.fa-regular.fa-heart
+                                  .swiper-slide
+                                    .audio-card
+                                      .audio-image
+                                        img.max-w-full(src="../assets/images/search/5.jpg", alt="")
+                                      .audio-content
+                                        .grow
+                                          h6 Pop
+                                          span Adorable & positive songs 
+                                        .shrink-0
+                                          i.fa-solid.fa-circle-play
+                                          i.fa-regular.fa-heart
+                                  .swiper-slide
+                                    .audio-card
+                                      .audio-image
+                                        img.max-w-full(src="../assets/images/search/6.jpg", alt="")
+                                      .audio-content
+                                        .grow
+                                          h6 Romantic
+                                          span Heartfelt melodies
+                                        .shrink-0
+                                          i.fa-solid.fa-circle-play
+                                          i.fa-regular.fa-heart
+                          div(class="col-span-12") 
+                            .common-title.common-space.px-0
+                              h5 Your Suggested Tracks 
+                              a(href="subscribed-user.html")  View All
+                            .overflow-x-auto.custom-scrollbar
+                              table.table.audio-table.table-hover
+                                thead
+                                  tr
+                                    th(scope='col') Title Song
+                                    th(scope='col') Album
+                                    th(scope='col') Artist
+                                    th(scope='col') Release Date
+                                    th(scope='col') Duration
+                                    th(scope='col') Download
+                                    th(scope='col') 
+                                tbody
+                                  tr
+                                    td(class="[@media(max-width:1035px)]:min-w-[200px]") 
+                                      .common-f-start.gap-2 
+                                        div
+                                          img.max-w-full(src="../assets/images/search/audio-1.png", alt="")
+                                          i.fa-solid.fa-circle-play
+                                        span Celestial Dreams
+                                    td(class="[@media(max-width:1035px)]:min-w-[108px]") Dream G
+                                    td(class="[@media(max-width:1035px)]:min-w-[148px]") Starlight Sym
+                                    td 14 Jan,2023
+                                    td 3:10
+                                    td
+                                      i.fa-solid.fa-download
+                                    td  
+                                      .common-align
+                                        a(href="#!" data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Add to Playlist') 
+                                          i.fa-solid.fa-plus
+                                        a(href="#!" data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Add to Favorite') 
+                                          i.fa-regular.fa-heart
+                                  tr
+                                    td(class="[@media(max-width:1035px)]:min-w-[200px]") 
+                                      .common-f-start.gap-2 
+                                        div
+                                          img.max-w-full(src="../assets/images/search/audio-2.png", alt="")
+                                          i.fa-solid.fa-circle-play
+                                        span Festival Fever
+                                    td(class="[@media(max-width:1035px)]:min-w-[108px]") Orange 
+                                    td(class="[@media(max-width:1035px)]:min-w-[148px]") Party Anthem
+                                    td(class="[@media(max-width:1035px)]:min-w-[118px]") 02 Aug,2025
+                                    td 4:12
+                                    td
+                                      i.fa-solid.fa-download
+                                    td  
+                                      .common-align
+                                        a(href="#!" data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Add to Playlist') 
+                                          i.fa-solid.fa-plus
+                                        a(href="#!" data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Add to Favorite') 
+                                          i.fa-regular.fa-heart
+                                  tr
+                                    td(class="[@media(max-width:1035px)]:min-w-[200px]") 
+                                      .common-f-start.gap-2 
+                                        div
+                                          img.max-w-full(src="../assets/images/search/audio-3.png", alt="")
+                                          i.fa-solid.fa-circle-play
+                                        span Galactic Voyage
+                                    td(class="[@media(max-width:1035px)]:min-w-[108px]") Macro
+                                    td(class="[@media(max-width:1035px)]:min-w-[148px]") Space Odyssey
+                                    td(class="[@media(max-width:1035px)]:min-w-[118px]") 12 Sep,2025
+                                    td 6:35
+                                    td
+                                      i.fa-solid.fa-download
+                                    td  
+                                      .common-align
+                                        a(href="#!" data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Add to Playlist') 
+                                          i.fa-solid.fa-plus
+                                        a(href="#!" data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Add to Favorite') 
+                                          i.fa-regular.fa-heart
+                                  tr
+                                    td(class="[@media(max-width:1035px)]:min-w-[200px]") 
+                                      .common-f-start.gap-2 
+                                        div
+                                          img.max-w-full(src="../assets/images/search/audio-4.png", alt="")
+                                          i.fa-solid.fa-circle-play
+                                        span Mystic Forest
+                                    td(class="[@media(max-width:1035px)]:min-w-[108px]") DS Cartoon
+                                    td(class="[@media(max-width:1035px)]:min-w-[148px]") Enchanted Flutes
+                                    td(class="[@media(max-width:1035px)]:min-w-[118px]") 25 Nov,2020
+                                    td 2:55
+                                    td
+                                      i.fa-solid.fa-download
+                                    td  
+                                      .common-align
+                                        a(href="#!" data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Add to Playlist') 
+                                          i.fa-solid.fa-plus
+                                        a(href="#!" data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Add to Favorite') 
+                                          i.fa-regular.fa-heart
+                                  tr
+                                    td(class="[@media(max-width:1035px)]:min-w-[200px]") 
+                                      .common-f-start.gap-2 
+                                        div
+                                          img.max-w-full(src="../assets/images/search/audio-5.png", alt="")
+                                          i.fa-solid.fa-circle-play
+                                        span Ocean Waves
+                                    td(class="[@media(max-width:1035px)]:min-w-[108px]") See Margon 
+                                    td(class="[@media(max-width:1035px)]:min-w-[148px]") Calm Seas
+                                    td(class="[@media(max-width:1035px)]:min-w-[118px]") 09 Nov,2019
+                                    td 3:25
+                                    td
+                                      i.fa-solid.fa-download
+                                    td  
+                                      .common-align
+                                        a(href="#!" data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Add to Playlist') 
+                                          i.fa-solid.fa-plus
+                                        a(href="#!" data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Add to Favorite') 
+                                          i.fa-regular.fa-heart
+                      div(class="tab-pan fade" data-tabcontent="5")
+                        .grid.grid-cols-12.gap-4.setting-options
+                          div(class="col-span-12")
+                            h5.mb-3 Search Options
+                            .grid.grid-cols-12.gap-2.mb-4
+                              div(class="col-span-2 xxl:col-span-3 md:col-span-4 sm:col-span-6 box-col-3")
+                                label.form-label.mb-0 Save Search History
+                              div(class="col-span-9 xxl:col-span-8 md:col-span-7 sm:col-span-6 box-col-8e")
+                                .form-check.form-switch.form-check-inline
+                                  input.form-check-input.switch-primary.check-size(type='checkbox' role='switch' checked='')
+                            .grid.grid-cols-12.gap-2.mb-4
+                              div(class="col-span-2 xxl:col-span-3 md:col-span-4 sm:col-span-6 box-col-3")
+                                label.form-label.mb-0 Safe Search
+                              div(class="col-span-9 xxl:col-span-8 md:col-span-7 sm:col-span-6 box-col-8e")
+                                .form-check.form-switch.form-check-inline
+                                  input.form-check-input.switch-primary.check-size(type='checkbox' role='switch' checked='')
+                            .grid.grid-cols-12.gap-2.mb-4
+                              div(class="col-span-2 xxl:col-span-3 md:col-span-4 box-col-3")
+                                label.form-label.mb-0 Language
+                              div(class="col-span-9 xxl:col-span-8 md:col-span-7 sm:col-span-12 box-col-8e")
+                                select.form-select
+                                  option(selected='') Select your language
+                                  option(value='1') English
+                                  option(value='2') French
+                                  option(value='3') Gujarati
+                                  option(value='4') Hindi
+                                  option(value='5') Japanese
+                                  option(value='6') Marathi
+                                  option(value='7') Russian
+                            .grid.grid-cols-12.gap-2.mb-4
+                              div(class="col-span-2 xxl:col-span-3 md:col-span-4 box-col-3")
+                                label.form-label.mb-0 Region
+                              div(class="col-span-9 xxl:col-span-8 md:col-span-7 sm:col-span-12 box-col-8e")
+                                select.form-select
+                                  option(selected='') Select your region
+                                  option(value='1') South-Central Asia
+                                  option(value='2') Balkan Peninsula
+                                  option(value='3') Southern Europe
+                                  option(value='4') Eastern Europe
+                                  option(value='5') West Africa
+                                  option(value='6') Eastern Africa
+                                  option(value='7') Central America
+                                  option(value='8') Eastern Europe
+                                  option(value='9') Eastern Africa
+                                  option(value='10') Northern Europe
+                                  option(value='11') West Africa
+                                  option(value='12') South-Central Asia
+                                  option(value='13') Eastern Africa
+                                  option(value='14') Southern Europe
+                                  option(value='15') Northern Europe
+                            .grid.grid-cols-12.gap-2.mb-4
+                              div(class="col-span-2 xxl:col-span-3 md:col-span-4 box-col-3")
+                                label.form-label.mb-0 File Type
+                              div(class="col-span-9 xxl:col-span-8 md:col-span-7 sm:col-span-12 box-col-8e")
+                                select.form-select
+                                  option(selected='') Any format
+                                  option(value='1') JPEG
+                                  option(value='2') PNG
+                                  option(value='3') SVG
+                                  option(value='4') AVIF
+                                  option(value='5') GIF
+                                  option(value='6') WebP
+                                  option(value='7') DOC / DOCX
+                                  option(value='8') PPT / PPTX
+                                  option(value='9') CSV
+                                  option(value='10') EPUB
+                                  option(value='11') MP3
+                                  option(value='12') WAV
+                                  option(value='13') WMA
+                                  option(value='14') MIDI
+                                  option(value='15') M4A
+                                  option(value='16') 3GP
+                                  option(value='17') MOV
+                                  option(value='18') ZIP
+                                  option(value='19') RAR
+                                  option(value='20') ISO
+                                  option(value='21') CAB
+                                  option(value='22') TAR
+                            .grid.grid-cols-12.gap-2.mb-4
+                              div(class="col-span-2 xxl:col-span-3 md:col-span-4 box-col-3")
+                                label.form-label.mb-0 Last Update
+                              div(class="col-span-9 xxl:col-span-8 md:col-span-7 sm:col-span-12 box-col-8e")
+                                select.form-select
+                                  option(selected='') Anytime
+                                  option(value='1') Today 
+                                  option(value='2') Yesterday 
+                                  option(value='3') Last 24 Hours
+                                  option(value='4') Last 7 Days
+                                  option(value='5') Last 30 Days
+                                  option(value='6') Last 6 Months 
+                                  option(value='7') Upto a week ago
+                                  option(value='8') Upto a month ago
+                                  option(value='9') Upto a year ago
+                                  option(value='10') Last 5 Years
+                            .grid.grid-cols-12.gap-2.mb-4
+                              div(class="col-span-2 xxl:col-span-3 md:col-span-4 box-col-3")
+                                label.form-label.mb-0 License & Rights
+                              div(class="col-span-9 xxl:col-span-8 md:col-span-7 sm:col-span-12 box-col-8e")
+                                select.form-select
+                                  option(value='1') Free to use for personal use
+                                  option(value='2') GNU - General public license
+                                  option(value='3') Public domain
+                                  option(value='4') Free to use or share, even commercially
+                                  option(value='5') Creative commons - Attribution-noncommercial-sharealike
+                                  option(value='6') Free to use or share
+                                  option(value='7') Not filter by license
+                                  option(value='8') Free to use with a link back
+                                  option(value='9') Free to use for non-commercial purposes 
+                                  option(value='10') Free to use for educational purposes
+                                .flex.mt-3.justify-end
+                                  a.btn.btn-primary.text-white(href='#!' role='button') Clear Search History 
+          
+          // Container-fluid Ends
+        include ../../components/footer
+    include ../../components/footer-files

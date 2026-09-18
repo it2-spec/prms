@@ -1,0 +1,364 @@
+@layer components {
+  .modal-bookmark {
+    .modal-body,
+    .modal-header {
+      @apply !p-[20px];
+    }
+  }
+  .bookmark-wrap {
+    .email-left-aside {
+      .left-bookmark {
+        ul {
+          li {
+            a {
+              &:hover {
+                @apply bg-[unset];
+              }
+            }
+          }
+        }
+      }
+    }
+    .main-bookmark {
+      .email-app-sidebar {
+        .main-menu {
+          .nav-item {
+            ul {
+              li {
+                .tab-link {
+                  @apply p-0;
+                }
+              }
+            }
+          }
+        }
+      }
+      .bootstrap-select {
+        .dropdown-toggle {
+          @apply w-full text-[rgba(var(--badge-light-color),1)] border-[rgba(var(--badge-light-color),0.1)] rounded-md after:text-sm;
+        }
+        .dropdown-menu {
+          li {
+            .dropdown-item {
+              @apply text-[rgba(var(--badge-light-color),1)];
+            }
+            &:hover {
+              @apply bg-[rgba(var(--light-background),1)];
+            }
+          }
+          .no-results {
+            @apply text-sm;
+          }
+        }
+      }
+    }
+    .details-bookmark {
+      .grid {
+        > div {
+          + div {
+            @apply pr-[15px];
+          }
+        }
+      }
+    }
+    .left-bookmark {
+      @apply h-[700px];
+      ul {
+        li {
+          ul {
+            li {
+              .active {
+                span {
+                  @apply text-[rgba(var(--theme-default),1)];
+                }
+              }
+            }
+          }
+          button {
+            @apply cursor-pointer border-[none] focus:shadow-[unset];
+            &:focus {
+              outline: none;
+            }
+          }
+          svg {
+            @apply w-[18px] h-[18px];
+            vertical-align: -4px;
+          }
+          > .main-title {
+            @apply text-[rgba(var(--theme-default),1)] font-medium block text-base mb-[5px];
+            span {
+              a {
+                &:hover {
+                  @apply bg-[var(--transparent-color)];
+                }
+              }
+            }
+            svg {
+              @apply text-[rgba(var(--theme-font-color),1)] stroke-[1px];
+            }
+          }
+          a {
+            > .title {
+              @apply capitalize;
+            }
+          }
+        }
+      }
+    }
+    &.todo-wrap {
+      .left-bookmark {
+        @apply h-[unset];
+      }
+    }
+  }
+  .form-bookmark {
+    a {
+      @apply capitalize text-[rgba(var(--theme-default),1)] leading-none font-medium hover:bg-[var(--transparent-color)];
+    }
+    input {
+      &#index_var {
+        @apply hidden;
+      }
+    }
+    input,
+    select,
+    textarea {
+      @apply text-sm text-[rgba(var(--badge-light-color),0.8)];
+    }
+    .select2-container {
+      .select2-selection--single {
+        @apply border-[#ced4da];
+      }
+    }
+    .select2 {
+      @apply w-full;
+    }
+    .error {
+      @apply text-[11px] text-[rgba(var(--danger-color),1)] m-0;
+    }
+    button {
+      @apply mt-[18px];
+    }
+    .bootstrap-select {
+      .dropdown-toggle {
+        @apply m-0;
+      }
+    }
+    &.was-validated {
+      .bootstrap-select {
+        select {
+          &:valid + .dropdown-toggle {
+            @apply border-[rgba(var(--success-color),1)];
+          }
+        }
+      }
+    }
+  }
+  .bookmark-tabcontent {
+    .details-bookmark {
+      @apply h-auto min-h-[359px];
+      .bookmark-card {
+        @apply relative;
+        &.card {
+          .favourite-icon {
+            @apply rounded bg-[rgba(var(--black),0.2)] w-[30px] absolute opacity-0 p-[3px] right-[15px] top-[15px] transition-[0.5s];
+            i {
+              @apply !text-[rgba(var(--white),1)] text-base;
+              vertical-align: -1px;
+            }
+            &.favourite {
+              i {
+                @apply !text-[rgba(var(--warning-color),1)];
+              }
+            }
+          }
+          .desciption-data {
+            @apply w-full;
+            .content-general {
+              @apply hidden;
+            }
+          }
+          .title-bookmark {
+            @apply text-left border-t-[rgba(var(--light-color),1)] relative p-[15px] border-t border-solid;
+            h6 {
+              @apply text-ellipsis overflow-hidden;
+              display: -webkit-box;
+              -webkit-line-clamp: 1;
+              -webkit-box-orient: vertical;
+            }
+            p {
+              @apply animate-[displayTransition_1s] break-words;
+            }
+            .hover-block {
+              @apply opacity-0 absolute w-full p-[15px] left-0 top-[30px];
+              ul {
+                li {
+                  @apply inline-block;
+                  + li {
+                    @apply ml-[5px];
+                  }
+                  svg {
+                    @apply w-4 h-4 text-[rgba(var(--dark-gray),1)];
+                  }
+                }
+              }
+            }
+          }
+          &:hover {
+            @apply shadow-[1px_4px_16px_3px_rgba(var(--black),0.04)] transition-[0.5s];
+            .title-bookmark {
+              p {
+                @apply opacity-0;
+              }
+              .hover-block {
+                @apply opacity-100 animate-[displayTransition_2s];
+              }
+            }
+            .favourite-icon {
+              @apply opacity-100;
+            }
+          }
+        }
+      }
+      &.list-bookmark {
+        .grid {
+          > div {
+            @apply !col-span-12;
+          }
+        } 
+        .bookmark-card {
+          .desciption-data {
+            .content-general {
+              @apply block;
+            }
+          }
+          .details-website {
+            @apply flex items-center;
+          }
+          .details-website {
+            .title-bookmark {
+              p {
+                @apply opacity-100;
+              }
+            }
+            .title-bookmark {
+              .hover-block {
+                @apply absolute opacity-100 text-right right-[30px];
+              }
+            }
+          }
+          &.card {
+            .title-bookmark {
+              border-top: none;
+              p,
+              h6 {
+                @apply inline-block cursor-pointer mt-0;
+              }
+              h6 {
+                @apply relative mb-[-5px] pr-[15px] after:absolute after:content-["-"] after:text-[rgba(var(--dark-gray),1)] after:right-0;
+              }
+              .content-general {
+                @apply mt-[5px];
+                p {
+                  @apply w-[68%] mr-5;
+                }
+              }
+            }
+          }
+          img {
+            @apply w-1/5;
+          }
+        }
+      }
+    }
+    .tab-content {
+      .card {
+        .flex {
+          @apply justify-between;
+          svg {
+            @apply w-[18px] h-[18px] align-middle;
+          }
+          ul {
+            li {
+              @apply inline-block cursor-pointer;
+              + li {
+                @apply ml-[5px];
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen sm {
+    .bookmark-tabcontent {
+      .details-bookmark {
+        &.list-bookmark {
+          .bookmark-card {
+            img {
+              @apply w-full;
+            }
+
+            .details-website {
+              @apply block;
+
+              .title-bookmark {
+                @apply pl-[15px];
+
+                .hover-block {
+                  @apply relative text-left p-0 right-[unset] top-[unset];
+                }
+
+                .content-general {
+                  @apply hidden;
+                }
+
+                p,
+                h6 {
+                  @apply block;
+                }
+
+                h6 {
+                  &::after {
+                    @apply hidden;
+                  }
+                }
+
+                p {
+                  @apply mt-[15px];
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .modal-bookmark {
+      .modal-body,
+      .modal-header {
+        @apply p-[20px];
+      }
+    }
+    .bookmark-wrap {
+      .left-bookmark {
+        ul {
+          li {
+            @apply text-start;
+            > .main-title {
+              @apply text-start;
+            }
+          }
+        }
+      }
+    }
+  }
+  @keyframes displayTransition {
+    from {
+      @apply opacity-0;
+    }
+    to {
+      @apply opacity-100;
+    }
+  }
+}

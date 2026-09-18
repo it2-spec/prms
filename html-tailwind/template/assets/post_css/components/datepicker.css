@@ -1,0 +1,273 @@
+@layer components {
+  .datepicker {
+    @apply z-[99];
+  }
+  .datepicker--day-name {
+    @apply text-[rgba(var(--theme-default),1)] font-[bold];
+  }
+  .datepicker--cell {
+    &.-current- {
+      @apply text-[rgba(var(--black),1)] font-[bold] border-[rgba(var(--theme-default),1)] rounded-[5px] border-2 border-solid;
+    }
+    .-focus- {
+      @apply text-[rgba(var(--white),1)] bg-[rgba(var(--theme-default),1)];
+    }
+    &.-selected- {
+      @apply bg-[rgba(var(--theme-default),1)];
+    }
+    &-day {
+      @apply w-[14.2857142857%];
+    }
+  }
+  .datepickers-container,
+  .bootstrap-datetimepicker-widget {
+    @apply z-[7];
+  }
+  .datetime-picker {
+    .bootstrap-datetimepicker-widget {
+      &.dropdown-menu {
+        @apply w-auto;
+      }
+    }
+    .input-group-text {
+      i {
+        @apply leading-[1.3];
+      }
+    }
+  }
+  .bootstrap-calendar {
+    .form-control {
+      @apply text-sm text-[rgba(var(--dark-gray),1)];
+    }
+  }
+  .clockpicker-popover {
+    @apply shadow-[rgba(var(--card-box-shadow),1)] z-[7] border-[none];
+    .popover-content {
+      @apply bg-[rgba(var(--theme-default),0.05)];
+    }
+  }
+  .clockpicker-canvas-bg {
+    @apply fill-[rgba(var(--theme-default),38%)];
+  }
+  .clockpicker-tick {
+    &:hover {
+      @apply text-inherit bg-[rgba(var(--theme-default),38%)];
+    }
+  }
+  .calendar-basic {
+    .md-sidebar-aside {
+      @apply bg-[rgba(var(--white),1)] shadow-[0px_9px_20px_rgba(46,35,94,0.08)];
+    }
+    .fc-event {
+      i {
+        @apply text-sm;
+      }
+    }
+    #external-events {
+      @apply border border-[rgba(var(--light-background),1)] p-5 border-solid;
+      h6 {
+        @apply mb-3.5;
+      }
+      p {
+        @apply mt-3;
+      }
+      .fc-h-event {
+        @apply bg-[rgba(var(--theme-secondary),0.1)] border border-[rgba(var(--theme-secondary),0.1)] cursor-pointer p-3 border-solid;
+        .fc-event-main {
+          @apply text-[rgba(var(--body-font-color),1)] text-sm overflow-hidden text-ellipsis whitespace-nowrap;
+        }
+        + .fc-h-event {
+          @apply mt-2.5;
+        }
+      }
+    }
+    .create-event {
+      .form-control {
+        @apply text-sm text-[rgba(var(--badge-light-color),0.8)];
+      }
+    }
+    .calendar-default {
+      .fc-event-main-frame {
+        @apply text-[13px] text-[rgba(var(--body-font-color),1)] px-1.5 py-0.5;
+      }
+      .fc {
+        .fc-highlight {
+          @apply bg-[rgba(var(--dark-color).0.2)];
+        }
+      }
+      .fc-daygrid-dot-event {
+        @apply text-[13px];
+        .fc-event-time {
+          @apply text-[rgba(var(--body-font-color),1)];
+        }
+        .fc-event-title {
+          @apply text-ellipsis text-[rgba(var(--body-font-color),1)] font-normal;
+        }
+      }
+      .fc {
+        td[role="presentation"] {
+          @apply border-0;
+        }
+        .fc-daygrid-day-number,
+        .fc-col-header-cell-cushion {
+          @apply text-[rgba(var(--theme-body-font-color),1)] font-medium;
+        }
+        .fc-button {
+          &:focus {
+            @apply shadow-[unset];
+          }
+          .fc-icon {
+            @apply h-[23px];
+          }
+        }
+      }
+      .fc-h-event {
+        @apply bg-[rgba(var(--theme-secondary),0.1)] border border-[rgba(var(--theme-secondary),0.1)] p-0.5 border-solid;
+        .fc-event-title {
+          @apply text-[rgba(var(--body-font-color),1)];
+        }
+        .fc-event-time {
+          @apply font-normal text-[rgba(var(--body-font-color),1)];
+        }
+      }
+      .fc-toolbar-chunk {
+        .fc-button-group {
+          button {
+            @apply capitalize;
+          }
+          ~ .fc-today-button {
+            @apply capitalize mx-2 my-0;
+          }
+        }
+      }
+    }
+    p {
+      label {
+        @apply cursor-pointer;
+      }
+    }
+  }
+  .calendar-basic {
+    .calendar-default {
+      .fc {
+        .fc-button {
+          &:focus {
+            box-shadow: unset !important;
+          }
+        }
+      }
+    }
+  }
+  .fc-event-dragging {
+    @apply bg-[rgba(var(--theme-secondary),0.1)] border border-[rgba(var(--theme-secondary),1)] p-2.5 border-solid;
+    .fc-event-main {
+      @apply text-[rgba(var(--body-font-color),1)] text-sm;
+    }
+  }
+  .fc-v-event {
+    @apply bg-[rgba(var(--theme-secondary),0.1)] border border-[rgba(var(--theme-secondary),1)] border-solid;
+  }
+  .fc-timegrid-event-harness-inset {
+    .fc-timegrid-event {
+      box-shadow: unset;
+    }
+  }
+  .fc {
+    .fc-toolbar {
+      @apply flex-wrap gap-2.5;
+    }
+    .fc-button-primary {
+      &:focus {
+        @apply shadow-[0_0_0_0.2rem_rgba(var(--theme-default),0.5)];
+      }
+    }
+  }
+  .main-inline-calender {
+    &.input-group {
+      @apply flex-col;
+      .form-control {
+        @apply w-full !rounded-md focus:shadow-[unset] focus:border-[rgba(var(--recent-border),1)];
+      }
+      .flatpickr-calendar {
+        &.inline {
+          @apply w-full rounded-md;
+        }
+      }
+      .flatpickr-innerContainer {
+        @apply block;
+      }
+      .flatpickr-rContainer {
+        @apply block;
+        .flatpickr-weekdays {
+          @apply w-full;
+        }
+        .flatpickr-days {
+          @apply w-full;
+          .dayContainer {
+            @apply w-full max-w-none min-w-[unset];
+            .flatpickr-day {
+              @apply w-full max-w-[unset] rounded-[5px] hover:!text-[rgba(var(--white),1)];
+              &.prevMonthDay,
+              &.nextMonthDay {
+                @apply text-[rgba(var(--badge-light-color),0.6)];
+              }
+              &:hover {
+                @apply !bg-[rgba(var(--theme-default),1)];
+                border-color: transparent;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .flatpickr-day {
+    &.selected,
+    .endRange {
+      @apply bg-[rgba(var(--theme-default),1)] border-[rgba(var(--theme-default),1)];
+      &:hover {
+        @apply bg-[rgba(var(--theme-default),1)] border-[rgba(var(--theme-default),1)];
+      }
+    }
+  }
+  .main-flatpickr {
+    .form-control {
+      &:read-only {
+        @apply bg-[unset];
+      }
+    }
+  }
+  .flatpickr-months {
+    @apply text-[calc(12px_+_(14_-_12)_*_((100vw_-_320px)_/_(1920_-_320)))];
+    .flatpickr-prev-month,
+    .flatpickr-next-month {
+      @apply z-[1];
+    }
+  }
+  .flatpickr-calendar {
+    .flatpickr-days {
+      @apply w-[unset];
+      .dayContainer {
+        @apply w-[unset] min-w-[unset] max-w-[unset];
+        .flatpickr-day {
+          &.endRange {
+            @apply border-[rgba(var(--theme-default),1)] bg-[rgba(var(--theme-default),1)];
+          }
+        }
+      }
+    }
+  }
+  .timepicker-wrapper {
+    .timepicker-wrapper-box {
+      @apply mb-4 last:mb-0;
+      .input-group {
+        .form-control {
+          @apply text-sm text-[rgba(var(--dark-gray),1)];
+          &.input {
+            @apply rounded-tl-[5px] rounded-bl-[5px];
+          }
+        }
+      }
+    }
+  }
+}

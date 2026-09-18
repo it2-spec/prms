@@ -1,0 +1,47 @@
+@layer components {
+  .jsgrid {
+    .jsgrid-grid-body {
+      .jsgrid-cell {
+        @apply p-3;
+      }
+    }
+    .jsgrid-pager-container {
+      @apply text-right;
+    }
+    .jsgrid-pager {
+      @apply mt-5 p-0;
+      .jsgrid-pager-nav-inactive-button {
+        @apply mr-[-5px] first:rounded-[5px_0_0_5px];
+      }
+      .jsgrid-pager-page {
+        & ~ .jsgrid-pager-nav-button {
+          @apply ml-[-5px];
+          &:last-child {
+            @apply rounded-[0_5px_5px_0];
+          }
+        }
+      }
+      [class*="jsgrid-pager"] {
+        @apply inline-block min-w-[1.5em] border border-[rgba(var(--light-color),1)] px-[1em] py-[0.5em] border-solid;
+      }
+      .jsgrid-pager-page {
+        a {
+          @apply text-[rgba(var(--dark-color),1)];
+        }
+      }
+      .jsgrid-pager-current-page {
+        @apply text-[rgba(var(--dark-color),1)];
+      }
+    }
+    .jsgrid-selected-row {
+      > .jsgrid-cell {
+        @apply border-[rgba(var(--auth-bg-color),1)] bg-[rgba(var(--light-color),1)];
+      }
+    }
+    .jsgrid-header-row {
+      > .jsgrid-header-cell {
+        @apply font-medium p-3;
+      }
+    }
+  }
+}

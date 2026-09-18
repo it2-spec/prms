@@ -1,0 +1,71 @@
+@layer components {
+  .avatars {
+    .avatar {
+      @apply inline-block relative w-auto mr-2.5 last:mr-0;
+      .status {
+        @apply absolute h-[12%] w-[12%] rounded-[100%] right-[4%] bottom-[12%];
+      }
+    }
+    &.badge-avatar {
+      .avatar {
+        .badge {
+          @apply w-5 h-5 flex items-center justify-center p-0;
+        }
+      }
+    }
+  }
+  .social-group {
+    ul {
+      li {
+        + li {
+          @apply ml-[-4%];
+        }
+      }
+    }
+  }
+  .customers {
+    ul {
+      li {
+        img {
+          @apply border-[rgba(var(--white),1)] transition-[0.5s] border-2 border-solid hover:-translate-y-1 hover:transition-[0.5s] hover:scale-[1.02];
+        }
+        + li {
+          @apply ml-[-7%];
+        }
+      }
+    }
+    &.avatar-group {
+      @apply mr-[30px] last:mr-0;
+    }
+  }
+  .avatar-showcase {
+    @apply -mb-2.5;
+    .avatars {
+      .avatar {
+        @apply mb-2.5;
+      }
+    }
+    .avatar-group {
+      @apply mb-2.5;
+    }
+    .ratio > * {
+      @apply relative left-[unset] top-[unset];
+    }
+  }
+  .letter-avatar {
+    @apply flex flex-wrap gap-6 items-center justify-center;
+    h6 {
+      @apply w-[60px] h-[60px] flex items-center justify-center rounded-[50%];
+    }
+  }
+  .animation-ping {
+    @apply animate-ping;
+  }
+  @keyframes ping {
+    75%,
+    100% {
+      transform: scale(2);
+      opacity: 0;
+    }
+  }
+}

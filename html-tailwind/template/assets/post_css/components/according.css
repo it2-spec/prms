@@ -1,0 +1,193 @@
+@layer components {
+  .default-according {
+    .avatar-showcase {
+      @apply mb-0;
+    }
+    .card {
+      @apply shadow-none;
+      + .card {
+        @apply mt-[var(--according-card-top-margin)];
+      }
+      .btn-link {
+        @apply font-[var(--according-btn-weight)] text-[rgba(var(--theme-body-font-color),1)] no-underline;
+        &:focus,
+        &:hover {
+          @apply no-underline;
+        }
+      }
+      .card-header {
+        @apply p-[var(--according-card-header-padding)] border-[var(--card-border-color)];
+        i {
+          @apply absolute text-xl left-[18px] top-5;
+        }
+        h5 {
+          @apply mt-0.5;
+        }
+      }
+      .card-body {
+        @apply border border-t-[0px] border-solid border-[var(--card-border-color)];
+      }
+    }
+    &.style-1 {
+      button {
+        @apply w-full text-left before:absolute before:transition-[0.4s] before:text-xl before:-translate-y-2/4 before:right-5 before:top-2/4;
+        &[aria-expanded="true"] {
+          &:before {
+            content: var(--according-close-icon) !important;
+            font-family: var(--according-card-header-icon);
+          }
+        }
+
+        &[aria-expanded="false"] {
+          &:before {
+            content: var(--according-open-icon) !important;
+            font-family: var(--according-card-header-icon);
+          }
+        }
+      }
+    }
+  }
+  .main-accordion {
+    .collapse {
+      @apply visible;
+    }
+    .accordion {
+      &.accordion-1 {
+        .accordion-item {
+          @apply border border-[rgba(var(--primary-color),0.3)] border-solid first:rounded-[6px_6px_0_0] last:rounded-[0_0_6px_6px];
+        }
+      }
+      .accordion-item {
+        .accordion-button {
+          @apply w-full text-start relative text-base pl-5 pr-[50px] py-4 after:bg-[unset] focus:shadow-none after:content-[unset];
+          letter-spacing: 0;
+          .svg-color {
+            @apply -translate-y-2/4 rotate-0 transition-all duration-[0.4s] ease-[ease-in-out] absolute right-5 top-2/4 after:content-[""] after:bg-[unset];
+            [dir="rtl"] & {
+              @apply left-5 right-[unset];
+            }
+          }
+          &:not(.collapsed) {
+            .svg-color {
+              @apply -translate-y-2/4 -rotate-180;
+            }
+          }
+          &:not(.collapsed) {
+            &::after {
+              @apply bg-[unset];
+            }
+          }
+        }
+        .accordion-collapse {
+          .accordion-body {
+            @apply px-5 py-4;
+          }
+        }
+      }
+      &.accordion-flush {
+        .accordion-item {
+          @apply border-t-[rgba(var(--black),0.1)] border-t border-solid first:border-t-[none];
+        }
+      }
+    }
+  }
+  .accordion-item {
+    .accordion-button {
+      .svg-wrapper {
+        @apply w-[18px] h-[18px];
+      }
+      &:not(.collapsed) {
+        &::before {
+          @apply -translate-y-2/4 -rotate-180;
+        }
+      }
+    }
+  }
+  .accordion-wrapper {
+    &.accordion-item {
+      @apply bg-transparent;
+      .accordion-button {
+        @apply bg-transparent border-b-[rgba(var(--recent-border),1)] border-b border-solid;
+        &.collapsed {
+          @apply border-b-[none];
+        }
+      }
+    }
+    &:active {
+      @apply border border-[rgba(var(--primary-color),1)] border-t-[rgba(var(--primary-color),1)] border-solid border-t;
+    }
+  }
+  .accordion-border {
+    .accordion-item {
+      @apply border-0;
+      &:last-child {
+        .accordion-body {
+          @apply pb-0;
+        }
+      }
+      .accordion-button {
+        &:not(.collapsed) {
+          svg {
+            &:first-child {
+              transform: unset;
+            }
+          }
+        }
+      }
+    }
+  }
+  .accordions-content {
+    li {
+      @apply text-[rgba(var(--dark-color),1)];
+    }
+  }
+  .collapse-accordion {
+    .btn-dark.collapse {
+      @apply text-[rgba(var(--white),1)] rounded-[15px];
+    }
+  }
+  .main-accordion {
+    .card-body {
+      button {
+        &:focus {
+          @apply border-0;
+        }
+      }
+    }
+    .accordion {
+      &:not(.accordion-flush) {
+        .accordion-item {
+          @apply border-[rgba(var(--theme-default),0.1)];
+        }
+      }
+      &.accordion-flush {
+        .accordion-item {
+          @apply border-[rgba(var(--recent-dashed-border),1)];
+        }
+      }
+      .accordion-item {
+        .accordion-button {
+          @apply pr-[50px];
+          [dir="rtl"] & {
+            @apply pl-[50px] pr-5;
+          }
+        }
+      }
+    }
+  }
+  .collapse:not(.show) {
+    @apply hidden;
+  }
+  .accordion-flush {
+    > .accordion-item {
+      &:first-child {
+        @apply !border-t-[0px];
+      }
+    }
+  }
+  .accordion-item {
+    &:not(:first-of-type) {
+      @apply !border-t-[0px];
+    }
+  }
+}

@@ -1,0 +1,590 @@
+- var page_Title = 'Base Inputs';
+- var theme_customizer      = true;
+- var sidebar               = true;
+- var slick                 = true;
+- var header_slider         = true;
+- var common_inputs         = true;
+- var scrollbar             = true;
+- var height_equal          = true;
+doctype html
+html(lang='en')
+  include ../../components/header-files
+  body
+    include ../../components/loader
+    include ../../components/taptop
+    // page-wrapper Start
+    #pageWrapper.page-wrapper.compact-wrapper
+      include ../../components/header
+      // Page Body Start
+      .page-body-wrapper
+        include ../../components/sidebar
+        .page-body
+          .container.w-full
+            .page-title
+              .grid.grid-cols-12.mx-2.items-center
+                div(class="col-span-6 sm:col-span-12")
+                  h3
+                    | Base Inputs
+                div(class="col-span-6 sm:col-span-12")
+                  ol.breadcrumb.flex
+                    li.breadcrumb-item
+                      a(href='index.html')                                        
+                        svg.stroke-icon
+                          use(href='../assets/svg/icon-sprite.svg#stroke-home')
+                    li.breadcrumb-item Form Controls
+                    li.breadcrumb-item.active Base inputs
+          // Container-fluid starts
+          .container
+            .grid.grid-cols-12.card-gap
+              div(class="col-span-6 md:col-span-12")
+                .card
+                  .card-header
+                    h5 Basic Form
+                    p.f-m-light.mt-1 
+                      | Use  
+                      code form-label 
+                      | and 
+                      code form-control 
+                      | through create basic form.
+                  .card-body
+                    .card-wrapper.custom-border.rounded-3
+                      form.grid.grid-cols-12.gap-3
+                        div(class="col-span-12")
+                          label.form-label(for='inputEmail4') Email
+                          input#inputEmail4.form-control(type='email' placeholder='Enter Your Email')
+                        div(class="col-span-12")
+                          label.form-label(for='inputPassword4') Password
+                          input#inputPassword4.form-control(type='password' placeholder='Enter Your Password')
+                        div(class="col-span-12")
+                          .form-check.checkbox-checked.flex.gap-2
+                            input#gridCheck1.form-check-input(type='checkbox')
+                            label.form-check-label(for='gridCheck1')
+                              | Check me out
+                        div(class="col-span-12")
+                          button.btn.btn-primary.text-white(type='submit') Sign in 
+              div(class="col-span-6 md:col-span-12")
+                .card
+                  .card-header
+                    h5 Floating Form 
+                    p.f-m-light.mt-1 
+                      | Use 
+                      code form-floating
+                      |  to create floating form.
+                  .card-body
+                    .card-wrapper.custom-border.rounded-3
+                      form.grid.grid-cols-12.gap-3.floating-wrapper
+                        div(class="col-span-12")
+                          .form-floating.mb-3
+                            input#floatingInput22.form-control(type='email' placeholder='')
+                            label(for='floatingInput22') Email Address
+                        div(class="col-span-12")
+                          .form-floating
+                            input#floatingPassword.form-control(type='password' placeholder='')
+                            label(for='floatingPassword') Password
+                        div(class="col-span-12")
+                          .form-check.checkbox-checked.flex.gap-2
+                            input#gridCheck.form-check-input(type='checkbox')
+                            label.form-check-label.mb-0(for='gridCheck')
+                              | Check me out
+                        div(class="col-span-12")
+                          button.btn.btn-primary.text-white(type='submit') Sign in 
+              div(class="col-span-6 md:col-span-12")
+                .card
+                  .card-header
+                    h5 Select Sizing
+                    p.f-m-light.mt-1 
+                      code form-select
+                      |  to trigger the custom styles. You may also choose from small and large custom selects to match our similarly sized text inputs. class:- 
+                      code [form-select-lg/form-select-sm]
+                      | .
+                  .card-body
+                    select.form-select.form-select-sm(aria-label='.form-select-sm example')
+                      option(selected='') What's Your Hobbies 
+                      option(value='1') Kho-kho
+                      option(value='2') Reading Books
+                      option(value='3') Creativity
+              div(class="col-span-6 md:col-span-12")
+                .card
+                  .card-header
+                    h5 Form Control Sizing
+                    p.f-m-light.mt-1 
+                      | Set heights using classes like 
+                      code form-control-lg
+                      |  and 
+                      code form-control-sm
+                      | .
+                  .card-body
+                    input.form-control.form-control-sm(type='text' placeholder='.form-control-sm' aria-label='.form-control-sm example')
+              div(class="col-span-6 md:col-span-12")
+                .card
+                  .card-header
+                    h5 File Input 
+                    p.f-m-light.mt-1 
+                      | For default file/multiple file/disabled file/small file/large file input for use 
+                      code &lt;input&gt; 
+                      | with 
+                      code (type='file')
+                      |.
+                  .card-body
+                    .mb-3
+                      label.form-label(for='formFile') Default File Input Example
+                      input#formFile.form-control(type='file')
+                    .mb-3
+                      label.form-label(for='formFileMultiple') Multiple Files Input Example
+                      input#formFileMultiple.form-control(type='file' multiple='')
+                    .mb-3
+                      label.form-label(for='formFileDisabled') Disabled File Input Example
+                      input#formFileDisabled.form-control(type='file' disabled='')
+                    .mb-3
+                      label.form-label(for='formFileSm') Small File Input Example
+                      input#formFileSm.form-control.form-control-sm(type='file')
+                    div
+                      label.form-label(for='formFileLg') Large File Input Example
+                      input#formFileLg.form-control.form-control-lg(type='file')
+              div(class="col-span-6 md:col-span-12")
+                .card
+                  .card-header
+                    h5 Flat Input Style
+                    p.f-m-light.mt-1 
+                      | Use 
+                      code btn-square 
+                      | to define 0px border-radius.
+                  form.form.theme-form.dark-inputs
+                    .card-body
+                      .grid.grid-cols-12
+                        div(class="col-span-12")
+                          .mb-3
+                            label.form-label(for='exampleFormControlSelect12') Select Your Favorite Roman Number
+                            select#exampleFormControlSelect12.form-select.btn-square.digits.custom-scrollbar
+                              option I 
+                              option II 
+                              option III
+                              option IV 
+                              option V 
+                      .grid.grid-cols-12
+                        div(class="col-span-12")
+                          .mb-3
+                            label.form-label(for='exampleFormControlSelect13') Select Your Multiple Paintings
+                            select#exampleFormControlSelect13.form-select.btn-square.digits.custom-scrollbar(multiple='')
+                              option.rounded-none Landscape 
+                              option.rounded-none Portrait 
+                              option.rounded-none Oil Painting
+                              option.rounded-none Abstract art
+                              option.rounded-none Acrylic 
+                      .grid.grid-cols-12
+                        div(class="col-span-12")
+                          div
+                            label.form-label(for='exampleFormControlTextarea14') Please Do Comments
+                            textarea#exampleFormControlTextarea14.form-control.btn-square(rows='3')
+              div(class="col-span-6 xl:col-span-12")
+                .card
+                  .card-header
+                    h5 Basic HTML Input Control
+                    p.f-m-light.mt-1 
+                      | Give textual form controls like 
+                      code &lt;input&gt;
+                      | s and 
+                      code &lt;textarea&gt;
+                      | s an upgrade with custom styles, sizing, focus states, and more.
+                  form.form.theme-form
+                    .card-body.custom-input
+                      .grid.grid-cols-12.gap-3
+                        div(class="col-span-12")
+                          .mb-3.grid.grid-cols-12
+                            div(class="col-span-3 sm:col-span-12")
+                              label Placeholder
+                            div(class="col-span-9 sm:col-span-12")
+                              input.form-control(type='text', placeholder='Type your title in Placeholder')
+                          .mb-3.grid.grid-cols-12
+                            div(class="col-span-3 sm:col-span-12")
+                              label Password
+                            div(class="col-span-9 sm:col-span-12")
+                              input.form-control(type='password', placeholder='Password input')
+                          .mb-3.grid.grid-cols-12
+                            div(class="col-span-3 sm:col-span-12")
+                              label Number
+                            div(class="col-span-9 sm:col-span-12")
+                              input.form-control.digits(type='number', placeholder='Number')
+                          .mb-3.grid.grid-cols-12
+                            div(class="col-span-3 sm:col-span-12")
+                              label Telephone
+                            div(class="col-span-9 sm:col-span-12")
+                              input.form-control.m-input.digits(type='tel', value='91-(999)-999-999')
+                          .mb-3.grid.grid-cols-12
+                            div(class="col-span-3 sm:col-span-12")
+                              label URL
+                            div(class="col-span-9 sm:col-span-12")
+                              input.form-control(type='url', value='https://getbootstrap.com')
+                          .mb-3.grid.grid-cols-12
+                            div(class="col-span-3 sm:col-span-12")
+                              label Date and Time
+                            div(class="col-span-9 sm:col-span-12")
+                              input#example-datetime-local-input.form-control.digits(type='datetime-local', value='2018-01-19T18:45:00')
+                          .mb-3.grid.grid-cols-12
+                            div(class="col-span-3 sm:col-span-12")
+                              label Date
+                            div(class="col-span-9 sm:col-span-12")
+                              input.form-control.digits(type='date', value='2018-01-01')
+                          .mb-3.grid.grid-cols-12
+                            div(class="col-span-3 sm:col-span-12")
+                              label Month
+                            div(class="col-span-9 sm:col-span-12")
+                              input.form-control.digits(type='month', value='2018-01')
+                          .mb-3.grid.grid-cols-12
+                            div(class="col-span-3 sm:col-span-12")
+                              label Week
+                            div(class="col-span-9 sm:col-span-12")
+                              input.form-control.digits(type='week', value='2018-W09')
+                          .mb-3.grid.grid-cols-12 
+                            div(class="col-span-3 sm:col-span-12")
+                              label.form-label(for='exampleDataList') Datalist Example
+                            div(class="col-span-9 sm:col-span-12")
+                              input#exampleDataList.form-control(list='datalistOptions' placeholder='Look up your nation...')
+                              datalist#datalistOptions
+                                option(value='San Francisco')
+                                option(value='New York')
+                                option(value='Seattle')
+                                option(value='Los Angeles')
+                                option(value='Chicago')
+                                option(value='India') 
+                          .mb-3.grid.grid-cols-12
+                            div(class="col-span-3 sm:col-span-12")
+                              label Time
+                            div(class="col-span-9 sm:col-span-12")
+                              input.form-control.digits(type='time', value='21:45:00')
+                          .mb-3.grid.grid-cols-12
+                            div(class="col-span-3 sm:col-span-12")
+                              label.pt-0 Color Picker
+                            div(class="col-span-1 sm:col-span-12")
+                              input.form-control.form-control-color.p-1(type='color', value='#7366FF')
+                          .mb-3.grid.grid-cols-12
+                            div(class="col-span-3 sm:col-span-12")
+                              label
+                              | Maximum
+                              | Length
+                            div(class="col-span-9 sm:col-span-12")
+                              input.form-control(type='text', placeholder='Content must be in 6 characters', maxlength='6')
+                          .grid.grid-cols-12
+                            div(class="col-span-3 sm:col-span-12")
+                              label Static Text
+                            div(class="col-span-9 sm:col-span-12")
+                              .form-control-static
+                                | Hello !... This is
+                                | my magical text
+                    .card-footer.text-end.grid.grid-cols-12
+                      div(class="col-span-12 sm:col-span-12")
+                        button.btn.btn-primary.me-3.text-white(type='submit') Submit
+                        input.btn.btn-light(type='reset', value='Cancel')
+              div(class="col-span-6 xl:col-span-12")
+                .card.basic-floating
+                  .card-header
+                    h5 Basic Floating Input Control
+                    p.f-m-light.mt-1 
+                      | Give textual form controls like 
+                      code &lt;input&gt;
+                      | s and 
+                      code &lt;textarea&gt;
+                      | s an upgrade with custom styles, sizing, focus states, and more.
+                  form.form.theme-form
+                    .card-body.custom-input
+                      .grid.grid-cols-12 
+                        div(class="col-span-12") 
+                          .mb-3.grid.grid-cols-12
+                            div(class="col-span-3 sm:col-span-12")
+                              label Valid Input 
+                            div(class="col-span-9 sm:col-span-12")
+                              .form-floating
+                                input#floatingInputValue.form-control(type='email' placeholder='' value='test@example.com')
+                                label(for='floatingInputValue') Input with value
+                          .mb-3.grid.grid-cols-12
+                            div(class="col-span-3 sm:col-span-12")
+                              label Invalid Input 
+                            div(class="col-span-9 sm:col-span-12") 
+                              .form-floating
+                                input#floatingInputInvalid.form-control.is-invalid(type='email' placeholder='' value='test@example.com')
+                                label(for='floatingInputInvalid') Invalid input
+                          .mb-3.grid.grid-cols-12
+                            div(class="col-span-3 sm:col-span-12")
+                              label Comments
+                            div(class="col-span-9 sm:col-span-12") 
+                              .form-floating
+                                textarea#floatingTextarea.form-control(placeholder='')
+                                label(for='floatingTextarea') Comments
+                          .mb-3.grid.grid-cols-12
+                            div(class="col-span-3 sm:col-span-12")
+                              label Email
+                            div(class="col-span-9 sm:col-span-12") 
+                              .form-floating.mb-3
+                                input#floatingInput.form-control(type='email')
+                                label(for='floatingInput') Email address
+                          .mb-3.grid.grid-cols-12
+                            div(class="col-span-3 sm:col-span-12")
+                              label Password
+                            div(class="col-span-9 sm:col-span-12") 
+                              .form-floating
+                                input#floatingPassword1.form-control(type='password')
+                                label(for='floatingPassword1') Password
+                          .mb-3.grid.grid-cols-12
+                            div(class="col-span-3 sm:col-span-12")
+                              label Comments
+                            div(class="col-span-9 sm:col-span-12") 
+                              .form-floating
+                                textarea#floatingTextarea2.form-control(placeholder='' style='height: 100px')
+                                label(for='floatingTextarea2') Comments
+                          .mb-3.grid.grid-cols-12
+                            div(class="col-span-3 sm:col-span-12")
+                              label Open This Select Menu 
+                            div(class="col-span-9 sm:col-span-12") 
+                              .form-floating
+                                select#floatingSelect.form-select(aria-label='Floating label select example')
+                                  option(selected='') Open this select menu
+                                  option(value='1') I 
+                                  option(value='2') II 
+                                  option(value='3') III 
+                                label(for='floatingSelect') Works with selects
+                          .mb-3.grid.grid-cols-12
+                            div(class="col-span-3 sm:col-span-12")
+                              label Input Group
+                            div(class="col-span-9 sm:col-span-12") 
+                              .input-group.mb-3
+                                span.input-group-text @
+                                .form-floating
+                                  input#floatingInputGroup1.form-control(type='text')
+                                  label(for='floatingInputGroup1') Username
+                          .mb-3.grid.grid-cols-12
+                            div(class="col-span-3 sm:col-span-12")
+                              label Input Group
+                            div(class="col-span-9 sm:col-span-12") 
+                              .input-group.has-validation
+                                span.input-group-text @
+                                .form-floating.is-invalid
+                                  input#floatingInputGroup2.form-control.is-invalid(type='text' required='')
+                                  label(for='floatingInputGroup2') Username
+                                .invalid-feedback
+                                  | Please choose a username.
+                          .mb-0.grid.grid-cols-12
+                            div(class="col-span-3 sm:col-span-12")
+                              label Layout
+                            div(class="col-span-9 sm:col-span-12") 
+                              .grid.grid-cols-12.gap-2
+                                div(class="col-span-6 xxl:col-span-12")
+                                  .form-floating
+                                    input#floatingInputGrid.form-control(type='email' placeholder='' value='mdo@example.com')
+                                    label(for='floatingInputGrid') Email address
+                                div(class="col-span-6 xxl:col-span-12")
+                                  .form-floating
+                                    select#floatingSelectGrid.form-select
+                                      option(selected='') Open this select menu
+                                      option(value='1') One
+                                      option(value='2') Two
+                                      option(value='3') Three
+                                    label(for='floatingSelectGrid') Works with selects
+                    .card-footer.text-end.grid.grid-cols-12
+                      div(class="col-span-12 sm:col-span-12")
+                        button.btn.btn-primary.me-3.text-white(type='submit') Submit
+                        input.btn.btn-light(type='reset', value='Cancel')
+              div(class="col-span-6 md:col-span-12")
+                .card
+                  .card-header
+                    h5 Edges Input Style
+                    p.f-m-light.mt-1 
+                      | Use 
+                      code btn-pill 
+                      | to define border-radius.
+                  form.form.theme-form.dark-inputs
+                    .card-body
+                      .grid.grid-cols-12
+                        div(class="col-span-12")
+                          .mb-3(class="!mb-3")
+                            label.form-label(for='exampleFormControlInput5') Email Address
+                            input#exampleFormControlInput5.form-control.btn-pill(type='email', placeholder='name@example.com')
+                      .grid.grid-cols-12
+                        div(class="col-span-12")
+                          .mb-3(class="!mb-3")
+                            label.form-label(for='exampleInputPassword6') Password
+                            input#exampleInputPassword6.form-control.btn-pill(type='password', placeholder='Password')
+                      .grid.grid-cols-12
+                        div(class="col-span-12")
+                          .mb-3(class="!mb-3")
+                            label.form-label(for='exampleFormControlSelect7') Select Your Favorite Pixelstrap Theme
+                            select#exampleFormControlSelect7.form-select.btn-pill.digits
+                              option Tivo
+                              option Mofi
+                              option Roxo
+                              option Oslo
+                              option Voxo
+                              option Sheltos 
+                              option Petkart
+                              option Zeta
+                      .grid.grid-cols-12
+                        div(class="col-span-12")
+                          .mb-3(class="!mb-3")
+                            label.form-label(for='formFileSimple') Default File Input Example
+                            input#formFileSimple.form-control.btn-pill.px-4(type='file')
+                      .grid.grid-cols-12 
+                        div(class="col-span-12")
+                          .mb-3 (class="!mb-3")
+                            label.form-label Default Input
+                            input.form-control.btn-pill(type='text' placeholder='Default input' aria-label='default input example')
+                      .grid.grid-cols-12 
+                        div(class="col-span-12") 
+                          .flex.gap-3.checkbox-checked(class="!mb-3")
+                            .form-check.flex.gap-2
+                              input#flexRadioDefault1.form-check-input(type='radio' name='flexRadioDefault')
+                              label.form-check-label.mb-0(for='flexRadioDefault1')
+                                | Male 
+                            .form-check.flex.gap-2
+                              input#flexRadioDefault2.form-check-input(type='radio' name='flexRadioDefault' checked='')
+                              label.form-check-label.mb-0(for='flexRadioDefault2')
+                                | Female
+                      .grid.grid-cols-12
+                        div(class="col-span-12")
+                          div
+                            label.form-label(for='exampleFormControlTextarea9') Comments
+                            textarea#exampleFormControlTextarea9.form-control.btn-pill(rows='3')
+                    .card-footer.text-end
+                      button.btn.btn-primary.me-3.text-white(type='submit') Submit
+                      input.btn.btn-light(type='reset', value='Cancel')
+              div(class="col-span-6 md:col-span-12")
+                .card
+                  .card-header
+                    h5 Raise Input Style
+                    p.f-m-light.mt-1 
+                      | Use 
+                      code input-air-* 
+                      | to define bottom box-shadow.
+                  form.form.theme-form.dark-inputs
+                    .card-body
+                      .grid
+                        div(class="col-span-12")
+                          .mb-3(class="!mb-3")
+                            label.form-label(for='exampleFormControlInput15') Email Address
+                            input#exampleFormControlInput15.form-control.input-air-primary(type='email', placeholder='name@example.com')
+                      .grid
+                        div(class="col-span-12")
+                          .mb-3(class="!mb-3")
+                            label.form-label(for='exampleInputPassword16') Password
+                            input#exampleInputPassword16.form-control.input-air-primary(type='password', placeholder='Password')
+                      .grid
+                        div(class="col-span-12")
+                          .mb-3(class="!mb-3")
+                            label.form-label(for='exampleFormControlSelect17') Select Your Favorite Pixelstrap Theme
+                            select#exampleFormControlSelect17.form-select.input-air-primary.digits
+                              option Tivo
+                              option Roxo
+                              option Wingo
+                              option Mofi
+                              option Koho
+                      .grid
+                        div(class="col-span-12")
+                          .mb-3(class="!mb-3")
+                            label.form-label(for='exampleFormControlSelect18') Select The Color You Like Below
+                            select#exampleFormControlSelect18.form-select.input-air-primary.digits.custom-scrollbar(multiple='')
+                              option.rounded-0 Red
+                              option.rounded-0 Yellow
+                              option.rounded-0 Orange
+                              option.rounded-0 White
+                              option.rounded-0 Black
+                              option.rounded-0 Gray 
+                              option.rounded-0 Brown
+                              option.rounded-0 Purple 
+                              option.rounded-0 White  
+                      .grid
+                        div(class="col-span-12")
+                          div
+                            label.form-label(for='exampleFormControlTextarea19') Comments
+                            textarea#exampleFormControlTextarea19.form-control.input-air-primary(rows='3')
+                    .card-footer.text-end
+                      button.btn.btn-primary.me-3.text-white(type='submit') Submit
+                      input.btn.btn-light(type='reset', value='Cancel')  
+              div(class="col-span-6 lg:col-span-12")
+                .card
+                  .card-header
+                    h5 Dynamic Form Field
+                    p.f-m-light.mt-1 
+                      | Use id 
+                      code #cart_fields 
+                      | to dynamically add form fields.
+                  .card-body           
+                    .dynamic-form-field
+                      .panel.panel-default
+                        .panel-body
+                          #cart_fields
+                          .grid.grid-cols-12.gap-3.custom-input
+                            div(class="col-span-3 xxl:col-span-6 sm:col-span-12 box-col-6")
+                              .form-group
+                                label(for='baseItemName') Items
+                                input#baseItemName.form-control(type='text' name='baseItemName[]' value='' placeholder='Watch')
+                            div(class="col-span-3 xxl:col-span-6 sm:col-span-12 box-col-6")
+                              .form-group
+                                label(for='basePrice') Price
+                                input#basePrice.form-control(type='number' name='basePrice[]' value='' placeholder='550')
+                            div(class="col-span-3 xxl:col-span-6 sm:col-span-12 box-col-6")
+                              .form-group
+                                label(for='baseQuantity') Qty
+                                input#baseQuantity.form-control(type='number' name='baseQuantity[]' value='' placeholder="2")
+                            div(class="col-span-3 xxl:col-span-6 sm:col-span-12 box-col-6")
+                              .form-group
+                                label(for='baseTotalPrice') Total Price
+                                input#baseTotalPrice.form-control(type='number' name='baseTotalPrice[]' value='' placeholder="11000")
+                            div(class="col-span-12")
+                              .input-group-btn
+                                button.btn.btn-success.text-white(type='button' onclick='cart_fields();') Add Item
+                                  span.fa-solid.fa-plus(aria-hidden='true')
+                            .clear
+              div(class="col-span-6 lg:col-span-12")
+                .card
+                  .card-header
+                    h5 Auto Size Textarea
+                    p.f-m-light.mt-1 
+                      | Use 
+                      code autosize-textarea 
+                      | to define custom textarea and javascript textarea.
+                  .card-body.autosize-textarea
+                    form.grid.grid-cols-12.gap-3
+                      div(class="col-span-12")
+                        label.form-label Using SPAN Tag
+                        span.textarea(role='textbox' contenteditable='')
+                      div(class="col-span-12")
+                        label.form-label Using Javascript
+                        textarea.textarea.autosize-area(rows="2" placeholder="Enter your message...")
+              div(class="col-span-12")
+                .card
+                  .card-header
+                    h5 Max Length Elements
+                    p.f-m-light.mt-1 
+                      | Use 
+                      code [*-maxlength] 
+                      | classes to define maxlength for textarea and inputs.
+                  .card-body
+                    form.grid.grid-cols-12.gap-3.custom-input
+                      div(class="col-span-6 sm:col-span-12")
+                        label.form-label Basic Maxlength
+                        input.form-control.basic-maxlength(type="text" maxlength='10')
+                      div(class="col-span-6 sm:col-span-12")
+                        label.form-label Change the threshold value
+                        input.form-control.threshold-maxlength(type="text" maxlength='20')
+                      div(class="col-span-6 sm:col-span-12")
+                        label.form-label Show
+                        input.form-control.show-maxlength(type="text" maxlength='15')
+                      div(class="col-span-6 sm:col-span-12")
+                        label.form-label Customized Text
+                        input.form-control.custom-maxlength(type="text" maxlength='30')
+                      div(class="col-span-12")
+                        label.form-label Basic Textarea
+                        textarea.textarea-maxlength.form-control.custom-scrollbar(rows='3'  maxlength='25')
+                      div(class="col-span-12")
+                        .grid.grid-cols-12.gap-3 
+                          div(class="col-span-12")
+                            label.form-label.mb-0 Badge Positions: (top-left ,top-right,bottom-left,bottom-right)
+                          div(class="col-span-3 lg:col-span-6 sm:col-span-12")
+                            input.topleft-maxlength.form-control(type="text" placeholder="Position top-left" maxlength='15')
+                          div(class="col-span-3 lg:col-span-6 sm:col-span-12")
+                            input.topright-maxlength.form-control(type="text" placeholder="Position top-right" maxlength='15')
+                          div(class="col-span-3 lg:col-span-6 sm:col-span-12")
+                            input.bottomright-maxlength.form-control(type="text" placeholder="Position bottom-right" maxlength='15')
+                          div(class="col-span-3 lg:col-span-6 sm:col-span-12")
+                            input.bottomleft-maxlength.form-control(type="text" placeholder="Position bottom-left" maxlength='15')
+          // Container-fluid Ends
+        include ../../components/footer
+    include ../../components/footer-files      

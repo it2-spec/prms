@@ -1,0 +1,432 @@
+// PRMS - Procurement Receiving Management System Schema
+// Berdasarkan PRD section 14 & 11 & 12
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum RoleName {
+  PURCHASING
+  WAREHOUSE
+  SUPPLIER
+}
+
+enum POStatus {
+  DRAFT
+  SENT
+  WAITING_DELIVERY
+  PARTIALLY_DELIVERED
+  WAITING_RECEIVING
+  PARTIALLY_RECEIVED
+  RECEIVED
+  CLOSED
+  REVISED
+  CANCELLED
+}
+
+enum DeliveryStatus {
+  CREATED
+  SENT
+  ARRIVED
+  CANCELLED
+}
+
+enum ReceivingStatus {
+  PENDING
+  VERIFIED
+  RECEIVED
+  CLOSED
+}
+
+enum PRStatus {
+  DRAFT
+  APPROVED
+  CONVERTED
+  CANCELLED
+}
+
+model Role {
+  id          String   @id @default(cuid())
+  name        RoleName @unique
+  description String?
+  users       User[]
+}
+
+model User {
+  id          String     @id @default(cuid())
+  username    String     @unique
+  password    String
+  name        String
+  email       String?
+  roleId      String
+  role        Role       @relation(fields: [roleId], references: [id])
+  supplierId  String?
+  supplier    Supplier?  @relation(fields: [supplierId], references: [id])
+  warehouseId String?
+  warehouse   Warehouse? @relation(fields: [warehouseId], references: [id])
+  isActive    Boolean    @default(true)
+  approvalLevel Int      @default(0) // 0=none, 1=Manager Purchasing, 2=Presdir
+  signatureImage String? @db.Text // Base64 image atau URL scan tanda tangan
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  auditLogs        AuditLog[]      @relation("AuditBy")
+  purchaseOrders   PurchaseOrder[] @relation("POByCreator")
+  approvedOrders   PurchaseOrder[] @relation("POByApprover")
+  approvedL2Orders PurchaseOrder[] @relation("POByApproverL2")
+  deliveries       Delivery[]      @relation("DeliveryUser")
+  receivings       Receiving[]     @relation("ReceivedBy")
+  notifications    Notification[]
+  pushSubscriptions PushSubscription[]
+  stockOutgoings   StockOutgoing[]
+}
+
+model Supplier {
+  id            String   @id @default(cuid())
+  code          String   @unique
+  name          String
+  address       String?
+  phone         String?
+  email         String?
+  contactPerson String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+
+  users             User[]
+  purchaseOrders    PurchaseOrder[]
+  deliveries        Delivery[]
+  purchasesrequests PurchaseRequest[]
+  items             SupplierItemQuality[]
+}
+
+model Warehouse {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  name      String
+  address   String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  users          User[]
+  receivings     Receiving[]
+  purchaseOrders PurchaseOrder[]
+  stockOutgoings StockOutgoing[]
+}
+
+model Item {
+  id            String   @id @default(cuid())
+  code          String   @unique
+  name          String
+  unit          String?  // Base unit e.g. "kg", "ltr", "Pcs"
+  packageUnit   String?  // Packaging unit e.g. "Pail", "Can", "Drum"
+  packageSize   Decimal? @default(1) @db.Decimal(10, 2) // Conversion factor e.g. 15 (1 Pail = 15 kg)
+  lastUnitPrice Decimal? @db.Decimal(15, 2) // Harga /unit terkini (auto-update dari PO)
+  description   String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+
+  prerequestDetails  PurchaseRequestDetail[]
+  poDetails          PurchaseOrderDetail[]
+  deliveryDetails    DeliveryDetail[]
+  receivingDetails   ReceivingDetail[]
+  items              SupplierItemQuality[]
+  priceHistories     ItemPriceHistory[]
+  outgoingDetails    StockOutgoingDetail[]
+}
+
+// Relasi Supplier <-> Item (opsional untuk validasi harga supplier)
+model SupplierItemQuality {
+  id         String   @id @default(cuid())
+  supplierId String
+  itemId     String
+  unitPrice  Decimal  @default(0) @db.Decimal(15, 2)
+  supplier   Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  item       Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@unique([supplierId, itemId])
+}
+
+// Riwayat perubahan harga per item — otomatis diisi saat upload Batch PO
+model ItemPriceHistory {
+  id           String   @id @default(cuid())
+  itemId       String
+  item         Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  oldUnitPrice Decimal? @db.Decimal(15, 2) // Harga lama /unit (null jika ini pertama kali)
+  newUnitPrice Decimal  @db.Decimal(15, 2) // Harga baru /unit
+  source       String?  // Sumber perubahan misal: "PO #PO-2026-001"
+  changedAt    DateTime @default(now())    // Kapan harga berubah
+
+  @@index([itemId, changedAt])
+}
+
+model PurchaseRequest {
+  id          String   @id @default(cuid())
+  prNumber    String   @unique
+  supplierId  String
+  supplier    Supplier @relation(fields: [supplierId], references: [id])
+  requestDate DateTime @default(now())
+  status      PRStatus @default(DRAFT)
+  notes       String?
+  createdAt   DateTime @default(now())
+
+  details        PurchaseRequestDetail[]
+  purchaseOrders PurchaseOrder[]
+}
+
+model PurchaseRequestDetail {
+  id                String          @id @default(cuid())
+  purchaseRequestId String
+  purchaseRequest   PurchaseRequest @relation(fields: [purchaseRequestId], references: [id], onDelete: Cascade)
+  itemId            String
+  item              Item            @relation(fields: [itemId], references: [id])
+  qty               Int
+  unitPrice         Decimal         @default(0) @db.Decimal(15, 2)
+  notes             String?
+}
+
+model PurchaseOrder {
+  id                String           @id @default(cuid())
+  poNumber          String           @unique
+  purchaseRequestId String?
+  purchaseRequest   PurchaseRequest? @relation(fields: [purchaseRequestId], references: [id])
+  supplierId        String
+  supplier          Supplier         @relation(fields: [supplierId], references: [id])
+  warehouseId       String?
+  warehouse         Warehouse?       @relation(fields: [warehouseId], references: [id])
+  createdById       String
+  createdBy         User             @relation("POByCreator", fields: [createdById], references: [id])
+  poDate            DateTime         @default(now())
+  expectedDelivery  DateTime?
+  deliveryDateType  String?          @default("DATE") // "DATE" atau "MONTH"
+  status            POStatus         @default(DRAFT)
+  notes             String?
+  purposeProject    String?          // e.g. "Additional Order / Painting Equipment"
+  department        String?          // e.g. "PAINTING DEPT"
+  revisionCount     Int              @default(0)
+  // Approval L1: Manager Purchasing
+  approvedById      String?          // ID user yang menyetujui PO (L1)
+  approvedBy        User?            @relation("POByApprover", fields: [approvedById], references: [id])
+  approvedAt        DateTime?        // Waktu approval L1
+  // Approval L2: Presdir
+  approvedL2ById    String?          // ID user yang menyetujui final (L2)
+  approvedL2By      User?            @relation("POByApproverL2", fields: [approvedL2ById], references: [id])
+  approvedL2At      DateTime?        // Waktu approval L2
+  verificationHash  String?          // SHA-256 hash — dibuat saat L2 approve
+  // Konfirmasi Penerimaan & TTD Supplier
+  supplierAcceptedAt        DateTime?        // Waktu supplier menerima & tanda tangan PO
+  supplierAcceptedByName    String?          // Nama penanda tangan pihak supplier
+  supplierAcceptedSignature String?          @db.Text // Gambar Base64 / URL tanda tangan supplier
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  details    PurchaseOrderDetail[]
+  deliveries Delivery[]
+  receivings Receiving[]
+
+  @@index([status])
+  @@index([poNumber])
+  @@index([createdAt])
+  @@index([poDate])
+  @@index([supplierId])
+  @@index([warehouseId])
+  @@index([approvedById])
+  @@index([approvedL2ById])
+}
+
+model PurchaseOrderDetail {
+  id              String        @id @default(cuid())
+  purchaseOrderId String
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  itemId          String
+  item            Item          @relation(fields: [itemId], references: [id])
+  qty             Int
+  unit            String?       // e.g. "kg", "ltr", "Pcs"
+  packageUnit     String?       // e.g. "Pail", "Can"
+  packageQty      Int?          // e.g. 10 Pail
+  receivedPackageQty Int        @default(0) // e.g. 10 Pail received
+  unitPrice       Decimal       @default(0) @db.Decimal(15, 2)
+  receivedQty     Int           @default(0)
+  deliveredQty    Int           @default(0)
+  notes           String?
+
+  deliveryDetails DeliveryDetail[]
+
+  @@index([purchaseOrderId])
+  @@index([itemId])
+}
+
+model Delivery {
+  id              String         @id @default(cuid())
+  deliveryNumber  String         @unique
+  purchaseOrderId String
+  purchaseOrder   PurchaseOrder  @relation(fields: [purchaseOrderId], references: [id])
+  supplierId      String
+  supplier        Supplier       @relation(fields: [supplierId], references: [id])
+  suratJalan      String
+  shipDate        DateTime
+  status          DeliveryStatus @default(CREATED)
+  createdById     String
+  createdBy       User           @relation("DeliveryUser", fields: [createdById], references: [id])
+  notes           String?
+  createdAt       DateTime       @default(now())
+
+  details    DeliveryDetail[]
+  receivings Receiving[]
+
+  @@index([purchaseOrderId])
+  @@index([supplierId])
+  @@index([shipDate])
+}
+
+model DeliveryDetail {
+  id                    String              @id @default(cuid())
+  deliveryId            String
+  delivery              Delivery            @relation(fields: [deliveryId], references: [id], onDelete: Cascade)
+  purchaseOrderDetailId String
+  purchaseOrderDetail   PurchaseOrderDetail @relation(fields: [purchaseOrderDetailId], references: [id])
+  itemId                String
+  item                  Item                @relation(fields: [itemId], references: [id])
+  qty                   Int
+  unitPrice             Decimal             @default(0) @db.Decimal(15, 2)
+
+  receivings ReceivingDetail[]
+
+  @@index([deliveryId])
+  @@index([purchaseOrderDetailId])
+  @@index([itemId])
+}
+
+model Receiving {
+  id              String          @id @default(cuid())
+  receivingNumber String          @unique
+  deliveryId      String
+  delivery        Delivery        @relation(fields: [deliveryId], references: [id])
+  purchaseOrderId String
+  purchaseOrder   PurchaseOrder   @relation(fields: [purchaseOrderId], references: [id])
+  warehouseId     String
+  warehouse       Warehouse       @relation(fields: [warehouseId], references: [id])
+  receivedById    String
+  receivedBy      User            @relation("ReceivedBy", fields: [receivedById], references: [id])
+  receivedAt      DateTime        @default(now())
+  status          ReceivingStatus @default(PENDING)
+  notes           String?
+  isManual        Boolean         @default(false)
+  createdAt       DateTime        @default(now())
+
+  details ReceivingDetail[]
+
+  @@index([purchaseOrderId])
+  @@index([deliveryId])
+  @@index([warehouseId])
+  @@index([receivedAt])
+}
+
+model ReceivingDetail {
+  id               String          @id @default(cuid())
+  receivingId      String
+  receiving        Receiving       @relation(fields: [receivingId], references: [id], onDelete: Cascade)
+  deliveryDetailId String?
+  deliveryDetail   DeliveryDetail? @relation(fields: [deliveryDetailId], references: [id])
+  itemId           String
+  item             Item            @relation(fields: [itemId], references: [id])
+  qtyOrdered       Int
+  qtyDelivered     Int
+  qtyReceived      Int
+  notes            String?
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String?
+  user       User?    @relation("AuditBy", fields: [userId], references: [id])
+  action     String
+  entityType String
+  entityId   String?
+  detail     String?
+  createdAt  DateTime @default(now())
+}
+
+model Dept {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  name      String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  type      String   @default("INFO") // NEW_PO, PO_APPROVED_L1, PO_APPROVED_L2, etc.
+  link      String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId, isRead])
+  @@index([createdAt])
+}
+
+model PushSubscription {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  endpoint   String   @unique
+  p256dh     String
+  auth       String
+  userAgent  String?
+  deviceName String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([userId])
+}
+
+enum StockOutgoingStatus {
+  COMPLETED
+  CANCELLED
+}
+
+model StockOutgoing {
+  id             String              @id @default(cuid())
+  outgoingNumber String              @unique // e.g. "OUT000001"
+  warehouseId    String
+  warehouse      Warehouse           @relation(fields: [warehouseId], references: [id])
+  createdById    String
+  createdBy      User                @relation(fields: [createdById], references: [id])
+  purpose        String?             // Tujuan / keterangan pemakaian
+  department     String?             // Departemen yang mengambil
+  status         StockOutgoingStatus @default(COMPLETED)
+  cancelledAt    DateTime?
+  cancelReason   String?
+  issuedAt       DateTime            @default(now())
+  createdAt      DateTime            @default(now())
+
+  details        StockOutgoingDetail[]
+
+  @@index([warehouseId])
+  @@index([issuedAt])
+  @@index([status])
+}
+
+model StockOutgoingDetail {
+  id              String        @id @default(cuid())
+  stockOutgoingId String
+  stockOutgoing   StockOutgoing @relation(fields: [stockOutgoingId], references: [id], onDelete: Cascade)
+  itemId          String
+  item            Item          @relation(fields: [itemId], references: [id])
+  packageQty      Int           // Jumlah kemasan keluar (satuan Pail, Can, dll)
+  baseQty         Decimal       @db.Decimal(10, 2) // Setara satuan dasar (kg/ltr)
+  notes           String?
+
+  @@index([stockOutgoingId])
+  @@index([itemId])
+}
+

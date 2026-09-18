@@ -1,0 +1,59 @@
+@layer components {
+  .main-invoice-1 {
+    body {
+      @apply block text-[#000248];
+      font-family: Rubik, sans-serif;
+    }
+
+    .table-wrapper {
+      @apply w-full;
+    }
+
+    h2 {
+      @apply font-medium text-[34px] m-0;
+    }
+
+    h6 {
+      @apply text-lg font-normal leading-normal m-0;
+    }
+
+    span {
+      @apply text-base leading-normal font-normal;
+    }
+
+    .banner-image {
+      @apply w-full mt-[13px] mb-2.5 mx-0;
+    }
+
+    .order-details td span {
+      @apply block -mb-1;
+    }
+
+    .order-details th:first-child,
+    .order-details td:first-child {
+      @apply min-w-[490px];
+    }
+
+    .order-details th:nth-child(2),
+    .order-details td:nth-child(2) {
+      @apply w-1/5;
+    }
+  }
+  .invoice-table {
+    @apply my-4;
+    table {
+      @apply border;
+    }
+  }
+  .invoice {
+    .text-right {
+      input {
+        @apply mt-1.5;
+      }
+    }
+
+    .flex {
+      @apply items-center;
+    }
+  }
+}

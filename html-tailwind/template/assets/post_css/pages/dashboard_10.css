@@ -1,0 +1,406 @@
+@layer components {
+  .visits-wrapper {
+    .card-body {
+      .common-flex {
+        @apply bg-[rgba(var(--course-light-btn),1)] items-center w-fit px-3 py-2.5 rounded-lg;
+      }
+    }
+  }
+  .treading-product {
+    .recent-table {
+      table {
+        tbody {
+          tr {
+            td {
+              .referral-wrapper {
+                @apply flex justify-start items-center gap-3;
+                svg {
+                  @apply w-4 h-4;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .referral-visit {
+    .table {
+      thead,
+      tbody {
+        tr {
+          th,
+          td {
+            @apply min-w-[auto];
+            .referral-wrapper {
+              .bg-dark-primary {
+                @apply border border-[rgba(var(--fb-color),1)] border-solid;
+                .social-wrapper {
+                  @apply bg-[rgba(47,132,244,0.1)];
+                }
+              }
+              > div {
+                @apply flex justify-center items-center gap-2.5;
+                > div {
+                  @apply w-[34px] h-[34px] border p-[3px] rounded-[50%] border-solid;
+                  .social-wrapper {
+                    @apply flex justify-center items-center min-w-full h-full rounded-[50%];
+                  }
+                }
+              }
+            }
+          }
+          &:last-child {
+            td {
+              @apply pb-0 border-[unset];
+            }
+          }
+        }
+      }
+    }
+  }
+  .page-analytics-table {
+    .recent-table {
+      div.dt-container {
+        .dt-layout-row {
+          .dt-layout-cell {
+            .dt-search {
+              @apply right-[60px] top-6;
+            }
+          }
+          &:last-child {
+            @apply flex-col;
+          }
+        }
+      }
+      .table {
+        thead,
+        tbody {
+          tr {
+            th,
+            td {
+              @apply text-[rgba(var(--body-font-color),1)] min-w-[auto];
+              &:first-child {
+                @apply pl-5;
+              }
+              &:last-child {
+                @apply pr-5;
+              }
+              svg {
+                @apply w-3.5 h-3.5;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .live-user-wrapper {
+    .user-data {
+      @apply flex justify-start gap-2 items-center mb-2;
+
+      h5 {
+        @apply mb-1;
+      }
+      span {
+        svg {
+          @apply w-3.5 h-3.5 align-middle;
+        }
+      }
+    }
+  }
+  .analytics-widget {
+    @apply bg-[url(../images/dashboard-10/light-bg.jpg)] bg-cover bg-no-repeat bg-right rounded-[20px];
+
+    img {
+      @apply h-[138px];
+    }
+    .btn {
+      @apply min-w-[auto];
+    }
+    p {
+      @apply mb-4;
+    }
+  }
+  .analytics-tread-card {
+    &:hover {
+      @apply translate-y-[-5px] transition-[0.5s];
+    }
+    .header-top {
+      svg {
+        @apply w-3.5 h-3.5;
+      }
+    }
+    .progress {
+      @apply h-3 bg-[rgba(var(--info-color),10%)] mt-[58px] mb-5 mx-0;
+      .progress-bar-striped {
+        @apply bg-[linear-gradient(_45deg,rgba(255,255,255,0.8)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.8)_50%,rgba(255,255,255,0.8)_75%,transparent_75%,transparent_)];
+      }
+    }
+    .analytics-tread {
+      @apply w-[calc(48px_+_(58_-_48)_*_((100vw_-_320px)_/_(1920_-_320)))] h-[calc(48px_+_(58_-_48)_*_((100vw_-_320px)_/_(1920_-_320)))] flex justify-center items-center rounded-[5px];
+      svg {
+        @apply w-[calc(20px_+_(28_-_20)_*_((100vw_-_320px)_/_(1920_-_320)))] h-[calc(20px_+_(28_-_20)_*_((100vw_-_320px)_/_(1920_-_320)))];
+      }
+    }
+    .session-progress {
+      .progress {
+        @apply bg-[rgba(var(--success-color),10%)];
+        .small-progressbar {
+          .animate-circle {
+            @apply border-[rgba(var(--success-color),0.62)] bg-[(90deg,rgba(101,193,92,0.2)_0%,#65c15c_76.58%)] animate-[unset] p-2.5 border-[5px] border-solid -right-4 -top-2.5;
+          }
+          &::after {
+            @apply bg-[rgba(var(--success-color),1)];
+          }
+        }
+        .small-progressbar {
+          &::after {
+            @apply top-[-3px] right-[-9px] w-4 h-4;
+          }
+        }
+        .progress-label {
+          @apply top-[-55px] bg-[rgba(var(--success-color),1)] text-sm text-[rgba(var(--white),1)] font-semibold px-2 py-0.5 rounded-md -right-5 after:content-[""] after:absolute after:block after:border-t-[rgba(var(--success-color),1)] after:border-l-[transparent] after:border-r-[transparent] after:-translate-x-2/4 after:translate-y-[calc(100%_-_0px)] after:border-b-0 after:border-8 after:border-solid after:left-2/4 after:bottom-0;
+        }
+      }
+    }
+    &.retention-progress {
+      .card-body {
+        .progress {
+          @apply mt-[38px];
+        }
+      }
+    }
+    .header-top {
+      .common-align {
+        @apply items-baseline gap-2;
+      }
+    }
+  }
+  .user-analytics-wrapper {
+    @apply ml-[-30px] -mr-2.5 -mt-10 -mb-5;
+  }
+  .analytics-view-wrapper {
+    @apply mt-[-34px] mb-[-30px] overflow-hidden ml-0 -mr-2.5;
+  }
+  .visit-duration-wrapper {
+    @apply mt-[-34px] mb-[-30px] ml-0 mr-[35px];
+  }
+  .bounce-rate-wrapper {
+    @apply mt-[-34px] mb-[-30px] overflow-hidden ml-0 -mr-5;
+  }
+  .main-session-devices {
+    .common-align {
+      @apply flex-col gap-8;
+      align-items: unset;
+      p {
+        @apply text-base font-medium mb-0;
+      }
+    }
+    .progress {
+      @apply h-2.5 rounded-[100px];
+      background: linear-gradient(180.36deg, #cfdce8 -32.82%, #ffffff 132.82%);
+    }
+  }
+  .session-browser-table {
+    .overflow-x-auto {
+      .table {
+        thead,
+        tbody {
+          tr {
+            th,
+            td {
+              @apply text-[rgba(var(--body-font-color),1)] min-w-[auto] border-0;
+              &:first-child {
+                @apply pl-5;
+              }
+              &:last-child {
+                @apply pr-5;
+              }
+              .session-name {
+                @apply text-[rgba(var(--body-font-color),1)] font-medium;
+              }
+            }
+            &:last-child {
+              td {
+                @apply pb-0;
+              }
+            }
+          }
+        }
+        thead {
+          tr {
+            th {
+              @apply text-[rgba(var(--badge-light-color),1)];
+            }
+          }
+        }
+      }
+    }
+  }
+  .jvm-zoom-btn {
+    @apply hidden;
+  }
+  .live-user-map {
+    #map {
+      @apply h-[245px];
+    }
+  }
+  .common-m-chart {
+    @apply -mb-5;
+  }
+  @screen sm420 {
+    .dashboard-10 .card.heading-space .header-top {
+      @apply ml-0;
+    }
+    .page-analytics-table .recent-table div.dt-container .dt-layout-row {
+      @apply relative;
+    }
+    .page-analytics-table .recent-table div.dt-container .dt-layout-row .dt-layout-cell .dt-search {
+      @apply right-[-130px] !left-[unset];
+    }
+    .page-analytics-table .recent-table div.dt-container .dt-layout-row:first-child .dt-length {
+      @apply left-5 top-0;
+    }
+  }
+
+  @screen xl1500 {
+    .page-analytics-table .recent-table div.dt-container .dt-layout-row .dt-layout-cell .dt-search {
+      @apply relative w-[90%] mb-5 left-5 top-1;
+    }
+  }
+
+  @screen between1580-1200 {
+    .page-analytics-table {
+      .recent-table {
+        .table {
+          thead,
+          tbody {
+            tr {
+              th,
+              td {
+                &:nth-child(5) {
+                  @apply hidden;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen between1366-1200 {
+    .page-analytics-table {
+      .recent-table {
+        .table {
+          thead,
+          tbody {
+            tr {
+              th,
+              td {
+                &:nth-child(4) {
+                  @apply hidden;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen md640 {
+    .page-analytics-table {
+      .recent-table {
+        .table {
+          thead,
+          tbody {
+            tr {
+              th,
+              td {
+                &:nth-child(2) {
+                  @apply min-w-[104px];
+                }
+                &:nth-child(5),
+                &:nth-child(4),
+                &:nth-child(3) {
+                  @apply min-w-[118px];
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen xl1700 {
+    .analytics-tread-card .progress {
+      @apply h-2;
+    }
+    .analytics-tread-card .session-progress .progress .small-progressbar .animate-circle {
+      @apply top-[-11px];
+    }
+    .analytics-tread-card .session-progress .progress .small-progressbar::after {
+      @apply top-[-3px] w-3.5 h-3.5;
+    }
+  }
+  @screen xl {
+    .analytics-tread-card .progress {
+      @apply mt-10 mb-5 mx-0;
+    }
+    .analytics-tread-card.retention-progress .card-body .progress {
+      @apply mt-3;
+    }
+    .ord-md-i {
+      @apply order-1;
+    }
+    .ord-md-ii {
+      @apply order-2;
+    }
+    .ord-md-iii {
+      @apply order-3;
+    }
+    .ord-md-iv {
+      @apply order-4;
+    }
+    .ord-md-v {
+      @apply order-5;
+    }
+    .ord-md-vi {
+      @apply order-6;
+    }
+    .ord-md-vii {
+      @apply order-7;
+    }
+    .ord-md-viii {
+      @apply order-8;
+    }
+    .ord-md-ix {
+      @apply order-9;
+    }
+    .ord-md-x {
+      @apply order-10;
+    }
+  }
+
+  @screen xxl {
+    .analytics-tread-card .session-progress .progress .progress-label {
+      @apply top-[-50px] text-xs -right-4;
+    }
+  }
+  @screen sm {
+    .main-session-devices .common-align {
+      @apply gap-2;
+    }
+    .user-analytics-wrapper {
+      @apply -ml-5 mr-0 -mt-10 -mb-5;
+    }
+    .analytics-widget {
+      @apply text-center bg-top;
+    }
+  }
+  @screen md {
+    .live-user-map #map {
+      @apply h-[150px];
+    }
+  }
+}

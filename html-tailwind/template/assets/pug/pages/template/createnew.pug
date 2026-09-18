@@ -1,0 +1,145 @@
+- var page_Title = 'Project Create';
+- var form_validation       = true;
+- var form_validation_custom = true;
+- var theme_customizer      = true;
+- var sidebar               = true;
+- var bs_select             = true;
+- var header_slider         = true;
+- var scrollbar             = true;
+- var slick                 = true;   
+doctype html
+html(lang='en')
+  include ../../components/header-files
+  body
+    include ../../components/loader
+    include ../../components/taptop
+    // page-wrapper Start
+    #pageWrapper.page-wrapper.default-wrapper
+      include ../../components/header
+      // Page Body Start
+      .page-body-wrapper.default-menu.default-menu
+        include ../../components/sidebar
+        .page-body
+          .container.w-full
+            .page-title
+              .grid.grid-cols-12.mx-2.items-center
+                div(class="col-span-6 sm:col-span-12")
+                  h3 
+                    | Project Create
+
+                div(class="col-span-6 sm:col-span-12")
+                  ol.breadcrumb.flex
+                    li.breadcrumb-item
+                      a(href='index.html')                                        
+                        svg.stroke-icon
+                          use(href='../assets/svg/icon-sprite.svg#stroke-home')
+                    li.breadcrumb-item Projects
+                    li.breadcrumb-item.active Project Create                           
+          // Container-fluid starts
+          .container
+            .grid.grid-cols-12.card-gap
+              div(class="col-span-12")
+                .card.create-project-form.custom-input
+                  .card-body
+                    .grid.grid-cols-12 
+                      div(class="col-span-12") 
+                        form.grid.grid-cols-12.gap-3.needs-validation(novalidate='')
+                          div(class="col-span-6 md:col-span-12")
+                            label.form-label(for='projectName') Project Name
+                            input#projectName.form-control(type='text' placeholder="Project Name" required='')
+                            .valid-feedback
+                              | Looks good!
+                          div(class="col-span-6 md:col-span-12")
+                            label.form-label(for='clientName') Client Name
+                            input#clientName.form-control(type='text' placeholder="Client Name"  required='')
+                            .valid-feedback
+                              | Looks good!
+                          div(class="col-span-4 lg:col-span-6 md:col-span-12")
+                            label.form-label(for='projectCost') Cost
+                            input#projectCost.form-control(type='text' placeholder="Project cost" required='')
+                            .invalid-feedback
+                              | Please enter a project cost
+                          div(class="col-span-4 lg:col-span-6 md:col-span-12")
+                            label.form-label(for='projectType') Project Type
+                            select#projectType.form-select(required='')
+                              option(selected='' disabled='' value='') Choose...
+                              option Hourly 
+                              option Fixed
+                            .invalid-feedback
+                              | Please select a valid project type
+                          div(class="col-span-4 lg:col-span-6 md:col-span-12")
+                            label.form-label(for='projectCategory') Category
+                            select#projectCategory.form-select(required='')
+                              option(selected='' disabled='' value='') Choose...
+                              option Developer
+                              option Designer 
+                              option Analyst
+                              option Scientist
+                              option Architect
+                            .invalid-feedback
+                              | Please select a valid category
+                          div(class="col-span-4 xxl:col-span-6 md:col-span-12")
+                            label.form-label(for='projectPriority') Priority
+                            select#projectPriority.form-select(required='')
+                              option(selected='' disabled='' value='') Choose...
+                              option Urgent
+                              option High
+                              option Medium
+                              option Low
+                            .invalid-feedback
+                              | Please select a valid priority
+                          div(class="col-span-4 xxl:col-span-6 md:col-span-12")
+                            label.form-label(for='selectTeamLeader') Select Team Leader
+                            select#selectTeamLeader.form-select(required='')
+                              option Nathan Cooper
+                              option Owen Davis
+                              option Zoey Jenkins
+                              option Alexis Taylor
+                            .invalid-feedback
+                              | Please select your team leader
+                          div(class="col-span-4 xxl:col-span-6 md:col-span-12")
+                            label.form-label(for='selectMember') Select Members
+                            select#selectMember.form-select(required='')
+                              option(value='1' selected) Nathan Cooper
+                              option(value='2' selected) Owen Davis
+                              option(value='3') Zoey Jenkins
+                              option(value='4' selected) Alexis Taylor
+                              option(value='5') Leonel Hodges
+                              option(value='6') Emelia Green
+                            .invalid-feedback
+                              | Please select your team leader
+                          div(class="col-span-4 xxl:col-span-6 lg:col-span-12")
+                            label.form-label(for='projectSize') Size
+                            select#projectSize.form-select(required='')
+                              option(selected='' disabled='' value='') Choose...
+                              option Small
+                              option Medium
+                              option Large
+                            .invalid-feedback
+                              | Please select your project size
+                          div(class="col-span-4 xxl:col-span-6 md:col-span-12")
+                            label.form-label Start Date
+                            input.form-control(type='date' required='')
+                            .invalid-feedback
+                              | Please select your start date
+                          div(class="col-span-4 xxl:col-span-6 md:col-span-12")
+                            label.form-label End Date
+                            input.form-control(type='date' required='')
+                            .invalid-feedback
+                              | Please select your end date
+                          div(class="col-span-12") 
+                            label.form-label(for='validationTextarea') Details
+                            textarea#validationTextarea.form-control(placeholder='Enter Project details' required='' rows="4")
+                            .invalid-feedback
+                              | Please enter your project details.
+                          div(class="col-span-12") 
+                            label.form-label(for='formFileMultiple') Upload Documents
+                            input#formFileMultiple.form-control(type='file' multiple='' required='')
+                            .invalid-feedback
+                              | Please select your files.
+                          div(class="col-span-12")
+                            .common-flex.justify-end
+                              button.btn.btn-primary.text-white(type='submit') Add 
+                              button.btn.btn-secondary.text-white Cancel
+        include ../../components/footer
+    include ../../components/footer-files

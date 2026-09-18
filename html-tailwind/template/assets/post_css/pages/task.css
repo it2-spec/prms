@@ -1,0 +1,195 @@
+@layer components {
+  .modal-open {
+    .datepickers-container {
+      @apply z-[1075];
+    }
+  }
+  .date-details {
+    @apply items-center;
+    > div {
+      + div {
+        @apply ml-2.5;
+      }
+    }
+  }
+  .taskadd {
+    table {
+      tr {
+        td {
+          @apply border-t-[none] first:pl-5 last:pr-5;
+          &:last-child {
+            a {
+              @apply grid place-items-center w-[25px] h-[25px] rounded-[3px] bg-[rgba(var(--light-danger),1)];
+              svg {
+                @apply text-[rgba(var(--danger-color),1)];
+              }
+            }
+          }
+          svg {
+            @apply text-[rgba(var(--semi-dark),1)] w-[18px] h-[18px];
+          }
+        }
+        &:first-child {
+          td {
+            @apply pt-5;
+          }
+        }
+        &:last-child {
+          td {
+            @apply pb-5 border-b-[unset];
+          }
+        }
+      }
+    }
+  }
+  .main-tasks {
+    .main-menu {
+      li {
+        &:last-child {
+          @apply border-t-[rgba(var(--chart-dashed-border),1)] mt-3.5 pt-3.5 border-t border-solid;
+        }
+      }
+    }
+    .task-stats {
+      .common-align {
+        @apply bg-[rgba(var(--theme-default),0.1)] rounded gap-3 p-3;
+        [class*="bg-"] {
+          @apply grid place-items-center rounded-[3px] w-[40px] h-[40px];
+          i {
+            @apply text-xl text-[rgba(var(--white),1)] m-0;
+          }
+        }
+        h4 {
+          @apply leading-[1.2];
+        }
+      }
+    }
+    .form-select {
+      @apply text-sm text-[rgba(var(--badge-light-color),0.8)];
+    }
+    .bootstrap-select {
+      .dropdown-toggle {
+        @apply border-[rgba(var(--badge-light-color),0.1)];
+        .filter-option {
+          white-space: initial;
+        }
+      }
+      .dropdown-menu {
+        .dropdown-item {
+          @apply opacity-100 text-[rgba(var(--badge-light-color),0.6)];
+        }
+      }
+      .no-results {
+        @apply text-sm m-0 px-3 py-0;
+      }
+    }
+    .was-validated {
+      .bootstrap-select {
+        select {
+          &:valid + .dropdown-toggle {
+            @apply border-[rgba(var(--success-color),1)];
+          }
+          &:invalid + .dropdown-toggle {
+            @apply border-[rgba(var(--danger-color),1)];
+          }
+        }
+      }
+    }
+    .common-task-table {
+      .overflow-x-auto {
+        div {
+          &.dt-container {
+            .dt-layout-row {
+              .dt-search {
+                @apply right-[-50px];
+              }
+              .dt-length {
+                @apply top-4;
+              }
+              .dt-layout-cell {
+                .dt-info {
+                  @apply flex gap-3;
+                }
+              }
+            }
+          }
+        }
+        form {
+          @apply p-5;
+        }
+        table {
+          thead,
+          tbody {
+            tr {
+              th,
+              td {
+                @apply min-w-[auto] text-[rgba(var(--body-font-color),1)];
+                a {
+                  @apply text-[rgba(var(--body-font-color),1)];
+                }
+                &:first-child {
+                  @apply pl-5;
+                }
+                &:last-child {
+                  @apply pr-5;
+                }
+                &:nth-child(2) {
+                  @apply max-w-[150px];
+                }
+                &:nth-child(3) {
+                  span {
+                    @apply w-[140px] h-[auto];
+                    display: -webkit-box !important;
+                    -webkit-line-clamp: 2;
+                    overflow: hidden;
+                    -webkit-box-orient: vertical;
+                  }
+                }
+                span {
+                  &.badge {
+                    @apply text-xs px-3 py-1.5;
+                  }
+                }
+                ul {
+                  li {
+                    + li {
+                      @apply -ml-3;
+                    }
+                  }
+                }
+                img {
+                  @apply h-[30px];
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen sm {
+    .taskadd {
+      table {
+        tr {
+          td {
+            &:first-child {
+              @apply pl-[15px];
+            }
+          }
+
+          &:first-child {
+            td {
+              @apply pt-[15px];
+            }
+          }
+
+          &:last-child {
+            td {
+              @apply pb-[15px];
+            }
+          }
+        }
+      }
+    }
+  }
+}

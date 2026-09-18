@@ -1,0 +1,580 @@
+@layer components {
+  .trending-card {
+    @apply !bg-cover !bg-no-repeat !bg-[url(../images/dashboard-6/bg-1.png)];
+    .card-header {
+      @apply bg-[rgba(var(--transparent-color))];
+    }
+    .activity-card {
+      .appointment-table {
+        table {
+          tr {
+            td {
+              &:nth-child(2) {
+                @apply min-w-[90px];
+              }
+              &:last-child {
+                @apply min-w-[95px];
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .explore-card {
+    @apply !bg-cover !bg-no-repeat !bg-[url(../images/dashboard-6/bg-2.png)];
+    .group-btn {
+      @apply flex gap-[15px];
+      .btn {
+        @apply py-[0.6rem];
+      }
+    }
+    .decore {
+      li {
+        @apply absolute;
+      }
+      .dot-gradient {
+        @apply w-[22px] h-[22px] rounded-[100%];
+        background: linear-gradient(#e3e3ef, rgba(var(--primary-color), 0.3));
+        &.dot-1 {
+          @apply right-[-18px] animate-[dot-animation_5s_ease_infinite] top-0;
+        }
+        &.dot-2 {
+          @apply w-3 h-3 animate-[dot-animation1_5s_ease_infinite] right-[-40%] top-[19%];
+        }
+      }
+    }
+  }
+  .total-balance {
+    @apply bg-cover bg-no-repeat bg-[url(../images/dashboard-6/bg-3.png)];
+    .btn {
+      @apply py-2;
+    }
+    .card-header {
+      background: transparent;
+      p {
+        @apply ml-[0] mr-[0] w-[226px] overflow-hidden text-ellipsis;
+        -webkit-line-clamp: 1;
+        display: -webkit-box;
+      }
+    }
+    .card-body {
+      .common-f-start {
+        @apply gap-[22px] mb-2;
+        .flex {
+          &:nth-of-type(2) {
+            @apply border-l-[rgba(var(--recent-dashed-border),1)] pl-[22px] border-l border-solid;
+          }
+        }
+        [class*="bg-light-"] {
+          @apply w-6 h-6 grid place-items-center rounded-[50%];
+          i {
+            @apply text-xs rotate-45;
+          }
+        }
+      }
+    }
+  }
+  .income-chart-wrapper {
+    @apply -mb-2.5;
+    .apexcharts-tooltip {
+      &.apexcharts-theme-light {
+        .apexcharts-tooltip-title,
+        .apexcharts-tooltip-goals-groupm,
+        .apexcharts-tooltip-z-group {
+          @apply hidden;
+        }
+        .apexcharts-tooltip-series-group.apexcharts-active,
+        .apexcharts-tooltip-series-group:last-child {
+          @apply pb-0;
+        }
+      }
+    }
+  }
+  .sale-status-table {
+    .table {
+      > :not(:last-child) > :last-child > * {
+        border-bottom: none;
+      }
+    }
+    table {
+      @apply border-spacing-[0_10px] border-separate;
+      tr,
+      td,
+      th {
+        border: none;
+      }
+      thead {
+        th {
+          @apply pb-0;
+          border: none;
+        }
+      }
+      tbody {
+        tr {
+          @apply shadow-[0px_6px_10px_rgba(70,60,175,0.05)] rounded-[5px];
+          td {
+            a {
+              @apply text-[rgba(var(--body-font-color),1)] font-medium block;
+            }
+          }
+        }
+      }
+    }
+  }
+  .arrow-round {
+    .swiper-button-next,
+    .swiper-button-prev {
+      @apply z-[1] w-[29px] h-[21px] shadow-[0px_4px_3px_rgba(115,102,255,0.1)] rounded-[30px] top-[42px] bg-[rgba(var(--white),1)];
+      &::after {
+        @apply text-[10px] text-[rgba(var(--theme-default),1)];
+      }
+    }
+    .swiper-button-next {
+      @apply right-[30px];
+      [dir="rtl"] & {
+        @apply left-[30px] right-[unset];
+      }
+    }
+    .swiper-button-prev {
+      @apply left-[unset] right-[70px];
+      [dir="rtl"] & {
+        @apply left-[70px] right-[unset];
+      }
+    }
+  }
+  .product-card {
+    .product-image {
+      > img {
+        @apply w-full rounded h-[6.875rem] object-cover;
+      }
+      .author-img {
+        @apply text-right block mr-1.5 -mt-5;
+      }
+    }
+    .product-nft-content {
+      @apply mt-[5px];
+      ul {
+        @apply flex justify-between;
+        li {
+          @apply w-full;
+          + li {
+            @apply text-right border-l-[rgba(var(--recent-dashed-border),1)] border-l border-dashed;
+          }
+        }
+      }
+      .btn {
+        @apply block text-center px-0 py-2;
+      }
+    }
+  }
+  .artist-chart-wrap {
+    > div {
+      @apply ml-[-15px] -mr-2.5;
+    }
+    .apexcharts-tooltip {
+      .apexcharts-tooltip-z-group,
+      .apexcharts-tooltip-goals-group,
+      .apexcharts-tooltip-text-y-label {
+        @apply hidden;
+      }
+      .apexcharts-tooltip-series-group.apexcharts-active,
+      .apexcharts-tooltip-series-group:last-child {
+        @apply pb-0;
+      }
+    }
+  }
+  .statistic-chart-wrap {
+    @apply mb-[-25px] -ml-5;
+    .apexcharts-tooltip {
+      .apexcharts-tooltip-z-group,
+      .apexcharts-tooltip-goals-group,
+      .apexcharts-tooltip-text-y-label {
+        @apply hidden;
+      }
+    }
+  }
+  .statistics-card {
+    .flex {
+      li {
+        + li {
+          @apply border-l-[rgba(var(--recent-dashed-border),1)] ml-[15px] pl-[15px] border-l border-dashed;
+          [dir="rtl"] & {
+            @apply border-l-[0px] border-r-[rgba(var(--recent-dashed-border),1)] ml-[unset] mr-[15px] pl-[unset] pr-[15px] border-r border-dashed;
+          }
+        }
+      }
+    }
+  }
+  .upgrade-plan {
+    &.mobile-app-card {
+      .card-header {
+        p {
+          @apply text-ellipsis overflow-hidden whitespace-normal;
+          display: -webkit-box !important;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+        }
+      }
+      .card-body {
+        img {
+          @apply mt-[-130px] w-36 h-[150px] mb-5;
+        }
+      }
+    }
+  }
+  .category-box {
+    img {
+      @apply w-full rounded-lg;
+    }
+    h6 {
+      @apply block w-[calc(100%_-_50px)] text-[rgba(var(--body-font-color),1)] text-center relative -mt-5 mx-auto my-0 p-2.5 rounded-[5px] bg-[rgba(var(--white),1)];
+    }
+  }
+  .artist-table {
+    button {
+      span {
+        @apply text-[rgba(var(--theme-default),1)];
+      }
+      svg {
+        @apply w-[15px] h-[15px] align-text-bottom;
+      }
+      &:hover {
+        span {
+          @apply text-[rgba(var(--white),1)];
+        }
+      }
+    }
+    .appointment-table.customer-table {
+      table {
+        tr {
+          td {
+            .medal-img {
+              @apply min-w-[30px];
+            }
+          }
+        }
+      }
+    }
+  }
+  .nft-table {
+    &.recent-table {
+      table {
+        tr {
+          th,
+          td {
+            @apply min-w-[auto];
+            &:first-child {
+              @apply pl-5;
+            }
+            &:last-child {
+              @apply pr-5;
+            }
+          }
+        }
+      }
+      svg {
+        @apply w-[18px] h-[18px];
+      }
+      .product-content {
+        .order-image {
+          @apply relative bg-[rgba(var(--transparent-color),1)];
+          .mark-img {
+            @apply absolute right-0 bottom-0.5;
+          }
+        }
+      }
+    }
+  }
+  .activity-table {
+    .status-success {
+      @apply min-w-[6px] h-1.5 rounded-[100%] bg-[rgba(var(--success-color))];
+    }
+    .img-content-box {
+      @apply min-w-[108px];
+    }
+  }
+  .live-auction-wrapper {
+    .product-nft-content {
+      .common-flex {
+        @apply gap-2;
+        .btn {
+          @apply w-full;
+        }
+        svg {
+          @apply w-[18px] h-[18px] fill-[rgba(var(--theme-default),1)];
+        }
+        .timer {
+          @apply flex justify-center items-center gap-1;
+        }
+        span {
+          span {
+            @apply text-[rgba(var(--theme-default),1)];
+          }
+        }
+        .common-align {
+          @apply gap-1;
+        }
+      }
+      img {
+        @apply h-4;
+      }
+      .btn {
+        @apply px-[26px] py-1.5;
+        &:hover {
+          svg {
+            @apply fill-[rgba(var(--white),1)];
+          }
+          span {
+            span {
+              @apply text-[rgba(var(--white),1)];
+            }
+          }
+        }
+      }
+    }
+  }
+  .art-creator-table {
+    &.recent-table {
+      table {
+        thead,
+        tbody {
+          tr {
+            th,
+            td {
+              @apply min-w-[auto];
+              &:first-child {
+                @apply pl-5;
+              }
+              &:last-child {
+                @apply pr-5;
+              }
+              .img-content-box {
+                a {
+                  @apply text-[rgba(var(--body-font-color),1)];
+                }
+              }
+              img {
+                @apply h-[38px];
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .nft-collection {
+    @apply relative overflow-hidden;
+    .swiper-container {
+      @apply w-full h-[300px] cursor-pointer mx-auto;
+      img {
+        @apply h-[130px] w-full object-cover;
+      }
+    }
+    .swiper-slide {
+      @apply bg-cover bg-center;
+    }
+    .gallery-top {
+      @apply h-full w-full mt-3.5;
+    }
+    .gallery-thumbs {
+      @apply h-1/5;
+    }
+    .gallery-thumbs .swiper-slide {
+      @apply h-full opacity-30;
+    }
+    .gallery-thumbs {
+      .swiper-slide-thumb-active {
+        @apply opacity-100;
+      }
+    }
+    .swiper-button-next,
+    .swiper-button-prev {
+      @apply hidden;
+    }
+    .nft-user-info {
+      @apply mt-[25px];
+      img {
+        @apply w-[30px] h-[30px] object-cover;
+      }
+      .user-desc {
+        @apply flex justify-start items-center gap-[3px] text-[rgba(var(--badge-light-color),0.8)] flex-wrap;
+        i {
+          @apply text-[6px];
+        }
+      }
+    }
+  }
+  .dashboard-6 {
+    .income-wrap {
+      .card-header {
+        .dropdown {
+          .dropdown-toggle {
+            &:active {
+              @apply bg-[rgba(115,102,255,0.08)] text-[rgba(var(--theme-default),1)];
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen xl {
+    .explore-card {
+      @apply bg-[rgba(var(--white),0.5)] bg-blend-overlay;
+    }
+    .explore-wrap {
+      @apply -order-1;
+    }
+  }
+  @screen sm {
+    .sale-status-table {
+      table {
+        th,
+        td {
+          &:last-child {
+            @apply hidden;
+          }
+        }
+      }
+    }
+    .explore-card .group-btn .btn {
+      @apply py-1.5;
+    }
+  }
+  @screen lg {
+    .explore-card .decore {
+      @apply hidden;
+    }
+    .upgrade-plan.mobile-app-card .card-body img {
+      @apply -mt-32;
+    }
+  }
+  @screen lg {
+    .arrow-round {
+      .swiper-button-next,
+      .swiper-button-prev {
+        @apply top-[42px];
+      }
+    }
+    .nft-table.recent-table div.dt-container .dt-layout-row .dt-layout-cell .dt-search {
+      @apply relative mb-5 left-5 top-1;
+    }
+  }
+
+  @screen xl1660 {
+    .explore-card .decore .dot-gradient.dot-1 {
+      @apply right-[45px] top-6;
+    }
+  }
+
+  @screen lg {
+    .nft-table.recent-table table tr th:nth-child(2),
+    .nft-table.recent-table table tr td:nth-child(2) {
+      @apply min-w-[162px];
+    }
+    .nft-table.recent-table table tr th:nth-child(4),
+    .nft-table.recent-table table tr td:nth-child(4) {
+      @apply min-w-[68px];
+    }
+  }
+  @screen xl {
+    .art-creator-table {
+      &.recent-table {
+        table {
+          thead,
+          tbody {
+            tr {
+              th,
+              td {
+                &:first-child {
+                  @apply min-w-[200px];
+                }
+                &:last-child,
+                &:nth-child(2) {
+                  @apply min-w-[85px];
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen sm480 {
+    .explore-card {
+      .card-body {
+        div {
+          @apply w-full;
+        }
+      }
+    }
+  }
+  @screen between1660-1400 {
+    .custom-rs-4 {
+      grid-column: span 4 / span 4 !important;
+    }
+
+    .custom-rs-12 {
+      grid-column: span 12 / span 12 !important;
+    }
+    .sale-status-table {
+      table {
+        th,
+        td {
+          &:nth-child(2) {
+            @apply max-w-[50px] px-2 py-0;
+          }
+          &:last-child {
+            @apply hidden;
+          }
+        }
+      }
+    }
+    .art-creator-table {
+      &.recent-table {
+        table {
+          thead,
+          tbody {
+            tr {
+              th,
+              td {
+                &:last-child {
+                  @apply hidden;
+                }
+                &:nth-child(2) {
+                  @apply pr-5;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@keyframes dot-animation {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.5) translateX(-10px);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes dot-animation1 {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.4) translateX(-10px);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}

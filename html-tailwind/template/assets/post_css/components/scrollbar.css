@@ -1,0 +1,48 @@
+@layer components {
+  [data-simplebar] {
+    position: unset;
+  }
+  .simplebar-mask {
+    @apply top-[100px];
+  }
+  .simplebar-track {
+    @apply -right-0.5;
+    &.simplebar-vertical {
+      @apply w-2.5 top-[100px];
+    }
+    &.simplebar-horizontal {
+      @apply !invisible;
+    }
+  }
+  .simplebar-scrollbar {
+    &:before {
+      @apply bg-[rgba(var(--theme-default),0.2)];
+    }
+  }
+  .scrollbar-images {
+    @apply mb-3;
+  }
+  .visible-wrapper {
+    img {
+      @apply w-[calc(_230px_+_(330_-_230)_*_((100vw_-_320px)_/_(1920_-_320))_)];
+    }
+  }
+  .horizontal-scroll {
+    .horz-scroll-content {
+      .horizontal-img {
+        @apply h-full;
+        img {
+          @apply h-full object-cover;
+        }
+      }
+    }
+  }
+  .scroll-demo {
+    &.scroll-b-none {
+      @apply p-0 border-0;
+    }
+  }
+  [dir="rtl"] .scroll-demo .scroll-rtl .list-group-item span {
+    @apply mr-auto;
+  }
+}

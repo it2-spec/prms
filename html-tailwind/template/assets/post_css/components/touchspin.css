@@ -1,0 +1,111 @@
+@layer components {
+  .taiwind-touchspin {
+    input {
+      &.touchspin {
+        @apply px-3 py-0;
+      }
+    }
+    .input-group {
+      .btn {
+        @apply px-7 py-2 rounded-none;
+      }
+    }
+    .touchspin-vertical-tab {
+      .input-group {
+        .input-group-btn-vertical {
+          @apply relative whitespace-nowrap w-[1%] align-middle table-cell;
+          .taiwind-touchspin-down {
+            @apply -mt-0.5;
+          }
+          i {
+            @apply absolute text-[10px] font-[normal] left-[7px] top-1;
+          }
+          > .btn {
+            @apply block float-none w-full max-w-full relative -ml-px p-[9px];
+          }
+        }
+      }
+    }
+    .input-group {
+      font-family: var(--font-rubik), var(--font-serif);
+    }
+    .dropdown-basic {
+      .dropdown {
+        .dropbtn {
+          @apply px-[30px] py-[9px];
+        }
+        .dropdown-content {
+          @apply z-[9999];
+        }
+      }
+    }
+  }
+  .touchspin-wrapper {
+    @apply flex gap-1;
+    .btn-touchspin {
+      @apply rounded-[5px] w-[32px] h-[32px];
+      i {
+        @apply align-middle;
+      }
+    }
+    input[type="number"] {
+      @apply text-center p-[3px] w-[85px] h-[30px];
+    }
+  }
+  .hover-touchspin {
+    .btn-touchspin {
+      &.spin-border-dark {
+        &:hover {
+          @apply bg-[rgba(var(--dark-color),1)] text-[rgba(var(--white),1)];
+        }
+      }
+    }
+  }
+  .pre-post-touchspin {
+    .decrement-touchspin,
+    .increment-touchspin,
+    .input-group-text {
+      @apply px-3.5 py-[7px] border-0;
+    }
+    .input-group-text {
+      @apply bg-[rgba(var(--light-bg),1)];
+    }
+    .input-touchspin {
+      @apply border border-[rgba(var(--course-light-btn),1)] text-center border-solid border-2;
+    }
+    .input-group {
+      @apply w-auto;
+    }
+    &.bg-touchspin {
+      button[type="button"] {
+        @apply border border-[color:var(--course-light-btn)] border text-center px-1.5 py-px border-solid;
+      }
+    }
+    .input-group
+      > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(
+        .valid-feedback
+      ):not(.invalid-tooltip):not(.invalid-feedback) {
+      @apply rounded-tl-none rounded-bl-none;
+    }
+  }
+  .rounded-touchspin {
+    .btn-touchspin {
+      @apply rounded-[50%];
+    }
+    .touchspin-wrapper {
+      input[type="number"] {
+        &.input-touchspin {
+          @apply rounded-[15px];
+        }
+      }
+    }
+  }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    @apply m-0;
+    -webkit-appearance: none;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+}

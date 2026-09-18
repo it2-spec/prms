@@ -1,0 +1,615 @@
+@layer components {
+  .dashboard-11 {
+    .project-finish-card {
+      .growth-info {
+        p {
+          @apply items-center;
+        }
+      }
+    }
+    .project-analytics {
+      .header-top {
+        h5 {
+          @apply items-center;
+        }
+      }
+    }
+  }
+  .widget-11 {
+    @apply !bg-[url(../images/dashboard/widget-bg.png)] bg-cover mb-[25px];
+    .card-body {
+      @apply px-[19px] py-5;
+      .common-align {
+        @apply gap-[15px];
+      }
+      .analytics-tread {
+        @apply min-w-[calc(48px_+_(58_-_48)_*_((100vw_-_320px)_/_(1920_-_320)))] min-h-[calc(48px_+_(58_-_48)_*_((100vw_-_320px)_/_(1920_-_320)))] flex justify-center items-center rounded-[5px];
+        svg {
+          @apply w-[calc(20px_+_(28_-_20)_*_((100vw_-_320px)_/_(1920_-_320)))] h-[calc(20px_+_(28_-_20)_*_((100vw_-_320px)_/_(1920_-_320)))];
+        }
+      }
+    }
+  }
+  .attendance-table {
+    &.recent-table {
+      table {
+        thead,
+        tbody {
+          tr {
+            th,
+            td {
+              @apply text-[rgba(var(--body-font-color),1)] min-w-[auto];
+              a {
+                @apply text-[rgba(var(--body-font-color),1)];
+              }
+              &:first-child {
+                @apply pl-5;
+              }
+              &:last-child {
+                @apply pr-5;
+              }
+              .badge {
+                @apply text-center font-normal text-sm min-w-[70px] px-[7px] py-1;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .bhd-user-cards {
+    @apply !bg-[url(../images/dashboard-11/bg.png)] bg-no-repeat bg-cover;
+  }
+  .birthday-cards {
+    .swiper {
+      @apply w-full h-full my-[36px];
+      .swiper-slide {
+        img {
+          @apply block w-full h-full object-cover;
+        }
+        .birthday-usercard {
+          @apply text-center;
+          .btd-user {
+            @apply inline-block bg-[url(../images/dashboard-11/ring.png)] bg-no-repeat bg-cover relative mb-3 p-2 rounded-[100%];
+            img {
+              @apply h-20 rounded-[50%];
+            }
+            .verified-user {
+              @apply w-5 h-5 absolute flex items-center justify-center bg-[rgba(var(--success-color),1)] rounded-[100%] border-2 border-solid border-[rgba(var(--white),1)] right-1 bottom-3;
+              i {
+                @apply text-[8px] text-[rgba(var(--white),1)];
+              }
+            }
+          }
+        }
+      }
+      .swiper-button-prev,
+      .swiper-button-next {
+        @apply w-[26px] h-[23px] bg-[rgba(var(--white),0.2)] rounded-sm;
+        &::after {
+          @apply text-[10px] font-[bold] text-[rgba(var(--white),1)];
+          font-family: swiper-icons !important;
+        }
+      }
+    }
+    .send-wishes {
+      @apply bg-[rgba(var(--white),0.15)] flex items-center justify-center gap-2.5 w-fit cursor-pointer m-auto px-[23px] py-3.5 rounded-sm;
+      span {
+        @apply text-[rgba(var(--white),1)];
+      }
+      i {
+        @apply text-[rgba(var(--white),1)];
+      }
+    }
+    h5,
+    h6 {
+      @apply text-[rgba(var(--white),1)] text-center;
+    }
+  }
+  .project-analytics {
+    .analytics-data {
+      .balance-data {
+        @apply inline-flex;
+      }
+    }
+    .project-analytics-wrapper {
+      @apply -ml-2.5 mr-0 mt-0 -mb-5;
+    }
+  }
+  .app-overview-wrapper {
+    @apply mt-0 -mb-5 -mx-2.5;
+  }
+  .project-finish-card {
+    .project-left-content {
+      .progress {
+        @apply h-3.5 bg-transparent px-1 py-0.5 rounded-[20px];
+        background: linear-gradient(180.36deg, #cfdce8 -32.82%, #ffffff 99.69%);
+        .progress-bar {
+          @apply bg-[rgba(var(--transparent-color),1)];
+          .common-f-start {
+            .progress-box {
+              @apply w-full h-4 flex items-center gap-1 overflow-hidden bg-transparent rounded-[50px];
+              > div {
+                @apply w-[3px] min-w-[3px] max-w-[3px] h-[170%] bg-[rgba(var(--theme-default),1)];
+              }
+            }
+          }
+        }
+      }
+      > p {
+        @apply mb-[19px];
+      }
+      .growth-info {
+        @apply mb-[31px];
+        p {
+          @apply mb-[19px];
+        }
+      }
+    }
+    .project-progress {
+      span {
+        @apply mb-[7px];
+      }
+    }
+    .project-right-content {
+      @apply absolute bottom-[-60px] animate-[bounce-effect_3s_infinite_ease-in] -right-4;
+    }
+  }
+  .leave-request-table {
+    &.overflow-x-auto {
+      .table {
+        thead,
+        tbody {
+          th,
+          td {
+            @apply min-w-[auto] px-2 py-3;
+            &:first-child {
+              @apply pl-5;
+            }
+            &:last-child {
+              @apply pr-5;
+            }
+            img {
+              @apply h-10;
+            }
+            .img-content-box {
+              a {
+                @apply text-[rgba(var(--body-font-color),1)];
+              }
+            }
+          }
+        }
+        tbody {
+          .common-align {
+            .approval-box {
+              @apply w-[30px] h-[30px] flex justify-center items-center rounded-sm;
+            }
+          }
+        }
+      }
+    }
+  }
+  .interviewer-users {
+    ul {
+      li {
+        @apply flex justify-between items-center gap-1.5 px-[18px] py-2.5;
+        &:nth-child(odd) {
+          @apply bg-[rgba(var(--light2),1)];
+        }
+        .common-flex {
+          @apply gap-2;
+          h6 {
+            @apply text-sm;
+          }
+        }
+        span {
+          @apply min-w-[100px];
+        }
+        img {
+          @apply h-11 rounded-[50%];
+        }
+      }
+    }
+  }
+  .schedule-calender {
+    .card-header-right-icon {
+      .btn {
+        @apply border border-[rgba(var(--badge-light-color),20%)] text-[rgba(var(--body-font-color),1)] border-solid hover:bg-[rgba(var(--theme-default),1)] hover:text-[rgba(var(--white),1)];
+      }
+    }
+    .schedule-wrapper {
+      @apply border-b-[rgba(var(--badge-light-color),10%)] justify-center pb-7;
+      .tab-link {
+        @apply transition-all duration-[0.2s] ease-[ease] min-w-[62px] inline-block px-4 py-2 rounded-2xl border-[unset];
+        span {
+          @apply text-[rgba(var(--badge-light-color),80%)];
+        }
+        h6 {
+          @apply text-[rgba(var(--body-font-color),1)];
+        }
+        &.active {
+          @apply bg-[rgba(var(--theme-default),1)] transition-all duration-[0.2s] ease-[ease] rounded-2xl;
+          span,
+          h6 {
+            @apply text-[rgba(var(--white),1)] leading-[1.2];
+          }
+        }
+      }
+    }
+    .tab-content {
+      .activity-update {
+        > li {
+          @apply border-b-[rgba(var(--chart-border),1)] border-b border-solid last:pb-[unset] last:border-b-0 py-[12px];
+          > div {
+            @apply justify-between gap-1.5 rounded-[6px_0px_0px_6px] border-l-4;
+          }
+          .left-schedule {
+            @apply ml-3.5;
+            > span {
+              @apply font-medium text-[rgba(var(--body-font-color),1)] mb-1.5;
+            }
+            .customers {
+              @apply pr-1.5;
+              ul {
+                li {
+                  + li {
+                    @apply -ml-4;
+                  }
+                  img {
+                    @apply w-[35px];
+                  }
+                }
+              }
+            }
+            .schedule-name {
+              @apply border-l-[rgba(var(--badge-light-color),80%)] pl-1.5 border-l border-solid;
+            }
+          }
+          .right-schedule {
+            @apply flex gap-[5px] justify-center items-center;
+            svg {
+              @apply w-[18px] h-[18px];
+            }
+          }
+        }
+      }
+    }
+  }
+  .employee-list-table {
+    &.recent-table {
+      table {
+        thead,
+        tbody {
+          tr {
+            th,
+            td {
+              @apply min-w-[auto];
+            }
+          }
+        }
+        tbody {
+          tr {
+            td {
+              &:last-child {
+                @apply cursor-pointer;
+              }
+            }
+          }
+          .square-white {
+            @apply w-[34px] h-[34px] flex justify-center items-center bg-[rgba(var(--white),1)] shadow-[0px_0px_28px_6px_rgba(235,235,235,0.4)] rounded-sm;
+            svg {
+              @apply fill-[rgba(var(--badge-light-color),0.8)] w-4 h-4;
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen xxl {
+    .attendance-table {
+      &.recent-table {
+        div.dt-container {
+          .dt-layout-row {
+            .dt-search {
+              @apply relative w-fit mb-5 left-5 top-1;
+            }
+            &:last-child {
+              @apply flex-col;
+            }
+          }
+        }
+      }
+    }
+    .employee-list-table {
+      &.recent-table {
+        div.dt-container {
+          .dt-layout-row {
+            &:last-child {
+              @apply flex-col;
+            }
+            .dt-layout-cell {
+              .dt-search {
+                @apply relative w-fit block mb-5 left-5 top-1;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @screen between1660-1200 {
+    .attendance-table {
+      &.recent-table {
+        table {
+          thead,
+          tbody {
+            tr {
+              th,
+              td {
+                &:nth-child(2) {
+                  @apply hidden;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen xl {
+    .leave-request-table {
+      &.overflow-x-auto {
+        .table {
+          thead,
+          tbody {
+            th,
+            td {
+              &:first-child {
+                @apply min-w-[212px];
+              }
+              &:nth-child(2) {
+                @apply min-w-[114px];
+              }
+            }
+          }
+        }
+      }
+    }
+    .attendance-table {
+      &.recent-table {
+        table {
+          thead,
+          tbody {
+            tr {
+              th,
+              td {
+                &:first-child {
+                  @apply min-w-[120px];
+                }
+                &:nth-child(2) {
+                  @apply min-w-[108px];
+                }
+                &:nth-child(3) {
+                  @apply min-w-[104px];
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .employee-list-table {
+      &.recent-table {
+        table {
+          thead,
+          tbody {
+            tr {
+              th,
+              td {
+                &:nth-child(2) {
+                  @apply min-w-[160px];
+                }
+                &:nth-child(3) {
+                  @apply min-w-[122px];
+                }
+                &:nth-child(5) {
+                  @apply min-w-[120px];
+                }
+                &:nth-child(6) {
+                  @apply min-w-[114px];
+                }
+                &:last-child {
+                  .square-white {
+                    @apply w-6 h-6;
+                    svg {
+                      @apply w-3.5 h-3.5;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen xl1660 {
+    .project-analytics .analytics-data .balance-data {
+      @apply hidden;
+    }
+  }
+  @screen md640 {
+    .project-finish-card .project-right-content {
+      @apply bottom-[-57px];
+    }
+  }
+  @screen sm {
+    .project-finish-card {
+      @apply bg-[rgba(var(--light-shade-primary),0.3)] overflow-hidden;
+      .project-left-content {
+        @apply relative z-[1];
+      }
+      .project-right-content {
+        @apply opacity-40 translate-x-[50px] translate-y-[-50px] animate-[unset] z-0 bottom-[-140px] right-[50px];
+      }
+    }
+    .birthday-cards {
+      .swiper {
+        .swiper-slide {
+          .birthday-usercard {
+            .btd-user {
+              img {
+                @apply h-[65px];
+              }
+              .verified-user {
+                @apply w-4 h-4 bottom-2.5;
+                i {
+                  @apply text-[6px];
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .schedule-wrapper {
+      .tab-links {
+        @apply !flex-row;
+        .nav-item {
+          @apply !w-[auto];
+        }
+      }
+    }
+  }
+  @screen sm439 {
+    .project-finish-card .project-right-content {
+      @apply opacity-10;
+    }
+  }
+  @screen between1660-1400 {
+    .col-hr-6 {
+      @apply !col-span-6;
+    }
+    .leave-request-table {
+      &.overflow-x-auto {
+        .table {
+          thead,
+          tbody {
+            th,
+            td {
+              &:last-child {
+                @apply hidden;
+              }
+              &:nth-child(2) {
+                @apply pr-5;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen between1399-768 {
+    .schedule-calender {
+      .tab-content {
+        .activity-update {
+          @apply flex flex-wrap;
+          > li {
+            @apply w-6/12 flex-[0_0_50%] mb-2.5 last:mb-0;
+            .left-schedule,
+            .right-schedule {
+              @apply flex-1;
+            }
+            &:nth-child(5) {
+              @apply mb-0 pb-[0] border-b-0;
+            }
+          }
+        }
+      }
+    }
+    .schedule-calender {
+      #thu {
+        .activity-update {
+          > li {
+            &:nth-child(3) {
+              @apply mb-0 pb-[0] border-b-0;
+            }
+          }
+        }
+      }
+      #frd,
+      #sun {
+        .activity-update {
+          > li {
+            &: first-child, @apply mb-0 pb-[0] border-b-0;
+          }
+        }
+      }
+    }
+  }
+  @screen between1490-1400 {
+    .schedule-calender .tab-content .activity-update > li > div {
+      @apply flex-col justify-start items-start pl-5;
+    }
+    .schedule-calender .tab-content .activity-update > li .left-schedule {
+      @apply ml-0;
+    }
+    .schedule-calender .card-header-right-icon {
+      @apply hidden;
+    }
+  }
+  @screen md640 {
+    .schedule-calender .tab-content .activity-update > li > div {
+      @apply flex-col justify-start items-start pl-5;
+    }
+  }
+  @screen xl1660 {
+    .schedule-calender .tab-content .activity-update > li .left-schedule .schedule-name {
+      @apply !hidden;
+    }
+    .leave-request-table.overflow-x-auto div.dt-container .dt-layout-row .dt-layout-cell .dt-search {
+      @apply hidden;
+    }
+  }
+  @screen xl1800 {
+    .application-overview .balance-data {
+      @apply hidden;
+    }
+  }
+  @screen between1399-1200 {
+    .employee-list-table {
+      &.recent-table {
+        table {
+          thead,
+          tbody {
+            tr {
+              th,
+              td {
+                &:nth-child(2) {
+                  img {
+                    @apply hidden;
+                  }
+                }
+                &:nth-child(5) {
+                  @apply hidden;
+                }
+                &:last-child {
+                  .square-white {
+                    @apply w-6 h-6;
+                    svg {
+                      @apply w-3.5 h-3.5;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .project-finish-card .project-right-content {
+      @apply bottom-[-75px];
+    }
+  }
+}

@@ -1,0 +1,56 @@
+@layer components {
+  #accordionoc {
+    #collapseicon,
+    #collapseicon1 {
+      @apply pt-0;
+    }
+    li {
+      button {
+        @apply flex items-center;
+      }
+    }
+  }
+  .navs-icon {
+    &.default-according {
+      &.style-1 {
+        li {
+          button {
+            @apply relative hover:text-[rgba(var(--theme-default),1)];
+            &[aria-expanded="false"] {
+              &:before {
+                @apply right-0.5 top-1.5;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .navs-icon {
+    @apply p-5;
+    li {
+      @apply py-[9px];
+      a {
+        @apply text-[rgba(var(--theme-body-font-color),1)] hover:text-[rgba(var(--theme-default),1)];
+      }
+      ul {
+        @apply pt-[9px];
+      }
+    }
+  }
+  .onhover-dropdown {
+    &.navs-dropdown {
+      &:hover {
+        .onhover-show-div {
+          &:before,
+          &:after {
+            @apply left-[unset] right-[77px];
+          }
+        }
+      }
+    }
+  }
+  .icon-lists {
+    font-family: inherit;
+  }
+}

@@ -1,0 +1,830 @@
+- var page_Title = 'Form Wizard 1';
+- var form_validation       = true;
+- var accordion             = true;
+- var theme_customizer      = true;
+- var sidebar               = true;
+- var slick                 = true;
+- var header_slider         = true;
+- var height_equal          = true;
+- var scrollbar             = true;
+- var image_upload          = true;
+- var form_wizard           = true;
+- var bs_select             = true;
+- var form_validation_custom = true;
+
+doctype html
+html(lang='en')
+  include ../../components/header-files
+  body
+    include ../../components/loader
+    include ../../components/taptop
+    // page-wrapper Start
+    #pageWrapper.page-wrapper.compact-wrapper
+      include ../../components/header
+      // Page Body Start
+      .page-body-wrapper
+        include ../../components/sidebar
+        .page-body
+          .container.w-full
+            .page-title
+              .grid.grid-cols-12.mx-2.items-center
+                div(class="col-span-6 sm:col-span-12")
+                  h3
+                    | Form Wizard 1
+                div(class="col-span-6 sm:col-span-12")
+                  ol.breadcrumb.flex
+                    li.breadcrumb-item
+                      a(href='index.html')                                        
+                        svg.stroke-icon
+                          use(href='../assets/svg/icon-sprite.svg#stroke-home')
+                    li.breadcrumb-item Form Layout
+                    li.breadcrumb-item.active  Form Wizard 1
+          // Container-fluid starts
+          .container
+            .grid.grid-cols-12.card-gap
+              div(class="col-span-6 xl:col-span-12")
+                .card
+                  .card-header
+                    h5 Numbering Wizard 
+                    p.f-m-light.mt-1 
+                      | Fill up your details and proceed next steps.
+                  .card-body.basic-wizard.important-validation
+                    #stepper1.stepper-horizontal.custom-scrollbar
+                      .stepper-one.stepper.step.editing.active
+                        .step-circle
+                          span 1
+                        .step-title Basic Info
+                        .step-bar-left
+                        .step-bar-right
+                      .stepper-two.step
+                        .step-circle
+                          span 2
+                        .step-title Cart Info
+                        .step-bar-left
+                        .step-bar-right
+                      .stepper-three.step
+                        .step-circle
+                          span 3
+                        .step-title Feedback
+                        .step-bar-left
+                        .step-bar-right
+                      .stepper-four.step
+                        .step-circle
+                          span 4
+                        .step-title Finish
+                        .step-bar-left
+                        .step-bar-right
+                    #msform
+                      //- .custom-input used as dark mode 
+                      form.stepper-one.needs-validation.custom-input(novalidate='')
+                        .grid.grid-cols-12.gap-3.w-full 
+                          div(class="col-span-6 sm:col-span-12")
+                            label.form-label(for='email-basic-wizard') Email
+                              span.txt-danger *
+                            input#email-basic-wizard.form-control(type='email' required='' placeholder='pixelstrap@gmail.com')
+                          div(class="col-span-6 sm:col-span-12")
+                            label.form-label(for='firstNameWizard') First Name
+                              span.txt-danger *
+                            input#firstNameWizard.form-control(type='text' required='' placeholder='Enter your name')
+                          div(class="col-span-12")
+                            label.col-sm-12.form-label(for='passwordWizard') Password
+                              span.txt-danger *
+                            input#passwordWizard.form-control(type='password' placeholder='Enter password' required='')      
+                          div(class="col-span-12")
+                            label.col-sm-12.form-label(for='confirmPasswordWizard') Confirm Password
+                              span.txt-danger *
+                            input#confirmPasswordWizard.form-control(type='password' placeholder='Enter confirm password' required='')         
+                          div(class="col-span-12")
+                            .form-check.flex.gap-1
+                              input#inputCheckWizard.form-check-input(type='checkbox' value='' required='')
+                              label.form-check-label.mb-0(for='inputCheckWizard')
+                                | Agree to terms and conditions
+                      form.stepper-two.needs-validation.custom-input(novalidate='')
+                        .grid.grid-cols-12.gap-3.w-full
+                          div(class="col-span-12") 
+                            label.form-label(for='placeholderName1') Placeholder Name 
+                            input#placeholderName1.form-control(type="text" required='' placeholder='Placeholder name')
+                          div(class="col-span-4 xxl:col-span-6 sm:col-span-12")
+                            label.form-label(for='cardNumber01') Card Number
+                            input#cardNumber01.form-control(type='number' required='' placeholder='xxxx xxxx xxxx xxxx')
+                          div(class="col-span-4 xxl:col-span-6 sm:col-span-12")
+                            label.form-label(for='expirationDates01') Expiration(MM/YY)
+                            input#expirationDates01.form-control(type='number' required='' placeholder='xx/xx')
+                          div(class="col-span-4 xxl:col-span-12")
+                            label.form-label(for='cvvNumber-a') CVV Number
+                            input#cvvNumber-a.form-control(type='number' required='')
+                          div(class="col-span-12") 
+                            label.form-label(for='formFileDocument') Upload Documentation
+                            input#formFileDocument.form-control(type='file' aria-label='file example' required='')
+                          div(class="col-span-12")
+                            .form-check.flex.gap-2
+                              input#invalidCheck-a.form-check-input(type='checkbox' value='' required='')
+                              label.form-check-label(for='invalidCheck-a')
+                                | All the above information is correct
+                      form.stepper-three.needs-validation.custom-input(novalidate='')
+                        .grid.grid-cols-12.gap-3.w-full 
+                          div(class="col-span-6 sm:col-span-12")
+                            label.form-label(for='email-basic') LinkedIn
+                              span.txt-danger *
+                            input#email-basic.form-control(type='url' required='' placeholder='https://linkedIn.com/cuba')
+                            .invalid-feedback
+                              | Please enter your valid link
+                            .valid-feedback 
+                              | Looks's Good!
+                          div(class="col-span-6 sm:col-span-12")
+                            label.form-label(for='validationCustom996') Github
+                              span.txt-danger *
+                            input#validationCustom996.form-control(type='url' required='' placeholder='https://github.com/cuba')
+                            .invalid-feedback
+                              | Please enter your valid link
+                            .valid-feedback 
+                              | Looks's Good!     
+                          div(class="col-span-12") 
+                            label.form-label(for='validationCustom09') Select State
+                              span.txt-danger *
+                            select#validationCustom09.form-select(required='')
+                              option(selected='' disabled='' value='') Choose...
+                              option U.K 
+                              option U.S 
+                              option India
+                            .invalid-feedback
+                              | Please select a valid state.
+                          div(class="col-span-12") 
+                            label.form-label(for='giveFeedBack') Give Feedback
+                            textarea#giveFeedBack.form-control(required='')
+                            .invalid-feedback
+                              | Please enter a message in the textarea.
+                          div(class="col-span-12")
+                            .form-check.flex.gap-1
+                              input#invalidCheck46.form-check-input(type='checkbox' value='' required='')
+                              label.form-check-label.mb-0(for='invalidCheck46')
+                                | Agree to terms and conditions
+                              .invalid-feedback
+                                | You must agree before submitting.
+                      form.stepper-four.needs-validation(novalidate='')
+                        .grid.grid-cols-12.gap-3.w-full
+                          div(class="col-span-12").m-0
+                            .successful-form
+                              img.max-w-full.h-auto(src="../assets/images/gif/dashboard-8/successful.gif", alt="successful")
+                              h6 Congratulations 
+                              p Well done! You have successfully completed. 
+                    .wizard-footer.flex.gap-2.justify-end
+                      button#backbtn.btn.button-light-primary(onclick='backStep()')  Back
+                      button#nextbtn.btn.btn-primary.text-white(onclick='nextStep()') Next
+              div(class="col-span-6 xl:col-span-12")
+                .card
+                  .card-header
+                    h5 Student Validation Form
+                    p.f-m-light.mt-1 
+                      |  Please make sure fill all the filed before click on next button.
+                  //- .custom-input used as dark mode 
+                  .card-body.custom-input
+                    form#regForm.form-wizard
+                      .tab
+                        .grid.grid-cols-12.gap-3
+                          div(class="col-span-6 sm:col-span-12")
+                            label(for='name') Name
+                              span.txt-danger *
+                            input#name.form-control(type='text', placeholder='Enter your name', required='required')
+                          div(class="col-span-6 sm:col-span-12")
+                            label.form-label(for='student-email-wizard') Email
+                              span.txt-danger *
+                            input#student-email-wizard.form-control(type='email' required='' placeholder='pixelstrap@gmail.com')
+                          div(class="col-span-12")
+                            label.col-sm-12.form-label(for='password-wizard') Password
+                              span.txt-danger *
+                            input#password-wizard.form-control(type='password' placeholder='Enter password' required='')
+                          div(class="col-span-12")
+                            label.col-sm-12.form-label(for='confirmPassword') Confirm Password
+                              span.txt-danger *
+                            input#confirmPassword.form-control(type='password' placeholder='Enter confirm password' required='')
+                      .tab
+                        .grid.grid-cols-12.gap-3.avatar-upload
+                          div(class="col-span-12")
+                            div
+                              .avatar-edit
+                                input#imageUpload(type="file" accept='.png, .jpg, .jpeg')
+                                label(for='imageUpload')
+                              .avatar-preview
+                                #image
+                            h6 Add Profile
+                          div(class="col-span-12")
+                            label.form-label(for='exampleFormControlInput1') Portfolio URL
+                            input#exampleFormControlInput1.form-control(type='url' placeholder='https://cuba')
+                          div(class="col-span-12") 
+                            label.form-label(for='projectDescription') Project Description
+                            textarea#projectDescription.form-control(rows='2')
+                      .tab
+                        h5.mb-2 Social Links 
+                        .grid.grid-cols-12.gap-3
+                          div(class="col-span-6 sm:col-span-12")
+                            label.form-label(for='twitterControlInput') Twitter
+                            input#twitterControlInput.form-control(type='url' placeholder='https://twitter.com')
+                          div(class="col-span-6 sm:col-span-12")
+                            label.form-label(for='githubControlInput') Github
+                            input#githubControlInput.form-control(type='url' placeholder='https:/github.com')
+                          div(class="col-span-12") 
+                            .input-group
+                              input#inputGroupFile04.form-control(type='file' aria-describedby='inputGroupFileAddon04' aria-label='Upload') 
+                              button#inputGroupFileAddon04.btn.btn-outline-secondary(type='button') Submit
+                          div(class="col-span-12")
+                            select.form-select(aria-label='Default select example')
+                              option(selected='') Positions
+                              option(value='1') Web Designer
+                              option(value='2') Software Engineer
+                              option(value='3') UI/UX Designer 
+                              option(value='3') Web Developer
+                          div(class="col-span-12") 
+                            label.form-label(for='customTextarea') Why do you want to take this position?
+                            textarea#customTextarea.form-control(rows='2')
+                      div
+                        .flex.justify-end.gap-2.mt-3
+                          button#prevBtn.btn.btn-secondary.text-white(type='button', onclick='nextPrev(-1)') Previous
+                          button#nextBtn.btn.btn-primary.text-white(type='button', onclick='nextPrev(1)') Next
+                      // Circles which indicates the steps of the form:
+                      .text-center
+                        span.step
+                        span.step
+                        span.step
+                        span.step
+              div(class="col-span-12")
+                .card
+                  .card-header
+                    h5 Vertical Validation Wizard 
+                    p.f-m-light.mt-1 
+                      | Fill up your true details and next proceed.
+                  //- .custom-input used as dark mode 
+                  .card-body
+                    .vertical-main-wizard
+                      .grid.grid-cols-12.gap-3.tabs     
+                        div(class="col-span-3 xxl:col-span-4 xl:col-span-12")
+                            .tab-links.nav.flex-col.header-vertical-wizard
+                              a.tab-link.active(data-tabfilter="1") 
+                                .vertical-wizard
+                                  .stroke-icon-wizard
+                                    i.fa-solid.fa-user
+                                  .vertical-wizard-content 
+                                    h6 Your Info
+                                    p Add your details 
+                              a.tab-link(data-tabfilter="2") 
+                                .vertical-wizard
+                                  .stroke-icon-wizard
+                                    i.fa-solid.fa-link
+                                  .vertical-wizard-content 
+                                    h6 Cart Info
+                                    p Add your a/c details
+                              a.tab-link(data-tabfilter="3") 
+                                .vertical-wizard
+                                  .stroke-icon-wizard
+                                    i.fa-solid.fa-user-group
+                                  .vertical-wizard-content 
+                                    h6 Net Banking
+                                    p Choose your bank
+                        div(class="col-span-9 xxl:col-span-8 xl:col-span-12")
+                            .tab-content
+                              .tab-pan.fade.show.active(data-tabcontent="1")
+                                form.grid.grid-cols-12.gap-3.needs-validation.custom-input(novalidate='')
+                                  div(class="col-span-4 xxl:col-span-6 sm:col-span-12")
+                                    label.form-label(for='validationCustom0-a') First Name
+                                      span.txt-danger *
+                                    input#validationCustom0-a.form-control(type='text' placeholder="Enter first name" required='')
+                                    .valid-feedback
+                                      | Looks good!
+                                  div(class="col-span-4 xxl:col-span-6 sm:col-span-12")
+                                    label.form-label(for='validationCustom-b') Last Name
+                                      span.txt-danger *
+                                    input#validationCustom-b.form-control(type='text' placeholder='Enter last name' required='')
+                                    .valid-feedback
+                                      | Looks good!
+                                  div(class="col-span-4 xxl:col-span-6 sm:col-span-12")
+                                    label.form-label(for='validationEmail-b') Email
+                                      span.txt-danger *
+                                    input#validationEmail-b.form-control(type='email' required='' placeholder='mofi@example.com')
+                                    .valid-feedback
+                                      | Looks good!
+                                  div(class="col-span-5 xxl:col-span-6 sm:col-span-12")
+                                    label.form-label(for='validationCustom04') State
+                                    select#validationCustom04.form-select(required='')
+                                      option(selected='' disabled='' value='') Choose...
+                                      option USA 
+                                      option U.K 
+                                      option U.S
+                                    .invalid-feedback
+                                      | Please select a valid state.
+                                  div(class="col-span-3 xxl:col-span-6 sm:col-span-12")
+                                    label.form-label(for='validationCustom05') Zip Code
+                                    input#validationCustom05.form-control(type='text' required='')
+                                    .invalid-feedback
+                                      | Please provide a valid zip.
+                                  div(class="col-span-4 xxl:col-span-6 sm:col-span-12")
+                                    label.form-label(for='contactNumber') Contact Number
+                                    input#contactNumber.form-control(type='number' placeholder='Enter number' required='')
+                                    .valid-feedback
+                                      | Looks good!
+                                  div(class="col-span-12")
+                                    .form-check.flex.gap-2
+                                      input#invalidCheck-n.form-check-input(type='checkbox' value='' required='')
+                                      label.form-check-label(for='invalidCheck-n')
+                                        | Agree to terms and conditions
+                                  div(class="col-span-12").text-end 
+                                    button.btn.btn-primary.text-white Next
+                              .tab-pan.fade(data-tabcontent="2")
+                                form.grid.grid-cols-12.gap-3.needs-validation.custom-input(novalidate='')
+                                  div(class="col-span-6 xxl:col-span-12")
+                                    .card-wrapper.custom-border.rounded-3.checkbox-checked
+                                      h6.sub-title Select your payment method
+                                      .radio-form
+                                        .form-check.flex.gap-1
+                                          input#flexRadioDefault1.form-check-input(type='radio' name='flexRadioDefault-a')
+                                          label.form-check-label(for='flexRadioDefault1')
+                                            | Visa
+                                        .form-check.flex.gap-1
+                                          input#flexRadioDefault2.form-check-input(type='radio' name='flexRadioDefault-a' checked='')
+                                          label.form-check-label(for='flexRadioDefault2')
+                                            | MasterCard
+                                        .form-check.flex.gap-1
+                                          input#flexRadioDefault3.form-check-input(type='radio' name='flexRadioDefault-a' checked='')
+                                          label.form-check-label(for='flexRadioDefault3')
+                                            | Paypal
+                                  div(class="col-span-6 xxl:col-span-12") 
+                                    .grid.grid-cols-12 
+                                      div(class="col-span-12")
+                                        .input-group.mb-3(class="flex !flex-nowrap")
+                                          input.form-control(type='text' placeholder="Recipient's username" class="!rounded-l-md !rounded-none" aria-label="Recipient's username" aria-describedby='button-addon2')
+                                          button#button-addon2.btn.btn-outline-secondary.border(type='button') Submit
+                                      div(class="col-span-12") 
+                                        .input-group(class="flex !flex-nowrap")
+                                          span#basic-addon1.input-group-text(class="!rounded-l-md !rounded-none") @
+                                          input.form-control(type='text' placeholder='Username' aria-label='Username' aria-describedby='basic-addon1')
+                                  div(class="col-span-4 md:col-span-6 sm:col-spn-12")
+                                    label.form-label(for='txtCardNumber1') Card Number
+                                    input#txtCardNumber1.form-control(type='number' required='' placeholder='xxxx xxxx xxxx xxxx')
+                                    .invalid-feedback
+                                      | Please enter your valid number
+                                    .valid-feedback 
+                                      | Looks's Good!
+                                  div(class="col-span-4 md:col-span-6 sm:col-spn-12")
+                                    label.form-label(for='validationDates') Expiration(MM/YY)
+                                    input#validationDates.form-control(type='number' required='' placeholder='xx/xx')
+                                    .invalid-feedback
+                                      | Please enter your valid expiration MM/YY
+                                    .valid-feedback 
+                                      | Looks's Good!
+                                  div(class="col-span-4 md:col-span-6 sm:col-spn-12")
+                                    label.form-label(for='cvvNumber-b') CVV
+                                    input#cvvNumber-b.form-control(type='number' required='')
+                                    .invalid-feedback
+                                      | Please enter your valid CVV
+                                    .valid-feedback 
+                                      | Looks's Good!
+                                  div(class="col-span-12 md:col-span-6 sm:col-span-12")
+                                    label.form-label(for='formFile2') Upload Documentation
+                                    input#formFile2.form-control(type='file' aria-label='file example' required='')
+                                    .invalid-feedback Invalid form file selected
+                                  div(class="col-span-12")
+                                    .form-check.mb-0.flex.gap-2
+                                      input#invalidCheck-b.form-check-input(type='checkbox' value='' required='')
+                                      label.form-check-label(for='invalidCheck-b')
+                                        | All the above information is correct
+                                      .invalid-feedback
+                                        | You must agree before submitting.
+                                  div(class="col-span-12")
+                                    .flex.gap-2.justify-end
+                                      button.btn.btn-primary.text-white Previous
+                                      button.btn.btn-primary.text-white Next
+                              .tab-pan.fade.custom-input(data-tabcontent="3")
+                                form.grid.grid-cols-12.gap-3.needs-validation(novalidate='')
+                                  div(class="col-span-12") 
+                                    #accordionExample-a.accordion.dark-accordion.form-wizard-box
+                                      .accordion-item
+                                        h2.accordion-header
+                                          button.accordion-button.collapsed.accordion-light-primary.txt-primary(type='button' data-bs-toggle='collapse' data-bs-target='#collapseOne-a' aria-expanded='true' aria-controls='collapseOne-a')
+                                            | NET BANKING
+                                            i.svg-color(data-feather='chevron-down')
+                                        #collapseOne-a.accordion-collapse.collapse
+                                          .accordion-body.weight-title.card-wrapper
+                                            h6.sub-title.f-14 SELECT YOUR BANK
+                                            .grid.grid-cols-12.card-gap.choose-bank
+                                              div(class="col-span-6 sm:col-span-12")
+                                                .form-check.radio.radio-primary.mb-2
+                                                  input#flexRadioDefault-z.form-check-input(type='radio' name='flexRadioDefault-v')
+                                                  label.form-check-label(for='flexRadioDefault-z')
+                                                    | Industrial & Commercial Bank
+                                                .form-check.radio.radio-primary.mb-2
+                                                  input#flexRadioDefault-y.form-check-input(type='radio' name='flexRadioDefault-v')
+                                                  label.form-check-label(for='flexRadioDefault-y')
+                                                    | Agricultural Bank
+                                                .form-check.radio.radio-primary.mb-2
+                                                  input#flexRadioDefault-x.form-check-input(type='radio' name='flexRadioDefault-v' checked='')
+                                                  label.form-check-label(for='flexRadioDefault-x')
+                                                    | JPMorgan Chase & Co.
+                                              div(class="col-span-6 sm:col-span-12") 
+                                                .form-check.radio.radio-primary.mb-2
+                                                  input#flexRadioDefault-w.form-check-input(type='radio' name='flexRadioDefault-v')
+                                                  label.form-check-label(for='flexRadioDefault-w')
+                                                    | Construction Bank Corp.
+                                                .form-check.radio.radio-primary.mb-2
+                                                  input#flexRadioDefault-v.form-check-input(type='radio' name='flexRadioDefault-v')
+                                                  label.form-check-label(for='flexRadioDefault-v')
+                                                    | Bank of America
+                                                .form-check.radio.radio-primary.mb-2
+                                                  input#flexRadioDefault-u.form-check-input(type='radio' name='flexRadioDefault-v')
+                                                  label.form-check-label(for='flexRadioDefault-u')
+                                                    | HDFC Bank
+                                  div(class="col-span-12") 
+                                    textarea#validationTextarea24.form-control(placeholder='Your Feedback' required='')
+                                    .invalid-feedback
+                                      | Please enter a message in the textarea.
+                                  div(class="col-span-12")
+                                    .form-check.mb-0.flex.gap-1
+                                      input#invalidCheck67.form-check-input(type='checkbox' value='' required='')
+                                      label.form-check-label.mb-0(for='invalidCheck67')
+                                        | Agree to terms and conditions
+                                      .invalid-feedback
+                                        | You must agree before submitting.
+                                  div(class="col-span-12").text-end 
+                                    button.btn.btn-success.text-white Finish
+              div(class="col-span-12")
+                .card
+                  .card-header
+                    h5 Shipping Form
+                    p.f-m-light.mt-1 
+                      | Fill up your true details and next proceed.
+                  .card-body
+                    .grid.grid-cols-12
+                      div(class="col-span-12") 
+                        .grid.grid-cols-12.shipping-form.gap-4
+                          div(class="col-span-8 xl:col-span-12 pr-3").shipping-border.checkout-cart.tabs
+                            .tab-links.horizontal-options.shipping-options(class="[@media(max-width:768px)]:flex-col")
+                                a.tab-link.rounded-none.active(data-tabfilter="1" class="[@media(min-width:1200px)_and_(max-width:1920px)]:!py-[calc(8px_+_(8_-_8)_*_((100vw_-_300px)_/_(1920_-_300)))] [@media(min-width:1200px)_and_(max-width:1920px)]:!px-[calc(6px_+_(16_-_6)_*_((100vw_-_300px)_/_(1920_-_300)))]") 
+                                  .cart-options
+                                    .stroke-icon-wizard
+                                      i.fa-solid.fa-user(class="[@media(min-width:1200px)_and_(max-width:1920px)]:!text-[calc(14px_+_(18_-_14)_*_((100vw_-_1200px)_/_(1920_-_1200)))] [@media(min-width:1200px)_and_(max-width:1920px)]:!w-[calc(30px_+_(40_-_30)_*_((100vw_-_1200px)_/_(1920_-_1200)))] [@media(min-width:1200px)_and_(max-width:1920px)]:!h-[calc(30px_+_(40_-_30)_*_((100vw_-_1200px)_/_(1920_-_1200)))]")
+                                    .cart-options-content 
+                                      h6 Billing
+                                a.tab-link.rounded-none(data-tabfilter="2" class="[@media(min-width:1200px)_and_(max-width:1920px)]:!py-[calc(8px_+_(8_-_8)_*_((100vw_-_300px)_/_(1920_-_300)))] [@media(min-width:1200px)_and_(max-width:1920px)]:!px-[calc(6px_+_(16_-_6)_*_((100vw_-_300px)_/_(1920_-_300)))]") 
+                                  .cart-options
+                                    .stroke-icon-wizard
+                                      i.fa-solid.fa-truck(class="[@media(min-width:1200px)_and_(max-width:1920px)]:!text-[calc(14px_+_(18_-_14)_*_((100vw_-_1200px)_/_(1920_-_1200)))] [@media(min-width:1200px)_and_(max-width:1920px)]:!w-[calc(30px_+_(40_-_30)_*_((100vw_-_1200px)_/_(1920_-_1200)))] [@media(min-width:1200px)_and_(max-width:1920px)]:!h-[calc(30px_+_(40_-_30)_*_((100vw_-_1200px)_/_(1920_-_1200)))]")
+                                    .cart-options-content 
+                                      h6 Shipping
+                                a.tab-link.rounded-none(data-tabfilter="3" class="[@media(min-width:1200px)_and_(max-width:1920px)]:!py-[calc(8px_+_(8_-_8)_*_((100vw_-_300px)_/_(1920_-_300)))] [@media(min-width:1200px)_and_(max-width:1920px)]:!px-[calc(6px_+_(16_-_6)_*_((100vw_-_300px)_/_(1920_-_300)))]") 
+                                  .cart-options
+                                    .stroke-icon-wizard
+                                      i.fa-solid.fa-money-bill-1(class="[@media(min-width:1200px)_and_(max-width:1920px)]:!text-[calc(14px_+_(18_-_14)_*_((100vw_-_1200px)_/_(1920_-_1200)))] [@media(min-width:1200px)_and_(max-width:1920px)]:!w-[calc(30px_+_(40_-_30)_*_((100vw_-_1200px)_/_(1920_-_1200)))] [@media(min-width:1200px)_and_(max-width:1920px)]:!h-[calc(30px_+_(40_-_30)_*_((100vw_-_1200px)_/_(1920_-_1200)))]")
+                                    .cart-options-content 
+                                      h6 Payment
+                                a.tab-link.rounded-none(data-tabfilter="4" class="[@media(min-width:1200px)_and_(max-width:1920px)]:!py-[calc(8px_+_(8_-_8)_*_((100vw_-_300px)_/_(1920_-_300)))] [@media(min-width:1200px)_and_(max-width:1920px)]:!px-[calc(6px_+_(16_-_6)_*_((100vw_-_300px)_/_(1920_-_300)))]") 
+                                  .cart-options
+                                    .stroke-icon-wizard
+                                      i.fa-solid.fa-check-square(class="[@media(min-width:1200px)_and_(max-width:1920px)]:!text-[calc(14px_+_(18_-_14)_*_((100vw_-_1200px)_/_(1920_-_1200)))] [@media(min-width:1200px)_and_(max-width:1920px)]:!w-[calc(30px_+_(40_-_30)_*_((100vw_-_1200px)_/_(1920_-_1200)))] [@media(min-width:1200px)_and_(max-width:1920px)]:!h-[calc(30px_+_(40_-_30)_*_((100vw_-_1200px)_/_(1920_-_1200)))]")
+                                    .cart-options-content 
+                                      h6 Finish
+                            .tab-content.dark-field.shipping-content.shipping-wizard.basic-wizard
+                              .tab-pan.fade.show.active(data-tabcontent="1")
+                                form.grid.grid-cols-12.gap-3.needs-validation(novalidate='')
+                                  div(class="col-span-6 sm:col-span-12")
+                                    label.form-label(for='customName') Full Name
+                                    input#customName.form-control(type='text' placeholder="Enter full name")
+                                  div(class="col-span-6 sm:col-span-12")
+                                    label.form-label(for='customContact') Contact Number
+                                    input#customContact.form-control(type='number' placeholder='Enter number')
+                                  div(class="col-span-12")
+                                    label.form-label(for='customEmail') Email
+                                    input#customEmail.form-control(type='email' placeholder='pixelstrap@example.com')
+                                  div(class="col-span-12")
+                                      label.form-label(for='currentAddress1') Current Address 
+                                      textarea#currentAddress1.form-control(rows='3' placeholder="Enter your current address")
+                                  div(class="col-span-12")
+                                    label.form-label(for='otherNotes1') Other Notes
+                                    textarea#otherNotes1.form-control(rows='3' placeholder='Enter your queries...')
+                                  div(class="col-span-4 md:col-span-1")
+                                    label.form-label(for='customSelectCountry') Country
+                                    select#customSelectCountry.form-select
+                                      option(selected='' disabled='' value='1') Select country
+                                      option(value='1') Africa 
+                                      option(value='2') India
+                                      option(value='3') Indonesia 
+                                      option(value='4') Netherlands
+                                      option(value='5') U.K 
+                                      option(value='6') U.S
+                                  div(class="col-span-4 md:col-span-6 sm:col-span-12") 
+                                    label.form-label(for='customstate') State
+                                    input#customstate.form-control(type='text' placeholder='Enter state')
+                                  div(class="col-span-4 md:col-span-6 sm:col-span-12")
+                                    label.form-label(for='customPostalCode') Postal Code
+                                    input#customPostalCode.form-control(type='text' placeholder="Enter postal code")
+                                  div(class="col-span-12").justify-end.common-flex
+                                    button.btn.btn-primary.text-white.mt-3(type="button" onclick="proceedNextButtonClick('ship-wizard-tab')") Proceed to Next
+                                      i.fa-solid.fa-truck.proceed-next
+                              .tab-pan.fade.shipping-wizard(data-tabcontent="2")
+                                .grid.grid-cols-12.gap-4
+                                  div(class="col-span-5 xxl:col-span-6 md:col-span-12 box-col-6")
+                                    .shipping-title.mb-2
+                                      h6 Delivery Address
+                                      button.btn.btn-primary(type='button', data-bs-toggle='modal', data-bs-target='#exampleModalgetbootstrap', data-whatever='@getbootstrap') 
+                                        i.fa-solid.fa-square-plus.f-20
+                                    .grid.grid-cols-12.gap-3.mt-0.flex-col
+                                      div(class="col-span-12")
+                                        .card-wrapper.custom-border.rounded-3.h-full.light-card
+                                          div.collect-address
+                                            .flex.gap-2.items-center
+                                              .form-check.radio.radio-primary
+                                                input#shipping-choose1.form-check-input(type='radio' name='radio1' value='option1' checked='')
+                                                label.form-check-label.mb-0(for='shipping-choose1')
+                                                  | Blakely Roy
+                                            .card-icon
+                                                i.fa-solid.fa-pencil
+                                                i.fa-solid.fa-trash-can
+                                                span.badge.badge-primary.text-white Home
+                                          .shipping-address
+                                            span 
+                                              strong Address: 
+                                              | 2211 Fruitville Rd, Sarasota, Florida, US 
+                                            span 
+                                              strong Pincode: 
+                                              | 34237
+                                            span 
+                                              strong Contact: 
+                                              | +1 3215643789
+                                      div(class="col-span-12")
+                                        .card-wrapper.custom-border.rounded-3.h-full.light-card
+                                          div.collect-address
+                                            .flex.gap-2.items-center
+                                              .form-check.radio.radio-primary
+                                                input#shipping-choose2.form-check-input(type='radio' name='radio1' value='option1' checked='')
+                                                label.form-check-label.mb-0(for='shipping-choose2')
+                                                  | Lia Dyer
+                                            .card-icon
+                                                i.fa-solid.fa-pencil
+                                                i.fa-solid.fa-trash-can
+                                                span.badge.badge-primary.text-white Office
+                                          .shipping-address
+                                            span 
+                                              strong Address: 
+                                              | 1531 E 23rd St S, Independence, Mississippi, US 
+                                            span 
+                                              strong Pincode: 
+                                              | 64055
+                                            span 
+                                              strong Contact: 
+                                              | +1 252450089
+                                      div(class="col-span-12")
+                                        .card-wrapper.custom-border.rounded-3.h-full.light-card
+                                          div.collect-address
+                                            .flex.gap-2.items-center
+                                              .form-check.radio.radio-primary
+                                                input#shipping-choose5.form-check-input(type='radio' name='radio1' value='option1' checked='')
+                                                label.form-check-label.mb-0(for='shipping-choose5')
+                                                  | Colt Grill
+                                            .card-icon
+                                                i.fa-solid.fa-pencil
+                                                i.fa-solid.fa-trash-can
+                                                span.badge.badge-primary.text-white Office
+                                          .shipping-address
+                                            span 
+                                              strong Address: 
+                                              | 502 News Street, Oslao, Nebraska, United States
+                                            span 
+                                              strong Pincode: 
+                                              |85200
+                                            span 
+                                              strong Contact: 
+                                              | +1 4589655741
+                                  div(class="col-span-7 xxl:col-span-6 md:col-span-12 box-col-6")
+                                    h6.mb-2 Delivery Options
+                                    .grid.grid-cols-12.shipping-method.gap-3.mt-0.flex-col
+                                      div(class="col-span-12")
+                                        .card-wrapper.custom-border.rounded-3.h-full.light-card
+                                          .form-check.radio.radio-primary
+                                            input#shipping-choose3.form-check-input(type='radio' name='radio2' value='option1' checked='')
+                                            label.form-check-label.mb-0(for='shipping-choose3')
+                                              | Standard Delivery - Free
+                                          p Estimated 5-7 days shipping
+                                      div(class="col-span-12")
+                                        .card-wrapper.custom-border.rounded-3.h-full.light-card
+                                          .form-check.radio.radio-primary
+                                            input#shipping-choose4.form-check-input(type='radio' name='radio2' value='option1' checked='')
+                                            label.form-check-label.mb-0(for='shipping-choose4')
+                                              | Express Delivery - $30
+                                          P Estimated 1-2 days shipping
+                                      div(class="col-span-12")
+                                        .card-wrapper.custom-border.rounded-3.h-full.light-card
+                                          .form-check.radio.radio-primary
+                                            input#shipping-choose6.form-check-input(type='radio' name='radio2' value='option1' checked='')
+                                            label.form-check-label.mb-0(for='shipping-choose6')
+                                              | Future Delivery
+                                          input.form-control.future-date(type='date')
+                                  div(class="col-span-12").justify-end.common-flex.flex.gap-2
+                                    button.btn.btn-primary.text-white(onclick="proceedNextButtonClick('bill-wizard-tab')")
+                                      i.fa-solid.fa-truck.proceed-prev
+                                      | Proceed to Back
+                                    button.btn.btn-primary.text-white(type="button" onclick="proceedNextButtonClick('payment-wizard-tab')") Proceed to Next
+                                      i.fa-solid.fa-truck.proceed-next
+                              .tab-pan.fade.shipping-wizard(data-tabcontent="3")
+                                .payment-info-wrapper
+                                  .grid.grid-cols-12.shipping-method.gap-3
+                                    div(class="col-span-12")
+                                      .card-wrapper.custom-border.rounded-3.light-card(class="[@media(max-width:768px)]:justify-[unset] [@media(max-width:768px)]:items-start [@media(max-width:768px)]:flex-col")
+                                        div
+                                          .form-check.radio.radio-primary
+                                            input#shipping-choose9.form-check-input(type='radio' name='radio3' value='option1' checked='')
+                                            label.form-check-label.mb-0.font-medium(for='shipping-choose9')
+                                              | Paypal
+                                          p You will be taken to the paypal website to finish your transaction safely
+                                        div 
+                                          img(src="../assets/images/checkout/paypal.png", alt="paypal")
+                                    div(class="col-span-12")
+                                      .card-wrapper.custom-border.rounded-3.pay-info.light-card
+                                        div(class="[@media(max-width:768px)]:flex-col")
+                                          div
+                                            .form-check.radio.radio-primary
+                                              input#shipping-choose8.form-check-input(type='radio' name='radio3' value='option1')
+                                              label.form-check-label.mb-0.font-medium(for='shipping-choose8')
+                                                | Credit Card
+                                            P Transferring money securely through your bank account. Mastercard, Visa, Discover, and Stripe are all accepted
+                                          div 
+                                            img(src="../assets/images/forms/credit-card.png", alt="card")
+                                        .grid.grid-cols-12.gap-3
+                                          div(class="col-span-12") 
+                                            label.form-label(for='selectCardHolderName') Card Holder
+                                            input#selectCardHolderName.form-control(type="text" placeholder='Enter card holder name')
+                                          div(class="col-span-12")
+                                            label.form-label(for='selectCardNumber') Card Number
+                                            input#selectCardNumber.form-control(type='number' placeholder='xxxx xxxx xxxx xxxx')
+                                          div(class="col-span-6 sm:col-span-12")
+                                            label.form-label(for='selectExpiration') Expiration(MM/YY)
+                                            input#selectExpiration.form-control(type='number' placeholder='xx/xx')
+                                          div(class="col-span-6 sm:col-span-12")
+                                            label.form-label(for='selectCvv') CVV
+                                            input#selectCvv.form-control(type='number')
+                                          div(class="col-span-12") 
+                                            label.form-label(for='uploadDocumentation') Upload Documentation
+                                            input#uploadDocumentation.form-control(type='file' aria-label='file example')
+                                          div(class="col-span-12")
+                                            .form-check.flex.gap-2
+                                              input#invalidCheck01.form-check-input.checkbox-primary(type='checkbox' value='')
+                                              label.form-check-label(for='invalidCheck01')
+                                                | All the above information is correct
+                                    div(class="col-span-12")
+                                      .card-wrapper.custom-border.rounded-3.light-card(class="[@media(max-width:768px)]:justify-[unset] [@media(max-width:768px)]:items-start [@media(max-width:768px)]:flex-col")
+                                        div
+                                          .form-check.radio.radio-primary
+                                            input#shipping-choose7.form-check-input(type='radio' name='radio3' value='option1')
+                                            label.form-check-label.mb-0.font-medium(for='shipping-choose7')
+                                              | Cash On Delivery
+                                          p After your order is delivered, make a cash payment
+                                        div 
+                                          img(src="../assets/images/forms/delivery.png", alt="delivery")
+                                    div(class="col-span-12").justify-end.common-flex.flex.gap-2
+                                      button.btn.btn-primary.text-white(type="button" onclick="proceedNextButtonClick('ship-wizard-tab')") 
+                                        i.fa-solid.fa-truck.proceed-prev
+                                        | Proceed to Back
+                                      button.btn.btn-primary.text-white(type="button" onclick="proceedNextButtonClick('finish-wizard-tab')")  Proceed to Next
+                                        i.fa-solid.fa-truck.proceed-next
+                              .tab-pan.fade.shipping-wizard.finish-wizard1(data-tabcontent="4")
+                                .finish-shipping
+                                  svg.m-auto 
+                                    use(href='../assets/svg/icon-sprite.svg#ord-success')
+                                  div.mt-sm-3
+                                    h5 Order Placed Successfully
+                                    p.mb-0.c-o-light(class="!block") A confirmation email with your order details has been sent to you.
+                          div(class="col-span-4 xl:col-span-12") 
+                            .shipping-info
+                              h5 Current Cart 
+                              .overflow-auto.custom-scrollbar
+                                table.table.table-striped
+                                  thead
+                                    tr
+                                      th(scope='col') Product
+                                      th(scope='col') Product Detail 
+                                      th(scope='col') Price 
+                                  tbody
+                                    tr
+                                      td 
+                                         img(src="../assets/images/product/13.png", alt="t-shirt")
+                                      td 
+                                        div 
+                                          h6 T-shirt 
+                                          span $98 * 2
+                                      td
+                                        p $400
+                                    tr
+                                      td 
+                                         img(src="../assets/images/email-template/4.png", alt="headphone")
+                                      td 
+                                        div 
+                                          h6 Headphone
+                                          span $4*2
+                                      td 
+                                        p $450
+                                    tr
+                                      td 
+                                         img(src="../assets/images/product/2.png", alt="headphone")
+                                      td 
+                                        div 
+                                          h6 T-shirt 
+                                          span $10 * 2
+                                      td 
+                                        p $234
+                                    tr
+                                      td 
+                                         img(src="../assets/images/dashboard-2/product/2.png", alt="headphone")
+                                      td 
+                                        div 
+                                          h6 Chairs
+                                          span $98 * 2
+                                      td 
+                                        p $200
+                                  tfoot
+                                    tr 
+                                      td Sub Total :
+                                      td(colspan='2') $1284.00 
+                                    tr 
+                                      td Discount :
+                                      td(colspan='2') $20.00
+                                    tr 
+                                      td Shipping Charge :
+                                      td(colspan='2') $100.78
+                                    tr 
+                                      td Tax :
+                                      td(colspan='2') $205.34
+                                    tr 
+                                      td Total (USD) :
+                                      td(colspan='2') $1569.7
+                //- Shipping Address Popup
+                #exampleModalgetbootstrap.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalgetbootstrap', aria-hidden='true')
+                  .modal-dialog.modal-dialog-centered.modal-lg
+                    .modal-content.custom-input
+                      .modal-header
+                        h5 Add Address
+                        button.btn-close.py-0(type='button', data-bs-dismiss='modal', aria-label='Close')
+                      .modal-body
+                        form.grid.grid-cols-12.gap-3.needs-validation(novalidate='')
+                          div(class="col-span-12")
+                            label.form-label(for='validationCustomName') Name
+                            input#validationCustomName.form-control(type='text' placeholder='Enter name' required='')
+                            .invalid-feedback
+                              | Please enter your name
+                            .valid-feedback
+                              | Looks good!
+                          div(class="col-span-12")
+                            label.form-label(for='validationAddress-a') Current Address
+                            textarea#validationAddress-a.form-control(rows='3' placeholder='Enter your address' required='')
+                            .invalid-feedback
+                              | Please enter current address
+                            .valid-feedback
+                              | Looks good!
+                          div(class="col-span-6 sm:col-span-12")
+                            label.form-label(for='validationCustomCountry1') Country
+                            select#validationCustomCountry1.selectpicker(aria-label='Default select example' data-live-search='true' required size='5')
+                              option(value='1') India
+                              option(value='2' selected) United States
+                              option(value='3') Australia
+                              option(value='4') Canada
+                              option(value='5') Bavaria
+                            .invalid-feedback
+                              | Please select your country
+                            .valid-feedback
+                              | Looks good!
+                          div(class="col-span-6 sm:col-span-12")
+                            label.form-label(for='validationCustomState1')  State
+                            select#validationCustomState1.selectpicker(aria-label='Default select example' data-live-search='true' required size='5')
+                              option(value='11') Andhra Pradesh
+                              option(value='12' selected) California
+                              option(value='13') Queensland
+                              option(value='14') Ontario
+                              option(value='15') Germany
+                            .invalid-feedback
+                              | Please select your state
+                            .valid-feedback
+                              | Looks good!
+                          div(class="col-span-6 sm:col-span-12")
+                            label.form-label(for='validationCity') City
+                            input#validationCity.form-control(type='text' placeholder='Enter city' required='')
+                            .invalid-feedback
+                              | Please enter your city
+                            .valid-feedback
+                              | Looks good!
+                          div(class="col-span-6 sm:col-span-12")
+                            label.form-label(for='validationPostalCode') Postal Code
+                            input#validationPostalCode.form-control(type='text' placeholder='Enter postal code' required='')
+                            .invalid-feedback
+                              | Please enter your postal code
+                            .valid-feedback
+                              | Looks good!
+                          div(class="col-span-12")
+                            label.international-num(for='contact') Contact Number
+                            input#contact.form-control(type='number', placeholder='Enter your contact number' required='')
+                            .invalid-feedback
+                              | Please enter your contact number
+                            .valid-feedback
+                              | Looks good!
+                          div(class="col-span-12")
+                            .modal-footer.gap-2
+                              button.btn.button-light-primary.m-0(type='button', data-bs-dismiss='modal') Cancel
+                              button.btn.btn-primary.m-0(type='submit') Submit
+                      // Container-fluid Ends
+          
+        include ../../components/footer
+    include ../../components/footer-files

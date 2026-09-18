@@ -1,0 +1,88 @@
+@layer components {
+  .badge {
+    @apply text-[11px] rounded-md py-[0.25em] px-[0.5em] font-medium !leading-[1.1] font-roboto;
+    + .badge {
+      @apply ml-[5px];
+    }
+    svg {
+      @apply w-[16px] h-[16px] pt-[3px];
+    }
+  }
+  .badge-spacing {
+    @apply flex flex-wrap gap-3;
+    .badge {
+      @apply text-xs px-3 py-1.5 !flex;
+      &.badge {
+        svg {
+          @apply pt-0;
+        }
+      }
+      &.rounded-circle {
+        @apply px-3.5 py-2.5 flex items-center justify-center;
+      }
+      + .badge {
+        @apply ml-0;
+      }
+      &.badge-p-space {
+        @apply px-[13px] py-2.5;
+      }
+    }
+  }
+  a {
+    &.badge {
+      &:hover {
+        @apply text-inherit;
+        &.badge-dark {
+          &:hover {
+            @apply text-[rgba(var(--white),1)];
+          }
+        }
+      }
+    }
+  }
+  .b-ln-height {
+    @apply leading-[5px];
+  }
+  .round-badge-primary {
+    @apply bg-[rgba(var(--theme-default),1)];
+  }
+  .round-badge-secondary {
+    @apply bg-[rgba(var(--theme-secondary),1)];
+  }
+  .badge-heading {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+      @apply mb-4;
+    }
+  }
+  .badge-flex {
+    @apply gap-[22px] flex-wrap flex items-start justify-start;
+    .badge-square {
+      @apply !p-0 w-[35px] h-[35px];
+    }
+    .badge-p-5 {
+      @apply p-[5px];
+    }
+    .btn {
+      @apply px-7 py-1.5 !text-[14px] !leading-[1.5];
+    }
+  }
+  .image-badges {
+    span {
+      img {
+        @apply h-6;
+      }
+      &.vr {
+        @apply min-h-[12px] h-auto;
+      }
+      a {
+        svg {
+          @apply align-middle;
+        }
+      }
+    }
+  }
+}

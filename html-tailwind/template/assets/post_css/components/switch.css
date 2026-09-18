@@ -1,0 +1,316 @@
+@layer components {
+  .switch {
+    @apply relative inline-block w-[60px] h-[34px];
+    input {
+      @apply hidden;
+      &:checked + .switch-state {
+        @apply bg-[rgba(var(--theme-default),1)] before:!translate-x-[26px];
+        &::before {
+          @apply translate-x-8;
+        }
+      }
+      &:checked + .switch-state {
+        &.large-switch {
+          &::before {
+            transform: translateX(32px);
+          }
+        }
+      }
+      &:focus + .switch-state {
+        @apply shadow-[0_0_1px_var(--theme-default)];
+      }
+    }
+  }
+  .switch-state {
+    @apply absolute cursor-pointer bg-[rgba(var(--light-color),1)] rounded-[20px] inset-0;
+    transition: 0.4s;
+    &:before {
+      @apply absolute content-[""] w-[26px] h-[26px] bg-white transition-[0.4s] rounded-[20px] left-1 bottom-1;
+    }
+  }
+  .icon-state {
+    .switch-state {
+      &:after {
+        @apply content-["\efb8"] absolute text-[rgba(var(--dark-color),1)] transition-[0.4s] opacity-30 left-2.5 top-2.5;
+        font-family: var(--font-ICO);
+      }
+    }
+    input {
+      &:checked + .switch-state {
+        &:after {
+          @apply content-["\efad"] opacity-100 transition-[0.4s] left-9;
+        }
+      }
+    }
+  }
+  .switch-lg {
+    .switch {
+      @apply m-0 p-0 w-[75px] h-[40px];
+      .switch-state {
+        &:before {
+          @apply left-[7px] inset-y-[5px] w-[30px] h-[30px];
+        }
+        &.large-switch {
+          &::before {
+            @apply top-[5px];
+          }
+        }
+      }
+    }
+  }
+  .switch-lg.icon-state {
+    .switch {
+      .switch-state {
+        &:after {
+          @apply text-lg left-3 top-[5px];
+        }
+      }
+      input {
+        &:checked + .switch-state {
+          &:after {
+            @apply !left-[47px] !top-[5px];
+          }
+          &:before {
+            transform: translateX(32px) !important;
+          }
+        }
+      }
+    }
+  }
+  .switch-sm {
+    &.icon-state {
+      .switch {
+        .switch-state {
+          &:after {
+            @apply text-[8px] left-1 top-1;
+          }
+        }
+        input {
+          &:checked + .switch-state {
+            &:after {
+              @apply left-[13px] top-1;
+            }
+          }
+        }
+      }
+    }
+    .switch {
+      @apply mt-2.5 mb-0 w-[25px] h-[16px];
+      .switch-state {
+        &:before {
+          @apply left-1 bottom-1 w-[8px] h-[8px];
+        }
+      }
+    }
+    input {
+      &:checked + .switch-state {
+        &:before {
+          @apply left-[-13px];
+        }
+      }
+    }
+  }
+  .switch-outline {
+    .switch-state {
+      @apply bg-[rgba(var(--white),1)] border border-[rgba(var(--theme-default),1)] transition-[0.4s] border-solid before:bg-[rgba(var(--light-color),1)] before:text-[rgba(var(--white),1)] before:bottom-[3px];
+    }
+  }
+  .switch-outline {
+    .switch {
+      input {
+        @apply hidden;
+        &:checked + .switch-state {
+          @apply bg-[rgba(var(--transparent-color),1)] border border-[rgba(var(--theme-default),1)] border-solid before:bg-[rgba(var(--theme-default),1)] before:translate-x-[26px] before:bottom-[3px] after:text-[rgba(var(--white),1)];
+          &.bg-primary {
+            @apply !bg-[(var(--transparent-color),1)] border border-[rgba(var(--theme-default),1)] border-solid before:bg-[rgba(var(--theme-default),1)] bg-[rgba(var(--transparent-color),1)] border border-[rgba(var(--theme-default),1)] border-solid before:bg-[rgba(var(--theme-default),1)];
+          }
+          &.bg-dark {
+            @apply !bg-[(var(--transparent-color),1)] border border-[rgba(var(--dark-color),1)] border-solid before:bg-[rgba(var(--dark-color),1)];
+          }
+          &.bg-warning {
+            @apply !bg-[(var(--transparent-color),1)] border border-[rgba(var(--warning-color),1)] border-solid before:bg-[rgba(var(--warning-color),1)];
+          }
+          &.bg-success {
+            @apply !bg-[(var(--transparent-color),1)] border border-[rgba(var(--success-color),1)] border-solid before:bg-[rgba(var(--success-color),1)];
+          }
+          &.bg-info {
+            @apply !bg-[(var(--transparent-color),1)] border border-[rgba(var(--info-color),1)] border-solid before:bg-[rgba(var(--info-color),1)];
+          }
+          &.bg-danger {
+            @apply !bg-[(var(--transparent-color),1)] border border-[rgba(var(--danger-color),1)] border-solid before:bg-[rgba(var(--danger-color),1)];
+          }
+          &.bg-secondary {
+            @apply !bg-[(var(--transparent-color),1)] border border-[rgba(var(--theme-secondary),1)] border-solid before:bg-[rgba(var(--theme-secondary),1)];
+          }
+        }
+      }
+    }
+    .switch-state {
+      &.bg-primary {
+        @apply border border-[rgba(var(--theme-default),1)] !bg-[(var(--transparent-color),1)] border-solid;
+      }
+      &.bg-secondary {
+        @apply border border-[rgba(var(--theme-secondary),1)] !bg-[(var(--transparent-color),1)] border-solid;
+      }
+      &.bg-warning {
+        @apply border border-[rgba(var(--warning-color),1)] !bg-[(var(--transparent-color),1)] border-solid;
+      }
+      &.bg-success {
+        @apply border border-[rgba(var(--success-color),1)] !bg-[(var(--transparent-color),1)] border-solid;
+      }
+      &.bg-info {
+        @apply border border-[rgba(var(--info-color),1)] !bg-[(var(--transparent-color),1)] border-solid;
+      }
+      &.bg-danger {
+        @apply border border-[rgba(var(--danger-color),1)] !bg-[(var(--transparent-color),1)] border-solid;
+      }
+      &.bg-dark {
+        @apply border border-[rgba(var(--dark-color),1)] !bg-[(var(--transparent-color),1)] border-solid;
+      }
+    }
+  }
+  .switch-showcase {
+    @apply -mb-2;
+    .flex {
+      @apply leading-none;
+    }
+    .form-check {
+      .form-check-input {
+        @apply float-right;
+      }
+    }
+  }
+  .form-switch {
+    .form-check-input {
+      &:checked {
+        @apply bg-[rgba(var(--theme-default),1)] border-[rgba(var(--theme-default),1)];
+      }
+    }
+  }
+  .tg-list {
+    @apply text-center flex items-center;
+  }
+  .tgl {
+    @apply hidden;
+    &,
+    &:after,
+    &:before,
+    & *,
+    & *:after,
+    & *:before,
+    & + .tgl-btn {
+      @apply box-border;
+      &::selection {
+        background: none;
+      }
+    }
+    + .tgl-btn {
+      @apply block w-[4em] h-[2em] relative cursor-pointer select-none after:left-0 before:hidden;
+      outline: 0;
+    }
+    + .tgl-btn {
+      &:after,
+      &:before {
+        @apply relative block content-[""] w-6/12 h-full;
+      }
+    }
+    &:checked + .tgl-btn:after {
+      @apply left-2/4;
+    }
+  }
+  .tgl-skewed {
+    + .tgl-btn {
+      @apply bg-[rgba(var(--theme-secondary),1)] overflow-hidden skew-x-[-10deg] transition-all duration-[0.2s] ease-[ease] after:content-[attr(data-tg-on)] after:left-full before:content-[attr(data-tg-off)] before:left-0 active:before:left-[-10%];
+      backface-visibility: hidden;
+      &:after,
+      &:before {
+        @apply skew-x-[10deg] inline-block transition-all duration-[0.2s] ease-[ease] w-full text-center absolute leading-[2em] font-[bold] text-[rgba(var(--white),1)];
+        text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+      }
+      &:active {
+        @apply bg-[rgba(var(--theme-secondary),1)];
+      }
+    }
+    &:checked + .tgl-btn {
+      @apply bg-[rgba(var(--theme-default),1)];
+      &:before {
+        @apply -left-full;
+      }
+      &:after {
+        @apply left-0;
+      }
+      &:active:after {
+        @apply left-[10%];
+      }
+    }
+  }
+  .tgl-flip {
+    + .tgl-btn {
+      @apply transition-all duration-[0.2s] ease-[ease] p-0.5 after:content-[attr(data-tg-on)] before:content-[attr(data-tg-off)];
+      perspective: 100px;
+      &:after,
+      &:before {
+        @apply inline-block transition-all duration-[0.4s] ease-[ease] w-full text-center absolute leading-[2em] font-medium text-[rgba(var(--white),1)] absolute rounded left-0 top-0;
+        backface-visibility: hidden;
+      }
+      &:after {
+        transform: rotateY(-180deg);
+        @apply bg-[rgba(var(--warning-color),1)];
+      }
+      &:before {
+        @apply bg-[rgba(var(--danger-color),1)];
+      }
+      &:active:before {
+        transform: rotateY(-20deg);
+      }
+    }
+    &:checked + .tgl-btn {
+      &:before {
+        transform: rotateY(180deg);
+      }
+      &:after {
+        @apply left-0 bg-[rgba(var(--success-color),1)];
+        transform: rotateY(0);
+      }
+      &:active:after {
+        transform: rotateY(20deg);
+      }
+    }
+  }
+  .radius-none {
+    .form-check-input {
+      @apply !rounded-[3px];
+    }
+  }
+  .tg-list {
+    .tg-list-item {
+      .square-checked {
+        .switch-state {
+          &::before {
+            @apply content-[""] rounded-none;
+          }
+        }
+      }
+    }
+  }
+  .switch-wrapper {
+    .switch-box {
+      @apply mr-5;
+      .col-form-label {
+        @apply pb-0;
+      }
+    }
+    .tg-list {
+      p {
+        @apply ml-0 mr-2 my-0;
+      }
+    }
+  }
+  .default-square {
+    .form-switch {
+      .form-check-input {
+        @apply bg-[url(../images/switch/square-gray.png)] checked:bg-[url(../images/switch/square.svg)];
+      }
+    }
+  }
+}

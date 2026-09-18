@@ -1,0 +1,51 @@
+@layer components{
+    .current_lang {
+        @apply cursor-pointer uppercase overflow-hidden;
+    }
+    .lang{
+        &.selected {
+            @apply hidden;
+        }
+        span{
+            &.lang-txt {
+                @apply inline-flex font-medium ml-[8px];
+            }
+            span {
+                @apply text-[#999] font-normal ml-[5px];
+            }
+        }
+    }
+    .more_lang {
+        @apply -translate-y-5 opacity-0 cursor-pointer hidden transition-all duration-[0.3s] ease-[cubic-bezier(0.25,1.15,0.35,1.15)];
+    }
+    .translate_wrapper{
+        &.active {
+            .more_lang {
+                @apply block absolute bg-[rgba(var(--white),1)] shadow-[0_0_20px_rgba(89,102,122,0.1)] right-0 top-[47px] before:w-0 before:h-0 before:content-[""] before:top-[-7px] before:absolute before:z-[2] before:border-b-[7px] before:border-b-white before:border-x-[7px] before:border-x-transparent before:border-solid before:right-5 after:w-0 after:h-0 after:content-[""] after:top-[-7px] after:absolute after:z-[1] after:border-b-[7px] after:border-b-[#bdc2c5] after:border-x-[7px] after:border-x-transparent after:border-solid after:right-5;
+            }
+        }
+    }
+    .more_lang{
+        &.active {
+            @apply opacity-100 translate-y-[-0px];
+        }
+        .lang {
+            @apply flex px-[15px] py-2.5 hover:text-[rgba(var(--white),1)];
+            &:hover {
+                @apply !bg-[rgba(var(--theme-default),1)];
+                span {
+                    @apply text-[rgba(var(--white),1)];
+                }
+            }
+        }
+    }
+    .translate_wrapper{
+        &.active {
+            .more_lang {
+                .lang {
+                    @apply border-b-[#eaeaea] border-b border-solid;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,74 @@
+@layer components {
+  .pricing-simple {
+    @apply shadow-[0_0_10px_5px_rgba(68,102,242,0.05)] mb-0;
+    .card-body {
+      @apply text-left border-b-[none];
+      h4 {
+        @apply relative mb-[38px] before:absolute before:content-[''] before:bg-[rgba(var(--light-text),1)] before:m-0 before:left-0 before:-bottom-2.5;
+        &:before {
+          @apply w-[80px] h-[1px];
+        }
+      }
+      h5 {
+        @apply text-[calc(36px_+_(40_-_36)_*_((100vw_-_320px)_/_(1920_-_320)))] leading-[0.9] font-normal mb-6;
+      }
+    }
+    .pricing-content {
+      li {
+        @apply text-left mb-[calc(12px_+_(18_-_12)_*_((100vw_-_320px)_/_(1920_-_320)))] capitalize text-[rgba(var(--badge-light-color),1)] last:mb-0;
+        i {
+          @apply text-[rgba(var(--theme-default),1)] pr-2;
+        }
+      }
+    }
+  }
+  .pricingtable {
+    @apply !text-center !shadow-[0_0_40px_rgba(8,21,66,0.05)] overflow-hidden relative z-[1] h-full rounded-[10px] after:bg-[rgba(var(--theme-default),1)] after:bottom-[-210px] after:opacity-10 after:-left-40 after:right-auto after:top-auto py-[20px];
+    &:before,
+    &:after {
+      @apply content-[""] bg-[rgba(var(--theme-default),1)] absolute right-[-213px] z-[-1] opacity-10 rounded-[50%] w-[300px] h-[300px];
+    }
+    &:after {
+      @apply w-[300px] h-[300px];
+    }
+    .title {
+      @apply uppercase mb-5;
+    }
+    .price-value {
+      @apply text-[rgba(var(--white),1)] bg-[rgba(var(--theme-default),1)] mt-0 mb-[25px] mx-auto pt-[45px] pb-0 px-0 rounded-[50%] w-[130px] h-[130px];
+      .duration {
+        @apply ml-[-5px] mr-0 my-0;
+      }
+      .amount {
+        @apply text-[58px] font-bold leading-[45px] inline-block;
+      }
+      .currency {
+        @apply align-top;
+      }
+    }
+    .pricing-content {
+      @apply inline-block mt-0 !mb-[25px] mx-0;
+      li {
+        @apply font-medium text-left relative mt-0 mb-5 mx-0 pl-[30px] last:m-0 before:content-["\f00c"] before:text-[rgba(var(--theme-default),1)] before:text-center before:font-semibold before:absolute before:rounded-[50%] before:left-0 before:top-px;
+        &:before {
+          font-family: var(--font-awesome);
+          @apply w-[20px] h-[20px];
+        }
+      }
+    }
+  }
+  @screen sm {
+    .pricing-simple {
+      .card-body {
+        h1 {
+          @apply mb-[15px];
+        }
+      }
+    }
+    .pricing-block {
+      > div {
+        @apply flex-[100%];
+      }
+    }
+  }
+}

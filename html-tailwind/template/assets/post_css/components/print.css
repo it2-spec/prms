@@ -1,0 +1,94 @@
+@layer components {
+  @media print {
+    .sidebar-panel-main {
+      @apply hidden;
+    }
+    .sidebar-wrapper,
+    .page-header {
+      @apply hidden;
+    }
+
+    .page-body {
+      @apply m-0;
+    }
+
+    .customizer-links {
+      @apply hidden;
+    }
+
+    .page-wrapper {
+      .page-title {
+        @apply invisible;
+      }
+
+      .page-body-wrapper {
+        .page-title {
+          @apply hidden;
+        }
+      }
+
+      &.compact-wrapper {
+        .page-body-wrapper {
+          .page-body {
+            @apply m-0;
+          }
+        }
+      }
+    }
+
+    table.fixedHeader-floating {
+      @apply hidden;
+    }
+
+    .main-invoice-1 {
+      .table-wrapper {
+        @apply w-full;
+
+        .print-btn {
+          span {
+            @apply hidden;
+          }
+        }
+      }
+
+      .banner-image {
+        @apply w-full;
+      }
+    }
+    .main-tasks {
+      .email-body {
+        .tab-content {
+          .card-header {
+            a {
+              @apply hidden;
+            }
+          }
+        }
+      }
+    }
+
+    .mail-body-wrapper {
+      @apply mt-5;
+
+      .user-mail-wrapper {
+        @apply w-full;
+
+        .send-btn {
+          @apply hidden;
+        }
+      }
+    }
+
+    .email-left-aside {
+      @apply hidden;
+    }
+
+    .footer {
+      @apply hidden;
+    }
+
+    .print-btn {
+      @apply hidden;
+    }
+  }
+}

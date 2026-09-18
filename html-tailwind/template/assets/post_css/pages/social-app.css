@@ -1,0 +1,520 @@
+@layer components {
+  .user-profile {
+    .hovercard {
+      .info {
+        &.market-tabs {
+          @apply pt-5 pb-0 px-0;
+        }
+      }
+    }
+    .card-footer {
+      > div {
+        h3 {
+          @apply text-base;
+        }
+      }
+    }
+  }
+  .market-tabs {
+    .border-tab {
+      &.tab-links {
+        .tab-link {
+          &.active {
+            @apply bg-[rgba(var(--white),1)] text-[rgba(var(--theme-default),1)] border-b-[none];
+          }
+        }
+      }
+    }
+    .nav {
+      @apply justify-center gap-3;
+      li {
+        @apply w-full;
+        .tab-link {
+          @apply h-[81px] font-medium block text-base pt-[30px] rounded-t-none;
+        }
+      }
+    }
+  }
+  .tabs-social {
+    @apply border-b-[none] !my-[20px];
+    li {
+      a {
+        @apply font-semibold;
+        svg {
+          circle {
+            @apply text-[rgba(var(--light-text),1)];
+          }
+        }
+      }
+    }
+  }
+  .default-according {
+    &.style-1 {
+      .social-network {
+        button {
+          @apply w-11 h-11 rounded p-0;
+          i {
+            @apply mr-0;
+          }
+        }
+        span {
+          @apply block mb-2;
+        }
+      }
+    }
+  }
+  .social-list {
+    .social-flex {
+      @apply flex items-center mb-5 last:mb-0;
+      .grow {
+        a {
+          @apply text-[rgba(var(--light-text),1)];
+        }
+        span {
+          @apply font-medium;
+        }
+        &:hover {
+          a {
+            @apply text-[rgba(var(--theme-default),1)];
+          }
+        }
+      }
+    }
+  }
+  .photos {
+    ul {
+      li {
+        @apply inline-block w-[70px] mr-2.5 mb-2.5;
+        &:nth-child(4n) {
+          @apply mr-0;
+        }
+      }
+    }
+  }
+  .new-users-social {
+    @apply mb-[30px];
+    svg {
+      @apply cursor-pointer;
+      circle {
+        @apply text-[rgba(var(--light-text),1)];
+      }
+    }
+    .flex {
+      @apply items-center;
+      img {
+        @apply w-[58px];
+      }
+      .grow {
+        @apply mt-2.5;
+      }
+    }
+  }
+  .like-content {
+    span {
+      i {
+        @apply text-sm;
+      }
+    }
+  }
+  .timeline-content {
+    p {
+      @apply text-[rgba(var(--badge-light-color),0.6)] mt-[30px];
+    }
+    .comment-number {
+      i {
+        @apply text-[rgba(var(--light-text),1)] mx-1.5 my-0;
+      }
+      + .comment-number {
+        @apply pr-3;
+      }
+    }
+    .comments-box {
+      @apply mt-[30px];
+      .input-group {
+        @apply bg-[rgba(var(--light-semi-gray),0.4)] items-center mt-1.5;
+        .input-txt-bx {
+          @apply bg-[rgba(var(--light-semi-gray),0.1)] !border-[0px];
+          &::placeholder {
+            @apply text-[rgba(var(--badge-light-color),1)];
+          }
+        }
+        .input-group-append {
+          .btn {
+            &:active {
+              @apply border-[var(--transparent-color)];
+            }
+            i {
+              @apply text-[calc(_18px_+_(20_-_18)_*_((100vw_-_320px)_/_(1920_-_320))_)] flex text-[rgba(var(--light-text),1)];
+            }
+          }
+        }
+        .btn {
+          @apply pl-0 pr-7 py-0;
+          vertical-align: -3px;
+        }
+      }
+    }
+  }
+  .social-chat {
+    @apply mt-[30px];
+    span {
+      span {
+        @apply font-[normal] text-[rgba(var(--badge-light-color),0.6)] text-xs;
+      }
+    }
+    .grow {
+      @apply border border-[rgba(var(--badge-light-color),0.2)] relative p-5 border-solid before:content-[""] before:absolute before:border-r-[rgba(var(--semi-dark),1)] before:border-[7px] before:border-solid before:border-transparent before:right-full before:top-[19px] after:content-[""] after:absolute after:border-r-[rgba(var(--white),1)] after:border-[7px] after:border-solid after:border-transparent after:right-full after:top-[19px];
+      p {
+        @apply mt-[5px];
+      }
+    }
+    .your-msg,
+    .other-msg {
+      @apply mb-[30px];
+    }
+    .other-msg {
+      @apply ml-10;
+    }
+  }
+  .socialprofile {
+    span {
+      @apply text-[rgba(var(--light-text),1)];
+    }
+    .social-btngroup {
+      @apply mx-0 my-5;
+    }
+    .likes-profile {
+      h5 {
+        span {
+          @apply text-[rgba(var(--theme-body-font-color),1)];
+        }
+      }
+    }
+    .social-group {
+      @apply !mt-[20px];
+      ul {
+        li {
+          &:nth-child(4) {
+            @apply ml-[-22px];
+          }
+        }
+      }
+    }
+  }
+  .social-status {
+    form {
+      .form-group {
+        .form-control-social {
+          @apply border border-[rgba(var(--light-color),1)] mb-[30px] pl-[15px] border-solid;
+        }
+      }
+    }
+    .flex {
+      @apply relative items-center mb-[30px] last:mb-0;
+      .social-status {
+        @apply w-[12px] h-[12px] content-[""] absolute bg-[rgba(var(--white),1)] rounded-[100%] left-[35px] bottom-0;
+      }
+      .social-online {
+        @apply border-[rgba(var(--success-color),1)] border-[3px] border-solid;
+      }
+      .social-busy {
+        @apply border-[rgba(var(--theme-default),1)] border-[3px] border-solid;
+      }
+      .social-offline {
+        @apply border-[rgba(var(--semi-dark),1)] border-[3px] border-solid;
+      }
+      .grow {
+        p {
+          @apply text-[rgba(var(--badge-light-color),0.6)] !mb-[5px];
+        }
+        span {
+          + span {
+            @apply text-[rgba(var(--badge-light-color),0.6)];
+          }
+        }
+        .light-span {
+          @apply text-[rgba(var(--badge-light-color),0.6)];
+        }
+      }
+    }
+  }
+  .social-header {
+    h5 {
+      span {
+        &:first-child {
+          @apply leading-[1.48];
+        }
+        svg {
+          vertical-align: -4px;
+          circle {
+            @apply text-[rgba(var(--light-text),1)];
+          }
+        }
+      }
+    }
+  }
+  .details-about {
+    + .details-about {
+      @apply mt-[30px];
+    }
+    .your-details {
+      p {
+        @apply text-[rgba(var(--badge-light-color),0.6)] mb-4;
+      }
+    }
+  }
+  .avatar-showcase {
+    .friend-pic {
+      @apply mr-2 mb-2.5;
+    }
+    .pepole-knows {
+      ul {
+        li {
+          @apply inline-block mr-5 mb-2.5 last:mr-0;
+          .add-friend {
+            h6 {
+              @apply mt-[3px];
+            }
+          }
+        }
+      }
+    }
+  }
+  .activity-log {
+    .my-activity {
+      + .my-activity {
+        @apply mt-[30px];
+      }
+      p {
+        @apply mb-[5px];
+        span {
+          svg {
+            @apply w-[15px] h-[15px];
+          }
+        }
+      }
+    }
+  }
+  .filter-cards-view {
+    p {
+      @apply mb-4;
+    }
+  }
+  .social-app-profile {
+    .tab-pane {
+      .social-details {
+        .social-follow {
+          li {
+            span {
+              @apply w-full overflow-hidden text-ellipsis whitespace-nowrap;
+            }
+          }
+        }
+      }
+      .faq-accordion,
+      .job-accordion {
+        .card-header {
+          .btn {
+            @apply text-base font-semibold;
+          }
+        }
+        .filter-cards-view {
+          p {
+            @apply mb-4;
+          }
+          .page-notification {
+            .grow {
+              span {
+                @apply text-[13px];
+              }
+            }
+          }
+          .grow {
+            span {
+              @apply text-sm font-medium;
+            }
+          }
+        }
+      }
+      .job-accordion {
+        .filter-cards-view {
+          span {
+            @apply text-sm;
+            font-weight: 500;
+          }
+          p {
+            @apply text-[rgba(var(--theme-body-font-color),0.9)];
+          }
+        }
+      }
+    }
+  }
+  .social-app-profile1 {
+    .collapse {
+      @apply visible;
+    }
+    .social-app-profile {
+      .gallery-with-description {
+        .caption {
+          ul {
+            @apply grid grid-cols-[1fr_1fr_1fr];
+            li {
+              @apply w-full text-center;
+              + li {
+                @apply border-l-[rgba(var(--light-gray),1)] border-l border-solid;
+              }
+              span {
+                @apply text-[rgba(var(--light-text),1)] ml-1.5;
+              }
+              i {
+                @apply text-[rgba(var(--light-text),1)];
+              }
+            }
+          }
+        }
+      }
+      .social-friends {
+        .social-profile {
+          @apply text-left;
+          .common-social-box {
+            @apply gap-3 flex justify-start items-center;
+            .social-img {
+              img {
+                @apply h-[calc(40px_+_(50_-_40)_*_((100vw_-_320px)_/_(1920_-_320)))];
+              }
+            }
+            .edit-icon {
+              @apply right-[calc(-2px_+_(0_-_(-2))_*_((100vw_-_320px)_/_(1920_-_320)))] bottom-[calc(-2px_+_(0_-_(-2))_*_((100vw_-_320px)_/_(1920_-_320)))];
+              svg {
+                @apply w-[calc(18px_+_(20_-_18)_*_((100vw_-_320px)_/_(1920_-_320)))] h-[calc(18px_+_(20_-_18)_*_((100vw_-_320px)_/_(1920_-_320)))];
+              }
+            }
+          }
+          .social-details {
+            .social-follow {
+              @apply text-center text-center;
+              li {
+                @apply relative;
+              }
+            }
+            .card-social {
+              @apply gap-[22px];
+            }
+          }
+          .card-social {
+            @apply gap-[13px] relative z-0 flex items-center mt-2.5 pt-[15px] before:content-[""] before:border-t-[#eee] before:w-[calc(100%_+_40px)] before:h-full before:absolute before:-translate-x-2/4 before:z-[-1] before:border-t before:border-solid before:left-2/4 before:top-0;
+            li {
+              @apply w-full;
+              a {
+                @apply w-full bg-[rgba(var(--theme-default),0.1)] text-[15px] rounded-[5px] flex justify-center items-center;
+              }
+            }
+          }
+        }
+      }
+      .filter-cards-view {
+        &.photos {
+          ul {
+            @apply flex-wrap gap-3 flex justify-start items-center;
+            li {
+              @apply w-auto m-0;
+              img {
+                @apply h-[55px];
+              }
+            }
+          }
+        }
+      }
+      .common-user-image {
+        .user-image {
+          .share-icons {
+            @apply inset-0;
+            position: inherit;
+            li {
+              @apply inline-block mr-[calc(_6px_+_(10_-_6)_*_((100vw_-_320px)_/_(1920_-_320))_)] last:mr-0;
+              .social-icon {
+                @apply text-center align-middle rounded-[100%] w-[calc(32px_+_(50_-_32)_*_((100vw_-_320px)_/_(1920_-_320)))] h-[calc(32px_+_(50_-_32)_*_((100vw_-_320px)_/_(1920_-_320)))] flex justify-center items-center;
+                i {
+                  @apply text-[rgba(var(--white),1)] text-[calc(_18px_+_(25_-_18)_*_((100vw_-_320px)_/_(1920_-_320))_)];
+                  animation-duration: 2.8s;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen only1200 {
+    .social-app-profile1 {
+      .social-app-profile {
+        .social-friends {
+          .social-profile {
+            .card-social {
+              li {
+                a {
+                  @apply h-[calc(_30px_+_(39_-_30)_*_((100vw_-_1200px)_/_(1920_-_1200))_)];
+                }
+              }
+            }
+            .social-details {
+              h5 {
+                @apply text-[calc(_16px_+_(18_-_16)_*_((100vw_-_1200px)_/_(1920_-_1200))_)];
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen xl {
+    .social-app-profile1 {
+      .social-app-profile {
+        .social-friends {
+          .social-profile {
+            .card-social {
+              li {
+                a {
+                  @apply h-[calc(_28px_+_(39_-_28)_*_((100vw_-_320px)_/_(1920_-_320))_)];
+                  i {
+                    @apply text-[calc(_14px_+_(16_-_14)_*_((100vw_-_320px)_/_(1920_-_320))_)];
+                  }
+                }
+              }
+            }
+            .social-details {
+              .card-social {
+                @apply gap-[22px];
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen md {
+    .market-tabs {
+      .nav {
+        li {
+          @apply w-auto;
+          .tab-link {
+            @apply h-[50px] !px-[25px] !py-[14px] !leading-[1.6];
+          }
+        }
+      }
+    }
+  }
+  @screen sm {
+    .social-app-profile1 {
+      .social-app-profile {
+        .common-user-image {
+          .user-image {
+            .avatar {
+              @apply gap-3;
+            }
+          }
+        }
+      }
+    }
+  }
+}

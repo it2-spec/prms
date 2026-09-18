@@ -1,0 +1,332 @@
+@layer components {
+  .manage-review-wrapper {
+    .top-body {
+      @apply flex justify-end items-center gap-1 relative p-5;
+
+      .bootstrap-select {
+        @apply w-[118px];
+
+        &.dropdown-toggle {
+          @apply min-w-[100px];
+        }
+      }
+
+      .form-label {
+        @apply mb-0;
+      }
+      ~ {
+        .manage-review {
+          .dt-container {
+            .dt-layout-row {
+              &:first-child {
+                @apply absolute gap-[16px] flex justify-start items-center flex-row-reverse left-5 top-5;
+              }
+
+              .dt-buttons {
+                @apply m-0;
+              }
+            }
+          }
+        }
+      }
+    }
+    .selectpicker {
+      ~ .custom-dropdown {
+        .dropdown-toggle {
+          @apply px-2.5 py-[5px];
+        }
+        .dropdown-menu {
+          @apply w-[unset];
+        }
+      }
+    }
+  }
+  .manage-review {
+    .recent-table {
+      div.dt-container {
+        .dt-layout-row {
+          .dt-search {
+            @apply relative inset-[unset];
+
+            .dt-input {
+              @apply w-auto opacity-100 p-1.5 rounded-md;
+
+              &:focus {
+                &::placeholder {
+                  @apply opacity-0;
+                }
+              }
+            }
+          }
+        }
+      }
+      [class*="square-"] {
+        @apply flex justify-center items-center w-[34px] h-[34px] bg-[rgba(var(--danger-color),0.1)] shadow-[0px_0px_28px_6px_rgba(235,235,235,0.4)] rounded-sm;
+
+        svg {
+          @apply fill-[rgba(var(--danger-color),1)] w-[16px] h-[16px];
+        }
+      }
+      table {
+        thead,
+        tbody {
+          tr {
+            th,
+            td {
+              @apply text-[rgba(var(--body-font-color),1)] min-w-[auto];
+
+              &:first-child {
+                @apply pl-5;
+              }
+
+              &:last-child {
+                @apply pr-5;
+              }
+
+              &:nth-child(2) {
+                @apply min-w-[42px];
+              }
+
+              &:nth-child(3) {
+                @apply min-w-[150px];
+              }
+
+              &:nth-child(4) {
+                @apply min-w-[180px];
+              }
+
+              &:nth-child(5) {
+                @apply min-w-[265px];
+              }
+
+              &:nth-child(6) {
+                @apply min-w-[110px];
+              }
+
+              .badge {
+                @apply text-xs px-3 py-1.5;
+              }
+
+              .common-f-start {
+                @apply gap-2;
+
+                img {
+                  @apply h-10;
+                }
+
+                .user-details {
+                  @apply block;
+
+                  p {
+                    @apply leading-[1.3] text-[rgba(var--badge-light-color),0.8];
+                  }
+                }
+              }
+
+              .rating {
+                @apply flex gap-[3px] pb-1.5;
+
+                i {
+                  @apply text-[rgba(var(--badge-light-color),0.8)];
+                }
+              }
+
+              .customer-review {
+                span {
+                  @apply text-[rgba(var(--badge-light-color),0.8)];
+                }
+              }
+            }
+
+            &.dt-hasChild {
+              ~ {
+                tr[data-dt-row] {
+                  tbody {
+                    @apply bg-[rgba(var(--auth-bg-color),1)];
+
+                    tr {
+                      td {
+                        &:first-child {
+                          @apply min-w-[128px] font-medium;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @screen lg {
+    .manage-review-wrapper {
+      .top-body {
+        ~ {
+          .manage-review {
+            .dt-container {
+              .dt-layout-row {
+                &:first-child {
+                  @apply flex-col-reverse gap-3 items-start;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen sm420 {
+    .manage-review-wrapper {
+      .top-body {
+        @apply !top-[0];
+        ~ {
+          .manage-review {
+            .dt-container {
+              .dt-layout-row {
+                &:first-child {
+                  @apply top-[90px];
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen sm360 {
+    .manage-review-wrapper {
+      .top-body {
+        ~ {
+          .manage-review {
+            .dt-container {
+              .dt-layout-row {
+                .dt-buttons {
+                  .dt-button {
+                    @apply px-[7px] py-[5px];
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen md640 {
+    .manage-review-wrapper {
+      .top-body {
+        ~ {
+          .manage-review {
+            .dt-container {
+              .dt-layout-row {
+                .dt-layout-cell {
+                  .dt-search {
+                    @apply !m-0 inset-0;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen between1399-768 {
+    .manage-review-wrapper {
+      .top-body {
+        .rating {
+          @apply !flex-col !flex;
+        }
+      }
+    }
+  }
+  @screen md640 {
+    .manage-review {
+      .recent-table {
+        div.dt-container {
+          .dt-layout-row {
+            .dt-search {
+              @apply top-1;
+            }
+            &:last-child {
+              @apply flex-col;
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen between1399-1200 {
+    .manage-review {
+      .recent-table {
+        table {
+          thead,
+          tbody {
+            tr {
+              th,
+              td {
+                &:nth-child(6) {
+                  @apply hidden;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen between1580-1200 {
+    .manage-review {
+      .recent-table {
+        table {
+          thead,
+          tbody {
+            tr {
+              th,
+              td {
+                &:nth-child(7) {
+                  @apply hidden;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  /* @screen xl1299 {
+    .manage-review-wrapper {
+      .top-body {
+        @apply mb-[40px] top-[48px] justify-start;
+      }
+    }
+  } */
+
+  @screen xl {
+    /* .manage-review-wrapper {
+      .top-body {
+        @apply mb-[79px] top-[92px] justify-start;
+      }
+    } */
+    .manage-review {
+      .recent-table {
+        table {
+          tbody {
+            tr {
+              td {
+                .customer-review {
+                  span {
+                    @apply !line-clamp-3;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

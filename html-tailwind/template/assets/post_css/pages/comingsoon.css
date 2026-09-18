@@ -1,0 +1,39 @@
+@layer components {
+  .comingsoon-bgimg {
+    @apply bg-bottom bg-cover bg-[url(../images/other-images/coming-soon-bg.jpg)];
+  }
+  .basic-comingsoon {
+    @apply bg-center bg-cover bg-[url(../images/other-images/comingsoon.png)];
+  }
+  .comingsoon {
+    @apply flex items-center justify-center min-h-screen px-0 py-[50px];
+    .comingsoon-inner {
+      h5 {
+        @apply text-lg tracking-[1px] text-[rgba(var(--theme-body-sub-title-color),1)] font-medium my-5;
+      }
+      .countdown {
+        @apply border-t-[rgba(var(--light-color),1)] px-0 py-[30px] border-t border-solid;
+        .time {
+          @apply bg-[rgba(var(--theme-default),1)] text-[rgba(var(--white),1)] font-medium text-4xl rounded-[50%] w-[100px] h-[100px] !flex justify-center items-center;
+        } 
+        .title {
+          @apply text-sm font-normal text-[rgba(var(--theme-body-sub-title-color),1)] uppercase tracking-[1px] pt-[13px];
+        }
+        ul { 
+          li {
+            @apply inline-block uppercase mx-5 my-0;
+            span {
+              @apply block;
+            }
+          }
+        }
+      }
+      img{
+        @apply m-[auto];
+      }
+    }
+    video {
+      @apply fixed min-w-full min-h-full z-[-100] -translate-x-2/4 -translate-y-2/4 transition-[1s] duration-[opacity] object-cover left-2/4 top-2/4 w-[auto] h-[auto];
+    }
+  }
+}

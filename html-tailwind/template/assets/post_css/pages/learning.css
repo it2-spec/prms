@@ -1,0 +1,52 @@
+@layer components {
+  .learning-header {
+    @apply mb-2.5;
+  }
+  .categories {
+    @apply px-0 py-5 last:pb-0;
+    .learning-header {
+      @apply pl-[15px];
+    }
+    ul {
+      li {
+        @apply px-[15px] py-2 hover:bg-[rgba(var(--light-color),1)];
+        a {
+          @apply text-[rgba(var(--theme-body-font-color),1)];
+        }
+        span{
+          &.badge{
+            @apply text-[rgba(var(--white),1)];
+          }
+        }
+      }
+    }
+  }
+  .upcoming-course {
+    .upcoming-flex {
+      + .upcoming-flex {
+        @apply mt-5;
+      }
+      .grow {
+        .block {
+          i {
+            @apply text-sm;
+          }
+        }
+      }
+    }
+  }
+  .job-accordion {
+    @apply mb-0;
+  }
+  .learning-filter {
+    .md-sidebar {
+      .card-body {
+        .job-filter {
+          .form-control {
+            @apply pr-[35px];
+          }
+        }
+      }
+    }
+  }
+}

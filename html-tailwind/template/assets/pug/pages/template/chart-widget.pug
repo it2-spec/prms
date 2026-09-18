@@ -1,0 +1,292 @@
+- var page_Title = 'Chart';
+- var prism                 = true;
+- var theme_customizer      = true;
+- var counter               = true;
+- var apex                  = true;
+- var apexmoment            = true;
+- var clipboard             = true;
+- var customcard            = true;
+- var chart_widget          = true;
+- var sidebar               = true;
+- var scrollbar             = true;
+- var slick                 = true;
+- var header_slider         = true;
+- var animate               = true;
+doctype html
+html(lang='en')
+  include ../../components/header-files
+  body
+    include ../../components/loader
+    include ../../components/taptop
+    // page-wrapper Start
+    #pageWrapper.page-wrapper.compact-wrapper
+      include ../../components/header
+      // Page Body Start
+      .page-body-wrapper
+        include ../../components/sidebar
+        .page-body
+          .container.w-full
+            .page-title
+              .grid.grid-cols-12.mx-2.items-center
+                div(class="col-span-6 sm:col-span-12")
+                  h3
+                    | Chart
+                div(class="col-span-6 sm:col-span-12")
+                  ol.breadcrumb.flex
+                    li.breadcrumb-item
+                      a(href='index.html')                                        
+                        svg.stroke-icon
+                          use(href='../assets/svg/icon-sprite.svg#stroke-home')
+                    li.breadcrumb-item Widgets
+                    li.breadcrumb-item.active Chart
+          // Container-fluid starts
+          .container
+            // Chart widget top Start
+            .grid.grid-cols-12.card-gap
+              div(class="col-span-4 xl:col-span-12 box-col-12")
+                .card.overflow-hidden
+                  .chart-widget-top
+                    .grid.grid-cols-12.card-body.pb-0.m-0
+                      div(class="col-span-9 xl:col-span-8 lg:col-span-9")
+                        h6.mb-2 Total Sale
+                        h4 $3654.00
+                        span Compare to last month
+                      div(class="col-span-3 xl:col-span-4 lg:col-span-3").text-end.p-0
+                        h6.txt-success +65%
+                    div
+                      #chart-widget1
+              div(class="col-span-4 xl:col-span-12 box-col-12")
+                .card.overflow-hidden
+                  .chart-widget-top
+                    .grid.grid-cols-12.card-body.pb-0.m-0
+                      div(class="col-span-9 xl:col-span-8 lg:col-span-9")
+                        h6.mb-2 Total Project
+                        h4 12569
+                        span Compare to last week
+                      div(class="col-span-3 xl:col-span-4 lg:col-span-3").text-end.p-0
+                        h6.txt-success +65%
+                    div#chart-widget2
+                      #chart-widget-top-second.flot-chart-placeholder
+              div(class="col-span-4 xl:col-span-12 box-col-12")
+                .card.overflow-hidden
+                  .chart-widget-top
+                    .grid.grid-cols-12.card-body.pb-0.m-0
+                      div(class="col-span-9 xl:col-span-8 lg:col-span-9")
+                        h6.mb-2 Total Product
+                        h4 93M
+                        span Compare to last year
+                      div(class="col-span-3 xl:col-span-4 lg:col-span-3").text-end.p-0
+                        h6.txt-success +65%
+                    div#chart-widget3
+                      #chart-widget-top-third.flot-chart-placeholder
+            // Chart widget top Ends
+            // Chart widget with bar chart Start
+            .grid.grid-cols-12.card-gap
+              div(class="col-span-12 box-col-12")
+                .card.overflow-hidden
+                  .card-header
+                    h5 Monthly  History
+                  .bar-chart-widget
+                    .bottom-content.card-body
+                      .grid.grid-cols-12
+                        div(class="col-span-12")
+                          div#chart-widget4
+              div(class="col-span-6 xl:col-span-12 box-col-6 xl-50")
+                .card
+                  .card-header
+                    h5 Skill Status
+                  .card-body
+                    .chart-container.skill-chart
+                      #circlechart
+              div(class="col-span-6 xl:col-span-12 box-col-6 xl-50")
+                .card
+                  .card-header
+                    .header-top
+                      h5 Order Status
+                      .card-header-right-icon
+                        .dropdown
+                          button#dropdownMenuButton.btn.dropdown-toggle(type='button', data-bs-toggle='dropdown')
+                            | Today
+                          .dropdown-menu.dropdown-menu-end(aria-labelledby='dropdownMenuButton')
+                            a.dropdown-item(href='#!') Today
+                            a.dropdown-item(href='#!') Tomorrow
+                            a.dropdown-item(href='#!') Yesterday
+                  .card-body
+                    .chart-container.progress-chart
+                      #progress1
+                      #progress2
+                      #progress3
+                      #progress4
+                      #progress5                
+            // Chart widget with bar chart Ends
+            // small widgets Start
+            .grid.grid-cols-12.card-gap
+              // Live Product chart widget Start
+              div(class="xl-50 col-span-7 xl:col-span-12")
+                .small-chart-widget.chart-widgets-small
+                  .card
+                    .card-header
+                      h5 Live Products
+                    .card-body
+                      .chart-container
+                        .grid.grid-cols-12
+                          div(class="col-span-12")
+                            div#chart-widget6
+              // Live Product chart widget Ends
+              // Turnover chart widget Start
+              div(class="xl-50 col-span-5 xl:col-span-12")
+                  .card
+                    .card-header
+                      h5 Turn over
+                    .card-body
+                      .chart-container
+                        .grid.grid-cols-12
+                          div(class="col-span-12")
+                            div#chart-widget7
+                      .code-box-copy
+                        button.code-box-copy__btn.btn-clipboard(data-clipboard-target='#example-head1', title='Copy')
+                          i.icofont.icofont-copy-alt
+                        pre
+                          code.language-html#example-head1
+                            | &lt;!-- Cod Box Copy begin --&gt;
+                            | &lt;div class="chart-container"&gt;
+                            |   &lt;div class="grid grid-cols-12"&gt;
+                            |     &lt;div class="col-span-12"&gt;
+                            |       &lt;div id="chart-widget7"&gt;&lt;/div&gt;
+                            |     &lt;/div&gt;
+                            |   &lt;/div&gt;
+                            | &lt;/div&gt;
+                            | &lt;!-- Cod Box Copy end --&gt;
+              // Turnover chart widget Ends
+              // Crypto price chart Start
+              div(class="xl-50 col-span-6 xl:col-span-12")
+                .card
+                  .card-header
+                    h5 Cryptocurrency Prices
+                  .card-body
+                    .chart-container.crypto-chart
+                      .grid.grid-cols-12
+                        div(class="col-span-12")
+                          div#chart-crypto
+              // Crypto price chart end
+              div(class="xl-50 col-span-6 xl:col-span-12")
+                .card
+                  .card-header
+                    h5 Crypto Annotations
+                  .card-body
+                    .chart-container
+                      .grid.grid-cols-12
+                        div(class="col-span-12")
+                          div#crypto-annotation  
+              // small widgets Ends
+              // Browser uses and website visiter widget Start
+            .grid.grid-cols-12.card-gap
+              // browser uses widget chart Start
+              div(class="col-span-12 box-col-12")
+                .donut-chart-widget
+                  .card
+                    .card-header
+                      h5 Stock Market
+                    .card-body
+                      #chart-widget13
+              // browser uses widget chart Endss
+              // status widget Start
+              div(class="col-span-5 xl:col-span-12 box-col-12")
+                .card
+                  .card-header
+                    h5 Finance
+                  .card-body
+                    .chart-container.column-container
+                      #columnchart
+              div(class="col-span-7 xl:col-span-12 box-col-6")
+                .card
+                  .card-header
+                    h5 Order Status 
+                  .card-body
+                    .chart-container
+                      #linechart
+              // status widget Ends
+              // Monthly Sale chart widget Start
+              div(class="xl-50 col-span-5 xl:col-span-12 box-col-6")
+                .small-chart-widget.chart-widgets-small
+                  .card
+                    .card-header
+                      h5 Monthly Sales
+                      .card-header-right
+                        ul.list-unstyled.card-option
+                          li
+                            i.fa-solid.fa-gear.fa-spin
+                          li
+                            i.view-html.fa-solid.fa-code
+                          li
+                            i.icofont.icofont-maximize.full-card
+                          li
+                            i.icofont.icofont-minus.minimize-card
+                          li
+                            i.icofont.icofont-refresh.reload-card
+                          li
+                            i.icofont.icofont-error.close-card
+                    .card-body
+                      .chart-container
+                        .grid.grid-cols-12
+                          div(class="col-span-12")
+                            div#chart-widget8
+                      .code-box-copy
+                        button.code-box-copy__btn.btn-clipboard(data-clipboard-target='#example-head2', title='Copy')
+                          i.icofont.icofont-copy-alt
+                        pre
+                          code.language-html#example-head2
+                            | &lt;!-- Cod Box Copy begin --&gt;
+                            | &lt;div class="chart-container"&gt;
+                            |   &lt;div class="grid grid-cols-12"&gt;
+                            |     &lt;div class="col-span-12"&gt;
+                            |       &lt;div id="chart-widget8"&gt;&lt;/div&gt;
+                            |     &lt;/div&gt;
+                            |   &lt;/div&gt;
+                            | &lt;/div&gt;
+                            | &lt;!-- Cod Box Copy end --&gt;
+              // Monthly Sale chart widget Ends
+              // Uses chart widget Start
+              div(class="xl-50 col-span-7 xl:col-span-12 box-col-12")
+                .small-chart-widget.chart-widgets-small
+                  .card
+                    .card-header
+                      h5 Uses
+                      .card-header-right
+                        ul.list-unstyled.card-option
+                          li
+                            i.fa-solid.fa-gear.fa-spin
+                          li
+                            i.view-html.fa-solid.fa-code
+                          li
+                            i.icofont.icofont-maximize.full-card
+                          li
+                            i.icofont.icofont-minus.minimize-card
+                          li
+                            i.icofont.icofont-refresh.reload-card
+                          li
+                            i.icofont.icofont-error.close-card
+                    .card-body
+                      .chart-container
+                        .grid.grid-cols-12
+                          div(class="col-span-12")
+                            div#chart-widget9
+                      .code-box-copy
+                        button.code-box-copy__btn.btn-clipboard(data-clipboard-target='#example-head3', title='Copy')
+                          i.icofont.icofont-copy-alt
+                        pre
+                          code.language-html#example-head3
+                            | &lt;!-- Cod Box Copy begin --&gt;
+                            | &lt;div class="chart-container"&gt;
+                            |   &lt;div class="grid grid-cols-12"&gt;
+                            |     &lt;div class="col-span-12"&gt;
+                            |       &lt;div id="chart-widget9"&gt;&lt;/div&gt;
+                            |     &lt;/div&gt;
+                            |   &lt;/div&gt;
+                            | &lt;/div&gt;
+                            | &lt;!-- Cod Box Copy end --&gt;
+              // Uses chart widget Ends
+
+          // Container-fluid Ends
+        include ../../components/footer
+    include ../../components/footer-files

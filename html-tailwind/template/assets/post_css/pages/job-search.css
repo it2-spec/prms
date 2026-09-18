@@ -1,0 +1,555 @@
+@layer components {
+  .filter-cards-view {
+    .job-filter {
+      &:first-child {
+        @apply mb-5;
+      }
+    }
+    .checkbox-animated {
+      @apply my-5;
+    }
+  }
+  .location-checkbox {
+    .form-check {
+      @apply flex justify-start items-center mb-3 p-0;
+      .form-check-label {
+        @apply flex justify-between items-center w-full;
+      }
+    }
+    span {
+      @apply text-[rgba(var(--light-text),1)] pl-[33px];
+    }
+    .number {
+      @apply text-[rgba(var(--badge-light-color),0.8)];
+    }
+  }
+  .job-accordion {
+    .card {
+      @apply !mb-[20px] rounded-[5px];
+    }
+    .btn-block {
+      @apply !rounded-t-none;
+    }
+  }
+  .job-search {
+    p {
+      @apply mt-[20px];
+    }
+    .job-flex {
+      @apply flex items-center;
+      .grow {
+        h6 {
+          @apply mb-[3px];
+          span {
+            @apply text-[rgba(var(--light-text),1)] text-xs font-[300];
+            &.badge {
+              @apply text-[rgba(var(--white),1)];
+            }
+          }
+        }
+        p {
+          @apply text-[rgba(var(--light-text),1)] !mt-0;
+        }
+      }
+    }
+    .job-description {
+      @apply !mt-[20px];
+      h6 {
+        @apply font-medium mb-1.5;
+      }
+      p {
+        @apply mt-0 mb-1.5;
+      }
+      ul:not(.job-apply-wrapper .job-search .job-description ul) {
+        @apply list-disc list-inside;
+        li {
+          @apply text-[rgba(var(--badge-light-color),0.8)] mb-2.5 last:mb-0;
+        }
+      }
+      .theme-form {
+        @apply my-[30px];
+        .grid {
+          div[class^="col-"] {
+            + div[class^="col-"] {
+              .select2-container {
+                @apply mt-[18px];
+              }
+            }
+            .input-group {
+              .datepicker-here {
+                @apply text-sm border border-[rgba(var(--gray-60),1)] py-3 border-solid;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .select2-container {
+    .select2-selection--single {
+      @apply rounded border-[rgba(var(--light-semi-gray),1)] h-[47px] p-2.5;
+    }
+  }
+  .job-pagination {
+    @apply mb-[30px];
+    nav {
+      ul {
+        @apply justify-end;
+      }
+    }
+    .page-item {
+      @apply bg-[rgba(var(--white-bg),1)];
+      .page-link {
+        @apply shadow-[unset];
+      }
+    }
+  }
+  .job-sidebar {
+    .job-accordion {
+      .card-body {
+        &.animate-chk:not(.filter-cards-view) {
+          @apply !rounded-none;
+          .form-check {
+            @apply flex justify-start items-center mb-3 p-0;
+            .form-check-label {
+              @apply flex justify-between items-center w-full;
+              .number {
+                @apply text-[rgba(var(--badge-light-color),0.8)] w-[145px] !block mr-0 ml-[unset] text-end overflow-hidden text-ellipsis whitespace-nowrap;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .job-details-wrapper,
+  .list-view-wrapper,
+  .card-view-wrapper,
+  .job-apply-wrapper {
+    .job-sidebar {
+      .job-accordion {
+        .animate-chk {
+          .form-check {
+            .form-check-label {
+              .number {
+                @apply w-[70px];
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .select-date {
+    .select2-container--default {
+      .select2-selection--single {
+        .select2-selection__arrow {
+          @apply right-3 top-[9px];
+        }
+      }
+    }
+  }
+  .job-apply-wrapper {
+    .job-search {
+      .job-description {
+        .theme-form {
+          .dropdown-toggle {
+            @apply h-[47px] p-3;
+          }
+        }
+      }
+    }
+    .job-accordion {
+      .filter-cards-view {
+        .form-check {
+          @apply flex justify-start items-center mb-3 p-0;
+          .form-check-label {
+            @apply flex w-full justify-between items-center;
+            .number {
+              @apply text-[rgba(var(--badge-light-color),0.8)];
+            }
+          }
+        }
+      }
+    }
+  }
+  .candidate-wrapper {
+    .form-select {
+      @apply text-sm text-[rgba(var(--badge-light-color),0.8)];
+    }
+    .card-body {
+      .common-f-start:not(.candidate-wrapper .candidates-box .common-f-start) {
+        @apply mt-[42px];
+      }
+    }
+    .candidates-box {
+      .overflow-x-auto {
+        .dt-container {
+          .dt-layout-row {
+            .dt-search {
+              @apply right-5;
+              .dt-input {
+                @apply w-auto opacity-100 p-1.5 rounded-md;
+                &:focus {
+                  &::placeholder {
+                    @apply opacity-0;
+                  }
+                }
+              }
+            }
+            &:first-child {
+              @apply pt-5 pb-[35px] px-5;
+            }
+          }
+          table {
+            &.dataTable {
+              thead,
+              tbody {
+                tr {
+                  th,
+                  td {
+                    @apply min-w-[auto] text-[rgba(var(--body-font-color),1)];
+                    &:first-child {
+                      @apply pl-5;
+                    }
+                    &:last-child {
+                      @apply min-w-[128px] pr-5;
+                    }
+                    &:nth-child(2) {
+                      @apply min-w-[200px];
+                    }
+                    &:nth-child(3) {
+                      @apply min-w-[150px];
+                    }
+                    &:nth-child(4) {
+                      @apply min-w-[200px];
+                    }
+                    a {
+                      @apply text-[rgba(var(--body-font-color),1)];
+                    }
+                  }
+                }
+              }
+              tbody {
+                td {
+                  @apply my-[20px];
+                }
+              }
+            }
+          }
+        }
+      }
+      img {
+        @apply h-[38px];
+      }
+      .status {
+        @apply w-2.5 h-2.5 absolute rounded-[50%] right-0.5 bottom-0.5;
+        .inner-dot {
+          @apply absolute block w-full h-full shadow-[0_0_8px_rgba(var(--black),0.3)] animate-[pulse-dot_1.25s_cubic-bezier(0.455,0.03,0.515,0.955)_-0.4s_infinite] rounded-[15px] border-2 border-solid border-[rgba(var(--white),1)] left-0.5 top-0.5;
+        }
+      }
+      .common-f-start {
+        @apply gap-2.5 mt-1;
+        .attachment {
+          @apply text-[rgba(var(--badge-light-color),0.8)] text-xs inline-block mt-[5px] px-2 py-0.5 rounded-[30px] bg-[rgba(var(--light-gray),1)];
+          i {
+            @apply mr-1;
+          }
+        }
+      }
+      .candidate-desc {
+        h6 {
+          @apply leading-[1.3] mb-0;
+        }
+        li {
+          p {
+            @apply text-[rgba(var(--badge-light-color),0.8)] mb-0;
+          }
+          span {
+            @apply text-[rgba(var(--badge-light-color),1)] font-medium;
+          }
+          &:last-child {
+            @apply mt-0.5;
+          }
+        }
+      }
+      .candidate-skill {
+        li {
+          .common-flex {
+            @apply gap-2;
+          }
+        }
+        .badge {
+          + .badge {
+            @apply m-0;
+          }
+        }
+        p {
+          @apply text-[rgba(var(--badge-light-color),0.8)];
+        }
+        span:not(.badge) {
+          @apply text-[rgba(var(--badge-light-color),1)] font-medium;
+        }
+      }
+      .educations {
+        p {
+          @apply text-[rgba(var(--badge-light-color),0.8)] mb-0;
+        }
+        li {
+          @apply mb-3 last:mb-0;
+          h6 {
+            @apply mb-1.5;
+          }
+        }
+      }
+      .badge {
+        @apply text-xs px-2.5 py-1.5;
+      }
+      .btn {
+        @apply py-[calc(4px_+_(8_-_4)_*_((100vw_-_320px)_/_(1920_-_320)))] px-[calc(8px_+_(12_-_8)_*_((100vw_-_320px)_/_(1920_-_320)))];
+      }
+    }
+  }
+  .company-box {
+    @apply text-center;
+    svg {
+      @apply w-[calc(30px_+_(60_-_30)_*_((100vw_-_320px)_/_(1920_-_320)))] h-10 m-auto;
+    }
+    .company-name {
+      .main-star-rating {
+        @apply mt-2.5 mb-1.5 mx-0;
+        .common-flex {
+          @apply gap-0.5;
+        }
+        i {
+          @apply text-sm;
+        }
+      }
+      .c-o-light {
+        @apply justify-center;
+      }
+      .company-desc {
+        @apply border-t-[rgba(var(--light-gray),1)] mt-2.5 pt-2.5 pb-4 px-0 border-t border-dashed;
+        p {
+          @apply text-[rgba(var(--theme-body-sub-title-color),1)] leading-normal h-[auto];
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+        }
+      }
+      .company-category {
+        @apply inline-block text-[13px] px-1.5 py-[3px] rounded-lg;
+        i {
+          @apply align-middle mr-2;
+        }
+      }
+      .btn {
+        @apply text-[rgba(var(--white),1)] border border-solid;
+      }
+    }
+  }
+  .job-accordion {
+    .accordion {
+      .accordion-item {
+        .collapse {
+          @apply visible;
+        }
+      }
+    }
+  }
+  .filter-companies {
+    .accordion-item {
+      @apply rounded-md border-[none];
+      .collapse {
+        @apply visible;
+      }
+      + .accordion-item {
+        @apply mt-4;
+      }
+      .accordion-header {
+        .accordion-button {
+          @apply bg-[rgba(var(--theme-default),0.1)] text-[rgba(var(--theme-default),1)] font-medium justify-between text-base transition-all duration-[0.4s] ease-[ease] flex w-full px-4 py-3 rounded-md after:content-[unset];
+          &.collapsed {
+            @apply bg-[rgba(var(--main-body-color),1)] text-[rgba(var(--theme-font-color),1)] transition-all duration-[0.4s] ease-[ease];
+          }
+          svg {
+            @apply inset-0;
+            position: unset;
+          }
+        }
+      }
+      .accordion-body {
+        @apply pt-4 pb-0 px-3.5;
+      }
+      .product-filter {
+        label {
+          @apply cursor-pointer text-[rgba(var(--theme-body-font-color),1)] last:mb-0;
+        }
+      }
+    }
+  }
+  .md-sidebar {
+    .md-sidebar-toggle {
+      @apply hidden w-fit capitalize mb-5;
+    }
+  }
+  .job-details-wrapper,
+  .list-view-wrapper {
+    .job-search {
+      .card-body {
+        .flex {
+          .job-grow {
+            p {
+              @apply !mt-[0];
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen xl {
+    .main-companies {
+      .md-sidebar {
+        .card {
+          @apply m-0 rounded-none;
+        }
+        .md-sidebar-aside {
+          @apply w-[calc(295px_+_(325_-_295)_*_((100vw_-_320px)_/_(1920_-_320)))] p-0;
+        }
+      }
+    }
+  }
+  @screen lg {
+    .filter-cards-view {
+      @apply p-5;
+      .job-filter {
+        &:first-child {
+          @apply mb-5;
+        }
+      }
+      .checkbox-animated {
+        @apply !mb-5;
+      }
+      .job-accordion {
+        .animate-chk {
+          @apply p-5;
+        }
+      }
+      .job-search {
+        p {
+          @apply mt-5;
+        }
+      }
+    }
+  }
+  @screen md {
+    .candidate-wrapper {
+      .card-body {
+        .common-f-start:not(
+            .candidate-wrapper .candidates-box .common-f-start
+          ) {
+          @apply mt-[23px];
+        }
+      }
+    }
+  }
+  @screen sm {
+    .filter-cards-view {
+      @apply p-[15px];
+      .job-filter {
+        &:first-child {
+          @apply mb-[15px];
+        }
+      }
+      .checkbox-animated {
+        @apply my-[15px];
+      }
+    }
+    .job-accordion {
+      .animate-chk {
+        @apply p-[15px];
+      }
+    }
+    .job-search {
+      p {
+        @apply mt-[15px];
+      }
+      .job-flex {
+        @apply block text-center;
+        .grow {
+          h6 {
+            .pull-right {
+              @apply float-none !block mt-[3px];
+            }
+          }
+          p {
+            span {
+              + span {
+                @apply block;
+              }
+            }
+          }
+        }
+        img {
+          @apply mb-[15px];
+        }
+        .m-r-20 {
+          @apply ml-[unset] mr-5;
+        }
+      }
+      .job-description {
+        @apply mt-[15px];
+        .theme-form {
+          @apply my-[15px];
+          .grid {
+            div[class^="col-"] {
+              + div[class^="col-"] {
+                .select2-container {
+                  @apply mt-0.5;
+                }
+              }
+            }
+          }
+          .xs-mt-period {
+            @apply mt-[15px];
+          }
+        }
+      }
+    }
+    .job-pagination {
+      @apply mb-[15px];
+    }
+    .xl-mt-job {
+      @apply mb-[15px];
+    }
+  }
+  @screen md640 {
+    .candidate-wrapper {
+      .candidates-box {
+        .overflow-x-auto {
+          .dt-container {
+            .dt-layout-row {
+              .dt-search {
+                @apply relative left-0 right-[unset] !top-5;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@keyframes pulse-dot {
+  0% {
+    transform: scale(1.1);
+  }
+
+  50% {
+    transform: scale(0.9);
+  }
+
+  100% {
+    transform: scale(1.1);
+  }
+}

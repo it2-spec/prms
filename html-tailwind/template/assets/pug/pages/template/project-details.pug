@@ -1,0 +1,1702 @@
+- var page_Title = 'Project Details';
+- var theme_customizer      = true;
+- var sidebar               = true;
+- var tooltip               = true;
+- var apex                  = true;
+- var slick                 = true;
+- var select_dt             = true;
+- var datatable             = true;
+- var touchspin_2           = true;
+- var page_datatable        = true;
+- var header_slider         = true;
+- var scope_project         = true;
+- var scrollbar             = true;
+
+doctype html
+html(lang='en')
+  include ../../components/header-files
+  body
+    include ../../components/loader
+    include ../../components/taptop
+    // page-wrapper Start
+    #pageWrapper.page-wrapper.default-wrapper
+      include ../../components/header
+      // Page Body Start
+      .page-body-wrapper.default-menu.default-menu
+        include ../../components/sidebar
+        .page-body
+          .container.w-full
+            .page-title
+              .grid.grid-cols-12.mx-2.items-center
+                div(class="col-span-6 sm:col-span-12")
+                  h3 
+                    | Project Details
+                div(class="col-span-6 sm:col-span-12")
+                  ol.breadcrumb.flex
+                    li.breadcrumb-item
+                      a(href='index.html')                                        
+                        svg.stroke-icon
+                          use(href='../assets/svg/icon-sprite.svg#stroke-home')
+                    li.breadcrumb-item Projects
+                    li.breadcrumb-item.active Project Details
+          // Container-fluid starts
+          .container.main-scope-project
+            .grid.grid-cols-12.card-gap.scope-bottom-wrapper.tabs
+                div(class="col-span-2 xxl:col-span-3 xl:col-span-12 recent-xl-23 box-col-3")
+                    .card 
+                        .card-body
+                            ul.sidebar-left-icons.nav.nav-pills.tab-links(class="[@media(max-width:1024px)]:!justify-start")
+                                li.nav-item  
+                                    a.tab-link.active(data-tabfilter="1")
+                                        .absolute-border
+                                        .nav-rounded
+                                            .product-icons
+                                                svg
+                                                    use(xlink:href="../assets/svg/icon-sprite.svg#project-search")
+                                        .product-tab-content
+                                            h6 Summary
+                                li.nav-item 
+                                    a.tab-link(data-tabfilter="2")
+                                        .absolute-border
+                                        .nav-rounded
+                                            .product-icons
+                                                svg
+                                                    use(href="../assets/svg/icon-sprite.svg#project-target")
+                                        .product-tab-content
+                                            h6 Status
+                                li.nav-item 
+                                    a.tab-link(data-tabfilter="3")
+                                        .absolute-border
+                                        .nav-rounded
+                                            .product-icons
+                                                svg
+                                                    use(href="../assets/svg/icon-sprite.svg#project-badget")
+                                        .product-tab-content
+                                            h6 Finance
+                                li.nav-item
+                                    a.tab-link(data-tabfilter="4")
+                                        .absolute-border
+                                        .nav-rounded
+                                            .product-icons
+                                                svg
+                                                    use(href="../assets/svg/icon-sprite.svg#project-users") 
+                                        .product-tab-content
+                                            h6 Team
+                                li.nav-item
+                                    a.tab-link(data-tabfilter="5")
+                                        .absolute-border
+                                        .nav-rounded
+                                            .product-icons
+                                                svg
+                                                    use(href="../assets/svg/icon-sprite.svg#stroke-files") 
+                                        .product-tab-content
+                                            h6 Attachment
+                                li.nav-item
+                                    a.tab-link(data-tabfilter="6")
+                                        .absolute-border
+                                        .nav-rounded
+                                            .product-icons
+                                                svg
+                                                    use(href="../assets/svg/icon-sprite.svg#stroke-activity") 
+                                        .product-tab-content
+                                            h6 Activity
+                div(class="col-span-10 xxl:col-span-9 xl:col-span-12 recent-xl-77 box-col-9")
+                    .grid.grid-cols-12.card-gap
+                        div(class="col-span-12")
+                            .common-project-header.common-space(class="!mb-[20px]")
+                                .common-space
+                                    div.pe-sm-3 
+                                        h5 Dashboard
+                                            span.badge.badge-light-warning.ms-2 In Progress
+                                        span.c-o-light Create a brand logo design for a admin.
+                                    .common-align(class="[@media(max-width:435px)]:flex-col")
+                                        .customers
+                                            ul.flex 
+                                                li.d-inline-block
+                                                    img.img-40.rounded-full(src="../assets/images/dashboard/user/10.jpg", alt="user")(class="[@media(max-width:644px)]:!h-[30px] [@media(max-width:644px)]:!w-[30px]")
+                                                li.d-inline-block
+                                                    img.img-40.rounded-full(src="../assets/images/dashboard/user/11.jpg", alt="user")(class="[@media(max-width:644px)]:!h-[30px] [@media(max-width:644px)]:!w-[30px]")
+                                                li.d-inline-block 
+                                                    .common-circle.bg-lighter-danger(class="[@media(max-width:644px)]:!h-[30px] [@media(max-width:644px)]:!w-[30px]") A
+                                                li.d-inline-block
+                                                    img.img-40.rounded-full(src="../assets/images/dashboard/user/1.jpg", alt="user")(class="[@media(max-width:644px)]:!h-[30px] [@media(max-width:644px)]:!w-[30px]")
+                                            
+                                                li.d-inline-block
+                                                    .bg-lighter-dark.common-circle(class="[@media(max-width:644px)]:!h-[30px] [@media(max-width:644px)]:!w-[30px]")
+                                                        span.font-medium 9+
+                                        h6 All tasks : 24
+                                .common-align
+                                    ul.common-align 
+                                        li.flex.gap-1
+                                            span Create Date &colon;
+                                            svg
+                                                use(href='../assets/svg/icon-sprite.svg#vector-calendar')
+                                            span 10 Jul, 2025 
+                                        li.flex.gap-1(class="[@media(max-width:435px)]:!pl-0 [@media(max-width:435px)]:!border-l-[0px]")  
+                                            span Due Date &colon;
+                                            svg
+                                                use(href='../assets/svg/icon-sprite.svg#vector-calendar')
+                                            span 10 Aug, 2025
+                                    a.btn.btn-primary.text-white(href="createnew.html" target="_blank")
+                                        i.fa-solid.fa-plus
+                                        |  Add Project  
+                        div(class="col-span-12")
+                            //- Summary
+                            .tab-content
+                                .tab-pan.fade.show.active(data-tabcontent="1")
+                                    .grid.grid-cols-12.card-gap 
+                                        div(class="col-span-8 xxl:col-span-12 box-col-12")
+                                            .card.main-summary
+                                                .card-header.card-no-border 
+                                                    .common-space
+                                                        .left-header-content
+                                                                h5 Project Summary
+                                                                p.m-0.c-o-light Due date exceeded for 24 projects
+                                                        .card-header-right-btn
+                                                            a.c-o-light(href="project-list.html") View All
+                                                .card-body.pt-0 
+                                                    .grid.grid-cols-12.gap-3 
+                                                        div(class="col-span-8 md:col-span-12 xl-50 ")
+                                                            ul.summary-section
+                                                                li.p-b-20 
+                                                                    p(class="[@media(max-width:1660px)_and_(min-width:320px)]:line-clamp-[3]") The proposal's project summary is among its most crucial sections. It is probably the first thing a reviewer will look at, so here is your best chance to catch their attention.
+                                                                li 
+                                                                    ul.common-space.p-t-10
+                                                                        li 
+                                                                            ul 
+                                                                                li 
+                                                                                    p.mb-1 Creation Date 
+                                                                                    span 14 March, 2025
+                                                                                li 
+                                                                                    p.mb-1 Due Date
+                                                                                    span 30 April, 2025
+                                                                        li
+                                                                            ul 
+                                                                                li 
+                                                                                    p.mb-1 Priority
+                                                                                    span.badge.badge-light-primary High
+                                                                                li 
+                                                                                    p.mb-1 Status
+                                                                                    span.badge.badge-light-success In progress
+                                                                        li
+                                                                            p.p-t-10.mb-2 Resource
+                                                                            .attachment-file.common-flex(class="[@media(max-width:1780px)_and_(min-width:576px)]:gap-[14px] [@media(max-width:1780px)_and_(min-width:576px)]:w-[218px] [@media(max-width:1780px)_and_(min-width:576px)]:min-w-[218px]")
+                                                                                .common-flex.items-center
+                                                                                    img.max-w-full(src="../assets/images/project/files/pdf.png", alt="pdf")
+                                                                                    .block 
+                                                                                        p.mb-0 Projects Webflow
+                                                                                        p.c-o-light 678 KB
+                                                                                a(href="../assets/pug/pages/template/text_file.pdf" download) 
+                                                                                    i.fa-solid.fa-download.f-light
+                                                        div(class="col-span-4 md:col-span-12 xl-50 md:order-0 order-1")
+                                                            .summary-chart-box
+                                                                #summary-chart
+                                        div(class="col-span-4 xxl:col-span-6 md:col-span-12 xxl:order-1 sm:order-1 box-col-6 box-ord-1")
+                                            .card
+                                                .card-header.card-no-border
+                                                    .common-space 
+                                                        .left-header-content
+                                                                h5 To Do List
+                                                        .card-header-right-btn
+                                                            a.c-o-light(href="to-do.html") View All
+                                                .card-body.pt-0.project-todo
+                                                    ul.crm-todo-list
+                                                        li.flex.items-center
+                                                            span.l-line-primary
+                                                            .shrink-0
+                                                                .form-check
+                                                                    input.form-check-input.checkbox-primary(type='checkbox' value='')
+                                                            .grow
+                                                                h6.font-normal Establish a project plan
+                                                                span.mb-0(class="!line-clap-[1]") Divide the project manageable phases
+                                                            .dropdown.icon-dropdown
+                                                                button#appointmentDropdown.btn.dropdown-toggle(type='button', data-bs-toggle='dropdown', aria-expanded='false')
+                                                                    i.icon-more-alt
+                                                                .dropdown-menu.dropdown-menu-end(aria-labelledby='appointmentDropdown')
+                                                                    a.dropdown-item(href='#') Completed
+                                                                    a.dropdown-item(href='#') Reschedule
+                                                                    a.dropdown-item(href='#') Repeat
+                                                        li.flex.items-center
+                                                            span.l-line-secondary
+                                                            .shrink-0
+                                                                .form-check
+                                                                    input.form-check-input.checkbox-secondary(type='checkbox' value='')
+                                                            .grow
+                                                                h6.font-normal Gathering Info
+                                                                span.mb-0(class="!line-clap-[1]") Establish a budget for project costs
+                                                            .dropdown.icon-dropdown
+                                                                button#getherInfoDropdown.btn.dropdown-toggle(type='button', data-bs-toggle='dropdown', aria-expanded='false')
+                                                                    i.icon-more-alt
+                                                                .dropdown-menu.dropdown-menu-end(aria-labelledby='getherInfoDropdown')
+                                                                    a.dropdown-item(href='#') Completed
+                                                                    a.dropdown-item(href='#') Reschedule
+                                                                    a.dropdown-item(href='#') Repeat
+                                                        li.flex.items-center
+                                                            span.l-line-success
+                                                            .shrink-0
+                                                                .form-check
+                                                                    input.form-check-input.checkbox-success(type='checkbox' value='')
+                                                            .grow
+                                                                h6.font-normal Track & keep an eye on progress
+                                                                span.mb-0(class="!line-clap-[1]") Development task
+                                                            .dropdown.icon-dropdown
+                                                                button#developmentDropdown.btn.dropdown-toggle(type='button', data-bs-toggle='dropdown', aria-expanded='false')
+                                                                    i.icon-more-alt
+                                                                .dropdown-menu.dropdown-menu-end(aria-labelledby='developmentDropdown')
+                                                                    a.dropdown-item(href='#') Completed
+                                                                    a.dropdown-item(href='#') Reschedule
+                                                                    a.dropdown-item(href='#') Repeat
+                                                        li.flex.items-center
+                                                            span.l-line-warning
+                                                            .shrink-0
+                                                                .form-check
+                                                                    input.form-check-input.checkbox-warning(type='checkbox' value='')
+                                                            .grow
+                                                                h6.font-normal Project Termination
+                                                                span.mb-0(class="!line-clap-[1]") Records and files for upcoming use
+                                                            .dropdown.icon-dropdown
+                                                                button#projectTermination.btn.dropdown-toggle(type='button', data-bs-toggle='dropdown', aria-expanded='false')
+                                                                    i.icon-more-alt
+                                                                .dropdown-menu.dropdown-menu-end(aria-labelledby='projectTermination')
+                                                                    a.dropdown-item(href='#') Completed
+                                                                    a.dropdown-item(href='#') Reschedule
+                                                                    a.dropdown-item(href='#') Repeat
+                                        div(class="col-span-8 xl:col-span-12 xl-100 box-col-12") 
+                                            .card
+                                                .card-header.card-no-border 
+                                                    .common-space 
+                                                        .left-header-content
+                                                                h5 Projects Pending
+                                                                p.m-0.c-o-light Total 28 projects pending
+                                                        .card-header-right-btn(class="[@media(max-width:350px)]:p-[8px]")
+                                                            a.c-o-light(href="project-list.html" class="[@media(max-width:330px)]:text-[12px]") View All
+                                                .card-body.px-0.pt-0
+                                                    .recent-table.overflow-x-auto.custom-scrollbar.project-pending-table
+                                                        table.table#project-table
+                                                            thead 
+                                                                tr 
+                                                                    th Project Name
+                                                                    th Project Head
+                                                                    th Priority
+                                                                    th Due Date
+                                                                    th Status
+                                                            tbody 
+                                                                tr
+                                                                    td Terraform 
+                                                                    td 
+                                                                        .common-flex.items-center
+                                                                            img.max-w-full.lead-img(src='../assets/images/dashboard-9/user/1.png',alt='user')
+                                                                            div
+                                                                                a.c-light(href="#!") Eleanor Pena
+                                                                                p.mb-0.c-o-light Elea.pena@crzq7.edu
+                                                                    td High
+                                                                    td 15,May 2025
+                                                                    td 
+                                                                        button.btn.button-light-success.txt-success In Progress
+                                                                tr
+                                                                    td GearVibe
+                                                                    td 
+                                                                        .common-flex.items-center
+                                                                            img.max-w-full.lead-img(src='../assets/images/dashboard-9/user/2.png',alt='user')
+                                                                            div
+                                                                                a.c-light(href="#!") Mae Golden
+                                                                                p.mb-0.c-o-light mae.golden@crz3q.edu
+                                                                    td Medium
+                                                                    td 10,June 2025
+                                                                    td 
+                                                                        button.btn.button-light-warning.txt-warning Pending
+                                                                tr
+                                                                    td CloudCraze
+                                                                    td 
+                                                                        .common-flex.items-center
+                                                                            img.max-w-full.lead-img(src='../assets/images/dashboard-9/user/3.png',alt='user')
+                                                                            div
+                                                                                a.c-light(href="#!") Emily Park
+                                                                                p.mb-0.c-o-light emily.park@crezq4.edu
+                                                                    td Low
+                                                                    td 16,May 2025
+                                                                    td 
+                                                                        button.btn.button-light-warning.txt-warning Pending
+                                                                tr
+                                                                    td PrimePulse
+                                                                    td 
+                                                                        .common-flex.items-center
+                                                                            img.max-w-full.lead-img(src='../assets/images/dashboard-9/user/4.png',alt='user')
+                                                                            div
+                                                                                a.c-light(href="#!") Jacob Jones
+                                                                                p.mb-0.c-o-light jacob.jonesl@crzd3.edu
+                                                                    td High
+                                                                    td 02,Nov 2025
+                                                                    td 
+                                                                        button.btn.button-light-success.txt-success In Progress
+                                                                tr
+                                                                    td ShiftSwift
+                                                                    td 
+                                                                        .common-flex.items-center
+                                                                            img.max-w-full.lead-img(src='../assets/images/dashboard-9/user/5.png',alt='user')
+                                                                            div
+                                                                                a.c-light(href="#!") Robert Fox
+                                                                                p.mb-0.c-o-light robert.fox@crzs2.edu
+                                                                    td Medium
+                                                                    td 06,Dec 2025
+                                                                    td 
+                                                                        button.btn.button-light-success.txt-success In Progress
+                                                                tr
+                                                                    td Solar Sphere
+                                                                    td 
+                                                                        .common-flex.items-center
+                                                                            img.max-w-full.lead-img(src='../assets/images/dashboard-11/user/1.jpg',alt='user')
+                                                                            div
+                                                                                a.c-light(href="#!") Eriko Fonsa
+                                                                                p.mb-0.c-o-light eriko.fonsa@crzq8.edu
+                                                                    td High
+                                                                    td 17,Feb 2025
+                                                                    td 
+                                                                        button.btn.button-light-success.txt-success In Progress
+                                                                tr
+                                                                    td Grow Green
+                                                                    td 
+                                                                        .common-flex.items-center
+                                                                            img.max-w-full.lead-img(src='../assets/images/dashboard-11/user/9.jpg',alt='user')
+                                                                            div
+                                                                                a.c-light(href="#!") Cody Fisher
+                                                                                p.mb-0.c-o-light cody.fisher@crz3r.edu
+                                                                    td Low
+                                                                    td 06,Mar 2025
+                                                                    td 
+                                                                        button.btn.button-light-warning.txt-warning Pending
+                                                                tr
+                                                                    td Green Horizon
+                                                                    td 
+                                                                        .common-flex.items-center
+                                                                            img.max-w-full.lead-img(src='../assets/images/dashboard-11/user/11.jpg',alt='user')
+                                                                            div
+                                                                                a.c-light(href="#!") Alexis Taylor
+                                                                                p.mb-0.c-o-light alexis.taylor@crzf8.edu
+                                                                    td High
+                                                                    td 03,Apr 2025
+                                                                    td 
+                                                                        button.btn.button-light-success.txt-success In Progress
+                                        div(class="col-span-4 xl:col-span-6 md:col-span-12 xl-50 xxl:order-2 sm:order-2 box-col-6 box-ord-2")
+                                            .card
+                                                .card-header.card-no-border 
+                                                    .common-space 
+                                                        .left-header-content
+                                                                h5 Task Overview
+                                                                p.m-0.c-o-light All 209 Task Completed
+                                                        .card-header-right-btn
+                                                            a.c-o-light(href="task.html") View All
+                                                .card-body.pt-0
+                                                    .task-overview
+                                                        #task-overview-chart
+                                        div(class="col-span-4 xxl:col-span-12 recent-xl-50 xxl:order-3 sm:order-3 box-col-12 box-ord-3")
+                                            .card
+                                                .card-header.card-no-border 
+                                                    .common-space 
+                                                        .left-header-content
+                                                                h5 Recent Activity
+                                                                p.m-0.c-o-light 23, April 2025
+                                                        .card-header-right-btn
+                                                            a.c-o-light(href="task.html") View All
+                                                .card-body.activity-wrapper.pt-0.tabs 
+                                                    ul#myTab.schedule-wrapper.nav.tab-links(class="[@media(min-width:320px)_and_(max-width:1818px)]:justify-start [@media(min-width:320px)_and_(max-width:1818px)]:flex")
+                                                        li.tab-link.active(data-tabfilter="1")
+                                                            h6 Su
+                                                            span.c-o-light 24
+                                                        li.tab-link(data-tabfilter="2")
+                                                                h6 Mo 
+                                                                span.c-o-light 25
+                                                        li.tab-link(data-tabfilter="3")
+                                                                h6 Tu 
+                                                                span.c-o-light 26
+                                                        li.tab-link(data-tabfilter="4")
+                                                                h6 We 
+                                                                span.c-o-light 27
+                                                        li.tab-link(data-tabfilter="5")
+                                                                h6 Thu
+                                                                span.c-o-light 28
+                                                        li.tab-link(data-tabfilter="6")
+                                                                h6 Fri
+                                                                span.c-o-light 29
+                                                    .tab-content
+                                                        .tab-pan.fade.active.show(data-tabcontent="1")
+                                                            ul.activity-update
+                                                                li.flex.items-center
+                                                                    .grow
+                                                                        h6 Make a new landing page
+                                                                        span By 
+                                                                            a(href="#!") Cody Fisher
+                                                                    .shrink-0
+                                                                        p.mb-0 10 min ago
+                                                                        svg.fill-icon
+                                                                            use(href='../assets/svg/icon-sprite.svg#clock')
+                                                                        span 02:00
+                                                                li.flex.items-center
+                                                                    .grow
+                                                                        h6 Client visit
+                                                                        span By 
+                                                                            a(href="#!") Marvin Lie
+                                                                    .shrink-0
+                                                                        p.mb-0 12 min ago
+                                                                        svg.fill-icon
+                                                                            use(href='../assets/svg/icon-sprite.svg#clock')
+                                                                        span 05:00
+                                                                li.flex.items-center
+                                                                    .grow
+                                                                        h6 Email marketing automation
+                                                                        span By 
+                                                                            a(href="#!") Emily Park
+                                                                    .shrink-0
+                                                                        p.mb-0 18 min ago
+                                                                        svg.fill-icon
+                                                                            use(href='../assets/svg/icon-sprite.svg#clock')
+                                                                        span 08:00
+                                                        .tab-pan.fade(data-tabcontent="2")
+                                                            ul.activity-update
+                                                                li.flex.items-center
+                                                                    .grow
+                                                                        h6 Marketing and client meeting
+                                                                        span By 
+                                                                            a(href="#!") Caleb Riv
+                                                                    .shrink-0
+                                                                        p.mb-0 11 min ago
+                                                                        svg.fill-icon
+                                                                            use(href='../assets/svg/icon-sprite.svg#clock')
+                                                                        span 08:00
+                                                                li.flex.items-center
+                                                                    .grow
+                                                                        h6 Make a creating an account profile
+                                                                        span By 
+                                                                            a(href="#!") Nareha Ail
+                                                                    .shrink-0
+                                                                        p.mb-0 18 min ago
+                                                                        svg.fill-icon
+                                                                            use(href='../assets/svg/icon-sprite.svg#clock')
+                                                                        span 10:00
+                                                                li.flex.items-center
+                                                                    .grow
+                                                                        h6 Web development and ui/ ux design
+                                                                        span By 
+                                                                            a(href="#!") Sneha Shah
+                                                                    .shrink-0
+                                                                        p.mb-0 22 min ago
+                                                                        svg.fill-icon
+                                                                            use(href='../assets/svg/icon-sprite.svg#clock')
+                                                                        span 13:00
+                                                                li.flex.items-center
+                                                                    .grow
+                                                                        h6 Brand Logo design
+                                                                        span By 
+                                                                            a(href="#!") Manish Pie
+                                                                    .shrink-0
+                                                                        p.mb-0 28 min ago
+                                                                        svg.fill-icon
+                                                                            use(href='../assets/svg/icon-sprite.svg#clock')
+                                                                        span 15:30
+                                                        .tab-pan.fade(data-tabcontent="3")
+                                                            ul.activity-update
+                                                                li.flex.items-center
+                                                                    .grow
+                                                                        h6 Social media graphic design & ads
+                                                                        span By 
+                                                                            a(href="#!") Caryl Kauth
+                                                                    .shrink-0
+                                                                        p.mb-0 02 min ago
+                                                                        svg.fill-icon
+                                                                            use(href='../assets/svg/icon-sprite.svg#clock')
+                                                                        span 02 :45
+                                                                li.flex.items-center
+                                                                    .grow
+                                                                        h6 Website usability testing
+                                                                        span By 
+                                                                            a(href="#!") Alexis Taylor
+                                                                    .shrink-0
+                                                                        p.mb-0 05 min ago
+                                                                        svg.fill-icon
+                                                                            use(href='../assets/svg/icon-sprite.svg#clock')
+                                                                        span 07 :30
+                                                                li.flex.items-center
+                                                                    .grow
+                                                                        h6 SEO optimization
+                                                                        span By 
+                                                                            a(href="#!") Eriko Fonsa
+                                                                    .shrink-0
+                                                                        p.mb-0 08 min ago
+                                                                        svg.fill-icon
+                                                                            use(href='../assets/svg/icon-sprite.svg#clock')
+                                                                        span 11 :50
+                                                        .tab-pan.fade(data-tabcontent="4")
+                                                            ul.activity-update
+                                                                li.flex.items-center
+                                                                    .grow
+                                                                        h6 Analyzing competitor strategies
+                                                                        span By 
+                                                                            a(href="#!") Jacob Jones
+                                                                    .shrink-0
+                                                                        p.mb-0 06 min ago
+                                                                        svg.fill-icon
+                                                                            use(href='../assets/svg/icon-sprite.svg#clock')
+                                                                        span 01 :20
+                                                                li.flex.items-center
+                                                                    .grow
+                                                                        h6 Lead generation
+                                                                        span By 
+                                                                            a(href="#!") Lily Mccoy
+                                                                    .shrink-0
+                                                                        p.mb-0 12 min ago
+                                                                        svg.fill-icon
+                                                                            use(href='../assets/svg/icon-sprite.svg#clock')
+                                                                        span 03:00
+                                                                li.flex.items-center
+                                                                    .grow
+                                                                        h6 Prototypes for user feedback
+                                                                        span By 
+                                                                            a(href="#!") Robert Fox
+                                                                    .shrink-0
+                                                                        p.mb-0 18 min ago
+                                                                        svg.fill-icon
+                                                                            use(href='../assets/svg/icon-sprite.svg#clock')
+                                                                        span 07 :50 
+                                                                li.flex.items-center
+                                                                    .grow
+                                                                        h6 Brand promotion
+                                                                        span By 
+                                                                            a(href="#!") Fran Loain
+                                                                    .shrink-0
+                                                                        p.mb-0 20 min ago
+                                                                        svg.fill-icon
+                                                                            use(href='../assets/svg/icon-sprite.svg#clock')
+                                                                        span 02:10
+                                                        .tab-pan.fade(data-tabcontent="5")
+                                                            ul.activity-update
+                                                                li.flex.items-center
+                                                                    .grow
+                                                                        h6 Website chatbot setup
+                                                                        span By 
+                                                                            a(href="#!") Loie Fenter
+                                                                    .shrink-0
+                                                                        p.mb-0 01 min ago
+                                                                        svg.fill-icon
+                                                                            use(href='../assets/svg/icon-sprite.svg#clock')
+                                                                        span 06 :20
+                                                                li.flex.items-center
+                                                                    .grow
+                                                                        h6 Video content creation
+                                                                        span By 
+                                                                            a(href="#!") Anna Catmire
+                                                                    .shrink-0
+                                                                        p.mb-0 15 min ago
+                                                                        svg.fill-icon
+                                                                            use(href='../assets/svg/icon-sprite.svg#clock')
+                                                                        span 03 :00
+                                                        .tab-pan.fade(data-tabcontent="6")
+                                                            ul.activity-update
+                                                                li.flex.items-center
+                                                                    .grow
+                                                                        h6 Chatbot meeting
+                                                                        span By 
+                                                                            a(href="#!") Edwin Hogan
+                                                                    .shrink-0
+                                                                        p.mb-0 25 min ago
+                                                                        svg.fill-icon
+                                                                            use(href='../assets/svg/icon-sprite.svg#clock')
+                                                                        span 17 :30
+                                                                li.flex.items-center
+                                                                    .grow
+                                                                        h6 Hosting online contests
+                                                                        span By 
+                                                                            a(href="#!") Ralph Water
+                                                                    .shrink-0
+                                                                        p.mb-0 35 min ago
+                                                                        svg.fill-icon
+                                                                            use(href='../assets/svg/icon-sprite.svg#clock')
+                                                                        span 04:45
+                                                                li.flex.items-center
+                                                                    .grow
+                                                                        h6 Quizzes for audience
+                                                                        span By 
+                                                                            a(href="#!") Aaron Hogan
+                                                                    .shrink-0
+                                                                        p.mb-0 45 min ago
+                                                                        svg.fill-icon
+                                                                            use(href='../assets/svg/icon-sprite.svg#clock')
+                                                                        span 02 :00   
+                                        div(class="col-span-4 xl:col-span-6 xl-50 md:col-span-12 xxl:order-4 sm:order-4 box-col-6 box-ord-4") 
+                                            .card
+                                                .card-header.card-no-border 
+                                                    .common-space 
+                                                        .left-header-content
+                                                                h5 Team Members
+                                                                p.m-0.c-o-light Total 205 Members
+                                                        .card-header-right-btn
+                                                            a.c-o-light(href="private-chat.html") View All
+                                                .card-body.invite-member.pt-0
+                                                    ul 
+                                                        li.common-align.gap-2
+                                                            .shrink-0
+                                                                img.max-w-full(src="../assets/images/dashboard-11/user/7.jpg", alt="user")
+                                                            .grow
+                                                                h6 Jane Cooper
+                                                                span.c-o-light jane.cooper@study.edu
+                                                            .flex 
+                                                                button(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='View')
+                                                                    svg
+                                                                        use(href='../assets/svg/icon-sprite.svg#view-member') 
+                                                                button(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Chat')
+                                                                    svg
+                                                                        use(href='../assets/svg/icon-sprite.svg#stroke-note')
+                                                        li.common-align.gap-2
+                                                            .shrink-0
+                                                                img.max-w-full(src="../assets/images/dashboard-11/user/4.jpg", alt="user")
+                                                            .grow
+                                                                h6 Robert Fox
+                                                                span.c-o-light robert.fox@study.edu
+                                                            .flex 
+                                                                button(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='View')
+                                                                    svg
+                                                                        use(href='../assets/svg/icon-sprite.svg#view-member') 
+                                                                button(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Chat')
+                                                                    svg
+                                                                        use(href='../assets/svg/icon-sprite.svg#stroke-note')
+                                                        li.common-align.gap-2
+                                                            .shrink-0
+                                                                img.max-w-full(src="../assets/images/dashboard/user/2.jpg", alt="user")
+                                                            .grow
+                                                                h6 Daisy Roy
+                                                                span.c-o-light daisy.roy@study.edu
+                                                            .flex 
+                                                                button(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='View')
+                                                                    svg
+                                                                        use(href='../assets/svg/icon-sprite.svg#view-member') 
+                                                                button(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Chat')
+                                                                    svg
+                                                                        use(href='../assets/svg/icon-sprite.svg#stroke-note')
+                                                        li.common-align.gap-2
+                                                            .shrink-0
+                                                                img.max-w-full(src="../assets/images/dashboard-11/user/12.jpg", alt="user")
+                                                            .grow
+                                                                h6 Ryan Gill
+                                                                span.c-o-light ryan.gill@study.edu
+                                                            .flex 
+                                                                button(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='View')
+                                                                    svg
+                                                                        use(href='../assets/svg/icon-sprite.svg#view-member') 
+                                                                button(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Chat')
+                                                                    svg
+                                                                        use(href='../assets/svg/icon-sprite.svg#stroke-note')
+                                                        li.common-align.gap-2
+                                                            .shrink-0
+                                                                img.max-w-full(src="../assets/images/dashboard-11/user/1.jpg", alt="user")
+                                                            .grow
+                                                                h6 Ace Marks
+                                                                span.c-o-light ace.mark@study.edu
+                                                            .flex 
+                                                                button(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='View')
+                                                                    svg
+                                                                        use(href='../assets/svg/icon-sprite.svg#view-member') 
+                                                                button(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Chat')
+                                                                    svg
+                                                                        use(href='../assets/svg/icon-sprite.svg#stroke-note')
+                                        div(class="col-span-4 xl:col-span-6 md:col-span-12 xl-50 xxl:order-5 sm:order-5 box-col-6 box-ord-5")
+                                            .card
+                                                .card-header.card-no-border 
+                                                    .common-space 
+                                                        .left-header-content
+                                                                h5 Comments
+                                                                p.m-0.c-o-light Total 120 Comments
+                                                        .card-header-right-btn
+                                                            a.c-o-light(href="course-details.html") View All
+                                                .card-body.pt-0
+                                                    ul.user-comment-wrapper
+                                                        li.common-align.gap-2.items-start
+                                                            .shrink-0
+                                                                img.max-w-full(src="../assets/images/dashboard/user/13.jpg", alt="user")
+                                                            .grow
+                                                                .common-space.pb-1
+                                                                    h6 Caleb Rivera
+                                                                    button.btn.c-o-light
+                                                                        svg.me-2 
+                                                                            use(href='../assets/svg/icon-sprite.svg#stroke-arrow')
+                                                                        | Reply
+                                                                span.c-o-light I am getting message from customers that when they place order always get error message
+                                                        li.common-align.gap-2.items-start
+                                                            .shrink-0
+                                                                img.max-w-full(src="../assets/images/dashboard/user/12.jpg", alt="user")
+                                                            .grow
+                                                                h6 Mili Pais
+                                                                span.c-o-light Please be sure to check your spam mailbox to see if your email filters have identified the email 
+                                                    .cmt-box 
+                                                        label.form-label(for='exampleFormControlTextarea1') Post A Comment
+                                                        .common-f-start.gap-1
+                                                            textarea#exampleFormControlTextarea1.form-control(rows='2' placeholder="Comment Here..")
+                                                            i.fa-solid.fa-paper-plane
+
+                                //- Status
+                                .tab-pan.fade(data-tabcontent="2")
+                                    .grid.grid-cols-12.card-gap
+                                        div(class="col-span-12") 
+                                            .card.filter-header 
+                                                .card-body
+                                                    .input-group.common-searchbox
+                                                        span.input-group-text
+                                                            i.search-icon.text-gray(data-feather='search')
+                                                        input.form-control(type='text' placeholder='Search Project...')
+                                        div(class="col-span-4 xl:col-span-6 md:col-span-12 xl-50 box-col-6")
+                                            .card.progress-project 
+                                                .card-header.card-no-border.scope-light-primary
+                                                    .common-space
+                                                        .common-align
+                                                            .common-dot.bg-primary
+                                                            h6 Pending
+                                                            span.badge.rounded-full.c-o-light 3
+                                                        .card-header-right-icon
+                                                            .dropdown.icon-dropdown
+                                                                button#pendingProject.btn.dropdown-toggle(type='button', data-bs-toggle='dropdown', aria-expanded='false')
+                                                                    i.icon-more-alt
+                                                                .dropdown-menu.dropdown-menu-end(aria-labelledby='pendingProject')
+                                                                    a.dropdown-item(href='#') View Project
+                                                                    a.dropdown-item(href='#') Add Members
+                                                                    a.dropdown-item(href='#') Update Status
+                                                .card-body 
+                                                    .progress-project-box
+                                                        .list-box.title-line-warning
+                                                            .header-top
+                                                                span.badge.badge-light-warning UI/UX Design
+                                                                .common-box 
+                                                                    i.fa-solid.fa-plus.txt-warning
+                                                            .project-body
+                                                                img.max-w-full(src="../assets/images/project/objective/phone1.png", alt="phone")
+                                                                h6.mb-2 UX Manager
+                                                                span Group's expertise in the industry and ensuring that the group continues to develop as experts.
+                                                                .progress
+                                                                    .progress-bar.bg-secondary(style='width: 30%')
+                                                                ul.common-f-start
+                                                                    li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Marley Ford')
+                                                                        img.rounded-full(src="../assets/images/dashboard-11/user/10.jpg", alt="user")
+                                                                    li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Gray Curran')
+                                                                        img.rounded-full(src="../assets/images/dashboard-11/user/9.jpg", alt="user")
+                                                                    li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Yarrow  Wix') 
+                                                                        .common-circle.bg-lighter-info Y
+                                                                .project-bottom.common-space
+                                                                    .common-flex
+                                                                        span(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Attachment')
+                                                                            svg.me-2 
+                                                                                use(href='../assets/svg/icon-sprite.svg#project-attachment')
+                                                                            | 7
+                                                                        span(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Comments')
+                                                                            svg.me-2 
+                                                                                use(href='../assets/svg/icon-sprite.svg#project-cmt')
+                                                                            | 5
+                                                                    p.mb-0.c-o-light 
+                                                                        svg.me-2 
+                                                                                use(href='../assets/svg/icon-sprite.svg#vector-calendar')
+                                                                        | 02 Jul, 2025
+                                                    .progress-project-box
+                                                        .list-box.title-line-success
+                                                            .header-top
+                                                                ul.common-f-start
+                                                                    li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Sarah Wilson')
+                                                                        img.rounded-full(src="../assets/images/dashboard-11/user/2.jpg", alt="user")
+                                                                    li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Richard Taylor')
+                                                                        img.rounded-full(src="../assets/images/dashboard-11/user/1.jpg", alt="user")
+                                                                    li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Linda Brown') 
+                                                                        .common-circle.bg-lighter-danger L
+                                                                    li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Jessica Anderson')
+                                                                        img.rounded-full(src="../assets/images/dashboard-11/user/8.jpg", alt="user")
+                                                                span.badge.badge-light-success UX Design
+                                                            .project-body
+                                                                h6.mb-2 Logo Design
+                                                                span Create a distinctive and memorable logo that connects with your target market.
+                                                                .progress
+                                                                    .progress-bar.bg-secondary(style='width: 10%')
+                                                                .project-bottom.common-space
+                                                                    .common-flex
+                                                                        span(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Attachment')
+                                                                            svg.me-2 
+                                                                                use(href='../assets/svg/icon-sprite.svg#project-attachment')
+                                                                            | 7
+                                                                        span(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Comments')
+                                                                            svg.me-2 
+                                                                                use(href='../assets/svg/icon-sprite.svg#project-cmt')
+                                                                            | 5
+                                                                    p.mb-0.c-o-light 
+                                                                        svg.me-2 
+                                                                                use(href='../assets/svg/icon-sprite.svg#vector-calendar')
+                                                                        | 20 Feb, 2025
+                                                    
+                                                    .progress-project-box
+                                                        .list-box.title-line-primary
+                                                            .header-top
+                                                                ul.common-f-start
+                                                                    li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Thomas Jones')
+                                                                        img.rounded-full(src="../assets/images/dashboard-9/user/1.png", alt="user")
+                                                                    li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Karen Jones') 
+                                                                        .common-circle.bg-lighter-dark K
+                                                                    li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Elizabeth Williams')
+                                                                        img.rounded-full(src="../assets/images/dashboard-9/user/3.png", alt="user")
+                                                                span.badge.badge-light-primary Negotiation
+                                                            .project-body
+                                                                h6.mb-2 Getting together with a customer
+                                                                span Deal with problems, and improve our collaboration for success on both sides.
+                                                                .progress
+                                                                    .progress-bar.bg-secondary(style='width: 40%')
+                                                                .project-bottom.common-space
+                                                                    .common-flex
+                                                                        span(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Attachment')
+                                                                            svg.me-2 
+                                                                                use(href='../assets/svg/icon-sprite.svg#project-attachment')
+                                                                            | 1
+                                                                        span(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Comments')
+                                                                            svg.me-2 
+                                                                                use(href='../assets/svg/icon-sprite.svg#project-cmt')
+                                                                            | 4
+                                                                    p.mb-0.c-o-light 
+                                                                        svg.me-2 
+                                                                                use(href='../assets/svg/icon-sprite.svg#vector-calendar')
+                                                                        | 12 Jan, 2025
+                                        div(class="col-span-4 xl:col-span-6 md:col-span-12 xl-50 box-col-6")
+                                            .card.progress-project 
+                                                .card-header.card-no-border.scope-light-warning
+                                                    .common-space
+                                                        .common-align
+                                                            .common-dot.bg-warning
+                                                            h6 In Progress
+                                                            span.badge.rounded-full.c-o-light 3
+                                                        .card-header-right-icon
+                                                            .dropdown.icon-dropdown
+                                                                button#progressProject.btn.dropdown-toggle(type='button', data-bs-toggle='dropdown', aria-expanded='false')
+                                                                    i.icon-more-alt
+                                                                .dropdown-menu.dropdown-menu-end(aria-labelledby='progressProject')
+                                                                    a.dropdown-item(href='#') View Project
+                                                                    a.dropdown-item(href='#') Add Members
+                                                                    a.dropdown-item(href='#') Update Status
+                                                .card-body 
+                                                    .progress-project-box
+                                                        .list-box.title-line-primary
+                                                            .header-top
+                                                                ul.common-f-start
+                                                                    li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Alexis Taylor')
+                                                                        img.rounded-full(src="../assets/images/dashboard/user/10.jpg", alt="user")
+                                                                    li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Andrew Price')
+                                                                        img.rounded-full(src="../assets/images/dashboard/user/11.jpg", alt="user")
+                                                                    li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Emily Park') 
+                                                                        .common-circle.bg-lighter-warning E
+                                                                    li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Caryl Kauth')
+                                                                        img.rounded-full(src="../assets/images/dashboard/user/1.jpg", alt="user")
+                                                                span.badge.badge-light-primary UI/UX Design
+                                                            .project-body
+                                                                h6.mb-2 Redesign - Landing page
+                                                                span Such as contact management, lead management, marketing automation, etc.
+                                                                .progress
+                                                                    .progress-bar.bg-warning(style='width: 32%')
+                                                                .project-bottom.common-space
+                                                                    .common-flex
+                                                                        span(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Attachment')
+                                                                            svg.me-2 
+                                                                                use(href='../assets/svg/icon-sprite.svg#project-attachment')
+                                                                            | 2
+                                                                        span(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Comments')
+                                                                            svg.me-2 
+                                                                                use(href='../assets/svg/icon-sprite.svg#project-cmt')
+                                                                            | 3
+                                                                    p.mb-0.c-o-light 
+                                                                        svg.me-2 
+                                                                                use(href='../assets/svg/icon-sprite.svg#vector-calendar')
+                                                                        | 06 Nov, 2025
+                                                                    
+                                                    .progress-project-box
+                                                        .list-box.title-line-warning
+                                                            .header-top
+                                                                span.badge.badge-light-warning Testing
+                                                                .common-box 
+                                                                    i.fa-solid.fa-plus.txt-warning
+                                                            .project-body
+                                                                img.max-w-full(src="../assets/images/project/objective/phone.png", alt="phone")
+                                                                h6.mb-2 Mobile Testing
+                                                                span Deliver a high-quality product that guarantees client happiness and lowers risk.
+                                                                .progress
+                                                                    .progress-bar.bg-warning(style='width: 40%')
+                                                                ul.common-f-start
+                                                                    li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Caleb Rivera')
+                                                                        img.rounded-full(src="../assets/images/dashboard/user/12.jpg", alt="user")
+                                                                    li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Ashley Bardot') 
+                                                                        .common-circle.bg-lighter-success A
+                                                                    li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Olivia Gor')
+                                                                        img.rounded-full(src="../assets/images/dashboard/user/13.jpg", alt="user")
+                                                                .project-bottom.common-space
+                                                                    .common-flex
+                                                                        span(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Attachment')
+                                                                            svg.me-2 
+                                                                                use(href='../assets/svg/icon-sprite.svg#project-attachment')
+                                                                            | 6
+                                                                        span(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Comments')
+                                                                            svg.me-2 
+                                                                                use(href='../assets/svg/icon-sprite.svg#project-cmt')
+                                                                            | 4
+                                                                    p.mb-0.c-o-light 
+                                                                        svg.me-2 
+                                                                                use(href='../assets/svg/icon-sprite.svg#vector-calendar')
+                                                                        | 10 Mar, 2025
+                                                    .progress-project-box
+                                                        .list-box.title-line-success
+                                                            .header-top
+                                                                ul.common-f-start
+                                                                    li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Gasper Mintz') 
+                                                                        .common-circle.bg-lighter-warning G
+                                                                    li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Ford Stoll')
+                                                                        img.rounded-full(src="../assets/images/dashboard-11/user/7.jpg", alt="user")
+                                                                span.badge.badge-light-success Lead
+                                                            .project-body
+                                                                h6.mb-2 Lead Generation
+                                                                span Usually, after initiating conversation, leads hear from a company or organization. 
+                                                                .progress
+                                                                    .progress-bar.bg-warning(style='width: 50%')
+                                                                .project-bottom.common-space
+                                                                    .common-flex
+                                                                        span(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Attachment')
+                                                                            svg.me-2 
+                                                                                use(href='../assets/svg/icon-sprite.svg#project-attachment')
+                                                                            | 1
+                                                                        span(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Comments')
+                                                                            svg.me-2 
+                                                                                use(href='../assets/svg/icon-sprite.svg#project-cmt')
+                                                                            | 5
+                                                                    p.mb-0.c-o-light 
+                                                                        svg.me-2 
+                                                                                use(href='../assets/svg/icon-sprite.svg#vector-calendar')
+                                                                        | 02 Feb, 2025
+                                        div(class="col-span-4 xl:col-span-12 xl-100 box-col-12")
+                                            .card.progress-project 
+                                                .card-header.card-no-border.scope-light-success
+                                                    .common-space
+                                                        .common-align
+                                                            .common-dot.bg-success
+                                                            h6 Completed
+                                                            span.badge.rounded-full.c-o-light 3
+                                                        .card-header-right-icon
+                                                            .dropdown.icon-dropdown
+                                                                button#completedProject.btn.dropdown-toggle(type='button', data-bs-toggle='dropdown', aria-expanded='false')
+                                                                    i.icon-more-alt
+                                                                .dropdown-menu.dropdown-menu-end(aria-labelledby='completedProject')
+                                                                    a.dropdown-item(href='#') View Project
+                                                                    a.dropdown-item(href='#') Add Members
+                                                                    a.dropdown-item(href='#') Update Status
+                                                .card-body 
+                                                    .progress-project-box
+                                                        .list-box.title-line-primary
+                                                            .header-top
+                                                                ul.common-f-start
+                                                                    li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Jenny Wilson')
+                                                                        img.rounded-full(src="../assets/images/dashboard/user/2.jpg", alt="user")
+                                                                    li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Levine Raven')
+                                                                        img.rounded-full(src="../assets/images/dashboard-11/user/2.jpg", alt="user")
+                                                                    li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Davis Jone')
+                                                                        img.rounded-full(src="../assets/images/dashboard-11/user/12.jpg", alt="user")
+                                                                span.badge.badge-light-primary Visiter
+                                                            .project-body
+                                                                h6.mb-2 Client Visit
+                                                                span Where you will directly see personalized service and customized solutions.
+                                                                .progress
+                                                                    .progress-bar.bg-success(style='width: 100%')
+                                                                .project-bottom.common-space
+                                                                    .common-flex
+                                                                        span(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Attachment')
+                                                                            svg.me-2 
+                                                                                use(href='../assets/svg/icon-sprite.svg#project-attachment')
+                                                                            | 7
+                                                                        span(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Comments')
+                                                                            svg.me-2 
+                                                                                use(href='../assets/svg/icon-sprite.svg#project-cmt')
+                                                                            | 2
+                                                                    p.mb-0.c-o-light 
+                                                                        svg.me-2 
+                                                                                use(href='../assets/svg/icon-sprite.svg#vector-calendar')
+                                                                        | 22 Apr, 2025
+                                                    .progress-project-box
+                                                        .list-box.title-line-success
+                                                            .header-top
+                                                                ul.common-f-start
+                                                                    li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Laurier Caddel')
+                                                                        img.rounded-full(src="../assets/images/dashboard-11/user/4.jpg", alt="user")
+                                                                    li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Barbara Taylor') 
+                                                                        .common-circle.bg-lighter-warning B
+                                                                span.badge.badge-light-success Deadline
+                                                            .project-body
+                                                                h6.mb-2 Project Deadline
+                                                                span Take aggressive measures to overcome obstacles.
+                                                                .progress
+                                                                    .progress-bar.bg-success(style='width: 100%')
+                                                                .project-bottom.common-space
+                                                                    .common-flex
+                                                                        span(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Attachment')
+                                                                            svg.me-2 
+                                                                                use(href='../assets/svg/icon-sprite.svg#project-attachment')
+                                                                            | 8
+                                                                        span(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Comments')
+                                                                            svg.me-2 
+                                                                                use(href='../assets/svg/icon-sprite.svg#project-cmt')
+                                                                            | 2
+                                                                    p.mb-0.c-o-light 
+                                                                        svg.me-2 
+                                                                                use(href='../assets/svg/icon-sprite.svg#vector-calendar')
+                                                                        | 10 Mar, 2025
+                                                    .progress-project-box
+                                                        .list-box.title-line-warning
+                                                            .header-top
+                                                                span.badge.badge-light-warning Marketing
+                                                                .common-box 
+                                                                    i.fa-solid.fa-plus.txt-warning
+                                                            .project-body
+                                                                img.max-w-full(src="../assets/images/project/objective/phone2.png", alt="phone")
+                                                                h6.mb-2 Marketing and client meeting
+                                                                span Develop deep relationships with your target market.
+                                                                .progress
+                                                                    .progress-bar.bg-success(style='width: 100%')
+                                                                ul.common-f-start
+                                                                    li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Juniper Blake') 
+                                                                        .common-circle.bg-lighter-info J
+                                                                    li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Jessica Anderson')
+                                                                        img.rounded-full(src="../assets/images/dashboard-9/user/2.png", alt="user")
+                                                                    li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Dashiell Wolfe')
+                                                                        img.rounded-full(src="../assets/images/dashboard-9/user/5.png", alt="user")
+                                                                .project-bottom.common-space
+                                                                    .common-flex
+                                                                        span(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Attachment')
+                                                                            svg.me-2 
+                                                                                use(href='../assets/svg/icon-sprite.svg#project-attachment')
+                                                                            | 4
+                                                                        span(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Comments')
+                                                                            svg.me-2 
+                                                                                use(href='../assets/svg/icon-sprite.svg#project-cmt')
+                                                                            | 1
+                                                                    p.mb-0.c-o-light 
+                                                                        svg.me-2 
+                                                                                use(href='../assets/svg/icon-sprite.svg#vector-calendar')
+                                                                        | 15 Feb, 2025
+                                                    
+                                .tab-pan.fade(data-tabcontent="3")
+                                    .grid.grid-cols-12.card-gap 
+                                        div(class="col-span-4 md:col-span-6 sm:col-span-12")
+                                            .card.widget-2.budget-card
+                                                .card-body.common-space
+                                                    div
+                                                        span.pb-2.c-o-light Weekly Expenses
+                                                        h6 $70,000.00
+                                                        span.f-14.txt-success.font-medium.flex
+                                                            i.me-1(data-feather="arrow-up")
+                                                            | +2.7%
+                                                    .expense-chart-wrap
+                                                        #expense-chart
+                                        div(class="col-span-4 md:col-span-6 sm:col-span-12")
+                                            .card.widget-2.budget-card 
+                                                .card-body.common-space(class="[@media(max-width:320px)]:!flex-nowrap")
+                                                    div
+                                                        span.pb-2.c-o-light Monthly Expenses
+                                                        h6 $32,458.00
+                                                        span.f-14.txt-success.font-medium.txt-danger.flex
+                                                            i(data-feather="arrow-down")
+                                                            | -1.4%
+                                                    .expense-chart-wrap
+                                                        #monthly-chart
+                                        div(class="col-span-4 md:col-span-12")
+                                            .card.widget-2.budget-card
+                                                .card-body.common-space
+                                                    div
+                                                        span.pb-2.c-o-light Yearly Expenses
+                                                        h6 $81,610.00
+                                                        span.f-14.txt-success.font-medium.flex
+                                                            i.me-1(data-feather="arrow-up")
+                                                            | +5.0%
+                                                    .expense-chart-wrap
+                                                        #year-chart
+                                        div(class="col-span-8 xxl:col-span-12 xl:col-span-8 lg:col-span-12 box-col-12")
+                                            .card 
+                                                .card-header.card-no-border 
+                                                    .common-space 
+                                                        .left-header-content
+                                                                h5 Budget Details
+                                                .card-body.px-0.pt-0
+                                                    .recent-table.overflow-x-auto.custom-scrollbar.overall-budget
+                                                        table.table#budget-table
+                                                            thead 
+                                                                tr 
+                                                                    th Type
+                                                                    th(class="[@media(max-width:1623px)_and_(min-width:1400px)]:hidden") Total Budget
+                                                                    th Expenses (USD)
+                                                                    th Remaining (USD)
+                                                            tbody 
+                                                                tr
+                                                                    td Data Analyst
+                                                                    td(class="[@media(max-width:1623px)_and_(min-width:1400px)]:hidden") $14,000.00
+                                                                    td $13,100.00
+                                                                    td $110.00
+                                                                tr
+                                                                    td Researcher
+                                                                    td(class="[@media(max-width:1623px)_and_(min-width:1400px)]:hidden") $34,720.00
+                                                                    td $19,859.84
+                                                                    td $14,860.16
+                                                                tr
+                                                                    td UI Designer
+                                                                    td(class="[@media(max-width:1623px)_and_(min-width:1400px)]:hidden") $11,600.00
+                                                                    td $3.00
+                                                                    td $11,600.00
+                                                                tr
+                                                                    td JS Developer
+                                                                    td(class="[@media(max-width:1623px)_and_(min-width:1400px)]:hidden") $68,600.00
+                                                                    td $14,859.84
+                                                                    td $25,680.00
+                                                                tr
+                                                                    td Coordinator
+                                                                    td(class="[@media(max-width:1623px)_and_(min-width:1400px)]:hidden") $48,589.00
+                                                                    td $10,222.12
+                                                                    td $99,32.24
+                                                                tr
+                                                                    td Scientist
+                                                                    td(class="[@media(max-width:1623px)_and_(min-width:1400px)]:hidden") $12,365.00
+                                                                    td $78,245.12
+                                                                    td $12,36.24
+                                                                tr
+                                                                    td Vue Developer
+                                                                    td(class="[@media(max-width:1623px)_and_(min-width:1400px)]:hidden") $14,987.00
+                                                                    td $14,999.12
+                                                                    td $69,22.00
+                                                                tr
+                                                                    td C# Developer
+                                                                    td(class="[@media(max-width:1623px)_and_(min-width:1400px)]:hidden") $25,698.00
+                                                                    td $12,222.12
+                                                                    td $14,42.00
+                                        div(class="col-span-4 xxl:col-span-12 xl:col-span-4 lg:col-span-12 box-col-12")
+                                            .card.get-card
+                                                .card-header.card-no-border
+                                                    h5 Budget Distribution
+                                                .card-body.pt-0
+                                                    .project-chart-wrap
+                                                        #projectchart
+                                        div(class="col-span-12") 
+                                            .card
+                                                .card-header
+                                                    .header-top
+                                                        h5.m-0 Project Budget
+                                                .card-body.project-budget-wrapper 
+                                                    .grid.grid-cols-12.gap-3.mb-3
+                                                        div(class="col-span-8 xl:col-span-12 col-ed-6 box-col-12")
+                                                            .grid.grid-cols-12.gap-1
+                                                                div(class="col-span-3 xxl:col-span-12 col-ed-4 box-col-12")
+                                                                    label.col-form-label Remaining Budget
+                                                                div(class="col-span-9 xxl:col-span-12 col-ed-8 box-col-12")
+                                                                    .progress
+                                                                        .progress-bar.bg-primary(style='width: 65%')
+                                                                    p.c-o-light.float-right $16,000 Used of $45,300
+                                                        div(class="col-span-4 xl:col-span-12 col-ed-6 box-col-12")
+                                                            .grid.grid-cols-12.gap-1
+                                                                div(class="col-span-4 col-start-4 xxl:col-start-0 xxl:col-span-12 col-auto box-col-3")
+                                                                    label.col-form-label Plan Your Budget
+                                                                div(class="col-span-5 xxl:col-span-12")
+                                                                    .touchspin-wrapper(class="[@media(max-width:320px)]:w-fit")
+                                                                        button.decrement-touchspin.btn-touchspin
+                                                                            i.fa-solid.fa-minus 
+                                                                        input.input-touchspin(type='number' value='1')
+                                                                        button.increment-touchspin.btn-touchspin
+                                                                            i.fa-solid.fa-plus
+                                                    .grid.grid-cols-12.gap-3
+                                                        div(class="col-span-12") 
+                                                            .grid.grid-cols-12.card-gap 
+                                                                div(class="col-span-2 xxl:col-span-12 box-col-12")
+                                                                    label.col-form-label Remarks and Notes
+                                                                div(class="col-span-10 xxl:col-span-12 box-col-12") 
+                                                                    textarea.form-control(rows='3' placeholder="Add Remarks and Notes...")
+                                                        div(class="col-span-12")
+                                                            .grid.grid-cols-12.card-gap
+                                                                div(class="col-span-2 md:col-span-12 col-auto")
+                                                                    label.col-form-label.p-0 Notification
+                                                                div(class="col-span-8 md:col-span-12") 
+                                                                    .form-check-size
+                                                                        .form-check.form-switch.form-check-inline
+                                                                            input.form-check-input.switch-primary.check-size(type='checkbox' role='switch' checked='')
+                                                                        label.form-check-label.mb-0(for='flexSwitchCheckChecked') Send email to the user if actual cost exceeds the budget.
+                                                        div(class="col-span-12") 
+                                                            .card-footer.text-end.pb-0.px-0
+                                                                a.btn.button-light-primary(href='#' role='button') Cancel
+                                                                a.btn.btn-primary.text-white(href='#' role='button') Submit
+                                //- Team 
+                                .tab-pan.fade(data-tabcontent="4")
+                                    .card
+                                        .card-body
+                                            .main-team-box(class="[@media(max-width:1399px)_and_(min-width:630px)]:grid-cols-2")
+                                                    div
+                                                        .team-box
+                                                            .team-box-circle
+                                                                img.max-w-full.rounded-full(src="../assets/images/dashboard-11/user/1.jpg", alt="user")
+                                                            .team-box-content
+                                                                h6(class="text-center")
+                                                                    a(href="#!") Cameron Williamson
+                                                                p.mb-0 QA Assistant
+                                                                div.pt-3
+                                                                    .common-space
+                                                                        p.mb-0 Task
+                                                                        span 110 /
+                                                                            span &nbsp; 190
+                                                                    .progress
+                                                                        .progress-bar.bg-primary(style='width: 80%')
+                                                            .team-box-footer
+                                                                .common-space
+                                                                    div 
+                                                                        h6 $9,284
+                                                                        p.mb-0 Revenue
+                                                                    div
+                                                                        h6 19
+                                                                        p.mb-0 Project
+                                                                    div
+                                                                        h6 150
+                                                                        p.mb-0 Features    
+                                                    div
+                                                        .team-box
+                                                            .team-box-circle
+                                                                img.max-w-full.rounded-full(src="../assets/images/dashboard-11/user/3.jpg", alt="user")
+                                                            .team-box-content
+                                                                h6(class="text-center")
+                                                                    a(href="#!") Magnolia Parker
+                                                                p.mb-0 Product Manager
+                                                                div.pt-3
+                                                                    .common-space
+                                                                        p.mb-0 Task
+                                                                        span 56 /
+                                                                            span &nbsp; 100
+                                                                    .progress
+                                                                        .progress-bar.bg-success(style='width: 56%')
+                                                            .team-box-footer
+                                                                .common-space
+                                                                    div 
+                                                                        h6 $4,869
+                                                                        p.mb-0 Revenue
+                                                                    div
+                                                                        h6 231
+                                                                        p.mb-0 Project
+                                                                    div
+                                                                        h6 108
+                                                                        p.mb-0 Features
+                                                    div
+                                                        .team-box
+                                                            .team-box-circle
+                                                                img.max-w-full.rounded-full(src="../assets/images/dashboard-11/user/4.jpg", alt="user")
+                                                            .team-box-content
+                                                                h6(class="text-center")
+                                                                    a(href="#!") Jasper Bennett
+                                                                p.mb-0 Freelancer
+                                                                div.pt-3
+                                                                    .common-space
+                                                                        p.mb-0 Task
+                                                                        span 150 /
+                                                                            span &nbsp; 200
+                                                                    .progress
+                                                                        .progress-bar.bg-warning(style='width: 50%')
+                                                            .team-box-footer
+                                                                .common-space
+                                                                    div 
+                                                                        h6 $9,735
+                                                                        p.mb-0 Revenue
+                                                                    div
+                                                                        h6 12
+                                                                        p.mb-0 Project
+                                                                    div
+                                                                        h6 100
+                                                                        p.mb-0 Features
+                                                    div
+                                                        .team-box
+                                                            .team-box-circle
+                                                                img.max-w-full.rounded-full(src="../assets/images/dashboard-11/user/7.jpg", alt="user")
+                                                            .team-box-content
+                                                                h6(class="text-center")
+                                                                    a(href="#!") Leslie Alexander
+                                                                p.mb-0 Web Developer
+                                                                div.pt-3
+                                                                    .common-space
+                                                                        p.mb-0 Task
+                                                                        span 150 /
+                                                                            span &nbsp; 200
+                                                                    .progress
+                                                                        .progress-bar.bg-secondary(style='width: 50%')
+                                                            .team-box-footer
+                                                                .common-space
+                                                                    div 
+                                                                        h6 $1,805
+                                                                        p.mb-0 Revenue
+                                                                    div
+                                                                        h6 28
+                                                                        p.mb-0 Project
+                                                                    div
+                                                                        h6 150
+                                                                        p.mb-0 Features
+                                                    div
+                                                        .team-box
+                                                            .team-box-circle
+                                                                img.max-w-full.rounded-full(src="../assets/images/dashboard-11/user/9.jpg", alt="user")
+                                                            .team-box-content
+                                                                h6(class="text-center")
+                                                                    a(href="#!") Maverick Sullivan
+                                                                p.mb-0 JS Developer
+                                                                div.pt-3
+                                                                    .common-space
+                                                                        p.mb-0 Task
+                                                                        span 120 /
+                                                                            span &nbsp; 200
+                                                                    .progress
+                                                                        .progress-bar.bg-warning(style='width: 70%')
+                                                            .team-box-footer
+                                                                .common-space
+                                                                    div 
+                                                                        h6 $3,805
+                                                                        p.mb-0 Revenue
+                                                                    div
+                                                                        h6 69
+                                                                        p.mb-0 Project
+                                                                    div
+                                                                        h6 150
+                                                                        p.mb-0 Features  
+                                                    div
+                                                        .team-box
+                                                            .team-box-circle
+                                                                img.max-w-full.rounded-full(src="../assets/images/dashboard-11/user/11.jpg", alt="user")
+                                                            .team-box-content
+                                                                h6(class="text-center")
+                                                                    a(href="#!") Wren Harrison
+                                                                p.mb-0 Backend Developer
+                                                                div.pt-3
+                                                                    .common-space
+                                                                        p.mb-0 Task
+                                                                        span 30 /
+                                                                            span &nbsp; 50
+                                                                    .progress
+                                                                        .progress-bar.bg-secondary(style='width: 80%')
+                                                            .team-box-footer
+                                                                .common-space
+                                                                    div 
+                                                                        h6 $6,378
+                                                                        p.mb-0 Revenue
+                                                                    div
+                                                                        h6 56
+                                                                        p.mb-0 Project
+                                                                    div
+                                                                        h6 150
+                                                                        p.mb-0 Features   
+                                                    div
+                                                        .team-box
+                                                            .team-box-circle
+                                                                img.max-w-full.rounded-full(src="../assets/images/dashboard-11/user/12.jpg", alt="user")
+                                                            .team-box-content
+                                                                h6(class="text-center")
+                                                                    a(href="#!") Saffron Valencia
+                                                                p.mb-0 UX Designer
+                                                                div.pt-3
+                                                                    .common-space
+                                                                        p.mb-0 Task
+                                                                        span 120 /
+                                                                            span &nbsp; 200
+                                                                    .progress
+                                                                        .progress-bar.bg-success(style='width: 70%')
+                                                            .team-box-footer
+                                                                .common-space
+                                                                    div 
+                                                                        h6 $7,950
+                                                                        p.mb-0 Revenue
+                                                                    div
+                                                                        h6 356
+                                                                        p.mb-0 Project
+                                                                    div
+                                                                        h6 150
+                                                                        p.mb-0 Features  
+                                                    div
+                                                        .team-box
+                                                            .team-box-circle
+                                                                img.max-w-full.rounded-full(src="../assets/images/dashboard-11/user/8.jpg", alt="user")
+                                                            .team-box-content
+                                                                h6(class="text-center")
+                                                                    a(href="#!") Lyra Hawthorne
+                                                                p.mb-0 Game Developer
+                                                                div.pt-3
+                                                                    .common-space
+                                                                        p.mb-0 Task
+                                                                        span 50 /
+                                                                            span &nbsp; 90
+                                                                    .progress
+                                                                        .progress-bar.bg-primary(style='width: 40%')
+                                                            .team-box-footer
+                                                                .common-space
+                                                                    div 
+                                                                        h6 $6,378
+                                                                        p.mb-0 Revenue
+                                                                    div
+                                                                        h6 56
+                                                                        p.mb-0 Project
+                                                                    div
+                                                                        h6 150
+                                                                        p.mb-0 Features
+                                .tab-pan.fade(data-tabcontent="5")            
+                                    .grid.grid-cols-12.attach-files-wrapper 
+                                        div(class="col-span-12") 
+                                            .card 
+                                                .card-body
+                                                    .common-f-start
+                                                        div.bg-10-primary
+                                                            .outer-file-circle.shadow-10-primary
+                                                                svg
+                                                                    use(href='../assets/svg/icon-sprite.svg#attach-img')
+                                                            p.mb-0.txt-primary Images
+                                                        div.bg-10-secondary
+                                                            .outer-file-circle.shadow-10-secondary
+                                                                svg
+                                                                    use(href='../assets/svg/icon-sprite.svg#attach-audio')
+                                                            p.mb-0.txt-secondary Audio
+                                                        div.bg-10-success
+                                                            .outer-file-circle.shadow-10-success
+                                                                svg
+                                                                    use(href='../assets/svg/icon-sprite.svg#attach-video')
+                                                            p.mb-0.txt-success Video
+                                                        div.bg-10-warning
+                                                            .outer-file-circle.shadow-10-warning
+                                                                svg
+                                                                    use(href='../assets/svg/icon-sprite.svg#attach-doc')
+                                                            p.mb-0.txt-warning Documents
+                                                        div.bg-10-primary
+                                                            .outer-file-circle.shadow-10-primary
+                                                                svg
+                                                                    use(href='../assets/svg/icon-sprite.svg#attach-pdf')
+                                                            p.mb-0.txt-primary PDF Files
+                                        div(class="col-span-12") 
+                                            .card 
+                                                .card-body
+                                                    .upload-files-wrapper
+                                                        div.create-file-box
+                                                            .flex.project-flex 
+                                                                svg
+                                                                    use(href='../assets/svg/icon-sprite.svg#vector-create')
+                                                                div 
+                                                                    h6 Create Folder
+                                                                    p.mb-0.c-o-light Create folder in this zone
+                                                        div.upload-file-box
+                                                            .flex.upload-flex 
+                                                                svg
+                                                                    use(href='../assets/svg/icon-sprite.svg#vector-upload')
+                                                                div 
+                                                                    h6 Upload files 
+                                                                    p.mb-0.c-o-light Drop your files in this zone
+                                                        div
+                                                            a(href="file-manager.html") 
+                                                                .flex 
+                                                                    svg 
+                                                                        use(href='../assets/svg/icon-sprite.svg#doc-file')
+                                                                    div
+                                                                        h6 Logger...
+                                                                        p.mb-0.c-o-light Uploaded 7 weeks ago
+                                                            .common-space
+                                                                p.mb-0 10.2 GB
+                                                                span 30 GB
+                                                            .progress
+                                                                .progress-bar.bg-primary(style='width: 30%')
+                                                        div
+                                                            a(href="file-manager.html") 
+                                                                .flex 
+                                                                    svg 
+                                                                        use(href='../assets/svg/icon-sprite.svg#ai-file')
+                                                                    div
+                                                                        h6 User Product
+                                                                        p.mb-0.c-o-light Uploaded 2 weeks ago
+                                                            .common-space
+                                                                p.mb-0 14.2 GB
+                                                                span 14 GB
+                                                            .progress
+                                                                .progress-bar.bg-primary(style='width: 20%')
+                                                        div
+                                                            a(href="file-manager.html") 
+                                                                .flex 
+                                                                    svg 
+                                                                        use(href='../assets/svg/icon-sprite.svg#sql-file')
+                                                                    div
+                                                                        h6 Database Log..
+                                                                        p.mb-0.c-o-light Uploaded 2 days ago
+                                                            .common-space
+                                                                p.mb-0 15.9 GB
+                                                                span 45 GB
+                                                            .progress
+                                                                .progress-bar.bg-primary(style='width: 40%')
+                                                        div
+                                                            a(href="file-manager.html") 
+                                                                .flex 
+                                                                    svg 
+                                                                        use(href='../assets/svg/icon-sprite.svg#pdf-file')
+                                                                    div
+                                                                        h6 Dashboard Doc
+                                                                        p.mb-0.c-o-light Uploaded 15 weeks ago
+                                                            .common-space
+                                                                p.mb-0 10.3 GB
+                                                                span 16 GB
+                                                            .progress
+                                                                .progress-bar.bg-primary(style='width: 70%')
+                                                        div
+                                                            a(href="file-manager.html") 
+                                                                .flex 
+                                                                    svg 
+                                                                        use(href='../assets/svg/icon-sprite.svg#xml-file')
+                                                                    div
+                                                                        h6 React Theme...
+                                                                        p.mb-0.c-o-light Uploaded 11 days ago
+                                                            .common-space
+                                                                p.mb-0 24.9 GB
+                                                                span 35 GB
+                                                            .progress
+                                                                .progress-bar.bg-primary(style='width: 72%')
+                                                        div
+                                                            a(href="file-manager.html") 
+                                                                .flex 
+                                                                    svg 
+                                                                        use(href='../assets/svg/icon-sprite.svg#css-file')
+                                                                    div
+                                                                        h6 Mofi Theme..
+                                                                        p.mb-0.c-o-light Uploaded 1 day ago
+                                                            .common-space
+                                                                p.mb-0 12.6 GB
+                                                                span 20 GB
+                                                            .progress
+                                                                .progress-bar.bg-primary(style='width: 35%')
+                                                        
+                                .tab-pan.fade(data-tabcontent="6")                        
+                                    .grid.grid-cols-12.card-gap
+                                        div(class="col-span-12") 
+                                            .card.filter-header
+                                                .card-body
+                                                    .common-space
+                                                        h5 Recent  Activity
+                                                        .btn-group
+                                                            button.btn.dropdown-toggle(type='button' data-bs-toggle='dropdown' aria-expanded='false')
+                                                                | Year
+                                                            ul.dropdown-menu.dropdown-block
+                                                                li
+                                                                    a.dropdown-item(href='#!') Today
+                                                                li
+                                                                    a.dropdown-item(href='#!') Week
+                                                                li
+                                                                    a.dropdown-item(href='#!') Month
+                                        div(class="col-span-12") 
+                                            .card.project-timeline
+                                                .card-body.notification
+                                                    ul
+                                                        li.flex
+                                                            .activity-dot-primary
+                                                            .w-full.ms-3
+                                                                h6.font-normal New order
+                                                                    a(href="#!") &nbsp;#109876&nbsp;
+                                                                    | is placed for Works how of marketing and make new product launch
+                                                                span.date-time At 2:20 PM by
+                                                                    span.activity-profile
+                                                                        img.max-w-full(src="../assets/images/user/common-user/3.png", alt="user")
+                                                                        span Mili Pais
+                                                                .mt-3
+                                                                    span Conduct Market Research: Start by researching your target market and understanding their needs, preferences, and behaviors. This will help you develop a product that meets their needs and has a strong market demand. Develop a Marketing Plan: Once you have a product idea, develop a marketing plan that outlines your target audience, messaging, and marketing channels. Consider using a mix of traditional and digital marketing tactics to reach your target audience.
+                                                        li.flex
+                                                            .activity-dot-warning
+                                                            .w-full.ms-3
+                                                                h6.font-normal Megan Elmore
+                                                                span.date-time Adding a new event with attachments - 03:45 PM
+                                                                    span.activity-profile
+                                                                        img.max-w-full(src="../assets/images/user/common-user/5.png", alt="user")
+                                                                        span Esther Howard
+                                                                .mt-3
+                                                                    .common-flex
+                                                                        .upload-doc
+                                                                            .main-file 
+                                                                                svg 
+                                                                                    use(href='../assets/svg/icon-sprite.svg#pdf-file')
+                                                                                div
+                                                                                    p.mb-0 Mofi Documentation
+                                                                                    p.mb-0.c-o-light 678 KB
+                                                                        .upload-doc
+                                                                            .main-file 
+                                                                                svg 
+                                                                                    use(href='../assets/svg/icon-sprite.svg#doc-file')
+                                                                                div
+                                                                                    p.mb-0 Web Template
+                                                                                    p.mb-0.c-o-light 2.4 MB
+                                                        li.flex
+                                                            .activity-dot-primary
+                                                            .w-full.ms-3
+                                                                h6.font-normal Five new flowchart ideas have been incorporated.
+                                                                span.date-time at 4:23 PM by
+                                                                    span.activity-profile
+                                                                        img.max-w-full(src="../assets/images/user/common-user/7.png", alt="user")
+                                                                        span Leslie Alexander
+                                                                .mt-3
+                                                                    .flowchart-wrapper(class="[@media(max-width:606px)]:!justify-center [@media(max-width:621px)]:!gap-[18px]")
+                                                                        div
+                                                                            .flowchart-img
+                                                                                img.max-w-full(src="../assets/images/project/flowchart-1.png", alt="flowchart")
+                                                                        div 
+                                                                            .flowchart-img
+                                                                                img.max-w-full(src="../assets/images/project/flowchart-2.png", alt="flowchart")
+                                                                        div 
+                                                                            .flowchart-img
+                                                                                img.max-w-full(src="../assets/images/project/flowchart-3.png", alt="flowchart")
+                                                                        div 
+                                                                            .flowchart-img
+                                                                                img.max-w-full(src="../assets/images/project/flowchart-4.png", alt="flowchart")
+                                                                        div 
+                                                                            .flowchart-img
+                                                                                img.max-w-full(src="../assets/images/project/flowchart-5.png", alt="flowchart")
+                                                        li.flex
+                                                            .activity-dot-warning
+                                                            .w-full.ms-3
+                                                                h6.font-normal Any kind of collaborative endeavour might have a theme. Use the theme to pass along data so that your team can understand it and contribute to the project.
+                                                                span.date-time At 6:23 PM by
+                                                                    span.activity-profile
+                                                                        img.max-w-full(src="../assets/images/user/common-user/1.png", alt="user")
+                                                                        span Guy Hawkins
+                                                                .mt-3
+                                                                    .project-teammate
+                                                                        ul.common-f-start
+                                                                            li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Sarah Wilson')
+                                                                                img.common-circle(src="../assets/images/dashboard-11/user/2.jpg", alt="user")
+                                                                            li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Richard Taylor')
+                                                                                img.common-circle(src="../assets/images/dashboard-11/user/1.jpg", alt="user")
+                                                                            li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Linda Brown') 
+                                                                                .common-circle.bg-lighter-danger L
+                                                                            li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Jessica Anderson')
+                                                                                img.common-circle(src="../assets/images/dashboard-11/user/8.jpg", alt="user")                                
+                                                        li.flex
+                                                            .activity-dot-primary
+                                                            .w-full.ms-3
+                                                                h6.font-normal Task has emerged in the 'Mofi' template, awaiting your action.
+                                                                span.date-time At 8:05 PM by
+                                                                    span.activity-profile
+                                                                        img.max-w-full(src="../assets/images/user/common-user/8.png", alt="user")
+                                                                        span Jacob Jones
+                                                                .mt-3
+                                                                    .overflow-x-auto.custom-scrollbar
+                                                                        table.table.project-task-note
+                                                                            thead.project-header.border-0
+                                                                                tr
+                                                                                    th(scope='col') Project 
+                                                                                    th(scope='col') Task 
+                                                                                    th(scope='col') Assigned To
+                                                                                    th(scope='col') Status 
+                                                                                    th(scope='col') Due Date
+                                                                                    th(scope='col') Action
+                                                                                
+                                                                            tbody.project-content
+                                                                                tr
+                                                                                    td Chitchat Template
+                                                                                    td Make a creating an account profile
+                                                                                    td 
+                                                                                        ul.common-f-start
+                                                                                            li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Jenny Wilson')
+                                                                                                img.rounded-full(src="../assets/images/dashboard/user/2.jpg", alt="user")
+                                                                                            li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Levine Raven')
+                                                                                                img.rounded-full(src="../assets/images/dashboard-11/user/2.jpg", alt="user")
+                                                                                            li(data-bs-toggle='tooltip' data-bs-placement='top' data-tooltip='Davis Jone')
+                                                                                                img.rounded-full(src="../assets/images/dashboard-11/user/12.jpg", alt="user")
+                                                                                    td
+                                                                                        span.badge.badge-light-success.txt-success Completed
+                                                                                    td 14 Oct, 2025
+                                                                                    td
+                                                                                        a.btn(href="project-list.html") View
+          // Container-fluid Ends
+        include ../../components/footer
+    include ../../components/footer-files

@@ -1,0 +1,194 @@
+- var page_Title = 'Datepicker';
+- var theme_customizer      = true;
+- var flatpickr             = true;
+- var custom_flatpickr      = true;
+- var sidebar               = true;
+- var slick                 = true;
+- var header_slider         = true;
+- var scrollbar             = true;
+doctype html
+html(lang='en')
+  include ../../components/header-files
+  body
+    include ../../components/loader
+    include ../../components/taptop
+    // page-wrapper Start
+    #pageWrapper.page-wrapper.compact-wrapper
+      include ../../components/header
+      // Page Body Start
+      .page-body-wrapper
+        include ../../components/sidebar
+        .page-body
+          .container.w-full
+            .page-title
+              .grid.grid-cols-12.mx-2.items-center
+                div(class="col-span-6 sm:col-span-12")
+                  h3
+                    | Datepicker
+                div(class="col-span-6 sm:col-span-12")
+                  ol.breadcrumb.flex
+                    li.breadcrumb-item
+                      a(href='index.html')                                        
+                        svg.stroke-icon
+                          use(href='../assets/svg/icon-sprite.svg#stroke-home')
+                    li.breadcrumb-item Form Widgets
+                    li.breadcrumb-item.active Date Picker
+          // Container-fluid starts
+          .container
+            .grid.grid-cols-12.card-gap 
+              div(class="col-span-6 xl:col-span-12")
+                .card
+                  .card-header  
+                    h5 Default Calendar
+                    p.f-m-light.mt-1
+                      | Display the calendar in an always-open state with the
+                      code  inline 
+                      | option.
+                  .card-body.card-wrapper 
+                    .grid.grid-cols-12.gap-3
+                      div(class="col-span-12")
+                        .input-group.main-inline-calender
+                          input#inline-calender.form-control.mb-2(type='date')
+              div(class="col-span-6 xl:col-span-12")
+                .card.bootstrap-calendar
+                  .card-header  
+                    h5 Tailwind Calendar
+                    p.f-m-light.mt-1
+                      | Bootstrap-datepicker provides a flexible datepicker widget in the bootstrap style.
+                  .card-body.card-wrapper
+                    .mb-3.grid.grid-cols-12.card-gap
+                      div(class="col-span-3 md:col-span-12")   
+                        label.col-form-label Date and Time
+                      div(class="col-span-9 md:col-span-12")
+                        input#example-datetime-local-input.form-control.digits(type='datetime-local', value='2025-05-03T18:45:00')
+                    .mb-3.grid.grid-cols-12.card-gap
+                      div(class="col-span-3 md:col-span-12")   
+                        label.col-form-label Date
+                      div(class="col-span-9 md:col-span-12")
+                        input.form-control.digits(type='date', value='2025-05-01')
+                    .mb-3.grid.grid-cols-12.card-gap
+                      div(class="col-span-3 md:col-span-12")   
+                        label.col-form-label Month
+                      div(class="col-span-9 md:col-span-12")
+                        input.form-control.digits(type='month', value='2025-01')
+                    .mb-3.grid.grid-cols-12.card-gap
+                      div(class="col-span-3 md:col-span-12")   
+                        label.col-form-label Week
+                      div(class="col-span-9 md:col-span-12")
+                        input.form-control.digits(type='week', value='2025-W09')
+                    .mb-3.grid.grid-cols-12.card-gap
+                      div(class="col-span-3 md:col-span-12")   
+                        label.col-form-label Time
+                      div(class="col-span-9 md:col-span-12")
+                        input.form-control.digits(type='time', value='21:45:00')
+              div(class="col-span-6 xl:col-span-12")
+                .card
+                  .card-header
+                    h5 Date Picker
+                    p.f-m-light.mt-1
+                      | Flatpickr has numerous options that accept date values in a variety of formats. Those are:
+                  .card-body.main-flatpickr
+                    .card-wrapper.custom-border.rounded-3
+                      form.timepicker-wrapper
+                        .grid.grid-cols-12.gap-3.mb-3.timepicker-wrapper-box
+                          div(class="col-span-3 xxl:col-span-12 box-col-12")  
+                            label.text-start Default Date 
+                          div(class="col-span-9 xxl:col-span-12 box-col-12")
+                            .input-group.flatpicker-calender
+                              input#datetime-local.form-control(type='date' value="2025-05-03")
+                        .grid.grid-cols-12.gap-3.mb-3.timepicker-wrapper-box
+                          div(class="col-span-3 xxl:col-span-12 box-col-12")  
+                            label.text-start Human Friendly 
+                          div(class="col-span-9 xxl:col-span-12 box-col-12") 
+                            .input-group.flatpicker-calender
+                              input#human-friendly.form-control(type='date')
+                        .grid.grid-cols-12.gap-3.mb-3.timepicker-wrapper-box
+                          div(class="col-span-3 xxl:col-span-12 box-col-12")  
+                            label.text-start Min-Max Value
+                          div(class="col-span-9 xxl:col-span-12 box-col-12") 
+                            .input-group.flatpicker-calender
+                              input#min-max.form-control(type='date')
+                        .grid.grid-cols-12.gap-3.mb-3.timepicker-wrapper-box
+                          div(class="col-span-3 xxl:col-span-12 box-col-12")  
+                            label.text-start Disabled Dates
+                          div(class="col-span-9 xxl:col-span-12 box-col-12") 
+                            .input-group.flatpicker-calender
+                              input#disabled-date.form-control(type='date' value="03-05-2025")
+                        .grid.grid-cols-12.gap-3.mb-3.timepicker-wrapper-box
+                          div(class="col-span-3 xxl:col-span-12 box-col-12")  
+                            label.text-start Multiples Dates
+                          div(class="col-span-9 xxl:col-span-12 box-col-12") 
+                            .input-group.flatpicker-calender
+                              input#multiple-date.form-control(type='date')
+                        .grid.grid-cols-12.gap-3.mb-3.timepicker-wrapper-box
+                          div(class="col-span-3 xxl:col-span-12 box-col-12")  
+                            label.text-start Customizing Conjunction
+                          div(class="col-span-9 xxl:col-span-12 box-col-12") 
+                            .input-group.flatpicker-calender
+                              input#customize-date.form-control(type='date')
+                        .grid.grid-cols-12.gap-3.mb-3.timepicker-wrapper-box
+                          div(class="col-span-3 xxl:col-span-12 box-col-12")  
+                            lab12.text-start  Range
+                          div(class="col-span-9 xxl:col-span-12 box-col-12")
+                            .input-group.flatpicker-calender
+                              input#range-date.form-control(type='date')
+                        .grid.grid-cols-12.gap-3.mb-3.timepicker-wrapper-box
+                          div(class="col-span-3 xxl:col-span-12 box-col-12")  
+                            label.text-start  Preloading Dates
+                          div(class="col-span-9 xxl:col-span-12 box-col-12") 
+                            .input-group.flatpicker-calender
+                              input#preloading-date.form-control(type='date')
+              div(class="col-span-6 xl:col-span-12")
+                .card
+                  .card-header
+                    h5 Time Picker
+                    p.f-m-light.mt-1
+                      | Flatpickr has numerous options that accept time values in a variety of formats. Those are:
+                  .card-body.main-flatpickr
+                    .card-wrapper.custom-border.rounded-3
+                      form.timepicker-wrapper
+                        .grid.grid-cols-12.gap-3.mb-3.timepicker-wrapper-box
+                          div(class="col-span-3 xxl:col-span-12 box-col-12")  
+                            label.text-start Time Picker
+                          div(class="col-span-9 xxl:col-span-12 box-col-12")
+                            .input-group
+                              input#time-picker.form-control(type='time' value="12:00")
+                        .grid.grid-cols-12.gap-3.mb-3.timepicker-wrapper-box
+                          div(class="col-span-3 xxl:col-span-12 box-col-12")  
+                            label.text-start 24-hour Time Picker
+                          div(class="col-span-9 xxl:col-span-12 box-col-12") 
+                            .input-group
+                              input#twenty-four-hour.form-control(type='time' value="12:05")
+                        .grid.grid-cols-12.gap-3.mb-3.timepicker-wrapper-box
+                          div(class="col-span-3 xxl:col-span-12 box-col-12")  
+                            label.text-start Time Picker W/Limits
+                          div(class="col-span-9 xxl:col-span-12 box-col-12") 
+                            .input-group
+                              input#limit-time.form-control(type='time' value="16:10")
+                        .grid.grid-cols-12.gap-3.mb-3.timepicker-wrapper-box
+                          div(class="col-span-3 xxl:col-span-12 box-col-12")  
+                            label.text-start Preloading Time
+                          div(class="col-span-9 xxl:col-span-12 box-col-12") 
+                            .input-group
+                              input#preloading-time.form-control(type='time')
+                        .grid.grid-cols-12.gap-3.mb-3.timepicker-wrapper-box
+                          div(class="col-span-3 xxl:col-span-12 box-col-12")  
+                            label.text-start TimePicker with Limited Time Range
+                          div(class="col-span-9 xxl:col-span-12 box-col-12") 
+                            .input-group
+                              input#limit-time-range.form-control(type='time')
+                        .grid.grid-cols-12.gap-3.mb-3.timepicker-wrapper-box
+                          div(class="col-span-3 xxl:col-span-12 box-col-12")  
+                            label.text-start TimePicker with Min/Max Time Range
+                          div(class="col-span-9 xxl:col-span-12 box-col-12") 
+                            .input-group.flatpicker-calender
+                              input#limit-min-max-range.form-control(type='time')
+                        .grid.grid-cols-12.gap-3.mb-3.timepicker-wrapper-box
+                          div(class="col-span-3 xxl:col-span-12 box-col-12")  
+                            label.text-start Date With Time
+                          div(class="col-span-9 xxl:col-span-12 box-col-12") 
+                            .input-group.flatpicker-calender
+                              input#datetime-local1.form-control(type='date')
+          // Container-fluid Ends
+        include ../../components/footer
+    include ../../components/footer-files

@@ -1,0 +1,198 @@
+@layer components {
+  .knowledgebase-bg {
+    @apply h-[500px] mb-[30px] rounded-[15px];
+  }
+  .knowledgebase-search {
+    @apply absolute flex items-center left-[5%] inset-y-0;
+    .form-inline {
+      @apply bg-[rgba(var(--white-bg),1)] w-[500px] border relative mt-2.5 !px-[50px] !py-3 rounded-[10px] border-solid border-[#e6e6e6];
+      &::placeholder {
+        @apply text-[rgba(var(--gray-60),1)];
+      }
+      svg {
+        @apply absolute w-5 stroke-[rgba(var(--gray-60),1)] left-5 top-2.5;
+      }
+      input {
+        &:focus-visible {
+          @apply outline-none;
+        }
+      }
+    }
+  }
+  .faq-widgets {
+    @apply items-center;
+    .faq-flex {
+      @apply flex-[1];
+      h5 {
+        @apply font-semibold text-[rgba(var(--white),1)] pb-2.5;
+      }
+      p {
+        @apply max-w-full h-[auto] text-ellipsis text-[rgba(var(--white),0.9)] pr-5;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+    }
+    svg {
+      @apply opacity-50 w-[60px] h-[60px];
+    }
+  }
+  .header-faq {
+    @apply mb-[30px];
+    h5 {
+      @apply font-semibold;
+    }
+  }
+  .features-faq {
+    &.card {
+      .card-body,
+      .card-footer {
+        @apply px-[25px] py-5;
+        p {
+          @apply h-[auto];
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+      }
+    }
+    .faq-image {
+      img {
+        @apply w-full rounded-t-lg;
+      }
+    }
+    .card-body {
+      h6 {
+        @apply font-medium;
+      }
+    }
+  }
+  .faq-accordion {
+    &.default-according {
+      @apply mb-[30px];
+      .card {
+        .btn-link {
+          @apply flex;
+          svg {
+            @apply min-w-[20px] min-h-[20px] mr-2.5 w-[20px] h-[20px];
+          }
+        }
+        .faq-header {
+          @apply relative !p-5 rounded-[15px];
+          svg {
+            @apply absolute right-5 top-5 w-[20px] h-[20px];
+          }
+          span {
+            @apply mt-[3px];
+          }
+        }
+      }
+      .faq-body {
+        @apply p-5 rounded-none;
+        border: unset;
+      }
+      .card-mb-faq {
+        @apply !mb-[30px];
+      }
+    }
+  }
+  .faq-title {
+    @apply mx-0 my-[30px];
+    h6 {
+      @apply text-[rgba(var(--light-text),1)] font-semibold;
+    }
+  }
+  .faq-form {
+    @apply relative;
+    .search-icon {
+      @apply absolute right-3 top-[9px] w-[20px] h-[20px];
+    }
+  }
+  .navigation-btn {
+    @apply mb-5;
+    a {
+      @apply flex justify-center items-center;
+      svg {
+        @apply w-[15px] h-[15px];
+      }
+    }
+  }
+  .navigation-option {
+    ul {
+      li {
+        @apply relative pl-0 pr-2 py-2 last:pb-0 hover:bg-[rgba(var(--light),1)];
+        a {
+          @apply text-[rgba(var(--theme-body-font-color),1)] pl-10;
+          svg {
+            @apply absolute left-[15px] top-[11px] w-[15px] h-[15px];
+          }
+        }
+      }
+    }
+  }
+  .updates-faq {
+    @apply border-[rgba(var(--theme-default),1)] mr-5 rounded-[100%] border-2 border-solid w-[40px] h-[40px] flex justify-center items-center;
+    svg {
+      @apply w-[18px] h-[18px];
+    }
+  }
+  .updates-bottom-time {
+    p {
+      @apply mb-0.5;
+      + p {
+        @apply text-[rgba(var(--light-text),1)];
+      }
+    }
+  }
+  .updates-faq-main {
+    @apply mb-5 last:mb-0;
+    a {
+      @apply font-medium;
+    }
+  }
+  .faq-wrapper {
+    .flex {
+      p {
+        @apply h-[auto];
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+    }
+  }
+  @screen sm {
+    .xs-mt-search {
+      @apply mt-0;
+    }
+    .faq-widgets {
+      svg {
+        @apply w-[50px] h-[50px];
+      }
+    }
+    .faq-title {
+      @apply mx-0 my-[15px];
+    }
+    .header-faq {
+      @apply mt-2.5 mb-[15px];
+    }
+    .faq-accordion {
+      @apply mb-0;
+      .faq-header {
+        @apply p-[15px];
+        .pull-right {
+          @apply float-right;
+        }
+        svg {
+          @apply right-[15px] top-[15px];
+        }
+      }
+    }
+    .navigation-btn,
+    .updates-faq-main {
+      @apply mb-[15px];
+    }
+  }
+}

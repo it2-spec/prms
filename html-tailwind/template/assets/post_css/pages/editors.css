@@ -1,0 +1,185 @@
+@layer components{
+    #editor6{
+        &.ql-bubble{
+            .ql-tooltip {
+                @apply bg-[rgba(var(--body-font-color),1)] p-3;
+                &:not(.ql-flip){
+                    .ql-tooltip-arrow {
+                        @apply border-b-[rgba(var(--body-font-color),1)] border-b-[6px] border-solid;
+                    }
+                }
+            }
+            .ql-tooltip-editor {
+                input[type="text"] {
+                    @apply text-[rgba(var(--white-bg),1)];
+                }
+            }
+        }
+        #toolbar6 {
+            .ql-formats {
+                @apply ml-[-3px] mr-2 my-2;
+                .ql-stroke,
+                .ql-fill {
+                    @apply stroke-[rgba(var(--white-bg),1)];
+                }
+            }
+        }
+    }
+    .ql-formats {
+        .ql-picker-label{
+            &::before {
+                @apply text-[rgba(var(--dark-body-background),1)];
+            }
+            svg {
+                .ql-stroke {
+                    @apply stroke-[rgba(var(--body-font-color),1)];
+                }
+            }
+        }
+        .ql-script,
+        .ql-stroke {
+            @apply stroke-[rgba(var(--body-font-color),1)];
+        }
+    }
+    .quill-paragraph{
+        p {
+            @apply text-[rgba(var(--body-font-color),1)];
+        }
+        ol,
+        ul {
+            li {
+                @apply text-[rgba(var(--body-font-color),1)];
+            }
+        }
+    }
+    .ql-toolbar{
+        &.ql-snow{
+            button{
+                &.ql-active {
+                    svg{
+                        .ql-stroke {
+                            @apply stroke-[rgba(var(--theme-default),1)];
+                        }
+                        .ql-fill {
+                            @apply fill-[rgba(var(--theme-default),1)];
+                        }
+                    }
+                }
+            }
+            .ql-formats {
+
+                .ql-script,
+                .ql-header,
+                .ql-video,
+                .ql-picker-label,
+                .ql-blockquote,
+                .ql-strike {
+                    &:hover {
+                        @apply text-[rgba(var(--theme-default),1)] stroke-[rgba(var(--theme-default),1)];
+
+                        .ql-fill {
+                            @apply fill-[rgba(var(--theme-default),1)];
+                        }
+                    }
+                }
+
+                .ql-picker-options {
+                    .ql-picker-item {
+
+                        &:hover,
+                        &.ql-selected {
+                            @apply text-[rgba(var(--theme-default),1)];
+                        }
+                    }
+                }
+
+                .ql-video {
+                    &:hover {
+                        .ql-fill {
+                            @apply fill-[rgba(var(--theme-default),1)];
+                        }
+                    }
+                }
+
+                .ql-align {
+                    &:hover {
+                        .ql-stroke {
+                            @apply stroke-[rgba(var(--theme-default),1)];
+                        }
+                    }
+                }
+
+                .ql-clean {
+                    &:hover {
+                        .ql-stroke {
+                            @apply stroke-[rgba(var(--theme-default),1)];
+                        }
+
+                        .ql-fill {
+                            @apply fill-[rgba(var(--theme-default),1)];
+                        }
+                    }
+                }
+
+                .ql-header {
+                    .ql-stroke {
+                        @apply stroke-[rgba(var(--theme-default),1)];
+                    }
+                }
+
+                .ql-picker-label {
+                    &:hover {
+
+                        .ql-color-label,
+                        .ql-stroke {
+                            @apply stroke-[rgba(var(--theme-default),1)];
+                        }
+                    }
+                }
+
+                .ql-blockquote {
+                    &:hover {
+                        .ql-fill {
+                            @apply fill-[rgba(var(--theme-default),1)] stroke-[rgba(var(--theme-default),1)];
+                        }
+                    }
+                }
+
+                .ql-code-block {
+                    &:hover {
+                        @apply text-[rgba(var(--theme-default),1)];
+
+                        .ql-even,
+                        .ql-stroke {
+                            @apply stroke-[rgba(var(--theme-default),1)];
+                        }
+                    }
+                }
+
+                .ql-size {
+                    &.ql-picker {
+                        .ql-picker-label {
+                            @apply border-[rgba(var(--white-bg),1)];
+                        }
+
+                        .ql-picker-options {
+                            @apply border-[rgba(var(--white-bg),1)] bg-[rgba(var(--white-bg),1)];
+
+                            .ql-picker-item {
+                                &::before {
+                                    @apply text-[rgba(var(--body-font-color),1)];
+                                }
+
+                                &:hover {
+                                    &::before {
+                                        @apply text-[rgba(var(--theme-default),1)];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

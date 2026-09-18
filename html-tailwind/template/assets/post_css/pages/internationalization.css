@@ -1,0 +1,23 @@
+@layer components {
+  .hdg_main {
+    @apply relative;
+  }
+  .main {
+    .langChoice {
+      @apply absolute bg-[rgba(var(--theme-default),1)] text-[rgba(var(--white),1)] px-3 py-2.5 right-5 top-2.5;
+      &:focus-visible {
+        outline: none;
+      }
+    }
+  }
+  @screen sm {
+    .main {
+      .langChoice {
+        @apply px-[7px] py-1 top-3.5;
+      }
+    }
+    .language-xs {
+      @apply mt-[15px];
+    }
+  }
+}

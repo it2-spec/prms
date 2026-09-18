@@ -1,0 +1,157 @@
+@layer components {
+  .Typeahead {
+    @apply w-full;
+
+    * {
+      @apply box-border before:box-border after:box-border;
+    }
+
+    .tt-hint {
+      @apply hidden;
+    }
+  }
+
+  .u-hidden {
+    @apply hidden;
+  }
+
+  .u-posRelative {
+    @apply relative;
+  }
+
+  .Typeahead-spinner {
+    @apply absolute hidden text-[#c5c5c5] right-[18px] top-3.5;
+  }
+
+  .ProfileCard-avatar {
+    svg {
+      @apply h-[18px] align-bottom;
+
+      path {
+        @apply text-[#7e7c7c];
+      }
+
+      polygon {
+        @apply text-[#7e7c7c];
+      }
+    }
+  }
+
+  .Typeahead-hint {
+    @apply w-full text-2xl leading-[30px] border absolute text-[#ccd6dd] opacity-100 px-2 py-[5px] rounded-lg border-solid border-[#024e6a] left-0 top-0;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+  }
+
+  .Typeahead-menu {
+    @apply absolute z-[100] hidden w-full overflow-hidden bg-[rgba(var(--white),1)] shadow-[0_5px_10px_rgba(0,0,0,0.2)] p-[15px] left-0 top-full;
+  }
+
+  .Typeahead-menu {
+    &.is-open {
+      @apply block;
+    }
+  }
+
+  .Typeahead-selectable {
+    @apply cursor-pointer;
+
+    + {
+      .Typeahead-selectable {
+        @apply border-t-[#ccd6dd] border-t border-solid;
+      }
+    }
+  }
+  .ProfileCard {
+    @apply relative border border-[rgba(var(--gray-60),1)] mb-2.5 p-2.5 rounded-[10px] border-solid hover:text-[#414345];
+
+    &:hover {
+      @apply bg-[#f8f8f8];
+
+      .ProfileCard-avatar {
+        @apply border-[#f5f8fa];
+      }
+
+      .ProfileCard-screenName {
+        @apply text-[rgba(var(--white),1)];
+      }
+
+      .ProfileCard-stat-label {
+        @apply text-[rgba(var(--white),1)];
+      }
+    }
+  }
+  .ProfileCard-avatar {
+    @apply absolute rounded-[5px];
+  }
+  .ProfileCard-details {
+    @apply float-left pl-[35px];
+  }
+  .ProfileCard-realName {
+    @apply inline-block text-[RGBA(VAR(--text-gray),1)];
+  }
+  .ProfileCard-screenName {
+    @apply inline-block text-[RGBA(VAR(--text-gray),1)];
+  }
+  .ProfileCard-description {
+    @apply text-sm leading-[18px] mt-[5px];
+  }
+  .ProfileCard-stats {
+    @apply float-right text-right;
+  }
+  .ProfileCard-stat {
+    @apply inline-block text-xs leading-4 uppercase;
+    + .ProfileCard-stat {
+      @apply ml-[5px];
+    }
+  }
+  .ProfileCard-stat-label {
+    @apply text-[rgba(var(--dark-gray),1)] font-medium;
+  }
+  .ProfileCard {
+    &.is-active {
+      @apply text-[rgba(var(--white),1)] bg-[rgba(var(--theme-default),1)];
+    }
+  }
+  .ProfileCard.is-active {
+    .ProfileCard-screenName {
+      @apply text-[rgba(var(--white),1)];
+    }
+    .ProfileCard-stat-label {
+      @apply text-[rgba(var(--white),1)];
+    }
+  }
+  .EmptyMessage {
+    @apply relative text-sm leading-[30px] text-center p-2.5;
+  }
+  .Typeahead-spinner {
+    @apply w-4 h-4;
+  }
+  .sey-container {
+    @apply hidden absolute shadow-[1px_2px_6px] bg-[rgba(var(--white),1)] text-[rgba(var(--tw-heading-color),1)] transition-[left] duration-[0.1s] ease-[ease-in-out] z-[1];
+  }
+  .sey-list {
+    @apply list-none m-0 p-0;
+  }
+  .sey-show {
+    @apply block;
+  }
+  .sey-hide {
+    @apply hidden;
+  }
+  .sey-empty {
+    @apply cursor-default p-[7px];
+  }
+  .sey-item {
+    @apply cursor-pointer p-[7px] hover:bg-[#444] hover:text-[rgba(var(--white),1)] overflow-hidden text-ellipsis whitespace-nowrap;
+  }
+  .sey-selected {
+    @apply bg-[rgba(var(--tw-heading-color),1)] text-[rgba(var(--white),1)];
+  }
+  .sey-char-highlight {
+    @apply font-[bold];
+  }
+  .sey-category-id {
+    @apply bg-[#eee] text-[#aaa] text-right capitalize italic text-xs shadow-[1px_0px_1px] p-[7px];
+  }
+}

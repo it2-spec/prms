@@ -1,0 +1,120 @@
+@layer components {
+  .icon-lists {
+    div {
+      @apply cursor-pointer leading-[60px] ml-[0] rounded block max-w-full w-full overflow-hidden text-ellipsis whitespace-nowrap hover:bg-[rgba(var(--light-background),1)];
+      i {
+        @apply text-2xl align-middle ml-2.5 mr-[15px] my-0;
+      }
+    }
+    &.whether-icon {
+      svg {
+        @apply h-[calc(40px_+_(50_-_40)_*_((100vw_-_320px)_/_(1920_-_320)))] w-[calc(40px_+_(50_-_40)_*_((100vw_-_320px)_/_(1920_-_320)))];
+      }
+    }
+    &.feather-icons {
+      .main-flag {
+        @apply flex;
+        svg {
+          @apply ml-2.5 mr-[15px] my-0;
+        }
+      }
+    }
+    .feather-icon {
+      .icon-first {
+        h6 {
+          @apply hidden;
+        }
+      }
+    }
+    &.flag-icons,
+    &.whether-icon {
+      div {
+        @apply w-full flex items-center whitespace-nowrap;
+        -webkit-box-align: center;
+      }
+    }
+  }
+  .flag-icons,
+  .feather-icons {
+    margin-block: -15px;
+    div {
+      @apply leading-none overflow-auto;
+      word-wrap: break-word;
+      .flag-icon {
+        @apply w-[50px] h-[50px];
+      }
+      .main-flag {
+        @apply !w-full flex py-[15px];
+      }
+      .flag-name {
+        @apply grow;
+        h6 {
+          @apply mx-[0] text-sm font-normal max-w-full overflow-hidden text-ellipsis whitespace-nowrap mb-0;
+        }
+
+        h5 {
+          @apply bg-[rgba(var(--theme-default),1)] inline-block text-[11px] text-[rgba(var(--white),1)] mr-[5px] mb-[5px] px-[5px] py-[3px] rounded-[3px];
+        }
+      }
+    }
+  }
+  .icon-hover-bottom {
+    @apply bg-[rgba(var(--light),1)] w-full shadow-[0px_0px_1px_1px_rgba(var(--light-color),1)] z-[999] left-0 bottom-0;
+    .icon-popup {
+      @apply w-full p-5 flex justify-center items-center;
+
+      .close-icon {
+        @apply absolute text-xl text-[rgba(var(--gray-60),1)] cursor-pointer right-2.5 top-2.5;
+      }
+      > div {
+        @apply inline-block;
+        .flag-icon {
+          @apply w-[60px] h-[60px];
+        }
+      }
+      .icon-class {
+        @apply cursor-pointer mx-5 my-0;
+      }
+      .icon-last {
+        .form-inline {
+          .form-group {
+            display: initial;
+          }
+        }
+      }
+    }
+    .icon-title {
+      @apply block text-[rgba(var(--dark-color),1)] uppercase font-medium;
+    }
+    span,
+    label,
+    .btn {
+      font-family: var(--font-roboto), var(--font-serif);
+    }
+
+    .form-group {
+      input {
+        @apply inline-block w-[300px] bg-[rgba(var(--white),1)];
+        font-family: var(--font-roboto), var(--font-serif);
+      }
+    }
+  }
+  .fa-fa-icon-show-div,
+  .icons-show-div {
+    @apply hidden;
+  }
+  .icon-first {
+    i {
+      @apply text-[rgba(var(--dark-gray),1)];
+    }
+
+    h6 {
+      @apply hidden;
+    }
+  }
+  .flag-icons {
+    div {
+      @apply !ml-[0];
+    }
+  }
+}

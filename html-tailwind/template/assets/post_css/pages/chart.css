@@ -1,0 +1,323 @@
+@layer components {
+  .chart-block {
+    canvas {
+      @apply !w-full;
+    }
+    .chart-overflow {
+      @apply text-center overflow-hidden rounded-[15px];
+      svg {
+        @apply rounded-[15px];
+      }
+    }
+  }
+  .candidcahrt {
+    @apply w-full h-[470px];
+  }
+  .amcharts-export-canvas {
+    @apply absolute hidden z-[1] bg-[rgba(var(--white),1)] inset-0;
+
+    .canvas-container {
+      @apply transition-opacity duration-[0.5s] ease-[ease-out];
+    }
+
+    &.active {
+      @apply block;
+    }
+
+    &.dropbox .canvas-container {
+      @apply opacity-50;
+    }
+  }
+  .flot-chart-container {
+    @apply w-full h-[400px];
+    box-sizing: border-box;
+    canvas {
+      @apply !h-[400px];
+    }
+
+    #toggling-series-flot {
+      @apply w-[79%];
+    }
+  }
+  .all-chart {
+    .flot-chart-container {
+      @apply h-[350px];
+    }
+  }
+  .flot-chart-placeholder {
+    @apply w-full h-full text-sm leading-[1.2em] text-center;
+    .legend table {
+      @apply border-spacing-[5px];
+    }
+  }
+  .morris-hover {
+    @apply absolute z-[1];
+    &.morris-default-style {
+      @apply text-[rgba(var(--dark-gray),1)] border-[rgba(var(--light-gray),1)] text-xs text-center p-1.5 rounded-[10px] border-solid;
+      background: rgba(var(--white), 1);
+      font-family: var(--font-serif);
+      .morris-hover-row-label {
+        @apply font-[bold] mx-0 my-[0.25em];
+      }
+      .morris-hover-point {
+        @apply whitespace-nowrap mx-0 my-[0.1em];
+      }
+    }
+  }
+  .chart-sparkline {
+    @apply absolute invisible text-[rgba(var(--white),1)] text-left whitespace-nowrap border box-content z-[10000] p-[5px] rounded-[5px] border-solid border-[rgba(49,49,49,0.75)] left-0 top-0;
+    background: rgba(49, 49, 49, 0.7);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);
+    font: 10px var(--font-rubik), var(--font-serif);
+    .jqsfield {
+      @apply text-[rgba(var(--white),1)] text-left;
+      font: 10px var(--font-rubik), var(--font-serif);
+    }
+  }
+  .radial-bar {
+    @apply relative inline-block bg-transparent box-content w-20 h-20 text-lg bg-clip-content rounded-[50%] after:inline-block after:absolute after:text-center after:font-medium after:text-[rgba(var(--color-fiord),1)] after:content-[attr(data-label)] after:bg-[rgba(var(--white),1)] after:z-[1] after:w-14 after:h-14 after:leading-[56px] after:ml-3 after:mt-3 after:rounded-[50%] after:left-0 after:top-0;
+    > img {
+      @apply inline-block absolute text-center font-medium text-[rgba(var(--color-fiord),1)] z-[3] w-14 h-14 leading-[56px] ml-3 mt-3 rounded-[50%] left-0 top-0;
+    }
+  }
+  .radial-bar-danger {
+    &.radial-bar-20 {
+      @apply bg-[linear-gradient(_90deg,rgba(var(--light-semi-gray),1)_50%,transparent_50%,transparent_),linear-gradient(_162deg,rgba(var(--danger-color),1)_50%,rgba(var(--light-semi-gray),1)_50%,rgba(var(--light-semi-gray),1)_)];
+    }
+  }
+  .radial-bar {
+    &.radial-bar-lg {
+      @apply w-[100px] h-[100px] text-xl;
+      &:after {
+        @extend %chart-1;
+      }
+      > img {
+        @extend %chart-1;
+      }
+    }
+    &.radial-bar-sm {
+      @apply w-[50px] h-[50px] text-xs;
+      &:after {
+        @extend %chart-2;
+      }
+      > img {
+        @extend %chart-2;
+      }
+    }
+    &.radial-bar-xs {
+      @apply w-[30px] h-[30px] text-[8px];
+      &:after {
+        @extend %chart-3;
+      }
+      > img {
+        @extend %chart-3;
+      }
+    }
+  }
+  .pieLabel {
+    div {
+      @apply text-[rgba(var(--white),1)];
+      input[type="checkbox"] {
+        @apply m-[7px];
+      }
+    }
+  }
+  .knob-chart {
+    @apply min-h-[255px];
+    .chart-clock-main {
+      @apply relative w-[200px] mx-auto my-[45px];
+      .clock-large {
+        @apply absolute top-[-45px] -left-12;
+      }
+      .clock-medium {
+        @apply absolute left-0.5 top-[5px];
+      }
+      .clock-small {
+        @apply absolute left-[55px] top-[55px];
+      }
+    }
+  }
+  .peity-charts {
+    svg {
+      @apply w-full h-[250px];
+    }
+    &.peity-chart-primary {
+      svg {
+        polygon {
+          @apply fill-[rgba(var(--primary-color),0.2)];
+        }
+      }
+    }
+  }
+  .bar-odd-even {
+    svg {
+      rect {
+        &:nth-child(odd) {
+          @apply fill-[rgba(var(--theme-default),1)];
+        }
+        &:nth-child(even) {
+          @apply fill-[rgba(var(--theme-secondary),1)];
+        }
+      }
+    }
+  }
+  .donut-peity {
+    svg {
+      path {
+        &:nth-child(odd) {
+          @apply fill-[rgba(var(--theme-default),1)];
+        }
+        &:nth-child(even) {
+          @apply fill-[rgba(var(--theme-secondary),1)];
+        }
+      }
+    }
+  }
+  .small-donut,
+  .donut-peity2,
+  .pie-peity {
+    ~ svg,
+    svg {
+      path {
+        &:nth-child(odd) {
+          @apply fill-[rgba(var(--theme-default),1)];
+        }
+
+        &:nth-child(even) {
+          @apply fill-[rgba(var(--light-semi-gray),1)];
+        }
+      }
+    }
+  }
+  .small-donut2 {
+    ~ svg {
+      path {
+        &:nth-child(odd) {
+          @apply fill-[rgba(var(--theme-secondary),1)];
+        }
+      }
+    }
+  }
+  .small-donut3 {
+    ~ svg {
+      path {
+        &:nth-child(odd) {
+          @apply fill-[rgba(var(--success-color),1)];
+        }
+      }
+    }
+  }
+  .small-donut4 {
+    ~ svg {
+      path {
+        &:nth-child(odd) {
+          @apply fill-[rgba(var(--info-color),1)];
+        }
+      }
+    }
+  }
+  .small-donut5 {
+    ~ svg {
+      path {
+        &:nth-child(odd) {
+          @apply fill-[rgba(var(--warning-color),1)];
+        }
+      }
+    }
+  }
+
+  .small-donut6 {
+    ~ svg {
+      path {
+        &:nth-child(odd) {
+          @apply fill-[rgba(var(--danger-color),1)];
+        }
+      }
+    }
+  }
+  p {
+    &.data-attributes {
+      svg {
+        @apply mr-2.5;
+      }
+    }
+  }
+  .knob-block {
+    @apply relative;
+    input {
+      @apply !flex !items-center !justify-center !h-full !w-full !mt-[-3px] !ml-0 !left-0 !top-0;
+      &:focus{
+        outline: unset;
+      }
+    }
+  }
+  .knob-input-disable {
+    input {
+      @apply hidden;
+    }
+  }
+  .apex-chart {
+    @apply flex justify-center;
+  }
+  .apexcharts-toolbar {
+    @apply z-[1];
+  }
+  .apexcharts-menu-item {
+    @apply w-[110px];
+  }
+  .word-tree {
+    @apply h-[400px];
+  }
+  .ct-series-a {
+    .ct-slice-pie,
+    .ct-slice-donut-solid,
+    .ct-area {
+      @apply fill-[rgba(var(--theme-default),1)];
+    }
+
+    .ct-point,
+    .ct-line,
+    .ct-bar,
+    .ct-slice-donut {
+      @apply stroke-[rgba(var(--theme-default),1)];
+    }
+  }
+
+  .ct-series-b {
+    .ct-point,
+    .ct-line,
+    .ct-bar,
+    .ct-slice-donut {
+      @apply stroke-[rgba(var(--theme-secondary),1)];
+    }
+
+    .ct-slice-pie,
+    .ct-slice-donut-solid,
+    .ct-area {
+      @apply fill-[rgba(var(--theme-secondary),1)];
+    }
+  }
+  .test-buttons {
+    button {
+      + button {
+        @apply ml-2.5;
+      }
+    }
+  }
+  .clip-chart-wrapper {
+    .test-chart-block {
+      @apply mb-[-30px];
+    }
+  }
+
+  #dotted {
+    @apply h-[390px];
+  }
+  .apexcharts-canvas {
+    .apexcharts-tooltip,
+    .apexcharts-xaxistooltip,
+    .apexcharts-yaxistooltip {
+      @apply z-[1];
+    }
+  }
+}

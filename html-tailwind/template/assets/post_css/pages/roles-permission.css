@@ -1,0 +1,168 @@
+@layer components{
+    .role-permission-wrapper {
+        .permission-table {
+            div{
+                &.dt-container {
+                    .dt-layout-row {
+                        .dt-search {
+                            @apply right-[234px] top-5;
+                            .dt-input {
+                                @apply w-[auto] p-[6px] rounded-[6px]; 
+                            }
+                        }
+                    }
+                }
+            }
+            table{
+                thead,
+                tbody{
+                    tr{
+                        th,
+                        td{
+                            @apply min-w-[auto] text-[rgba(var(--body-font-color),1)];
+                            &:first-child {
+                                @apply pl-5;
+                            }
+                            &:last-child {
+                                @apply pr-5;
+                            }
+                            .badge {
+                                @apply px-2.5 py-1.5;
+                            }
+                            .square-white {
+                                @apply shadow-[0px_0px_28px_6px_rgba(235,235,235,0.4)] flex justify-center items-center w-[34px] h-[34px] rounded-[2px] bg-[rgba(var(--white),1)];
+                                svg {
+                                    @apply fill-[rgba(var(--badge-light-color),1)] w-[16px] h-[16px];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .modal-header,
+        .modal-body{
+            .form-label {
+                @apply font-medium;
+            }
+            .modal-title {
+                @apply text-lg;
+            }
+        }
+         .permission-form {
+            ul {
+                @apply grid border-b-[rgba(var(--chart-progress-light),1)] grid-cols-[1fr_1fr_1fr_1fr_1fr] overflow-auto px-0 py-2.5 border-b border-solid;
+                 li{
+                    &:first-child {
+                        @apply font-medium;
+                    }
+                    .form-check {
+                        @apply relative block min-h-[1.5rem] pl-[1.8em];
+                        .form-check-input {
+                            @apply w-[18px] !h-[18px] absolute -left-0.5 -top-0.5 focus:shadow-[unset] valid:border-[rgba(var(--badge-light-color),1)] invalid:border-[rgba(var(--danger-color),1)] checked:bg-[rgba(var(--theme-default),1)] checked:valid:border-[rgba(var(--theme-default),1)];
+                            &:invalid~.form-check-label {
+                                @apply text-[rgba(var(--danger-color),1)];
+                            }
+                            &:valid~.form-check-label {
+                                @apply text-[rgba(var(--badge-light-color),1)];
+                            }
+                        }
+                        .form-check-label {
+                            @apply mb-0;
+                        }
+                    }
+                 }
+            }
+         }
+    }
+    .user-list-wrapper{
+        .square-white {
+            @apply shadow-[0px_0px_28px_6px_rgba(235,235,235,0.4)] w-[34px] h-[34px] rounded-[2px] bg-[rgba(var(--white),1)];
+             svg {
+                @apply fill-[rgba(var(--badge-light-color),1)] w-[16px] h-[16px];
+             }
+        }
+        .user-list-table{
+            div{
+                &.dt-container {
+                    .dt-layout-row {
+                        .dt-search {
+                            @apply right-[185px] top-5;
+                            .dt-input {
+                                @apply w-[auto] p-[6px] rounded-md;
+                            }
+                        }
+                    }
+                }
+            }
+            table{
+                thead,
+                tbody{
+                    tr{
+                        th,
+                        td{
+                            @apply min-w-[auto] text-[rgba(var(--body-font-color),1)];
+                            &:first-child {
+                                @apply pl-5;
+                            }
+                            &:last-child {
+                                @apply pr-5;
+                            }
+                            .badge {
+                                @apply px-2.5 py-1.5;
+                            }
+                            a {
+                                @apply text-[rgba(var(--dark-color),1)];
+                                &:hover {
+                                    @apply text-[rgba(var(--theme-default),1)];
+                                }
+                            }
+                            .square-white {
+                                @apply flex justify-center items-center shadow-[0px_0px_28px_6px_rgba(235,235,235,0.4)] w-[34px] h-[34px] rounded-[2px] bg-[rgba(var(--white),1)];
+                                svg {
+                                    @apply fill-[rgba(var(--badge-light-color),1)] w-[16px] h-[16px];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .role-permission-wrapper,
+    .user-list-wrapper {
+        .card-header-right-icon {
+            .btn {
+                @apply relative z-[1];
+            }
+        }
+    }
+    @screen md640 {
+        .role-permission-wrapper{
+             .permission-table {
+                div{
+                    &.dt-container {
+                        .dt-layout-row {
+                            .dt-search {
+                                @apply top-0;
+                            }
+                        }
+                    }
+                }
+             }
+        }
+        .user-list-wrapper {
+            .user-list-table {
+                div{
+                    &.dt-container {
+                        .dt-layout-row{
+                            .dt-search {
+                                @apply top-0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}  

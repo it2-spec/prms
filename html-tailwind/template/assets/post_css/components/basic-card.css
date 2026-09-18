@@ -1,0 +1,18 @@
+@layer components {
+  .dark-color-header {
+    @apply !bg-[unset] text-[rgba(var(--primary-color),1)];
+    ul {
+      li {
+        &:first-child,
+        &:last-child {
+          i {
+            @apply !text-[rgba(var(--primary-color),1)];
+          }
+        }
+        i {
+          @apply !text-[rgba(var(--light-color),1)];
+        }
+      }
+    }
+  }
+}  

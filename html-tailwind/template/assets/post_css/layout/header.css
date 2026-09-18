@@ -1,0 +1,87 @@
+/* ========================
+   ✅ Header Section
+=========================== */
+@layer components {
+  .left-header {
+    .flex {
+      @apply items-center;
+    }
+    h6 {
+      @apply leading-[1.6];
+    }
+    img {
+      @apply h-[26px] -mt-3;
+    }
+    i {
+      @apply font-semibold text-xs -mb-1;
+    }
+  }
+  .toggle-sidebar {
+    @apply absolute cursor-pointer right-[30px] top-[30px]
+          before:content-[""]
+          before:absolute
+          before:h-10
+          before:w-10
+          before:bg-[rgba(115,102,255,0.1)]
+          before:z-[-2]
+          before:transition-all
+          before:duration-[0.3s]
+          before:ease-[ease]
+          before:rounded-[100%]
+          before:scale-0
+          before:-left-2.5
+          before:-top-2
+          hover:before:h-10
+          hover:before:w-10
+          hover:before:transition-all
+          hover:before:duration-[0.3s]
+          hover:before:ease-[ease]
+          hover:before:scale-100;
+  }
+
+  .toggle-sidebar {
+    svg {
+      @apply w-[var(--header-wrapper-nav-icon-size)] h-[var(--header-wrapper-nav-icon-size)];
+    }
+    &:hover {
+      > svg {
+        @apply text-[rgba(var(--theme-default),1)] stroke-[rgba(var(--theme-default),1)];
+      }
+    }
+  }
+
+  .onhover-dropdown {
+    @apply cursor-pointer relative;
+    &:hover {
+      .onhover-show-div {
+        @apply opacity-100 visible translate-y-0 transition-all duration-[0.3s] ease-[ease];
+      }
+    }
+  }
+
+  .onhover-show-div {
+    @apply absolute z-[8] bg-[rgba(var(--white),1)] transition-all duration-[linear] delay-[0.3s] shadow-[0_0_20px_rgba(var(--semi-dark),0.1)] translate-y-[30px] opacity-0 invisible left-0 top-20;
+    li {
+      a {
+        svg {
+          @apply mt-0;
+          path,
+          line {
+            @apply text-neutral-700;
+          }
+        }
+      }
+    }
+  }
+
+  .offcanvas .page-wrapper .page-body-wrapper .page-body,
+  .offcanvas-bookmark .page-wrapper .page-body-wrapper .page-body {
+    @apply relative blur-[5px] grayscale;
+  }
+
+  .offcanvas {
+    @apply visible z-[2];
+    position: unset;
+    background: unset;
+  }
+}

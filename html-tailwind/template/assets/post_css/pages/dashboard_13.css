@@ -1,0 +1,477 @@
+@layer components {
+  .dashboard-13 {
+    .widget-13 {
+      @apply bg-[url("../images/dashboard-12/light-bg.png")] bg-top bg-cover;
+      .stat-content {
+        @apply gap-2.5 mb-5 flex justify-start items-center;
+        .stat-square {
+          @apply flex justify-center items-center w-[calc(45px_+_(58_-_45)_*_((100vw_-_320px)_/_(1920_-_320)))] h-[calc(45px_+_(58_-_45)_*_((100vw_-_320px)_/_(1920_-_320)))] rounded-[5px];
+          svg {
+            @apply w-[calc(24px_+_(30_-_24)_*_((100vw_-_320px)_/_(1920_-_320)))] h-[calc(24px_+_(30_-_24)_*_((100vw_-_320px)_/_(1920_-_320)))] transition-[0.5s];
+          }
+        }
+      }
+      .card-body {
+        .common-align {
+          svg {
+            @apply align-middle w-[18px] h-[16px];
+          }
+          span {
+            @apply text-[calc(14px_+_(18_-_14)_*_((100vw_-_320px)_/_(1920_-_320)))];
+          }
+        }
+        .progress {
+          @apply w-3/5 h-3;
+          .progress-bar-striped {
+            @apply bg-[linear-gradient(_45deg,_rgba(231,252,255,1)_25%,_transparent_25%,_transparent_50%,_rgba(255,255,255,0.8)_50%,_rgba(231,252,255,1)_75%,_transparent_75%,_transparent)];
+          }
+        }
+      }
+      &:hover {
+        .stat-square {
+          svg {
+            @apply transition-[0.5s] scale-110;
+          }
+        }
+      }
+    }
+    .shipment-tracking-table {
+      .recent-table {
+        table {
+          thead,
+          tbody {
+            tr {
+              th,
+              td {
+                @apply min-w-[auto];
+                a {
+                  @apply text-[rgba(var(--body-font-color),1)] font-medium;
+                }
+                &:first-child {
+                  @apply pl-5;
+                }
+                &:last-child {
+                  @apply pr-5;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .shipping-details {
+      .common-space {
+        @apply bg-[rgba(var(--light2),1)] gap-2.5 px-[49px] py-3.5 rounded-md;
+        p {
+          @apply font-medium mb-0;
+          span {
+            @apply font-normal;
+          }
+        }
+      }
+      .simple-timeline {
+        @apply mt-[23px];
+        ul {
+          @apply relative;
+          .dots {
+            @apply w-[16px] h-[16px] relative shadow-[0px_6px_18px_0px_rgba(0,0,0,0.19)] rounded-[100%] border-[3px] border-solid border-[rgba(var(--white),1)];
+          }
+          li {
+            .shipment-details {
+              @apply flex gap-[23px] z-0 relative;
+              .line {
+                @apply absolute h-full w-px z-[-1] left-[7px] top-0;
+              }
+              p {
+                @apply m-0;
+                &:first-child {
+                  @apply mt-[3px];
+                }
+                &:last-child {
+                  @apply !mb-5 pb-[23px] border-b-[rgba(82,82,108,0.1)] border-b border-solid;
+                }
+              }
+              > div {
+                &:last-child {
+                  @apply w-[calc(100%_-_23px_-_16px)];
+                }
+              }
+            }
+            &:last-child {
+              > div p:last-child {
+                @apply mb-0 pb-0;
+                border-bottom: unset;
+              }
+
+              .shipment-details {
+                .line {
+                  @apply hidden;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .sales-order {
+      h3 {
+        @apply text-3xl font-medium;
+      }
+      .common-space {
+        &:last-child {
+          @apply pt-2.5;
+        }
+        .total-sale {
+          @apply text-lg font-medium;
+        }
+      }
+      .progress {
+        @apply w-[68%] h-[23px] rounded-none;
+      }
+    }
+    .delivery-chart {
+      .balance-data {
+        @apply right-[60px] top-5;
+      }
+    }
+    .vehicle-table {
+      .recent-table {
+        table {
+          thead,
+          tbody {
+            tr {
+              th,
+              td {
+                @apply min-w-[auto];
+                a {
+                  @apply text-[rgba(var(--body-font-color),1)];
+                }
+                &:first-child {
+                  @apply pl-5;
+                }
+                &:last-child {
+                  @apply pr-5;
+                }
+                img {
+                  @apply h-[37px];
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .country-option {
+      ul {
+        @apply flex flex-col gap-3.5;
+        li {
+          @apply bg-[rgba(var(--light2),1)] px-7 py-[9px];
+          span {
+            @apply mr-3.5 rounded-sm w-[10px] h-[10px];
+          }
+        }
+      }
+    }
+    .common-stat-option {
+      @apply mt-[-82px] mb-[-58px] ml-0 -mr-1.5;
+    }
+    .delivered-stat-option {
+      @apply mt-[-85px] mb-[-58px] ml-0 -mr-1.5;
+    }
+    .sales-order-chart {
+      @apply -ml-2.5 mt-3.5;
+    }
+    .delivery-duration-chart {
+      @apply ml-[-38px];
+    }
+    .fleet-status-chart {
+      .apexcharts-legend {
+        @apply gap-2;
+      }
+    }
+    .profitable-country-chart {
+      @apply border-r-[rgba(var(--chart-progress-light),1)] h-full -ml-4 -mr-2 pr-2.5 border-r border-solid;
+    }
+  }
+  @screen between1800-1400 {
+    .dashboard-13 {
+      .shipping-details {
+        .common-space {
+          @apply px-[30px] py-3.5;
+        }
+      }
+    }
+  }
+  @screen between1399-1200 {
+    .dashboard-13 {
+      .shipping-details {
+        .common-space {
+          @apply px-[30px] py-3.5;
+        }
+      }
+    }
+  }
+  @screen between1660-1200 {
+    .dashboard-13 {
+      .vehicle-table {
+        .recent-table {
+          table {
+            thead,
+            tbody {
+              tr {
+                th,
+                td {
+                  &:nth-child(6) {
+                    @apply hidden;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .dashboard-13 {
+      .country-option {
+        ul {
+          li {
+            @apply px-[12px] py-1.5;
+          }
+        }
+      }
+    }
+    .dashboard-13 {
+      .shipping-details {
+        .common-space {
+          @apply block px-[18px] py-2;
+        }
+      }
+    }
+    .dashboard-13 {
+      .shipment-tracking-table {
+        .recent-table {
+          table {
+            thead,
+            tbody {
+              tr {
+                th,
+                td {
+                  &:nth-child(3) {
+                    @apply hidden;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen xl1660 {
+    .dashboard-13 {
+      .delivery-chart {
+        .balance-data {
+          @apply relative flex gap-3.5 flex-wrap inset-0;
+        }
+      }
+    }
+    .dashboard-13 {
+      .shipping-details {
+        .simple-timeline {
+          ul {
+            li {
+              .shipment-details {
+                p {
+                  &:last-child {
+                    @apply !mb-[11px] pb-[13px];
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen xl1600 {
+    .dashboard-13 {
+      .widget-13 {
+        .card-body {
+          .common-align {
+            span {
+              @apply text-sm;
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen only1400 {
+    .dashboard-13 {
+      .widget-13 {
+        .card-body {
+          .progress {
+            @apply h-[calc(10px_+_(12_-_10)_*_((100vw_-_1400px)_/_(1920_-_1400)))];
+          }
+        }
+      }
+      .shipping-details {
+        .common-space p {
+          @apply text-[calc(_16px_+_(18_-_16)_*_((100vw_-_1400px)_/_(1920_-_1400))_)];
+        }
+      }
+      .sales-order {
+        .progress {
+          @apply w-[calc(56%_+_(68_-_56)_*_((100vw_-_1400px)_/_(1920_-_1400)))];
+        }
+      }
+    }
+  }
+  @screen xxl {
+    .dashboard-13 {
+      .widget-13 {
+        .card-body {
+          .progress {
+            @apply w-[48%] h-2.5;
+          }
+        }
+      }
+      .shipment-tracking-table {
+        .recent-table {
+          table {
+            thead,
+            tbody {
+              tr {
+                td,
+                th {
+                  &:nth-child(6) {
+                    @apply min-w-[145px];
+                  }
+                  &:nth-child(7) {
+                    @apply min-w-[66px];
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      .sales-order {
+        h3 {
+          @apply text-[22px];
+        }
+        .progress {
+          @apply w-6/12 h-[18px];
+        }
+      }
+    }
+  }
+  @screen between1366-1200 {
+    .dashboard-13 {
+      .common-stat-option {
+        @apply mt-[-89px] mb-[-58px] ml-0 -mr-1.5;
+      }
+    }
+  }
+  @screen between1399-1200 {
+    .dashboard-13 {
+      .shipping-details {
+        .simple-timeline {
+          ul {
+            li {
+              .shipment-details {
+                p {
+                  &:last-child {
+                    @apply h-[53px];
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                  }
+                }
+              }
+              &:last-child {
+                > div {
+                  p {
+                    &:last-child {
+                      @apply h-[unset];
+                      text-overflow: unset;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      .fleet-status-chart {
+        @apply mt-12;
+      }
+    }
+    .dashboard-13 {
+      .widget-13 {
+        .stat-content {
+          p {
+            @apply w-[95px];
+          }
+          h4 {
+            @apply text-lg;
+          }
+        }
+      }
+    }
+  }
+  @screen xl {
+    .dashboard-13 {
+      .vehicle-table {
+        .recent-table {
+          table {
+            thead {
+              tr {
+                th {
+                  &:nth-child(2) {
+                    @apply min-w-[72px];
+                  }
+                  &:nth-child(3) {
+                    @apply min-w-[65px];
+                  }
+                  &:nth-child(4) {
+                    @apply min-w-[150px];
+                  }
+                  &:nth-child(5) {
+                    @apply min-w-[95px];
+                  }
+                  &:nth-child(6) {
+                    @apply min-w-[104px];
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      .common-stat-option {
+        @apply !mb-[-54px] ml-0 -mr-1.5 -mt-24;
+      }
+      .delivered-stat-option {
+        @apply mt-[-65px] ml-0 -mr-1.5 -mb-4;
+      }
+    }
+  }
+  @screen lg {
+    .dashboard-13 {
+      .country-option {
+        ul {
+          @apply !flex-col;
+        }
+      }
+    }
+  }
+  @screen sm {
+    .dashboard-13 {
+      .profitable-country-chart {
+        @apply border-r-0;
+      }
+    }
+  }
+}

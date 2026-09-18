@@ -1,0 +1,187 @@
+@layer components {
+  .shipping-form {
+    .checkout-cart {
+      .basic-wizard {
+        .shipping-wizard {
+          .form-select {
+            @apply border-[rgba(var(--tw-border-color),1)] text-[rgba(var(--chart-text-color),1)] text-sm;
+          }
+
+          .collect-address {
+            .form-check-label {
+              @apply text-[15px] font-medium leading-[normal];
+            }
+          }
+
+          .card-wrapper {
+            @apply cursor-pointer gap-2;
+
+            .collect-address {
+              .card-icon {
+                i {
+                  @apply hidden transition-all duration-[0.3s] ease-[ease-in-out];
+                }
+              }
+            }
+
+            &:hover {
+              .collect-address {
+                .card-icon {
+                  i {
+                    @apply block transition-all duration-[0.3s] ease-[ease-in-out];
+                  }
+                }
+              }
+            }
+          }
+
+          .shipping-address {
+            span {
+              @apply text-[rgba(var(--chart-text-color),1)];
+
+              strong {
+                @apply font-medium text-[rgba(var(--theme-font-color),1)] pr-[5px];
+              }
+            }
+          }
+
+          .order-confirm {
+            @apply text-start bg-[rgba(var(--light-background),1)] gap-3 p-3 rounded-md flex justify-center items-center;
+
+            img {
+              @apply h-[60px];
+            }
+          }
+        }
+        input {
+          &::placeholder {
+            @apply text-[rgba(var(--theme-font-color),0.8)];
+          }
+        }
+        .radio {
+          label {
+            @apply pl-2.5 before:top-[3px] after:top-2;
+          }
+        }
+        .wizard-footer {
+          .btn {
+            &:disabled {
+              @apply border-[rgba(var(--transparent-color),1)];
+            }
+          }
+        }
+      }
+    }
+
+    .shipping-content {
+      .order-confirm {
+        img {
+          @apply h-24;
+        }
+      }
+    }
+
+    .shipping-method {
+      .future-date {
+        @apply text-[rgba(var(--chart-text-color),1)] text-sm mt-1.5;
+      }
+
+      .card-wrapper {
+        &.pay-info {
+          .grid {
+            @apply flex-row;
+          }
+        }
+      }
+    }
+
+    .modal-content {
+      .modal-body {
+        .bootstrap-select {
+          .dropdown-toggle {
+            @apply border-[rgba(var(--tw-border-color),1)];
+          }
+        }
+      }
+    }
+  }
+  .summery-contain {
+    @apply border-b-[rgba(var(--light-widget-border),1)] pb-5 border-b border-solid;
+
+    li {
+      @apply border-b-[rgba(var(--chart-dashed-border),1)] gap-3.5 px-0 py-2 border-b border-dashed last:border-b-[0]  flex justify-start items-center;
+
+      &:first-child {
+        @apply pt-[0];
+      }
+
+      &:last-child {
+        @apply pb-[0];
+      }
+
+      img {
+        @apply object-contain w-[60px] h-[60px];
+      }
+
+      h6 {
+        @apply text-sm font-normal tracking-[1.2px] text-[rgba(var(--badge-light-color),1)] leading-normal;
+
+        span {
+          @apply font-medium pl-1.5;
+        }
+      }
+
+      .price {
+        @apply ml-auto;
+      }
+    }
+  }
+  .summary-total {
+    @apply pt-[5px];
+
+    li {
+      @apply pt-3 flex justify-center items-center last:border-t-[rgba(var(--light-widget-border),1)] last:pt-3 last:border-t last:border-solid;
+
+      h6 {
+        @apply font-normal text-[rgba(var(--theme-font-color),1)];
+      }
+
+      .price {
+        @apply font-normal text-[rgba(var(--theme-font-color),1)] ml-auto;
+      }
+
+      &:nth-child(4) {
+        @apply font-semibold py-[20px];
+        h6 {
+          @apply text-[rgba(var(--theme-default),1)] font-medium;
+        }
+      }
+
+      &:last-child {
+        h6 {
+          @apply text-xl font-medium text-[rgba(var(--body-font-color),1)];
+        }
+      }
+    }
+  }
+  @screen between1399-768 {
+    .summery-contain li img {
+      @apply w-[45px] h-[45px];
+    }
+  }
+  @screen xxl {
+    .summery-contain {
+      li {
+        @apply gap-2.5;
+        h6 {
+          &:not(.price) {
+            @apply max-w-full mx-[0] h-auto overflow-hidden text-ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+          }
+        }
+      }
+    }
+  }
+}

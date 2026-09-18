@@ -1,0 +1,44 @@
+@layer components {
+  .browse {
+    .browse-articles {
+      h6 {
+        @apply leading-[1.6] border-b-[rgba(var(--light-gray),1)] mb-0 pl-[30px] pb-2.5 border-b border-solid;
+        span {
+          svg {
+            @apply align-text-top left-[7px] top-1 w-[16px] h-[16px];
+          }
+        }
+      }
+      span {
+        @apply align-middle;
+        &:nth-child(2) {
+          @apply pl-5;
+        }
+        svg {
+          @apply w-3.5 h-3.5 align-text-top absolute left-0 top-0.5;
+        }
+      } 
+      ul {
+        li { 
+          @apply p-2 rounded-lg hover:bg-[rgba(var(--light),1)];
+          a {
+            @apply text-[rgba(var(--theme-body-font-color),1)] relative flex items-center gap-2.5;
+          }
+        }
+      }
+    }
+  }
+  .badge {
+    &.pull-right {
+      @apply pt-1;
+    }
+  }
+  .articles-icons {
+    svg {
+      @apply min-w-[18px];
+    }
+    .grow {
+      @apply flex-1;
+    }
+  }
+}

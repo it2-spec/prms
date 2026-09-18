@@ -1,0 +1,275 @@
+@layer components {
+  .updateimg {
+    @apply absolute w-[100px] leading-[93px] opacity-0 left-[15px] top-8;
+  }
+  #right-history {
+    @apply h-full fixed w-80 z-[9] bg-[rgba(var(--white),1)] transition-[0.5s] shadow-[0_0_9px_rgba(191,191,191,0.36)] -right-80 top-[81px];
+    h6 {
+      span {
+        a {
+          @apply text-[rgba(var(--theme-body-font-color),1)];
+        }
+      }
+    }
+    &.show {
+      @apply transition-[0.3s] right-0;
+    }
+  }
+  .history-details {
+    > div {
+      @apply py-[calc(8px_+_(20_-_8)_*_((100vw_-_320px)_/_(1920_-_320)))] px-[0] flex justify-center items-center flex-wrap border-t-[rgba(var(--chart-progress-light),1)] gap-2 border-t border-solid;
+      -webkit-box-align: center;
+      -webkit-box-pack: center;
+      i {
+        @apply text-[rgba(var(--badge-light-color),0.8)];
+      }
+    }
+    .flex {
+      @apply border-t-[rgba(var(--chart-progress-light),1)] px-[15px] py-5 border-t border-solid;
+      i {
+        @apply text-[rgba(var(--white),1)] p-[5px] bg-[rgba(var(--warning-color),1)] rounded-[100%];
+      }
+      .grow {
+        h6 {
+          @apply mb-0;
+        }
+      }
+    }
+  }
+  .delete-contact {
+    @apply hidden;
+  }
+  .more-data {
+    @apply animate-[displayTransition_1s];
+  }
+  .contact-editform {
+    @apply animate-[displayTransition_1s] p-[30px];
+    form {
+      .form-control {
+        @apply text-sm text-[rgba(var(--badge-light-color),0.8)];
+      }
+      .bootstrap-select {
+        .dropdown-toggle {
+          @apply w-full border-[rgba(var(--badge-light-color),0.1)] text-[rgba(var(--form-placeholder-color),1)] !m-0 rounded-md;
+          &:focus {
+            outline: unset !important;
+          }
+        }
+        .no-results {
+          @apply text-sm;
+        }
+      }
+    }
+    a {
+      @apply block;
+    }
+    button {
+      @apply mt-[30px];
+    }
+    .select2-container {
+      .select2-selection--single {
+        @apply h-[39px] border-[#ced4da];
+      }
+    }
+    .custom-dropdown {
+      .dropdown-toggle {
+        @apply p-[5px];
+      }
+    }
+  }
+  #deletemodal {
+    .modal-header {
+      @apply border-b-[none];
+      .delete-data {
+        span {
+          svg {
+            @apply align-middle mr-[15px];
+          }
+        }
+      }
+    }
+  }
+  .email-wrap {
+    .email-app-sidebar {
+      .main-menu {
+        &.contact-options {
+          li {
+            &.nav-item {
+              &:nth-child(2) {
+                .btn-mail {
+                  @apply mt-0;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .list-persons {
+    p {
+      font-family: var(--font-roboto), var(--font-serif);
+    }
+
+    .profile-mail {
+      @apply px-0 py-5;
+
+      .flex {
+        .grow {
+          .main-contact-option {
+            @apply flex gap-1.5 flex-wrap mt-2.5;
+
+            li {
+              @apply bg-[rgba(var(--theme-default),1)] px-3 py-1.5 rounded-md;
+
+              a {
+                @apply text-[rgba(var(--white),1)];
+              }
+
+              + li {
+                @apply ml-0;
+              }
+            }
+          }
+        }
+      }
+
+      .flex {
+        @apply pr-[15px];
+        -webkit-box-pack: justify;
+
+        img {
+          @apply h-[100px] cursor-pointer;
+        }
+
+        .grow {
+          h5 {
+            span {
+              + span {
+                @apply pl-1.5;
+              }
+            }
+          }
+        }
+      }
+
+      .common-flex {
+        img {
+          @apply h-[70px];
+        }
+
+        .grow {
+          ul {
+            @apply mt-[5px];
+
+            li {
+              @apply inline-block;
+
+              a {
+                @apply text-[13px];
+              }
+
+              + li {
+                @apply border-l-[rgba(var(--light-color),1)] ml-[5px] pl-2.5 border-l-2 border-solid;
+              }
+            }
+          }
+        }
+      }
+
+      .email-general {
+        @apply pt-5;
+
+        ul {
+          @apply pr-5;
+
+          li {
+            @apply text-[rgba(var(--dark-gray),1)] mb-2.5 pb-2.5 last:mb-0 last:pb-0;
+
+            > span {
+              &:first-child,
+              &:last-child {
+                @apply min-w-[108px];
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .contacts-tabs {
+    .tab-links {
+      @apply border-r-[rgba(var(--light-color),1)] h-full border-r border-solid;
+
+      .tab-link,
+      .show {
+        &.active,
+        > .tab-link {
+          @apply bg-[rgba(var(--theme-default),0.05)] text-[rgba(var(--theme-body-font-color),1)];
+
+          .flex {
+            @apply border-l-[rgba(var(--theme-default),1)] border-l-2 border-solid;
+          }
+        }
+      }
+
+      .tab-link {
+        @apply text-[rgba(var(--theme-body-font-color),1)] block p-0;
+        .flex {
+          @apply border-l-[var(--transparent-color)] border-l-2 border-solid;
+        }
+
+        .flex {
+          img {
+            @apply h-[50px] w-[50px] object-cover;
+          }
+        }
+
+        + .tab-link {
+          @apply border-t-[rgba(var(--light-gray),1)] rounded-none border-t border-solid;
+        }
+      }
+
+      .flex {
+        @apply p-5;
+      }
+    }
+
+    .tab-content {
+      .tab-content-child {
+        @apply animate-[displayTransition_1s];
+      }
+
+      .modal-header {
+        .pull-right {
+          a {
+            @apply grid place-items-center w-[28px] h-[28px] rounded-[3px] bg-[rgba(var(--theme-default),0.1)];
+          }
+
+          i {
+            @apply text-sm text-[rgba(var(--theme-default),1)];
+          }
+        }
+      }
+    }
+  }
+  .dark-contact {
+    .nav {
+      .nav-link {
+        .flex {
+          .grow {
+            h6 {
+              @apply text-[rgba(var(--body-font-color),1)] font-normal mb-0;
+
+              span {
+                + span {
+                  @apply pl-1.5;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

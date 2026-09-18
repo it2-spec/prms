@@ -1,0 +1,63 @@
+@layer components {
+  .grid-showcase {
+    @apply -mb-2.5;
+
+    span,
+    .grid-wrapper {
+      @apply !block text-center bg-[rgba(var(--tw-emphasis-color-rgb),1)] mb-2.5 p-2.5;
+    }
+  }
+  .grid-align {
+    @apply -mb-4;
+    .grid {
+      @apply min-h-[7rem] bg-[rgba(var(--tw-emphasis-color-rgb),1)] mb-4 px-0 py-[15px];
+    }
+  }
+  .grid-vertical {
+    @apply min-h-[150px] text-[rgba(var(--black),1)] bg-[rgba(var(--light-background),1)] p-2.5;
+  }
+  table {
+    &.border {
+      thead {
+        tr {
+          th {
+            p {
+              @apply mb-0;
+            }
+          }
+        }
+      }
+    }
+  }
+  .grid-footer {
+    table {
+      tbody {
+        tr {
+          @apply text-[rgba(var(--dark-color),1)];
+        }
+      }
+    }
+  }
+  .flex-behaviors {
+    div {
+      @apply !bg-[rgba(var(--light-background),1)] mb-2.5 last:mb-[unset];
+    }
+  }
+  .h,
+  .v,
+  .r-c,
+  .no {
+    &-gutter {
+      .grid {
+        [class*="col-"],
+        [class*="col-sm-"],
+        [class*="col-md-"],
+        .col {
+          div {
+            @apply bg-[rgba(var(--tw-emphasis-color-rgb),1)];
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,791 @@
+@layer components {
+  .widget-hover {
+    &:hover {
+      @apply translate-y-[-5px] transition-[0.5s];
+    }
+  }
+  .currency-widget {
+    .currency-icon-widget {
+      @apply w-[35px] h-[35px] flex items-center justify-center shadow-[inset_2.66667px_-2.66667px_2.66667px_rgba(194,128,49,0.1),inset_-2.66667px_2.66667px_2.66667px_rgba(var(--white),0.1)] rounded-[5px];
+      svg {
+        @apply w-4 h-4 fill-[rgba(var(--white),1)];
+      }
+    }
+    .card {
+      @apply mt-3.5 hover:translate-y-[-5px] hover:transition-[0.5s];
+      .card-body {
+        @apply gap-2.5 justify-between p-[15px];
+      }
+    }
+    h6 {
+      @apply flex items-center gap-[5px] mb-0;
+    }
+    .flex {
+      @apply gap-2.5 items-center;
+    }
+    h5 {
+      @apply flex items-center justify-center;
+    }
+    span {
+      @apply flex items-center justify-center;
+      svg {
+        @apply w-4 h-4 align-middle;
+      }
+    }
+    div[class*="bg-light-"] {
+      @apply text-[rgba(var(--theme-body-font-color),1)] w-[115px] p-[15px] rounded-[10px];
+    }
+    &.warning {
+      .currency-icon-widget {
+        @apply bg-[linear-gradient(_to_right,rgba(var(--warning-color),1)_80%,rgba(var(--warning-color),0.2)_)];
+      }
+    }
+    &.primary {
+      .currency-icon-widget {
+        @apply bg-[linear-gradient(_to_right,rgba(var(--theme-default),1)_80%,rgba(var(--primary-color),0.2)_)];
+      }
+    }
+    &.success {
+      .currency-icon-widget {
+        @apply bg-[linear-gradient(_to_right,rgba(var(--success-color),1)_80%,rgba(var(--success-color),0.2)_)];
+      }
+    }
+  }
+  .currency-chart-wrap {
+    @apply -ml-5 -mr-2.5 -mt-7 -mb-5;
+    .apexcharts-canvas {
+      .apexcharts-tooltip-text-y-label {
+        @apply hidden;
+      }
+    }
+  }
+  .transaction-card {
+    .header-top {
+      @apply gap-2.5;
+    }
+    .active {
+      @apply bg-[rgba(var(--white),1)] border-[none];
+      button {
+        @apply text-[rgba(var(--theme-default),1)] font-medium;
+      }
+    }
+    .tab-links {
+      .tab-link {
+        @apply p-0;
+      }
+    }
+  }
+  .crypto-main-card {
+    @apply bg-[linear-gradient(to_bottom_right,#5f3deb,#ad79ff)] text-[rgba(var(--white),1)];
+    .btn {
+      @apply px-5 py-2;
+    }
+    .deposit-wrap {
+      > div {
+        @apply w-[65%];
+        h5 {
+          @apply text-[rgba(var(--white),1)] leading-[1.2];
+        }
+        p {
+          @apply text-[rgba(var(--white),1)] mb-4;
+        }
+      }
+      img {
+        @apply absolute w-[48%] animate-[bounce-effect_5s_infinite_ease-in] right-2.5 bottom-2.5;
+        [dir="rtl"] & {
+          @apply -scale-x-100 left-2.5 right-[unset];
+        }
+      }
+    }
+  }
+  .portfolio-card {
+    .dropdown-toggle {
+      @apply w-20;
+    }
+  }
+  .btn-white {
+    @apply text-[rgba(var(--theme-default),1)] bg-[rgba(var(--white),1)];
+    &:hover,
+    &:active {
+      @apply text-[rgba(var(--theme-default),1)] bg-[rgba(var(--white),1)] border-[rgba(var(--white),1)];
+    }
+  }
+  .radial-progress-card {
+    @apply flex items-center justify-between gap-1.5;
+    p {
+      @apply line-clamp-[1];
+    }
+    h6 {
+      @apply line-clamp-[1];
+    }
+    .sale-details {
+      @apply mx-0 my-2.5;
+      svg {
+        @apply w-[15px] h-[15px] align-middle;
+      }
+    }
+    .radial-chart-wrap {
+      @apply w-[110px] mr-[-25px];
+      [dir="rtl"] & {
+        @apply ml-[-25px] mr-[unset];
+      }
+      .apexcharts-canvas {
+        .apexcharts-datalabel-label {
+          @apply hidden;
+        }
+      }
+    }
+  }
+  .transaction-table {
+    &.recent-table {
+      table {
+        thead,
+        tbody {
+          tr {
+            th,
+            td {
+              &:first-child {
+                @apply pl-5;
+              }
+              &:last-child {
+                @apply pr-5;
+              }
+            }
+          }
+        }
+        tr {
+          th,
+          td {
+            @apply min-w-[auto];
+          }
+          th,
+          td {
+            &:first-child {
+              @apply min-w-[unset];
+            }
+            &:last-child {
+              @apply text-right min-w-[60px];
+            }
+          }
+          &:last-child {
+            td {
+              @apply pb-0 border-b-[0];
+            }
+          }
+        }
+        tr,
+        td {
+          @apply border-b-[rgba(var(--chart-progress-light),1)] border-b border-dashed;
+          &:last-child {
+            @apply border-b-[0];
+          }
+        }
+      }
+    }
+  }
+  .custom-tab {
+    @apply p-1 rounded-[5px] bg-[rgba(var(--light2),1)];
+    &.nav-tabs {
+      @apply border-[none];
+      .nav-link {
+        @apply text-[rgba(var(--chart-text-color),1)] px-3 py-1.5 border-[none];
+        &.active {
+          @apply text-[rgba(var(--theme-default),1)];
+        }
+      }
+    }
+  }
+  .market-chart-container {
+    @apply ml-[-15px] mr-0 -my-6;
+    [dir="rtl"] & {
+      @apply mr-[-15px] ml-0 -my-6;
+    }
+  }
+  .market-card {
+    .balance-card {
+      @apply p-2.5;
+    }
+  }
+  .currency-icon {
+    @apply w-[34px] h-[34px] bg-[rgba(var(--light2),1)] rounded flex items-center justify-center;
+
+    &.warning {
+      svg {
+        @apply fill-[rgba(var(--warning-color),1)];
+      }
+    }
+
+    &.success {
+      svg {
+        @apply fill-[rgba(var(--success-color),1)];
+      }
+    }
+
+    &.primary {
+      svg {
+        @apply fill-[rgba(var(--primary-color),1)];
+      }
+    }
+
+    &.secondary {
+      svg {
+        @apply fill-[rgba(var(--secondary-color),1)];
+      }
+    }
+
+    &.dark-green {
+      svg {
+        @apply fill-[#1ba27a];
+      }
+    }
+
+    &.light-blue {
+      svg {
+        @apply fill-[#038de7];
+      }
+    }
+  }
+  .recent-table {
+    tr {
+      &:hover {
+        td {
+          &:first-child {
+            h6 {
+              @apply text-[rgba(var(--theme-default),1)];
+            }
+          }
+        }
+
+        .border-icon {
+          .social-circle {
+            @apply transition-[0.5s] scale-[1.02];
+          }
+        }
+
+        .currency-icon {
+          svg {
+            animation: tada 1.5s ease infinite;
+          }
+        }
+
+        .badge-light-primary {
+          @apply bg-[rgba(var(--theme-default),1)] text-[rgba(var(--white),1)];
+        }
+      }
+    }
+  }
+  .currency-table {
+    &.recent-table {
+      table {
+        .change-currency {
+          svg {
+            @apply w-4 h-4 align-sub;
+          }
+        }
+
+        thead,
+        tbody {
+          tr {
+            th,
+            td {
+              @apply !min-w-[auto] text-[rgba(var(--body-font-color),1)];
+
+              &:first-child {
+                @apply pl-5;
+              }
+
+              &:last-child {
+                @apply pr-5;
+              }
+
+              &:nth-child(2),
+              &:nth-child(3) {
+                @apply min-w-[76px];
+              }
+
+              &:nth-child(4) {
+                @apply min-w-[98px];
+              }
+
+              &:nth-child(5) {
+                @apply min-w-[100px];
+              }
+            }
+          }
+
+          thead {
+            tr {
+              th {
+                @apply text-[rgba(var(--badge-light-color),1)];
+              }
+            }
+          }
+        }
+      }
+
+      &.average-sale {
+        &.overflow-x-auto {
+          thead,
+          tbody {
+            tr {
+              th,
+              td {
+                @apply min-w-[auto] text-[rgba(var(--body-font-color),1)];
+
+                &:first-child {
+                  @apply pl-5;
+                }
+
+                &:last-child {
+                  @apply pr-5;
+                }
+
+                a {
+                  @apply text-[rgba(var(--body-font-color),1)];
+                }
+
+                .currency-icon {
+                  svg {
+                    @apply fill-[rgba(var(--white),1)];
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      &.performer-table {
+        thead,
+        tbody {
+          tr {
+            th,
+            td {
+              @apply !min-w-[auto] text-[rgba(var(--body-font-color),1)];
+
+              &:first-child {
+                @apply pl-5;
+              }
+
+              &:last-child {
+                @apply pr-5;
+              }
+            }
+
+            a {
+              @apply text-[rgba(var(--body-font-color),1)];
+            }
+
+            svg {
+              @apply fill-[rgba(var(--white),1)];
+            }
+          }
+        }
+      }
+    }
+  }
+  select {
+    &.crypto-select {
+      @apply absolute -translate-y-2/4 text-xs w-[62px] bg-[right_0.25rem_center] font-medium bg-[8px] p-2 border-[none] right-[7px] top-2/4;
+      [dir="rtl"] & {
+        @apply left-[7px] right-[unset];
+      }
+      &.warning {
+        @apply !bg-[rgba(var(--warning-color),0.1)] !text-[rgba(var(--warning-color),1)];
+      }
+      &.primary {
+        @apply !bg-[rgba(var(--theme-default),0.1)] !text-[rgba(var(--theme-default),1)];
+      }
+    }
+  }
+  .crypto-form {
+    div {
+      select {
+        &.form-select {
+          border: unset;
+        }
+      }
+    }
+    input {
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        @apply m-0;
+        -webkit-appearance: none;
+      }
+      &[type="number"] {
+        -moz-appearance: textfield;
+      }
+    }
+  }
+  .balance-box {
+    @apply text-center !bg-[url(../images/dashboard-4/bg-balance.png)] !bg-right !bg-cover;
+    .balance-img {
+      @apply inline-block border-[rgba(var(--chart-border),1)] border-l-[rgba(var(--success-color),1)] border-b-[rgba(var(--success-color),1)] relative mb-[15px] p-[5px] rounded-[100%] border-2 border-solid;
+      img {
+        @apply bg-[rgba(var(--balance-profile-bg),1)] rounded-[100%];
+      }
+      .edit-icon {
+        @apply w-[26px] h-[26px] absolute flex items-center justify-center border-[rgba(var(--white),1)] bg-[#dfdff4] rounded-[100%] border-2 border-solid right-0 bottom-0;
+        svg {
+          @apply w-[11px] h-[11px] fill-[rgba(var(--primary-color),1)];
+        }
+      }
+    }
+  }
+  .balance-profile {
+    ul {
+      @apply flex justify-center gap-[50px] mt-4;
+      li {
+        @apply relative;
+        + li {
+          &::before {
+            @apply absolute content-[""] left-[-25px] h-10 -translate-y-2/4 border border-[rgba(var(--recent-dashed-border),1)] border-dashed top-2/4;
+            [dir="rtl"] & {
+              @apply right-[-25px] left-[unset];
+            }
+          }
+        }
+      }
+    }
+  }
+  .activity-card {
+    .appointment-table {
+      tr {
+        td {
+          &:nth-child(2) {
+            @apply min-w-[99px];
+          }
+        }
+      }
+    }
+  }
+  .balance-item {
+    @apply flex gap-2.5;
+    .balance-icon-wrap {
+      @apply w-10 min-w-[40px] h-10 rounded-[10px] flex items-center justify-center;
+      .balance-icon {
+        @apply rounded-[100%] h-[16px] w-[16px] flex items-center justify-center;
+        svg {
+          @apply text-[rgba(var(--white),1)] h-[14px] w-[14px];
+        }
+      }
+    }
+    .badge {
+      @apply px-2.5 py-2;
+    }
+    &.danger {
+      .balance-icon-wrap {
+        @apply bg-[rgba(var(--danger-color),0.1)];
+        .balance-icon {
+          @apply bg-[rgba(var(--danger-color),1)];
+        }
+      }
+    }
+    &.success {
+      .balance-icon-wrap {
+        @apply bg-[rgba(var(--success-color),0.1)];
+        .balance-icon {
+          @apply bg-[rgba(var(--success-color),1)];
+        }
+      }
+    }
+  }
+  .portfolio-chart-container {
+    @apply -mt-14;
+  }
+  .portfolio-table {
+    .status {
+      @apply w-1.5 h-1.5 inline-block rounded-[100%];
+    }
+    table {
+      tr,
+      td {
+        @apply border-b-[rgba(var(--chart-progress-light),1)] border-b border-dashed;
+        &:last-child {
+          @apply border-b-[0];
+        }
+        h6 {
+          @apply leading-[1.2];
+        }
+      }
+      tr {
+        &:last-child {
+          td {
+            @apply pb-0 border-[unset];
+          }
+        }
+      }
+    }
+  }
+  @screen xl1660 {
+    .currency-widget .card .card-body {
+      @apply flex-wrap;
+    }
+    .crypto-main-card .btn {
+      @apply px-[15px] py-2;
+    }
+    .crypto-main-card .deposit-wrap > div {
+      @apply w-[90%];
+    }
+    .crypto-main-card .deposit-wrap > div h5 {
+      @apply line-clamp-[2];
+    }
+    .balance-profile ul {
+      @apply gap-[25px];
+    }
+    .balance-profile ul li + li::before {
+      @apply -left-4;
+    }
+    .balance-item .balance-icon-wrap .balance-icon svg {
+      @apply h-[12px] w-[12px];
+      vertical-align: 2px;
+    }
+    .balance-item .balance-icon-wrap .balance-icon {
+      @apply h-[14px] w-[14px];
+    }
+    .balance-item .balance-icon-wrap {
+      @apply w-[25px] min-w-[25px] h-[25px] rounded-lg;
+    }
+    .currency-table.recent-table.average-sale.overflow-x-auto div.dt-container .dt-layout-row:last-child {
+      @apply flex-col;
+    }
+    .currency-table.recent-table.performer-table.overflow-x-auto div.dt-container .dt-layout-row:last-child {
+      @apply flex-col;
+    }
+  }
+  @screen sm420 {
+    .transaction-card {
+      .card-header {
+        .header-top {
+          @apply flex-wrap;
+        }
+      }
+    }
+  }
+  @screen sm {
+    .transaction-card {
+      .card-header {
+        .header-top {
+          .tab-links {
+            @apply !w-[auto] !flex-row;
+          }
+        }
+      }
+    }
+    .currency-widget .card .card-body {
+      flex-wrap: unset;
+    }
+    .currency-widget div[class*="bg-light-"] {
+      @apply w-6/12;
+    }
+    .currency-chart-wrap {
+      @apply w-[100%];
+    }
+    .market-chart-container {
+      @apply mb-0;
+    }
+    .market-card .custom-tab {
+      @apply hidden;
+    }
+    .activity-card .appointment-table {
+      @apply h-[unset];
+    }
+  }
+  @screen between1660-1200 {
+    .currency-widget div[class*="bg-light-"] {
+      @apply hidden;
+    }
+  }
+  @screen xxl {
+    .currency-widget.height-equal {
+      @apply min-h-[unset];
+    }
+    .crypto-main-card .deposit-wrap > div {
+      @apply w-9/12;
+    }
+    .activity-card .appointment-table {
+      @apply h-[180px];
+    }
+    .portfolio-chart-container {
+      @apply -mt-5;
+    }
+  }
+
+  @screen xl {
+    .crypto-main-card .deposit-wrap img {
+      @apply w-[27%];
+    }
+    .currency-widget div[class*="bg-light-"] {
+      @apply w-full;
+    }
+    .crypto-main-card .card-body {
+      @apply p-5;
+    }
+    .crypto-main-card .deposit-wrap > div {
+      @apply w-[95%];
+    }
+    .radial-progress-card.card-body {
+      @apply px-5 py-[30px];
+    }
+    .currency-table.recent-table.average-sale.overflow-x-auto div.dt-container .dt-layout-row .dt-layout-cell .dt-search {
+      @apply relative mb-5 left-5 top-1 w-fit;
+    }
+    .currency-table {
+      &.recent-table {
+        thead,
+        tbody {
+          tr {
+            th,
+            td {
+              &:last-child {
+                @apply !min-w-[147px];
+              }
+            }
+          }
+        }
+      }
+    }
+    .currency-table.recent-table.performer-table.overflow-x-auto div.dt-container .dt-layout-row .dt-layout-cell .dt-search {
+      @apply relative mb-5 left-5 top-1 w-fit;
+    }
+    .currency-table {
+      &.recent-table {
+        &.performer-table {
+          thead,
+          tbody {
+            tr {
+              th,
+              td {
+                &:nth-child(2) {
+                  @apply !min-w-[128px];
+                }
+                &:last-child {
+                  @apply !min-w-[108px];
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .currency-table {
+      &.recent-table {
+        &.performer-table {
+          &.overflow-x-auto {
+            thead,
+            tbody {
+              tr {
+                &:nth-child(2) {
+                  @apply min-w-[137px];
+                }
+                &:nth-child(5) {
+                  @apply min-w-[98px];
+                }
+                &:last-child {
+                  @apply min-w-[126px];
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen between1580-1200 {
+    .currency-table {
+      &.recent-table {
+        &.average-sale {
+          thead,
+          tbody {
+            tr {
+              th,
+              td {
+                &:nth-child(4) {
+                  @apply hidden;
+                }
+              }
+            }
+          }
+        }
+        &.performer-table {
+          thead,
+          tbody {
+            tr {
+              th,
+              td {
+                &:nth-child(4),
+                &:last-child {
+                  @apply hidden;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @screen md {
+    .crypto-main-card .deposit-wrap > div h5 {
+      -webkit-line-clamp: 1;
+    }
+    .currency-table {
+      &.recent-table {
+        &.average-sale {
+          &.overflow-x-auto {
+            thead,
+            tbody {
+              tr {
+                th,
+                td {
+                  &:nth-child(2),
+                  &:nth-child(3),
+                  &:nth-child(4) {
+                    @apply min-w-[85px];
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen between1660-1400 {
+    .crypto-main-card .deposit-wrap img {
+      @apply w-[44%];
+    }
+    .dashboard-4 {
+      .appointment-table {
+        &.customer-table {
+          table {
+            tr {
+              &:last-child,
+              &:nth-child(5),
+              &:nth-child(4) {
+                @apply hidden;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @screen between1399-1200 {
+    .crypto-main-card .deposit-wrap img {
+      @apply w-[50%];
+    }
+  }
+
+  @screen xl1800 {
+    .radial-progress-card .radial-chart-wrap {
+      @apply -mr-3;
+    }
+  }
+
+  @screen between1366-1200 {
+    .currency-table.recent-table.average-sale.overflow-x-auto div.dt-container .dt-layout-row .dt-layout-cell .dt-search {
+      @apply hidden;
+    }
+  }
+}
