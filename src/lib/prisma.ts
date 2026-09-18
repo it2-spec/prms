@@ -22,8 +22,9 @@ function getPool(): Pool {
     globalForPrisma.pgPool = new Pool({
       connectionString: sanitizedUrl,
       max: isProduction ? 1 : 10,
-      idleTimeoutMillis: 10000,
-      connectionTimeoutMillis: 10000,
+      idleTimeoutMillis: 30000,
+      connectionTimeoutMillis: 8000,
+      keepAlive: true,
       ssl: isProduction || isSupabase ? { rejectUnauthorized: false } : undefined,
     });
     globalForPrisma.pgPool.on("error", (err) => {
