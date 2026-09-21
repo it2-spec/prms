@@ -33,6 +33,7 @@ type BalanceData = {
   item: {
     id: string;
     code: string;
+    paintingCode?: string | null;
     name: string;
     unit: string | null;
     packageUnit: string | null;
@@ -617,9 +618,15 @@ export default function OutgoingPageClient({
                     {detectedCode}
                   </div>
                   {itemData ? (
-                    <div className="text-xs text-emerald-700 font-medium mt-0.5">
-                      {itemData.item.name} &bull; Sisa di {warehouseName}:{" "}
-                      <strong>{itemData.balancePkgQty} {itemData.item.packageUnit || "pail"}</strong>
+                    <div className="text-xs text-emerald-700 font-medium mt-0.5 flex flex-wrap items-center gap-1.5">
+                      <span>{itemData.item.name}</span>
+                      {itemData.item.paintingCode && (
+                        <span className="text-teal-800 bg-teal-100/90 border border-teal-300 px-1.5 py-0.5 rounded font-mono text-[10px] font-bold">
+                          Painting: {itemData.item.paintingCode}
+                        </span>
+                      )}
+                      <span>&bull; Sisa di {warehouseName}:{" "}
+                      <strong>{itemData.balancePkgQty} {itemData.item.packageUnit || "pail"}</strong></span>
                     </div>
                   ) : (
                     <div className="text-[11px] text-emerald-600">Sedang memuat data stok part...</div>
@@ -699,9 +706,16 @@ export default function OutgoingPageClient({
           <div className="space-y-4">
             <div className="flex items-start justify-between gap-4 pb-3 border-b border-slate-200">
               <div>
-                <span className="px-2.5 py-1 rounded bg-blue-100 text-blue-800 font-mono text-xs font-bold">
-                  {itemData.item.code}
-                </span>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="px-2.5 py-1 rounded bg-blue-100 text-blue-800 font-mono text-xs font-bold">
+                    {itemData.item.code}
+                  </span>
+                  {itemData.item.paintingCode && (
+                    <span className="px-2.5 py-1 rounded bg-teal-100 text-teal-800 font-mono text-xs font-bold border border-teal-200">
+                      Painting: {itemData.item.paintingCode}
+                    </span>
+                  )}
+                </div>
                 <h3 className="text-base font-bold text-slate-900 mt-1.5">{itemData.item.name}</h3>
                 <div className="text-xs text-slate-500 mt-0.5">
                   1 {itemData.item.packageUnit || "Kemasan"} = {itemData.item.packageSize} {itemData.item.unit || "kg"}

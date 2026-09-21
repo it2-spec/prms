@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     const body = await req.json();
-    const { code, name, unit, packageUnit, packageSize, lastUnitPrice, description } = body;
+    const { code, paintingCode, name, unit, packageUnit, packageSize, lastUnitPrice, description } = body;
 
     if (!code || !name) {
       return NextResponse.json({ error: "Kode & Nama Item wajib diisi" }, { status: 400 });
@@ -42,6 +42,7 @@ export async function POST(req: NextRequest) {
     const item = await prisma.item.create({
       data: {
         code: code.trim(),
+        paintingCode: paintingCode?.trim() || null,
         name: name.trim(),
         unit: unit?.trim() || "kg",
         packageUnit: packageUnit?.trim() || null,
@@ -78,7 +79,7 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     const body = await req.json();
-    const { id, code, name, unit, packageUnit, packageSize, lastUnitPrice, description, isActive } = body;
+    const { id, code, paintingCode, name, unit, packageUnit, packageSize, lastUnitPrice, description, isActive } = body;
 
     if (!id || !code || !name) {
       return NextResponse.json({ error: "Data item tidak lengkap" }, { status: 400 });
@@ -98,6 +99,7 @@ export async function PUT(req: NextRequest) {
       where: { id },
       data: {
         code: code.trim(),
+        paintingCode: paintingCode !== undefined ? (paintingCode?.trim() || null) : undefined,
         name: name.trim(),
         unit: unit?.trim() || "kg",
         packageUnit: packageUnit?.trim() || null,

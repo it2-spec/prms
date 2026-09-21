@@ -18,11 +18,18 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "itemCode wajib diisi" }, { status: 400 });
   }
 
-  const item = await prisma.item.findUnique({
-    where: { code: itemCode },
+  const item = await prisma.item.findFirst({
+    where: {
+      OR: [
+        { code: { equals: itemCode, mode: "insensitive" } },
+        { paintingCode: { equals: itemCode, mode: "insensitive" } },
+      ],
+      isActive: true,
+    },
     select: {
       id: true,
       code: true,
+      paintingCode: true,
       name: true,
       unit: true,
       packageUnit: true,
@@ -31,7 +38,7 @@ export async function GET(request: Request) {
   });
 
   if (!item) {
-    return NextResponse.json({ error: `Item dengan kode "${itemCode}" tidak ditemukan` }, { status: 404 });
+    return NextResponse.json({ error: `Item dengan kode/painting "${itemCode}" tidak ditemukan` }, { status: 404 });
   }
 
   const pkgSize = Number(item.packageSize ?? 1) || 1;
@@ -148,6 +155,7 @@ export async function GET(request: Request) {
     item: {
       id: item.id,
       code: item.code,
+      paintingCode: item.paintingCode,
       name: item.name,
       unit: item.unit,
       packageUnit: item.packageUnit,

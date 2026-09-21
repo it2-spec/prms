@@ -32,6 +32,7 @@ import { useRouter } from "next/navigation";
 type ItemData = {
   id: string;
   code: string;
+  paintingCode?: string | null;
   name: string;
   unit: string | null;
   packageUnit: string | null;
@@ -86,6 +87,7 @@ export default function ItemsPage() {
   const [editingItem, setEditingItem] = useState<ItemData | null>(null);
   const [formData, setFormData] = useState({
     code: "",
+    paintingCode: "",
     name: "",
     unit: "kg",
     packageUnit: "Pail",
@@ -148,10 +150,10 @@ export default function ItemsPage() {
     if (!file) return;
 
     setCodeFile(file);
-    setCodePreviewLoading(true);
+    setCodePreviewData(null);
     setCodeError(null);
     setCodeSuccessMsg(null);
-    setCodePreviewData(null);
+    setCodePreviewLoading(true);
 
     try {
       const fd = new FormData();
@@ -162,22 +164,24 @@ export default function ItemsPage() {
         method: "POST",
         body: fd,
       });
+
       const data = await res.json();
-      if (!res.ok || data.error) {
-        throw new Error(data.error || "Gagal membaca file Excel");
-      }
+      if (!res.ok) throw new Error(data.error || "Gagal membaca file Excel");
+
       setCodePreviewData(data);
     } catch (err: any) {
-      setCodeError(err.message || "Gagal memproses file");
+      setCodeError(err.message || "Gagal memproses pratinjau file Excel");
     } finally {
       setCodePreviewLoading(false);
     }
   }
 
-  async function handleCommitCodeUpdates() {
+  async function handleCommitCodeUpdate() {
     if (!codeFile) return;
+
     setCodeCommitLoading(true);
     setCodeError(null);
+
     try {
       const fd = new FormData();
       fd.append("file", codeFile);
@@ -187,16 +191,16 @@ export default function ItemsPage() {
         method: "POST",
         body: fd,
       });
+
       const data = await res.json();
-      if (!res.ok || data.error) {
-        throw new Error(data.error || "Gagal memperbarui kode item");
-      }
-      setCodeSuccessMsg(data.message || "Berhasil memperbarui kode item!");
+      if (!res.ok) throw new Error(data.error || "Gagal memperbarui kode item");
+
+      setCodeSuccessMsg(data.message || `Berhasil memperbarui ${data.updatedCount} kode item!`);
       setCodePreviewData(null);
       setCodeFile(null);
       loadItems();
     } catch (err: any) {
-      setCodeError(err.message || "Gagal menyimpan perubahan kode");
+      setCodeError(err.message || "Gagal menyimpan pembaruan kode item");
     } finally {
       setCodeCommitLoading(false);
     }
@@ -223,6 +227,7 @@ export default function ItemsPage() {
     setEditingItem(null);
     setFormData({
       code: "",
+      paintingCode: "",
       name: "",
       unit: "kg",
       packageUnit: "Pail",
@@ -238,6 +243,7 @@ export default function ItemsPage() {
     setEditingItem(item);
     setFormData({
       code: item.code,
+      paintingCode: item.paintingCode || "",
       name: item.name,
       unit: item.unit || "kg",
       packageUnit: item.packageUnit || "Pail",
@@ -366,6 +372,7 @@ export default function ItemsPage() {
   const filteredItems = items.filter(
     (i) =>
       i.code.toLowerCase().includes(search.toLowerCase()) ||
+      (i.paintingCode && i.paintingCode.toLowerCase().includes(search.toLowerCase())) ||
       i.name.toLowerCase().includes(search.toLowerCase()) ||
       (i.unit && i.unit.toLowerCase().includes(search.toLowerCase()))
   );
@@ -455,7 +462,8 @@ export default function ItemsPage() {
           <table className="w-full text-left text-sm">
             <thead className="bg-slate-50 text-xs text-slate-500 uppercase tracking-wider font-semibold">
               <tr>
-                <th className="px-4 py-3 whitespace-nowrap">Kode</th>
+                <th className="px-4 py-3 whitespace-nowrap">Kode Purchasing</th>
+                <th className="px-4 py-3 whitespace-nowrap">Kode Painting</th>
                 <th className="px-4 py-3 whitespace-nowrap">Descriptions</th>
                 <th className="px-4 py-3 whitespace-nowrap text-center">Package Unit</th>
                 <th className="px-4 py-3 whitespace-nowrap text-center">Package Size</th>
@@ -469,13 +477,13 @@ export default function ItemsPage() {
             <tbody className="divide-y divide-slate-100">
               {loading ? (
                 <tr>
-                  <td colSpan={9} className="px-4 py-8 text-center text-slate-400">
+                  <td colSpan={10} className="px-4 py-8 text-center text-slate-400">
                     Memuat data item...
                   </td>
                 </tr>
               ) : filteredItems.length === 0 ? (
                 <tr>
-                  <td colSpan={9} className="px-4 py-8 text-center text-slate-400">
+                  <td colSpan={10} className="px-4 py-8 text-center text-slate-400">
                     Tidak ada item ditemukan.
                   </td>
                 </tr>
@@ -487,6 +495,15 @@ export default function ItemsPage() {
                     <tr key={item.id} className="hover:bg-slate-50/50">
                       <td className="px-4 py-3 font-mono font-semibold text-slate-900 whitespace-nowrap">
                         {item.code}
+                      </td>
+                      <td className="px-4 py-3 font-mono text-xs whitespace-nowrap">
+                        {item.paintingCode ? (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded bg-teal-50 text-teal-700 font-semibold border border-teal-200">
+                            {item.paintingCode}
+                          </span>
+                        ) : (
+                          <span className="text-slate-300">—</span>
+                        )}
                       </td>
                       <td className="px-4 py-3 font-medium text-slate-800">
                         {item.name}
@@ -603,7 +620,9 @@ export default function ItemsPage() {
             <form onSubmit={handleSubmit} className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Kode Item *</label>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Kode Item (Purchasing) *
+                  </label>
                   <input
                     type="text"
                     required
@@ -614,16 +633,30 @@ export default function ItemsPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Nama Item (Descriptions) *</label>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center justify-between">
+                    <span>Kode Item (Painting / Gudang)</span>
+                    <span className="text-[10px] text-teal-600 font-normal">Optional</span>
+                  </label>
                   <input
                     type="text"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="Contoh: Washing Thinner PP"
-                    className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    value={formData.paintingCode}
+                    onChange={(e) => setFormData({ ...formData, paintingCode: e.target.value })}
+                    placeholder="Contoh: PTG-001"
+                    className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500/20"
                   />
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Nama Item (Descriptions) *</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  placeholder="Contoh: Washing Thinner PP"
+                  className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20"
+                />
               </div>
 
               {/* Kemasan Info */}
@@ -995,7 +1028,7 @@ export default function ItemsPage() {
 
               {codePreviewData && codePreviewData.summary.validCount > 0 && (
                 <Button
-                  onClick={handleCommitCodeUpdates}
+                  onClick={handleCommitCodeUpdate}
                   disabled={codeCommitLoading}
                   variant="primary"
                   className="gap-2 text-xs font-bold"

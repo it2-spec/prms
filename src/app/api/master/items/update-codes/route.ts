@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
 
     // Cari header row
     let headerRowIdx = -1;
-    let colMap: { id?: number; currentCode?: number; newCode?: number; name?: number } = {};
+    let colMap: { id?: number; currentCode?: number; paintingCode?: number; newCode?: number; name?: number } = {};
 
     for (let r = 1; r <= 15; r++) {
       const row = worksheet.getRow(r);
@@ -40,6 +40,7 @@ export async function POST(req: NextRequest) {
         const val = String(row.getCell(c).value || "").trim().toUpperCase();
         if (val.includes("ID ITEM") || val === "ID") colMap.id = c;
         if (val.includes("KODE SEKARANG") || val.includes("KODE LAMA")) colMap.currentCode = c;
+        if (val.includes("KODE PAINTING") || val.includes("PAINTING") || val.includes("KODE GUDANG")) colMap.paintingCode = c;
         if (val.includes("KODE BARU") || val.includes("KODE STANDAR") || val === "NEW CODE") colMap.newCode = c;
         if (val.includes("NAMA BARANG") || val.includes("DESCRIPTION")) colMap.name = c;
       }
@@ -50,11 +51,11 @@ export async function POST(req: NextRequest) {
     }
 
     // Default fallback columns jika header tidak terdeteksi spesifik:
-    // Sesuai susunan file export: col 1 = ID, col 2 = currentCode, col 3 = newCode, col 4 = name
     if (!colMap.id) colMap.id = 1;
     if (!colMap.currentCode) colMap.currentCode = 2;
-    if (!colMap.newCode) colMap.newCode = 3;
-    if (!colMap.name) colMap.name = 4;
+    if (!colMap.paintingCode) colMap.paintingCode = 3;
+    if (!colMap.newCode) colMap.newCode = 4;
+    if (!colMap.name) colMap.name = 5;
     if (headerRowIdx === -1) headerRowIdx = 1;
 
     // Load semua item yang ada di DB untuk verifikasi
@@ -68,6 +69,7 @@ export async function POST(req: NextRequest) {
       itemName: string;
       oldCode: string;
       newCode: string;
+      paintingCode?: string;
       status: "VALID" | "DUPLICATE" | "UNCHANGED" | "NOT_FOUND";
       message?: string;
     }[] = [];
@@ -145,11 +147,14 @@ export async function POST(req: NextRequest) {
 
       usedNewCodes.add(rawNewCode);
 
+      const rawPaintingCode = colMap.paintingCode ? String(row.getCell(colMap.paintingCode).value || "").trim() : undefined;
+
       parsedUpdates.push({
         itemId: matchedItem.id,
         itemName: matchedItem.name,
         oldCode: matchedItem.code,
         newCode: rawNewCode,
+        paintingCode: rawPaintingCode,
         status: "VALID",
         message: "Siap diupdate",
       });
@@ -184,7 +189,10 @@ export async function POST(req: NextRequest) {
       for (const update of validUpdates) {
         await tx.item.update({
           where: { id: update.itemId },
-          data: { code: update.newCode },
+          data: {
+            code: update.newCode,
+            ...(update.paintingCode !== undefined ? { paintingCode: update.paintingCode || null } : {}),
+          },
         });
       }
     });

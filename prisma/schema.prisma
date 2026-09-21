@@ -121,6 +121,7 @@ model Warehouse {
 model Item {
   id            String   @id @default(cuid())
   code          String   @unique
+  paintingCode  String?  // Kode part di departemen painting (gudang / label lapangan)
   name          String
   unit          String?  // Base unit e.g. "kg", "ltr", "Pcs"
   packageUnit   String?  // Packaging unit e.g. "Pail", "Can", "Drum"
@@ -137,6 +138,8 @@ model Item {
   items              SupplierItemQuality[]
   priceHistories     ItemPriceHistory[]
   outgoingDetails    StockOutgoingDetail[]
+
+  @@index([paintingCode])
 }
 
 // Relasi Supplier <-> Item (opsional untuk validasi harga supplier)

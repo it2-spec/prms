@@ -17,6 +17,7 @@ export async function GET(req: NextRequest) {
       select: {
         id: true,
         code: true,
+        paintingCode: true,
         name: true,
         unit: true,
         packageUnit: true,
@@ -38,8 +39,9 @@ export async function GET(req: NextRequest) {
     // Define columns
     worksheet.columns = [
       { header: "ID Item (Sistem - Jangan Diubah)", key: "id", width: 32 },
-      { header: "Kode Sekarang", key: "currentCode", width: 22 },
-      { header: "Kode Baru (Isi Kode Standar di Sini)", key: "newCode", width: 32 },
+      { header: "Kode Sekarang", key: "currentCode", width: 20 },
+      { header: "Kode Painting (Gudang)", key: "paintingCode", width: 24 },
+      { header: "Kode Baru (Isi Kode Standar di Sini)", key: "newCode", width: 30 },
       { header: "Nama Barang (Tetap Dipertahankan dari PO)", key: "name", width: 45 },
       { header: "Satuan Dasar", key: "unit", width: 14 },
       { header: "Kemasan", key: "packageUnit", width: 14 },
@@ -56,11 +58,17 @@ export async function GET(req: NextRequest) {
       cell.alignment = { vertical: "middle", horizontal: "center" };
       
       // Beri warna khusus pada kolom "Kode Baru" agar user langsung tahu di mana harus mengisi
-      if (colNumber === 3) {
+      if (colNumber === 4) {
         cell.fill = {
           type: "pattern",
           pattern: "solid",
           fgColor: { argb: "FF1E40AF" }, // Biru pekat
+        };
+      } else if (colNumber === 3) {
+        cell.fill = {
+          type: "pattern",
+          pattern: "solid",
+          fgColor: { argb: "FF0D9488" }, // Teal untuk Kode Painting
         };
       } else if (colNumber === 1) {
         cell.fill = {
@@ -82,6 +90,7 @@ export async function GET(req: NextRequest) {
       const row = worksheet.addRow({
         id: item.id,
         currentCode: item.code,
+        paintingCode: item.paintingCode || "",
         newCode: "", // Kosongkan agar pengguna bisa mengisi kode baru dengan mudah
         name: item.name,
         unit: item.unit || "kg",
@@ -98,14 +107,15 @@ export async function GET(req: NextRequest) {
       row.getCell(1).alignment = { vertical: "middle", horizontal: "center" };
       row.getCell(2).alignment = { vertical: "middle", horizontal: "center" };
       row.getCell(3).alignment = { vertical: "middle", horizontal: "center" };
-      row.getCell(5).alignment = { vertical: "middle", horizontal: "center" };
+      row.getCell(4).alignment = { vertical: "middle", horizontal: "center" };
       row.getCell(6).alignment = { vertical: "middle", horizontal: "center" };
-      row.getCell(7).alignment = { vertical: "middle", horizontal: "right" };
+      row.getCell(7).alignment = { vertical: "middle", horizontal: "center" };
       row.getCell(8).alignment = { vertical: "middle", horizontal: "right" };
-      row.getCell(9).alignment = { vertical: "middle", horizontal: "center" };
+      row.getCell(9).alignment = { vertical: "middle", horizontal: "right" };
+      row.getCell(10).alignment = { vertical: "middle", horizontal: "center" };
 
       // Highlight cell Kode Baru dengan border tipis dan background lembut
-      const newCodeCell = row.getCell(3);
+      const newCodeCell = row.getCell(4);
       newCodeCell.fill = {
         type: "pattern",
         pattern: "solid",
