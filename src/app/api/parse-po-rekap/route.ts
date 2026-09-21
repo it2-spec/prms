@@ -66,6 +66,77 @@ function getSmartCellValue(
   return raw as any;
 }
 
+function parseDeliverySchedule(raw: string): { dateStr: string; type: "DATE" | "MONTH" } | null {
+  if (!raw) return null;
+  const cleaned = raw
+    .replace(/Delivery\/Finish\s*(\(Optional\))?/i, "")
+    .replace(/to\s*:.*$/i, "")
+    .trim();
+
+  const monthNames = [
+    "january", "february", "march", "april", "may", "june",
+    "july", "august", "september", "october", "november", "december",
+    "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec",
+  ];
+
+  const dayMatch =
+    cleaned.match(/(\b\w+\b)[,\s]+(\d{1,2})(?:st|nd|rd|th)?[,\s]+(\d{4})/i) ||
+    cleaned.match(/(\d{1,2})(?:st|nd|rd|th)?[,\s]+(\b\w+\b)[,\s]+(\d{4})/i);
+
+  if (dayMatch) {
+    let mStr = dayMatch[1];
+    let dStr = dayMatch[2];
+    let yStr = dayMatch[3];
+    if (/^\d+$/.test(mStr)) {
+      const temp = mStr;
+      mStr = dStr;
+      dStr = temp;
+    }
+    const mIdx = monthNames.indexOf(mStr.toLowerCase());
+    if (mIdx !== -1) {
+      const mNum = (mIdx % 12) + 1;
+      const dNum = parseInt(dStr, 10);
+      const yNum = parseInt(yStr, 10);
+      if (!isNaN(dNum) && !isNaN(yNum) && dNum >= 1 && dNum <= 31) {
+        const iso = `${yNum}-${String(mNum).padStart(2, "0")}-${String(dNum).padStart(2, "0")}`;
+        return { dateStr: iso, type: "DATE" };
+      }
+    }
+  }
+
+  const dateSlashMatch = cleaned.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+  if (dateSlashMatch) {
+    const d1 = parseInt(dateSlashMatch[1], 10);
+    const d2 = parseInt(dateSlashMatch[2], 10);
+    const yr = parseInt(dateSlashMatch[3], 10);
+    let day = d1;
+    let mon = d2;
+    if (d1 <= 12 && d2 > 12) {
+      day = d2;
+      mon = d1;
+    }
+    const iso = `${yr}-${String(mon).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+    return { dateStr: iso, type: "DATE" };
+  }
+
+  const monthOnlyMatch = cleaned.match(/(\b\w+\b)[,\s]+(\d{4})/i);
+  if (monthOnlyMatch) {
+    const mStr = monthOnlyMatch[1];
+    const yStr = monthOnlyMatch[2];
+    const mIdx = monthNames.indexOf(mStr.toLowerCase());
+    if (mIdx !== -1) {
+      const mNum = (mIdx % 12) + 1;
+      const yNum = parseInt(yStr, 10);
+      if (!isNaN(yNum)) {
+        const iso = `${yNum}-${String(mNum).padStart(2, "0")}`;
+        return { dateStr: iso, type: "MONTH" };
+      }
+    }
+  }
+
+  return null;
+}
+
 /** Port of clean_value */
 function cleanValue(val: any, isQty = false): string | number | null {
   if (val === null || val === undefined) return null;
@@ -171,6 +242,9 @@ function extractPoDataFromSheet(
   warehouseName: string;
   department: string;
   purposeProject: string;
+  expectedDelivery: string | null;
+  deliveryDateType: "DATE" | "MONTH";
+  notes: string;
   items: {
     description: string;
     qty: number;
@@ -190,6 +264,8 @@ function extractPoDataFromSheet(
   let rawLocation = "";
   let department = "";
   let purposeProject = "";
+  let deliveryStr = "";
+  let notes = "";
 
   // ── 1. Extract Metadata: rows 1–50, cols 1–18 ─────────────────────────────
   for (let r = 1; r <= 50; r++) {
@@ -363,7 +439,21 @@ function extractPoDataFromSheet(
   }
 
   if (headerRow === -1) {
-    return { poNumber, poDate, supplier, supplierAddress, supplierPhone, supplierContactPerson, warehouseName, department, purposeProject, items: [] };
+    return {
+      poNumber,
+      poDate,
+      supplier,
+      supplierAddress,
+      supplierPhone,
+      supplierContactPerson,
+      warehouseName,
+      department,
+      purposeProject,
+      expectedDelivery: null,
+      deliveryDateType: "DATE" as const,
+      notes: "",
+      items: [],
+    };
   }
 
   const headers: Record<number, { main: string; combined: string }> = {};
@@ -603,7 +693,80 @@ function extractPoDataFromSheet(
     });
   }
 
-  return { poNumber, poDate, supplier, supplierAddress, supplierPhone, supplierContactPerson, warehouseName, department, purposeProject, items };
+  // ── 4. Scan Footer / Metadata Info (Dept, Usage For, Delivery Finish, Quotation Remarks) ──
+  for (let r = 1; r <= Math.min(worksheet.rowCount, 80); r++) {
+    for (let c = 1; c <= 20; c++) {
+      const cellVal = getCellStr(worksheet, r, c);
+      if (!cellVal) continue;
+      const valUpper = cellVal.toUpperCase();
+
+      // USE BY DEPT
+      if (!department && (valUpper.includes("USE BY DEPT") || valUpper.includes("USE BY DEPARTMENT"))) {
+        for (let offset = 1; offset <= 6; offset++) {
+          const v = getCellStr(worksheet, r, c + offset);
+          if (v && ![":", ""].includes(v)) {
+            department = v.replace(/^[:\s]+/, "").trim();
+            break;
+          }
+        }
+      }
+
+      // USAGE FOR / PURPOSE PROJECT
+      if (!purposeProject && (
+        valUpper.includes("USAGE FOR") ||
+        valUpper.includes("PROPOSE/PROJECT") ||
+        valUpper.includes("PURPOSE/PROJECT") ||
+        valUpper.includes("PROPOSAL/PROJECT")
+      )) {
+        for (let offset = 1; offset <= 6; offset++) {
+          const v = getCellStr(worksheet, r, c + offset);
+          if (v && ![":", ""].includes(v)) {
+            purposeProject = v.replace(/^[:\s]+/, "").trim();
+            break;
+          }
+        }
+      }
+
+      // DELIVERY / FINISH
+      if (!deliveryStr && (valUpper.includes("DELIVERY/FINISH") || valUpper.includes("DELIVERY / FINISH"))) {
+        deliveryStr = cellVal;
+        for (let offset = 1; offset <= 6; offset++) {
+          const v = getCellStr(worksheet, r, c + offset);
+          if (v && ![":", ""].includes(v)) {
+            deliveryStr = `${deliveryStr} ${v}`.trim();
+            break;
+          }
+        }
+      }
+
+      // QUOTATION / REMARKS
+      if (!notes && (valUpper.includes("PRICE AS PER YOUR QUOTATION") || valUpper.includes("QUOTATION") || valUpper.includes("REMARKS:"))) {
+        const m = cellVal.match(/Price As per Your Quotations?\s*[:\s]*(.*)/i);
+        if (m && m[1]) notes = m[1].trim();
+        else notes = cellVal.replace(/^[0-9.]+\s*/, "").replace(/^[:\s]+/, "").trim();
+      }
+    }
+  }
+
+  const parsedDelivery = deliveryStr ? parseDeliverySchedule(deliveryStr) : null;
+  const expectedDelivery = parsedDelivery ? parsedDelivery.dateStr : null;
+  const deliveryDateType = parsedDelivery ? parsedDelivery.type : "DATE";
+
+  return {
+    poNumber,
+    poDate,
+    supplier,
+    supplierAddress,
+    supplierPhone,
+    supplierContactPerson,
+    warehouseName,
+    department,
+    purposeProject,
+    expectedDelivery,
+    deliveryDateType,
+    notes,
+    items,
+  };
 }
 
 // ─── API Handler ──────────────────────────────────────────────────────────────
@@ -763,6 +926,9 @@ export async function POST(req: NextRequest) {
           suggestedWarehouseCode: suggestedWhCode,
           department: extracted.department || null,
           purposeProject: extracted.purposeProject || null,
+          expectedDelivery: extracted.expectedDelivery || null,
+          deliveryDateType: extracted.deliveryDateType || "DATE",
+          notes: extracted.notes || null,
           isDuplicateInDb,
           sourceFile: file.name,
           items: processedItems,

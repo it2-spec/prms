@@ -47,6 +47,9 @@ type ParsedPO = {
   warehouseName?: string | null;
   department?: string | null;
   purposeProject?: string | null;
+  expectedDelivery?: string | null;
+  deliveryDateType?: "DATE" | "MONTH" | null;
+  notes?: string | null;
   isDuplicateInDb: boolean;
   items: ParsedItem[];
 };
@@ -342,13 +345,22 @@ export default function ImportBatchPOPage() {
                         </span>
                       )}
                     </div>
-                    {(po.supplierContactPerson || po.supplierPhone || po.supplierAddress || po.purposeProject || po.department) && (
+                    {(po.supplierContactPerson || po.supplierPhone || po.supplierAddress || po.purposeProject || po.department || po.expectedDelivery || po.notes) && (
                       <div className="text-xs text-slate-500 flex flex-col gap-0.5">
                         <div className="flex flex-wrap gap-x-4 gap-y-1">
                           {po.supplierContactPerson && <span><strong>Attn:</strong> {po.supplierContactPerson}</span>}
                           {po.supplierPhone && <span><strong>Telp:</strong> {po.supplierPhone}</span>}
                           {po.department && <span><strong>Dept:</strong> {po.department}</span>}
-                          {po.purposeProject && <span><strong>Project/Purpose:</strong> {po.purposeProject}</span>}
+                          {po.purposeProject && <span><strong>Usage for:</strong> {po.purposeProject}</span>}
+                          {po.expectedDelivery && (
+                            <span>
+                              <strong>Delivery:</strong> {po.expectedDelivery}{" "}
+                              <span className="text-[10px] text-slate-400">
+                                ({po.deliveryDateType === "MONTH" ? "Bulan" : "Tanggal"})
+                              </span>
+                            </span>
+                          )}
+                          {po.notes && <span><strong>Quotation:</strong> {po.notes}</span>}
                         </div>
                         {po.supplierAddress && (
                           <div className="text-[11px] text-slate-400 truncate max-w-xl">

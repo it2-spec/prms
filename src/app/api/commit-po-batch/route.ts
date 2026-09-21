@@ -285,6 +285,14 @@ export async function POST(req: NextRequest) {
 
         // 4. Create Purchase Order (status SENT so supplier can immediately deliver)
         const poDate = group.poDate ? new Date(group.poDate) : new Date();
+        let expectedDelivery: Date | null = null;
+        if (group.expectedDelivery) {
+          let edStr = String(group.expectedDelivery).trim();
+          if (/^\d{4}-\d{2}$/.test(edStr)) edStr += "-01";
+          const d = new Date(edStr);
+          if (!isNaN(d.getTime())) expectedDelivery = d;
+        }
+
         await tx.purchaseOrder.create({
           data: {
             poNumber: group.poNumber,
@@ -292,8 +300,11 @@ export async function POST(req: NextRequest) {
             warehouseId: finalWarehouseId,
             createdById: user.id,
             poDate: isNaN(poDate.getTime()) ? new Date() : poDate,
+            expectedDelivery,
+            deliveryDateType: group.deliveryDateType === "MONTH" ? "MONTH" : "DATE",
             department: group.department || null,
             purposeProject: group.purposeProject || null,
+            notes: group.notes || null,
             status: "SENT",
             details: {
               create: poDetailsData,
