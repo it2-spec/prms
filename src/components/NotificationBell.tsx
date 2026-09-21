@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Bell, Check, CheckCheck, ExternalLink, FileText, ShieldCheck, Clock, XCircle } from "lucide-react";
+import { Bell, Check, CheckCheck, ExternalLink, FileText, ShieldCheck, Clock, XCircle, X, RefreshCw } from "lucide-react";
 
 interface NotificationItem {
   id: string;
@@ -16,6 +16,32 @@ interface NotificationItem {
 
 interface NotificationBellProps {
   isApprover?: boolean;
+}
+
+function playGentleChime() {
+  if (typeof window === "undefined") return;
+  try {
+    const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+    if (!AudioContextClass) return;
+    const ctx = new AudioContextClass();
+    if (ctx.state === "suspended") {
+      ctx.resume().catch(() => {});
+    }
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    // Gentle dual-tone ascending chime (D5 -> A5)
+    osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.12);
+    gain.gain.setValueAtTime(0.04, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.38);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.4);
+  } catch {
+    // Autoplay restrictions are gracefully ignored
+  }
 }
 
 function formatRelativeTime(dateStr: string, isEnglish: boolean): string {
@@ -44,9 +70,19 @@ export default function NotificationBell({ isApprover = false }: NotificationBel
   const [unreadCount, setUnreadCount] = useState(0);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [loading, setLoading] = useState(false);
+  const [toastNotif, setToastNotif] = useState<NotificationItem | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const knownNotifIdsRef = useRef<Set<string>>(new Set());
   const isFirstFetchRef = useRef(true);
+  const toastTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const showFloatingToast = useCallback((notif: NotificationItem) => {
+    setToastNotif(notif);
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    toastTimerRef.current = setTimeout(() => {
+      setToastNotif(null);
+    }, 12000);
+  }, []);
 
   const showDesktopAlert = (notif: NotificationItem) => {
     if (typeof window === "undefined" || !("Notification" in window)) return;
@@ -97,6 +133,11 @@ export default function NotificationBell({ isApprover = false }: NotificationBel
               knownNotifIdsRef.current.add(n.id);
               if (!n.isRead) {
                 showDesktopAlert(n);
+                playGentleChime();
+                showFloatingToast(n);
+                if (typeof window !== "undefined") {
+                  window.dispatchEvent(new CustomEvent("prms:new-notification", { detail: n }));
+                }
               }
             }
           });
@@ -105,12 +146,12 @@ export default function NotificationBell({ isApprover = false }: NotificationBel
     } catch {
       // silently ignore network jitter
     }
-  }, []);
+  }, [showFloatingToast]);
 
-  // Initial fetch and periodic polling
+  // Initial fetch and periodic polling (every 15s for fast responsive feel)
   useEffect(() => {
     fetchNotifications();
-    const interval = setInterval(fetchNotifications, 25000);
+    const interval = setInterval(fetchNotifications, 15000);
 
     const onFocus = () => fetchNotifications();
     window.addEventListener("focus", onFocus);
@@ -118,6 +159,7 @@ export default function NotificationBell({ isApprover = false }: NotificationBel
     return () => {
       clearInterval(interval);
       window.removeEventListener("focus", onFocus);
+      if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
     };
   }, [fetchNotifications]);
 
@@ -173,135 +215,229 @@ export default function NotificationBell({ isApprover = false }: NotificationBel
     }
   };
 
-  return (
-    <div className="relative" ref={dropdownRef}>
-      {/* Bell Button */}
-      <button
-        onClick={() => setOpen(!open)}
-        className="relative p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/30"
-        title={isApprover ? "Notifications" : "Notifikasi"}
-        aria-label="Notifications"
-      >
-        <Bell className="w-5 h-5" />
-        {unreadCount > 0 && (
-          <span className="absolute top-1 right-1 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white shadow-xs animate-in zoom-in-50 duration-200">
-            {unreadCount > 99 ? "99+" : unreadCount}
-          </span>
-        )}
-      </button>
+  const handleToastAction = (notif: NotificationItem) => {
+    setToastNotif(null);
+    if (!notif.isRead) {
+      setUnreadCount((c) => Math.max(0, c - 1));
+      setNotifications((prev) =>
+        prev.map((n) => (n.id === notif.id ? { ...n, isRead: true } : n))
+      );
+      fetch("/api/notifications", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: notif.id }),
+      }).catch(() => {});
+    }
 
-      {/* Popover Dropdown */}
-      {open && (
-        <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl border border-slate-200 shadow-2xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150">
-          {/* Header */}
-          <div className="px-4 py-3 bg-slate-50/80 border-b border-slate-100 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-slate-800 text-sm">
-                {isApprover ? "Notifications" : "Notifikasi"}
-              </span>
-              {unreadCount > 0 && (
-                <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-700">
-                  {unreadCount} {isApprover ? "new" : "baru"}
+    if (notif.link) {
+      if (typeof window !== "undefined" && window.location.pathname === notif.link) {
+        router.refresh();
+      } else {
+        router.push(notif.link);
+      }
+    } else {
+      router.refresh();
+    }
+  };
+
+  return (
+    <>
+      <div className="relative" ref={dropdownRef}>
+        {/* Bell Button */}
+        <button
+          onClick={() => setOpen(!open)}
+          className="relative p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+          title={isApprover ? "Notifications" : "Notifikasi"}
+          aria-label="Notifications"
+        >
+          <Bell className="w-5 h-5" />
+          {unreadCount > 0 && (
+            <span className="absolute top-1 right-1 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white shadow-xs animate-in zoom-in-50 duration-200">
+              {unreadCount > 99 ? "99+" : unreadCount}
+            </span>
+          )}
+        </button>
+
+        {/* Popover Dropdown */}
+        {open && (
+          <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl border border-slate-200 shadow-2xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150">
+            {/* Header */}
+            <div className="px-4 py-3 bg-slate-50/80 border-b border-slate-100 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-slate-800 text-sm">
+                  {isApprover ? "Notifications" : "Notifikasi"}
                 </span>
+                {unreadCount > 0 && (
+                  <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-700">
+                    {unreadCount} {isApprover ? "new" : "baru"}
+                  </span>
+                )}
+              </div>
+              {unreadCount > 0 && (
+                <button
+                  onClick={handleMarkAllRead}
+                  disabled={loading}
+                  className="text-xs font-semibold text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1 cursor-pointer disabled:opacity-50"
+                >
+                  <CheckCheck className="w-3.5 h-3.5" />
+                  <span>{isApprover ? "Mark all read" : "Tandai dibaca"}</span>
+                </button>
               )}
             </div>
-            {unreadCount > 0 && (
-              <button
-                onClick={handleMarkAllRead}
-                disabled={loading}
-                className="text-xs font-semibold text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1 cursor-pointer disabled:opacity-50"
-              >
-                <CheckCheck className="w-3.5 h-3.5" />
-                <span>{isApprover ? "Mark all read" : "Tandai dibaca"}</span>
-              </button>
-            )}
-          </div>
 
-          {/* List */}
-          <div className="max-h-[380px] overflow-y-auto divide-y divide-slate-100">
-            {notifications.length === 0 ? (
-              <div className="py-10 text-center text-slate-400">
-                <Bell className="w-8 h-8 mx-auto mb-2 text-slate-300 stroke-[1.5]" />
-                <p className="text-xs font-medium">
-                  {isApprover ? "No notifications yet" : "Belum ada notifikasi"}
-                </p>
-              </div>
-            ) : (
-              notifications.map((notif) => {
-                const isApprovedL1 = notif.type === "PO_APPROVED_L1";
-                const isNewPo = notif.type === "NEW_PO";
+            {/* List */}
+            <div className="max-h-[380px] overflow-y-auto divide-y divide-slate-100">
+              {notifications.length === 0 ? (
+                <div className="py-10 text-center text-slate-400">
+                  <Bell className="w-8 h-8 mx-auto mb-2 text-slate-300 stroke-[1.5]" />
+                  <p className="text-xs font-medium">
+                    {isApprover ? "No notifications yet" : "Belum ada notifikasi"}
+                  </p>
+                </div>
+              ) : (
+                notifications.map((notif) => {
+                  const isApprovedL1 = notif.type === "PO_APPROVED_L1";
+                  const isNewPo = notif.type === "NEW_PO";
 
-                return (
-                  <div
-                    key={notif.id}
-                    onClick={() => handleNotificationClick(notif)}
-                    className={`p-3.5 transition-colors cursor-pointer flex items-start gap-3 text-left ${
-                      notif.isRead
-                        ? "hover:bg-slate-50 bg-white"
-                        : "bg-blue-50/40 hover:bg-blue-50/70"
-                    }`}
-                  >
-                    {/* Icon based on notification type */}
-                    <div className="mt-0.5 shrink-0">
-                      {notif.type === "PO_CANCELLED" ? (
-                        <div className="w-8 h-8 rounded-xl bg-red-100 text-red-600 flex items-center justify-center">
-                          <XCircle className="w-4 h-4" />
-                        </div>
-                      ) : isApprovedL1 ? (
-                        <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center">
-                          <ShieldCheck className="w-4 h-4" />
-                        </div>
-                      ) : isNewPo ? (
-                        <div className="w-8 h-8 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center">
-                          <FileText className="w-4 h-4" />
-                        </div>
-                      ) : (
-                        <div className="w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center">
-                          <Bell className="w-4 h-4" />
-                        </div>
-                      )}
-                    </div>
+                  return (
+                    <div
+                      key={notif.id}
+                      onClick={() => handleNotificationClick(notif)}
+                      className={`p-3.5 transition-colors cursor-pointer flex items-start gap-3 text-left ${
+                        notif.isRead
+                          ? "hover:bg-slate-50 bg-white"
+                          : "bg-blue-50/40 hover:bg-blue-50/70"
+                      }`}
+                    >
+                      {/* Icon based on notification type */}
+                      <div className="mt-0.5 shrink-0">
+                        {notif.type === "PO_CANCELLED" ? (
+                          <div className="w-8 h-8 rounded-xl bg-red-100 text-red-600 flex items-center justify-center">
+                            <XCircle className="w-4 h-4" />
+                          </div>
+                        ) : isApprovedL1 ? (
+                          <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center">
+                            <ShieldCheck className="w-4 h-4" />
+                          </div>
+                        ) : isNewPo ? (
+                          <div className="w-8 h-8 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center">
+                            <FileText className="w-4 h-4" />
+                          </div>
+                        ) : (
+                          <div className="w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center">
+                            <Bell className="w-4 h-4" />
+                          </div>
+                        )}
+                      </div>
 
-                    {/* Content */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between gap-1">
-                        <p
-                          className={`text-xs truncate ${
-                            notif.isRead
-                              ? "font-semibold text-slate-800"
-                              : "font-bold text-slate-900"
-                          }`}
-                        >
-                          {notif.title}
+                      {/* Content */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-1">
+                          <p
+                            className={`text-xs truncate ${
+                              notif.isRead
+                                ? "font-semibold text-slate-800"
+                                : "font-bold text-slate-900"
+                            }`}
+                          >
+                            {notif.title}
+                          </p>
+                          {!notif.isRead && (
+                            <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0" />
+                          )}
+                        </div>
+                        <p className="text-xs text-slate-600 line-clamp-2 mt-0.5 leading-relaxed">
+                          {notif.message}
                         </p>
-                        {!notif.isRead && (
-                          <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0" />
-                        )}
-                      </div>
-                      <p className="text-xs text-slate-600 line-clamp-2 mt-0.5 leading-relaxed">
-                        {notif.message}
-                      </p>
-                      <div className="flex items-center gap-1 text-[10px] text-slate-400 mt-1.5 font-medium">
-                        <Clock className="w-3 h-3" />
-                        <span>{formatRelativeTime(notif.createdAt, isApprover)}</span>
-                        {notif.link && (
-                          <>
-                            <span>·</span>
-                            <span className="text-blue-600 hover:underline flex items-center gap-0.5 font-semibold">
-                              {isApprover ? "Review" : "Lihat"}
-                              <ExternalLink className="w-2.5 h-2.5" />
-                            </span>
-                          </>
-                        )}
+                        <div className="flex items-center gap-1 text-[10px] text-slate-400 mt-1.5 font-medium">
+                          <Clock className="w-3 h-3" />
+                          <span>{formatRelativeTime(notif.createdAt, isApprover)}</span>
+                          {notif.link && (
+                            <>
+                              <span>·</span>
+                              <span className="text-blue-600 hover:underline flex items-center gap-0.5 font-semibold">
+                                {isApprover ? "Review" : "Lihat"}
+                                <ExternalLink className="w-2.5 h-2.5" />
+                              </span>
+                            </>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })
-            )}
+                  );
+                })
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Non-intrusive In-App Floating Toast Banner */}
+      {toastNotif && (
+        <div className="fixed bottom-5 right-5 z-[9999] max-w-sm sm:max-w-md w-full bg-white/95 backdrop-blur-md rounded-2xl border border-slate-200/90 shadow-2xl p-4 animate-in fade-in slide-in-from-bottom-5 duration-300">
+          <div className="flex items-start gap-3.5">
+            {/* Icon */}
+            <div className="shrink-0 mt-0.5">
+              {toastNotif.type === "PO_APPROVED_L1" ? (
+                <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shadow-xs">
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
+              ) : toastNotif.type === "PO_CANCELLED" ? (
+                <div className="w-10 h-10 rounded-xl bg-red-100 text-red-600 flex items-center justify-center shadow-xs">
+                  <XCircle className="w-5 h-5" />
+                </div>
+              ) : (
+                <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-xs">
+                  <FileText className="w-5 h-5" />
+                </div>
+              )}
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-1.5">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
+                  </span>
+                  <p className="text-xs font-bold text-slate-900 truncate">
+                    {toastNotif.title}
+                  </p>
+                </div>
+                <button
+                  onClick={() => setToastNotif(null)}
+                  className="text-slate-400 hover:text-slate-600 p-0.5 rounded-md cursor-pointer transition-colors"
+                  title="Tutup"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <p className="text-xs text-slate-600 mt-1 line-clamp-2 leading-relaxed">
+                {toastNotif.message}
+              </p>
+
+              {/* Action Buttons */}
+              <div className="mt-3 flex items-center gap-2">
+                <button
+                  onClick={() => handleToastAction(toastNotif)}
+                  className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-3.5 py-1.5 rounded-xl transition-all shadow-xs flex items-center gap-1.5 cursor-pointer"
+                >
+                  <span>{isApprover ? "Review PO" : "Buka / Muat Ulang"}</span>
+                  <ExternalLink className="w-3 h-3" />
+                </button>
+                <button
+                  onClick={() => setToastNotif(null)}
+                  className="text-slate-500 hover:text-slate-700 hover:bg-slate-100 text-xs font-medium px-2.5 py-1.5 rounded-xl transition-colors cursor-pointer"
+                >
+                  {isApprover ? "Dismiss" : "Nanti"}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

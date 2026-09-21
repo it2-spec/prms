@@ -33,6 +33,7 @@ import {
   Boxes,
   Check,
   ShieldCheck,
+  RefreshCw,
 } from "lucide-react";
 
 export const PO_STATUS_LABEL: Record<string, string> = {
@@ -173,6 +174,26 @@ export default function PurchaseOrderTableClient({
   const [isBatchApproving, setIsBatchApproving] = useState(false);
   const [batchApproveModalOpen, setBatchApproveModalOpen] = useState(false);
   const [successToast, setSuccessToast] = useState<string | null>(null);
+  const [incomingUpdateText, setIncomingUpdateText] = useState<string | null>(null);
+
+  useEffect(() => {
+    function handleIncomingNotification(e: Event) {
+      const customEvent = e as CustomEvent;
+      const notif = customEvent.detail;
+      if (notif) {
+        setIncomingUpdateText(
+          notif.title || (userApprovalLevel === 1 || userApprovalLevel === 2 ? "New PO data available" : "Ada data PO baru yang masuk")
+        );
+      }
+    }
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("prms:new-notification", handleIncomingNotification);
+      return () => {
+        window.removeEventListener("prms:new-notification", handleIncomingNotification);
+      };
+    }
+  }, [userApprovalLevel]);
 
   // Search input state with debouncing
   const [searchInput, setSearchInput] = useState(activeFilters.search);
@@ -625,6 +646,46 @@ export default function PurchaseOrderTableClient({
 
   return (
     <div className="space-y-5">
+      {/* Banner Update Data Masuk (Non-intrusif) */}
+      {incomingUpdateText && (
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/80 rounded-2xl p-3.5 sm:px-4 shadow-sm flex flex-wrap items-center justify-between gap-3 animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <span className="relative flex h-2.5 w-2.5 shrink-0">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-600"></span>
+            </span>
+            <div className="text-xs sm:text-sm font-semibold text-slate-800">
+              <span>{incomingUpdateText}. </span>
+              <span className="text-slate-500 font-normal hidden sm:inline">
+                {isEnglish ? "Click refresh when you are ready to update the table." : "Klik perbarui saat Anda siap memuat data terbaru."}
+              </span>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 shrink-0 ml-auto">
+            <button
+              onClick={() => {
+                setIncomingUpdateText(null);
+                startTransition(() => {
+                  router.refresh();
+                });
+              }}
+              disabled={isPending}
+              className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-3 py-1.5 rounded-xl transition-all shadow-xs flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${isPending ? "animate-spin" : ""}`} />
+              <span>{isEnglish ? "Refresh Table" : "Perbarui Tabel"}</span>
+            </button>
+            <button
+              onClick={() => setIncomingUpdateText(null)}
+              className="text-slate-400 hover:text-slate-600 p-1 rounded-lg transition-colors cursor-pointer"
+              title="Tutup banner"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* KPI Summary Cards */}
       <div className="grid grid-cols-2 gap-3.5 md:grid-cols-4">
         {[
