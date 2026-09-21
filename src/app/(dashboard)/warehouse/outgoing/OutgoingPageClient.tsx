@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Html5Qrcode } from "html5-qrcode";
+import { Html5Qrcode, CameraDevice } from "html5-qrcode";
 import {
   ScanLine,
   QrCode,
@@ -16,6 +16,9 @@ import {
   RotateCcw,
   ShoppingCart,
   Trash2,
+  Camera,
+  StopCircle,
+  Keyboard,
 } from "lucide-react";
 import { Card } from "@/components/ui";
 import { submitOutgoing, cancelOutgoing } from "./outgoingAction";
@@ -85,54 +88,80 @@ export default function OutgoingPageClient({
   const [cancellingId, setCancellingId] = useState<string | null>(null);
 
   // QR Scanner State
+  const [scanMode, setScanMode] = useState<"camera" | "manual">("camera");
   const [scanning, setScanning] = useState(false);
+  const [starting, setStarting] = useState(false);
+  const [cameras, setCameras] = useState<CameraDevice[]>([]);
+  const [selectedCameraId, setSelectedCameraId] = useState<string>("");
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
+    if (scanMode === "manual") {
+      inputRef.current?.focus();
+    }
+  }, [scanMode]);
 
   useEffect(() => {
     return () => {
-      if (scannerRef.current?.isScanning) {
-        scannerRef.current.stop().catch(() => {});
-      }
-    };
-  }, []);
-
-  async function startScanner() {
-    setErrorMsg(null);
-    setScanning(true);
-
-    try {
       if (scannerRef.current) {
         if (scannerRef.current.isScanning) {
-          await scannerRef.current.stop();
+          scannerRef.current.stop().catch(() => {});
         }
         scannerRef.current.clear();
         scannerRef.current = null;
       }
+    };
+  }, []);
 
-      // Wait for React to render the scanner container into the DOM
-      await new Promise((r) => setTimeout(r, 100));
+  async function startScanner(preferredCameraId?: string) {
+    setErrorMsg(null);
+    setStarting(true);
+
+    try {
+      if (scannerRef.current) {
+        try {
+          if (scannerRef.current.isScanning) {
+            await scannerRef.current.stop();
+          }
+          scannerRef.current.clear();
+        } catch {}
+        scannerRef.current = null;
+      }
+
+      let availableCameras: CameraDevice[] = [];
+      try {
+        availableCameras = await Html5Qrcode.getCameras();
+        setCameras(availableCameras);
+      } catch (err: any) {
+        console.warn("Could not enumerate cameras:", err);
+      }
+
+      await new Promise((r) => setTimeout(r, 80));
 
       const el = document.getElementById(SCANNER_ID);
       if (!el) {
-        throw new Error("Container scanner belum siap.");
+        throw new Error("Wadah kamera scanner belum siap.");
       }
 
       const scanner = new Html5Qrcode(SCANNER_ID);
       scannerRef.current = scanner;
 
       let targetCam: any = { facingMode: "environment" };
-      try {
-        const cams = await Html5Qrcode.getCameras();
-        if (cams && cams.length > 0) {
-          const rear = cams.find((c) => /back|rear|belakang|environment/i.test(c.label));
-          targetCam = rear ? rear.id : cams[0].id;
+      if (availableCameras.length > 0) {
+        let chosen = availableCameras[0];
+        if (preferredCameraId) {
+          const matched = availableCameras.find((c) => c.id === preferredCameraId);
+          if (matched) chosen = matched;
+        } else {
+          const rear = availableCameras.find((c) =>
+            /back|rear|belakang|environment|macro/i.test(c.label)
+          );
+          if (rear) chosen = rear;
         }
-      } catch {}
+        targetCam = chosen.id;
+        setSelectedCameraId(chosen.id);
+      }
 
       await scanner.start(
         targetCam,
@@ -152,10 +181,18 @@ export default function OutgoingPageClient({
         },
         () => {},
       );
+
+      setScanning(true);
+      setStarting(false);
     } catch (err: any) {
       console.error("Outgoing scanner error:", err);
       setScanning(false);
-      setErrorMsg("Tidak dapat mengakses kamera. Silakan ketik kode part langsung di bawah.");
+      setStarting(false);
+      setErrorMsg(
+        err?.message?.includes("Permission") || err?.name === "NotAllowedError"
+          ? "Izin kamera ditolak oleh browser. Mohon izinkan akses kamera di pengaturan browser Anda."
+          : "Gagal menghubungkan ke kamera. Silakan gunakan tab 'Ketik Manual' di atas."
+      );
     }
   }
 
@@ -172,7 +209,13 @@ export default function OutgoingPageClient({
       // ignore
     } finally {
       setScanning(false);
+      setStarting(false);
     }
+  }
+
+  function handleCameraChange(newCamId: string) {
+    setSelectedCameraId(newCamId);
+    startScanner(newCamId);
   }
 
   // Lookup Part by Code
@@ -405,82 +448,192 @@ export default function OutgoingPageClient({
         </div>
       )}
 
+      {/* TAB SELECTOR: KAMERA VS MANUAL */}
+      <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200">
+        <button
+          type="button"
+          onClick={() => setScanMode("camera")}
+          className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg font-bold text-sm transition-all cursor-pointer ${
+            scanMode === "camera"
+              ? "bg-white text-blue-600 shadow-xs"
+              : "text-slate-600 hover:text-slate-900"
+          }`}
+        >
+          <Camera className="w-4 h-4" />
+          <span>Scan Kamera (QR / Barcode)</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setScanMode("manual");
+            stopScanner();
+          }}
+          className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg font-bold text-sm transition-all cursor-pointer ${
+            scanMode === "manual"
+              ? "bg-white text-blue-600 shadow-xs"
+              : "text-slate-600 hover:text-slate-900"
+          }`}
+        >
+          <Keyboard className="w-4 h-4" />
+          <span>Ketik Manual / Barcode Scanner</span>
+        </button>
+      </div>
+
       {/* STEP 1: SCAN / INPUT PART */}
-      <Card bodyClassName="!p-5 bg-white border border-slate-200 shadow-sm">
-        <form onSubmit={handleFormLookup} className="space-y-3">
+      {scanMode === "camera" ? (
+        <Card bodyClassName="!p-5 bg-white border border-slate-200 shadow-sm space-y-4">
           <div className="flex items-center justify-between">
             <label className="text-sm font-bold text-slate-800 flex items-center gap-2">
               <ScanLine className="w-4 h-4 text-blue-600" />
-              <span>Scan Part / Ketik Kode Barang</span>
+              <span>Pemindai QR / Barcode Part</span>
             </label>
             <span className="text-xs text-slate-500">
               Gudang: <strong className="text-slate-700">{warehouseName}</strong>
             </span>
           </div>
 
-          <div className="flex items-center gap-2">
-            <div className="relative flex-1">
-              <input
-                ref={inputRef}
-                type="text"
-                value={inputCode}
-                onChange={(e) => setInputCode(e.target.value)}
-                placeholder="Scan barcode / ketik kode part lalu tekan Enter..."
-                className="w-full pl-10 pr-3 py-3 rounded-xl border-2 border-slate-300 focus:border-blue-600 focus:outline-hidden text-base font-semibold placeholder:font-normal placeholder:text-slate-400 shadow-2xs"
-                disabled={lookupLoading}
-              />
-              <ScanLine className="w-5 h-5 text-slate-400 absolute left-3 top-3.5" />
-            </div>
-
-            <button
-              type="submit"
-              disabled={lookupLoading || !inputCode.trim()}
-              className="px-5 py-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-xl font-bold text-sm transition shrink-0 cursor-pointer"
-            >
-              {lookupLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Cari Part"}
-            </button>
-
-            <button
-              type="button"
-              onClick={scanning ? stopScanner : startScanner}
-              className={`p-3 rounded-xl border transition shrink-0 cursor-pointer ${
-                scanning
-                  ? "bg-red-50 text-red-600 border-red-300"
-                  : "bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300"
-              }`}
-              title={scanning ? "Tutup Kamera" : "Gunakan Kamera Scan QR"}
-            >
-              <QrCode className="w-5 h-5" />
-            </button>
-          </div>
-        </form>
-
-        {scanning && (
-          <div className="mt-4 pt-4 border-t border-slate-200 flex flex-col items-center">
+          {/* Scanner Box Container - Guaranteed DOM Mounting */}
+          <div className="relative w-full rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 shadow-md">
+            {/* The actual element used by Html5Qrcode */}
             <div
               id={SCANNER_ID}
-              className="w-full max-w-sm rounded-xl overflow-hidden border border-slate-300 shadow-inner bg-slate-950 min-h-[260px]"
+              className="w-full min-h-[280px] sm:min-h-[320px] flex items-center justify-center relative overflow-hidden"
             />
-            <p className="text-xs text-slate-500 mt-2">Arahkan kamera ke QR / Barcode part</p>
 
-            <style jsx global>{`
-              #${SCANNER_ID} video {
-                width: 100% !important;
-                height: 100% !important;
-                max-height: 320px !important;
-                object-fit: cover !important;
-                border-radius: 0.75rem !important;
-              }
-              #${SCANNER_ID} {
-                border: none !important;
-              }
-              #${SCANNER_ID} img[alt="Info icon"] {
-                display: none !important;
-              }
-            `}</style>
+            {/* Overlay saat kamera BELUM aktif */}
+            {!scanning && !starting && (
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-6 bg-slate-900/95 text-center">
+                <div className="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center mb-4">
+                  <ScanLine className="w-8 h-8 stroke-[1.8]" />
+                </div>
+                <h3 className="text-base font-bold text-white mb-1">
+                  Kamera Scan Part Gudang
+                </h3>
+                <p className="text-xs text-slate-400 max-w-xs mb-5 leading-relaxed">
+                  Arahkan kamera ke QR Code atau Barcode pada kemasan part untuk memeriksa stok dan mencatat pengeluaran.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => startScanner()}
+                  className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-6 py-2.5 rounded-xl shadow-lg shadow-blue-600/30 transition-all flex items-center gap-2 cursor-pointer"
+                >
+                  <Camera className="w-4 h-4" />
+                  <span>Aktifkan Kamera Scan Part</span>
+                </button>
+              </div>
+            )}
+
+            {/* Loading Spinner saat inisialisasi kamera */}
+            {starting && (
+              <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-slate-950/90 text-white p-4">
+                <Loader2 className="w-8 h-8 text-blue-500 animate-spin mb-3" />
+                <p className="text-sm font-semibold">Menghubungkan ke kamera...</p>
+                <p className="text-xs text-slate-400 mt-1">Mohon izinkan akses kamera jika diminta browser</p>
+              </div>
+            )}
+
+            {/* Controls Bar saat kamera AKTIF */}
+            {scanning && (
+              <div className="absolute top-3 left-3 right-3 z-30 flex items-center justify-between gap-2 bg-slate-950/75 backdrop-blur-md px-3 py-2 rounded-xl border border-white/10 text-white">
+                <div className="flex items-center gap-2 text-xs font-medium">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span className="hidden sm:inline">Kamera Aktif</span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  {cameras.length > 1 && (
+                    <select
+                      value={selectedCameraId}
+                      onChange={(e) => handleCameraChange(e.target.value)}
+                      className="bg-slate-800 text-white text-xs px-2 py-1 rounded-lg border border-slate-700 focus:outline-none cursor-pointer max-w-[140px] truncate"
+                    >
+                      {cameras.map((c, i) => (
+                        <option key={c.id} value={c.id}>
+                          {c.label || `Kamera ${i + 1}`}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={stopScanner}
+                    className="bg-red-600/90 hover:bg-red-700 text-white text-xs font-semibold px-3 py-1 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+                  >
+                    <StopCircle className="w-3.5 h-3.5" />
+                    <span>Stop Kamera</span>
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
-        )}
-      </Card>
+
+          {inputCode && (
+            <div className="flex items-center justify-between bg-blue-50 border border-blue-200 rounded-xl p-3 text-sm">
+              <span className="text-slate-600 font-medium">Hasil Scan Terakhir:</span>
+              <span className="font-mono font-bold text-blue-700">{inputCode}</span>
+            </div>
+          )}
+
+          <style jsx global>{`
+            #${SCANNER_ID} video {
+              width: 100% !important;
+              height: 100% !important;
+              max-height: 340px !important;
+              object-fit: cover !important;
+              border-radius: 1rem !important;
+            }
+            #${SCANNER_ID} {
+              border: none !important;
+            }
+            #${SCANNER_ID} img[alt="Info icon"] {
+              display: none !important;
+            }
+          `}</style>
+        </Card>
+      ) : (
+        <Card bodyClassName="!p-5 bg-white border border-slate-200 shadow-sm">
+          <form onSubmit={handleFormLookup} className="space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-bold text-slate-800 flex items-center gap-2">
+                <Keyboard className="w-4 h-4 text-blue-600" />
+                <span>Ketik Kode Barang / Barcode Scanner</span>
+              </label>
+              <span className="text-xs text-slate-500">
+                Gudang: <strong className="text-slate-700">{warehouseName}</strong>
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <div className="relative flex-1">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={inputCode}
+                  onChange={(e) => setInputCode(e.target.value)}
+                  placeholder="Scan barcode fisik / ketik kode part lalu tekan Enter..."
+                  className="w-full pl-10 pr-3 py-3 rounded-xl border-2 border-slate-300 focus:border-blue-600 focus:outline-hidden text-base font-semibold placeholder:font-normal placeholder:text-slate-400 shadow-2xs"
+                  disabled={lookupLoading}
+                  autoFocus
+                />
+                <ScanLine className="w-5 h-5 text-slate-400 absolute left-3 top-3.5" />
+              </div>
+
+              <button
+                type="submit"
+                disabled={lookupLoading || !inputCode.trim()}
+                className="px-5 py-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-xl font-bold text-sm transition shrink-0 cursor-pointer"
+              >
+                {lookupLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Cari Part"}
+              </button>
+            </div>
+            <p className="text-xs text-slate-500">
+              Mendukung barcode scanner USB / Bluetooth fisik (otomatis submit saat Enter) atau ketik kode manual.
+            </p>
+          </form>
+        </Card>
+      )}
 
       {/* STEP 2: MASUKKAN QTY & TAMBAH KE KERANJANG */}
       {itemData && (
