@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Html5Qrcode, CameraDevice } from "html5-qrcode";
-import { QrCode, ScanLine, Camera, Loader2, StopCircle, RefreshCw, AlertCircle } from "lucide-react";
+import { QrCode, ScanLine, Camera, Loader2, StopCircle, RefreshCw, AlertCircle, CheckCircle2, ArrowRight } from "lucide-react";
 
 const SCANNER_ID = "warehouse-qr-scanner-box";
 
@@ -16,6 +16,7 @@ export default function QrScanner({
   const [cameras, setCameras] = useState<CameraDevice[]>([]);
   const [selectedCameraId, setSelectedCameraId] = useState<string>("");
   const [manual, setManual] = useState("");
+  const [detectedValue, setDetectedValue] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const scannerRef = useRef<Html5Qrcode | null>(null);
@@ -36,19 +37,21 @@ export default function QrScanner({
   }, []);
 
   const handleDecoded = useCallback((text: string) => {
+    let cleanCode = text.trim();
     try {
       const parsed = JSON.parse(text);
       if (parsed.delivery_id) {
-        onResult(String(parsed.delivery_id));
-        return;
-      }
-      if (parsed.deliveryNumber) {
-        onResult(String(parsed.deliveryNumber));
-        return;
+        cleanCode = String(parsed.delivery_id).trim();
+      } else if (parsed.deliveryNumber) {
+        cleanCode = String(parsed.deliveryNumber).trim();
       }
     } catch {}
-    onResult(text.trim());
-  }, [onResult]);
+
+    // 1. Langsung isi kotak input manual
+    setManual(cleanCode);
+    setDetectedValue(cleanCode);
+    setError(null);
+  }, []);
 
   async function stopScanner() {
     try {
@@ -254,6 +257,44 @@ export default function QrScanner({
         )}
       </div>
 
+      {/* Scan Success Confirmation Card */}
+      {detectedValue && (
+        <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-950 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="flex items-start sm:items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+              <CheckCircle2 className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="text-xs text-emerald-700 font-semibold">QR Surat Jalan Terdeteksi:</div>
+              <div className="text-base font-black text-emerald-900 font-mono tracking-wide">
+                {detectedValue}
+              </div>
+              <div className="text-[11px] text-emerald-600">Nilai telah diisi otomatis ke kotak input di bawah.</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={() => onResult(manual.trim() || detectedValue)}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-xs flex items-center gap-1.5 cursor-pointer"
+            >
+              <span>Lanjutkan Terima Barang</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setDetectedValue(null);
+                startScanner();
+              }}
+              className="text-emerald-700 hover:bg-emerald-100 text-xs font-semibold px-3 py-2 rounded-xl transition-colors cursor-pointer"
+            >
+              Scan Ulang
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Error Banner */}
       {error && (
         <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 flex items-start gap-2.5 text-xs">
@@ -265,7 +306,7 @@ export default function QrScanner({
       {/* Divider */}
       <div className="flex items-center gap-3 text-xs text-slate-400 my-2">
         <span className="h-px flex-1 bg-slate-200" />
-        <span>atau input manual nomor surat jalan</span>
+        <span>atau periksa / ubah nomor surat jalan di bawah</span>
         <span className="h-px flex-1 bg-slate-200" />
       </div>
 
@@ -276,13 +317,13 @@ export default function QrScanner({
             value={manual}
             onChange={(e) => setManual(e.target.value)}
             placeholder="Contoh: DLV000245 atau SJ-2026-001"
-            className="w-full px-3.5 py-2.5 text-sm bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 placeholder:text-slate-400"
+            className="w-full px-3.5 py-2.5 text-sm bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 placeholder:text-slate-400 font-medium"
           />
         </div>
         <button
           type="submit"
           disabled={!manual.trim()}
-          className="bg-slate-900 hover:bg-slate-800 disabled:opacity-40 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors inline-flex items-center gap-2 cursor-pointer disabled:cursor-not-allowed"
+          className="bg-slate-900 hover:bg-slate-800 disabled:opacity-40 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors inline-flex items-center gap-2 cursor-pointer disabled:cursor-not-allowed shadow-xs"
         >
           <QrCode className="w-4 h-4" />
           <span>Cari</span>

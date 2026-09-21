@@ -146,7 +146,9 @@ export default function OutgoingPageClient({
         },
         (decoded) => {
           stopScanner();
-          handleLookup(decoded.trim());
+          const cleanCode = decoded.trim();
+          setInputCode(cleanCode);
+          handleLookup(cleanCode);
         },
         () => {},
       );
