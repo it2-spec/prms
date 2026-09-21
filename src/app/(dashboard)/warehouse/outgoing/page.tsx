@@ -28,7 +28,7 @@ export default async function OutgoingPage() {
   const defaultWarehouseId = dbUser?.warehouseId || warehouses[0].id;
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-xl space-y-4">
       <div className="flex items-center gap-3">
         <PageTitle
           title="Outgoing Material"
@@ -37,9 +37,9 @@ export default async function OutgoingPage() {
         />
         <a
           href="/warehouse/history?tab=outgoing"
-          className="btn btn-outline ml-auto inline-flex items-center gap-1 text-sm"
+          className="btn btn-outline ml-auto inline-flex items-center gap-1 text-xs sm:text-sm"
         >
-          Riwayat Outgoing
+          Riwayat
         </a>
       </div>
 

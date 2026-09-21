@@ -507,197 +507,190 @@ export default function OutgoingPageClient({
         </div>
       )}
 
-      {/* STEP 1: SCAN QR / CARI PART - LAYOUT IDENTIK DENGAN INCOMING */}
-      <Card bodyClassName="!p-5 bg-white border border-slate-200 shadow-sm space-y-4">
-        {/* Header Step 1 dengan Dropdown Gudang */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
-          <label className="text-sm font-bold text-slate-900 flex items-center gap-2">
-            <ScanLine className="w-4 h-4 text-blue-600" />
-            <span>Pemindai QR / Barcode Part Keluar</span>
-          </label>
-
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-slate-500 font-medium">Gudang:</span>
-            <select
-              value={selectedWarehouseId}
-              onChange={(e) => handleWarehouseChange(e.target.value)}
-              className="px-3 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-300 focus:border-blue-600 rounded-lg text-xs sm:text-sm font-bold text-slate-800 cursor-pointer focus:outline-none"
-            >
-              {warehouses.map((w) => (
-                <option key={w.id} value={w.id}>
-                  {w.name} ({w.code})
-                </option>
-              ))}
-            </select>
-          </div>
+      {/* Selector Gudang Pengeluaran */}
+      <div className="flex items-center justify-between bg-white px-4 py-3 rounded-2xl border border-slate-200 shadow-2xs">
+        <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-800">
+          <span>Lokasi Gudang:</span>
         </div>
+        <select
+          value={selectedWarehouseId}
+          onChange={(e) => handleWarehouseChange(e.target.value)}
+          className="bg-slate-50 border border-slate-300 text-slate-800 text-xs sm:text-sm font-bold px-3 py-1.5 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 cursor-pointer"
+        >
+          {warehouses.map((w) => (
+            <option key={w.id} value={w.id}>
+              {w.name} ({w.code})
+            </option>
+          ))}
+        </select>
+      </div>
 
-        {/* Scanner Box Container - Identik dengan Incoming */}
-        <div className="relative w-full rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 shadow-md">
-          {/* Wadah kamera Html5Qrcode - SELALU TER-MOUNT */}
-          <div
-            id={SCANNER_ID}
-            className="w-full min-h-[300px] sm:min-h-[340px] flex items-center justify-center relative overflow-hidden"
-          />
+      {/* CARD SCANNER DECK - 100% IDENTIK DENGAN INCOMING */}
+      <Card>
+        <div className="space-y-4">
+          {/* Scanner Box Container */}
+          <div className="relative w-full rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 shadow-md">
+            {/* The actual element used by Html5Qrcode */}
+            <div
+              id={SCANNER_ID}
+              className="w-full min-h-[300px] sm:min-h-[340px] flex items-center justify-center relative overflow-hidden"
+            />
 
-          {/* Overlay saat kamera BELUM aktif */}
-          {!scanning && !starting && (
-            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-6 bg-slate-900/95 text-center">
-              <div className="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center mb-4">
-                <ScanLine className="w-8 h-8 stroke-[1.8]" />
-              </div>
-              <h3 className="text-base font-bold text-white mb-1">
-                Pemindai QR / Barcode Part
-              </h3>
-              <p className="text-xs text-slate-400 max-w-xs mb-5 leading-relaxed">
-                Arahkan kamera ke QR Code atau Barcode pada kemasan part untuk memeriksa stok dan mencatat pengeluaran.
-              </p>
-              <button
-                type="button"
-                onClick={() => startScanner()}
-                className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-6 py-2.5 rounded-xl shadow-lg shadow-blue-600/30 transition-all flex items-center gap-2 cursor-pointer"
-              >
-                <Camera className="w-4 h-4" />
-                <span>Aktifkan Kamera</span>
-              </button>
-            </div>
-          )}
-
-          {/* Loading Spinner saat inisialisasi kamera */}
-          {starting && (
-            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-slate-950/90 text-white p-4">
-              <Loader2 className="w-8 h-8 text-blue-500 animate-spin mb-3" />
-              <p className="text-sm font-semibold">Menghubungkan ke kamera...</p>
-              <p className="text-xs text-slate-400 mt-1">Mohon izinkan akses kamera jika diminta browser</p>
-            </div>
-          )}
-
-          {/* Controls Bar saat kamera AKTIF (Kamera terus menyala sampai tombol Stop diklik) */}
-          {scanning && (
-            <div className="absolute top-3 left-3 right-3 z-30 flex items-center justify-between gap-2 bg-slate-950/75 backdrop-blur-md px-3 py-2 rounded-xl border border-white/10 text-white">
-              <div className="flex items-center gap-2 text-xs font-medium">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span className="hidden sm:inline">Kamera Aktif (Terus Menyala)</span>
-              </div>
-
-              <div className="flex items-center gap-2">
-                {cameras.length > 1 && (
-                  <select
-                    value={selectedCameraId}
-                    onChange={(e) => handleCameraChange(e.target.value)}
-                    className="bg-slate-800 text-white text-xs px-2 py-1 rounded-lg border border-slate-700 focus:outline-none cursor-pointer max-w-[140px] truncate"
-                  >
-                    {cameras.map((c, i) => (
-                      <option key={c.id} value={c.id}>
-                        {c.label || `Kamera ${i + 1}`}
-                      </option>
-                    ))}
-                  </select>
-                )}
-
+            {/* Overlay saat kamera BELUM aktif */}
+            {!scanning && !starting && (
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-6 bg-slate-900/95 text-center">
+                <div className="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center mb-4">
+                  <ScanLine className="w-8 h-8 stroke-[1.8]" />
+                </div>
+                <h3 className="text-base font-bold text-white mb-1">
+                  Pemindai QR / Barcode Part
+                </h3>
+                <p className="text-xs text-slate-400 max-w-xs mb-5 leading-relaxed">
+                  Arahkan kamera ke QR Code atau Barcode pada kemasan part untuk memeriksa stok dan mencatat pengeluaran.
+                </p>
                 <button
                   type="button"
-                  onClick={stopScanner}
-                  className="bg-red-600/90 hover:bg-red-700 text-white text-xs font-semibold px-3 py-1 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+                  onClick={() => startScanner()}
+                  className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-6 py-2.5 rounded-xl shadow-lg shadow-blue-600/30 transition-all flex items-center gap-2 cursor-pointer"
                 >
-                  <StopCircle className="w-3.5 h-3.5" />
-                  <span>Stop Kamera</span>
+                  <Camera className="w-4 h-4" />
+                  <span>Aktifkan Kamera</span>
+                </button>
+              </div>
+            )}
+
+            {/* Loading Spinner saat inisialisasi kamera */}
+            {starting && (
+              <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-slate-950/90 text-white p-4">
+                <Loader2 className="w-8 h-8 text-blue-500 animate-spin mb-3" />
+                <p className="text-sm font-semibold">Menghubungkan ke kamera...</p>
+                <p className="text-xs text-slate-400 mt-1">Mohon berikan izin jika diminta browser</p>
+              </div>
+            )}
+
+            {/* Controls Bar saat kamera AKTIF */}
+            {scanning && (
+              <div className="absolute top-3 left-3 right-3 z-30 flex items-center justify-between gap-2 bg-slate-950/70 backdrop-blur-md px-3 py-2 rounded-xl border border-white/10 text-white">
+                <div className="flex items-center gap-2 text-xs font-medium">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span className="hidden sm:inline">Kamera Aktif</span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  {cameras.length > 1 && (
+                    <select
+                      value={selectedCameraId}
+                      onChange={(e) => handleCameraChange(e.target.value)}
+                      className="bg-slate-800 text-white text-xs px-2 py-1 rounded-lg border border-slate-700 focus:outline-none cursor-pointer max-w-[140px] truncate"
+                    >
+                      {cameras.map((c, i) => (
+                        <option key={c.id} value={c.id}>
+                          {c.label || `Kamera ${i + 1}`}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={stopScanner}
+                    className="bg-red-600/90 hover:bg-red-700 text-white text-xs font-semibold px-3 py-1 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+                  >
+                    <StopCircle className="w-3.5 h-3.5" />
+                    <span>Stop</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Scan Success Confirmation Card */}
+          {detectedCode && (
+            <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-950 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm animate-in fade-in slide-in-from-top-2 duration-200">
+              <div className="flex items-start sm:items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                  <CheckCircle2 className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="text-xs text-emerald-700 font-semibold">QR / Barcode Part Terdeteksi:</div>
+                  <div className="text-base font-black text-emerald-900 font-mono tracking-wide">
+                    {detectedCode}
+                  </div>
+                  {itemData ? (
+                    <div className="text-xs text-emerald-700 font-medium mt-0.5">
+                      {itemData.item.name} &bull; Sisa di {warehouseName}:{" "}
+                      <strong>{itemData.balancePkgQty} {itemData.item.packageUnit || "pail"}</strong>
+                    </div>
+                  ) : (
+                    <div className="text-[11px] text-emerald-600">Sedang memuat data stok part...</div>
+                  )}
+                </div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDetectedCode(null);
+                    setInputCode("");
+                    setItemData(null);
+                  }}
+                  className="text-emerald-700 hover:bg-emerald-100 text-xs font-semibold px-3 py-2 rounded-xl transition-colors cursor-pointer"
+                >
+                  Scan Ulang
                 </button>
               </div>
             </div>
           )}
-        </div>
 
-        {/* Kartu Konfirmasi Hasil Scan (Hijau) - Identik dengan Incoming */}
-        {detectedCode && (
-          <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-950 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs animate-in fade-in slide-in-from-top-2 duration-200">
-            <div className="flex items-start sm:items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-                <CheckCircle2 className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="text-xs text-emerald-700 font-semibold">QR / Barcode Part Terdeteksi:</div>
-                <div className="text-base font-black text-emerald-900 font-mono tracking-wide">
-                  {detectedCode}
-                </div>
-                {itemData ? (
-                  <div className="text-xs text-emerald-700 font-medium mt-0.5">
-                    {itemData.item.name} &bull; Sisa di {warehouseName}:{" "}
-                    <strong>{itemData.balancePkgQty} {itemData.item.packageUnit || "pail"}</strong>
-                  </div>
-                ) : (
-                  <div className="text-[11px] text-emerald-600">Sedang memuat data stok part...</div>
-                )}
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2 shrink-0">
-              <button
-                type="button"
-                onClick={() => {
-                  setDetectedCode(null);
-                  setInputCode("");
-                  setItemData(null);
-                }}
-                className="text-emerald-700 hover:bg-emerald-100 text-xs font-semibold px-3 py-2 rounded-xl transition-colors cursor-pointer"
-              >
-                Scan Part Lain
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Divider Identik dengan Incoming */}
-        <div className="flex items-center gap-3 text-xs text-slate-400 my-1">
-          <span className="h-px flex-1 bg-slate-200" />
-          <span>atau periksa / masukkan kode part manual di bawah</span>
-          <span className="h-px flex-1 bg-slate-200" />
-        </div>
-
-        {/* Form Input Manual / Barcode Scanner Fisik - Identik dengan Incoming */}
-        <form onSubmit={handleFormLookup} className="flex gap-2">
-          <div className="relative flex-1">
-            <input
-              ref={inputRef}
-              type="text"
-              value={inputCode}
-              onChange={(e) => setInputCode(e.target.value)}
-              placeholder="Contoh kode part: SI115 atau scan barcode fisik..."
-              className="w-full pl-10 pr-3.5 py-2.5 text-sm bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 placeholder:text-slate-400 font-medium"
-              disabled={lookupLoading}
-            />
-            <ScanLine className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+          {/* Divider */}
+          <div className="flex items-center gap-3 text-xs text-slate-400 my-2">
+            <span className="h-px flex-1 bg-slate-200" />
+            <span>atau periksa / masukkan kode part di bawah</span>
+            <span className="h-px flex-1 bg-slate-200" />
           </div>
 
-          <button
-            type="submit"
-            disabled={lookupLoading || !inputCode.trim()}
-            className="bg-slate-900 hover:bg-slate-800 disabled:opacity-40 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors inline-flex items-center gap-2 cursor-pointer disabled:cursor-not-allowed shadow-xs shrink-0"
-          >
-            {lookupLoading ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              <QrCode className="w-4 h-4" />
-            )}
-            <span>Cari Part</span>
-          </button>
-        </form>
+          {/* Input Manual Form */}
+          <form onSubmit={handleFormLookup} className="flex gap-2">
+            <div className="relative flex-1">
+              <input
+                ref={inputRef}
+                value={inputCode}
+                onChange={(e) => setInputCode(e.target.value)}
+                placeholder="Contoh: SI115 atau scan barcode manual..."
+                className="w-full px-3.5 py-2.5 text-sm bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 placeholder:text-slate-400 font-medium"
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={!inputCode.trim() || lookupLoading}
+              className="bg-slate-900 hover:bg-slate-800 disabled:opacity-40 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors inline-flex items-center gap-2 cursor-pointer disabled:cursor-not-allowed shadow-xs shrink-0"
+            >
+              {lookupLoading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <QrCode className="w-4 h-4" />
+              )}
+              <span>Cari</span>
+            </button>
+          </form>
 
-        <style jsx global>{`
-          #${SCANNER_ID} video {
-            width: 100% !important;
-            height: 100% !important;
-            max-height: 380px !important;
-            object-fit: cover !important;
-            border-radius: 1rem !important;
-          }
-          #${SCANNER_ID} {
-            border: none !important;
-          }
-          #${SCANNER_ID} img[alt="Info icon"] {
-            display: none !important;
-          }
-        `}</style>
+          {/* Global CSS Override for Html5Qrcode video elements */}
+          <style jsx global>{`
+            #${SCANNER_ID} video {
+              width: 100% !important;
+              height: 100% !important;
+              max-height: 380px !important;
+              object-fit: cover !important;
+              border-radius: 1rem !important;
+            }
+            #${SCANNER_ID} {
+              border: none !important;
+            }
+            #${SCANNER_ID} img[alt="Info icon"] {
+              display: none !important;
+            }
+          `}</style>
+        </div>
       </Card>
 
       {/* STEP 2: MASUKKAN QTY & TAMBAH KE KERANJANG */}
