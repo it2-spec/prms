@@ -77,8 +77,14 @@ async function revisePo(
   // Check received quantity constraints
   for (const d of details) {
     const rcv = receivedByItem.get(d.itemId) || 0;
-    if (d.qty < rcv) {
-      return { error: `Kuantitas item tidak boleh kurang dari jumlah yang sudah diterima (${rcv})` };
+    const oldDetail = po.details.find((x) => x.itemId === d.itemId || x.id === d.id);
+    const originalQty = oldDetail ? Number(oldDetail.qty) : 0;
+    // Hanya tolak jika kuantitas sengaja diturunkan di bawah barang yang sudah diterima gudang
+    if (rcv > 0 && d.qty < rcv && d.qty < originalQty) {
+      const it = po.details.find((x) => x.itemId === d.itemId)?.item;
+      return {
+        error: `Kuantitas item "${it?.name || "Item"}" tidak boleh diturunkan kurang dari jumlah yang sudah diterima gudang (${rcv}).`,
+      };
     }
   }
 

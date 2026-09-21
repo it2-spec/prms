@@ -395,10 +395,13 @@ export default function ReviseForm({
 
     // Validasi kuantitas terhadap barang yang sudah diterima
     for (const r of validDetails) {
-      if (r.receivedQty && r.qty < r.receivedQty) {
+      const oldD = initialDetails.find((x) => x.itemId === r.itemId || x.id === r.id);
+      const originalQty = oldD ? Number(oldD.qty) : 0;
+      // Hanya tolak jika user sengaja MENURUNKAN kuantitas di bawah yang sudah diterima gudang
+      if (r.receivedQty && r.qty < r.receivedQty && r.qty < originalQty) {
         const it = itemMap.get(r.itemId);
         setError(
-          `Kuantitas item "${it?.name ?? r.itemId}" tidak boleh kurang dari jumlah yang sudah diterima gudang (${r.receivedQty}).`
+          `Kuantitas item "${it?.name ?? r.itemId}" tidak boleh diturunkan kurang dari jumlah yang sudah diterima gudang (${r.receivedQty}).`
         );
         return;
       }
@@ -749,7 +752,7 @@ export default function ReviseForm({
                           <input
                             name={`qty_${idx}`}
                             type="number"
-                            min={row.receivedQty || 1}
+                            min={Math.min(Number(row.qty) || 1, row.receivedQty || 1)}
                             readOnly={hasPackaging}
                             className={`w-full text-right font-bold p-1 border rounded text-xs transition ${
                               hasPackaging
@@ -778,8 +781,17 @@ export default function ReviseForm({
                           </span>
                         )}
                         {hasReceived && (
-                          <span className="text-[9px] text-rose-600 block text-right font-medium truncate">
-                            Min: {row.receivedQty}
+                          <span
+                            className={`text-[9px] block text-right font-medium truncate ${
+                              (row.receivedQty || 0) > (Number(row.qty) || 0)
+                                ? "text-amber-600 font-semibold"
+                                : "text-slate-500"
+                            }`}
+                            title={`Sudah diterima fisik di gudang: ${row.receivedQty} ${baseUnit}`}
+                          >
+                            {(row.receivedQty || 0) > (Number(row.qty) || 0)
+                              ? `Diterima: ${row.receivedQty} (+${(row.receivedQty || 0) - (Number(row.qty) || 0)})`
+                              : `Diterima: ${row.receivedQty}`}
                           </span>
                         )}
                       </td>
