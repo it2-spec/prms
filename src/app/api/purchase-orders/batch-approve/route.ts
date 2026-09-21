@@ -117,37 +117,54 @@ export async function POST(req: NextRequest) {
 
       const now = new Date();
 
-      await prisma.$transaction(async (tx) => {
-        for (const po of eligiblePOs) {
-          const totalValue = po.details.reduce((s, d) => s + d.qty * Number(d.unitPrice), 0);
-          const hashPayload = [
-            po.id,
-            po.poNumber,
-            po.supplierId,
-            po.createdById,
-            po.poDate.toISOString(),
-            totalValue.toString(),
-          ].join("|");
-          const verificationHash = crypto.createHash("sha256").update(hashPayload).digest("hex");
+      // 1. Precompute verification hashes in-memory
+      const poUpdates = eligiblePOs.map((po) => {
+        const totalValue = po.details.reduce((s, d) => s + d.qty * Number(d.unitPrice), 0);
+        const hashPayload = [
+          po.id,
+          po.poNumber,
+          po.supplierId,
+          po.createdById,
+          po.poDate.toISOString(),
+          totalValue.toString(),
+        ].join("|");
+        const verificationHash = crypto.createHash("sha256").update(hashPayload).digest("hex");
 
-          await tx.purchaseOrder.update({
-            where: { id: po.id },
-            data: {
-              approvedL2ById: user.id,
-              approvedL2At: now,
-              verificationHash,
-            },
-          });
-
-          await writeAuditLog(
-            user,
-            "APPROVE_PO_L2",
-            "PurchaseOrder",
-            po.id,
-            `PO ${po.poNumber} approved by President Director (Batch Approval): ${user.name || user.username}`
-          );
-        }
+        return {
+          id: po.id,
+          verificationHash,
+        };
       });
+
+      // 2. Execute updates in parallel with 30s transaction timeout
+      await prisma.$transaction(
+        async (tx) => {
+          await Promise.all(
+            poUpdates.map((u) =>
+              tx.purchaseOrder.update({
+                where: { id: u.id },
+                data: {
+                  approvedL2ById: user.id,
+                  approvedL2At: now,
+                  verificationHash: u.verificationHash,
+                },
+              })
+            )
+          );
+        },
+        { maxWait: 10000, timeout: 30000 }
+      );
+
+      // 3. Write audit logs outside the transaction so it doesn't hold locks
+      for (const po of eligiblePOs) {
+        await writeAuditLog(
+          user,
+          "APPROVE_PO_L2",
+          "PurchaseOrder",
+          po.id,
+          `PO ${po.poNumber} approved by President Director (Batch Approval): ${user.name || user.username}`
+        );
+      }
 
       await notifyBatchPoApprovedL2({
         count: eligiblePOs.length,

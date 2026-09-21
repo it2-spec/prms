@@ -315,7 +315,7 @@ export async function POST(req: NextRequest) {
         createdPoNumbers.push(group.poNumber);
         createdPoCount++;
       }
-    });
+    }, { maxWait: 15000, timeout: 60000 });
 
     await writeAuditLog(
       user,
