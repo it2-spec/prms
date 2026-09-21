@@ -164,6 +164,34 @@ function matchDbItem(
   return null;
 }
 
+function extractQuotationRemarks(raw: string): string {
+  if (!raw) return "";
+  const s = raw.trim();
+
+  // 1. Ambil bagian tanda kurung (beserta kurungnya), contoh: "(2026/SNI/VI/0303, 0304, 0305)"
+  const parenMatch = s.match(/(\([^)]+\))/);
+  if (parenMatch && parenMatch[1]) {
+    return parenMatch[1].trim();
+  }
+
+  // 2. Jika tidak ada kurung, ambil nomor quotation (misal: "2026/SNI/VI/0303, 0304, 0305")
+  const slashMatch = s.match(/\b([0-9A-Za-z]{2,8}\/[0-9A-Za-z\/\-_.,\s]+)/);
+  if (slashMatch && slashMatch[1]) {
+    return slashMatch[1].trim();
+  }
+
+  // 3. Fallback: buang prefix "1. Price As per Your Quotations :", "Remarks :", dll.
+  let cleaned = s
+    .replace(/^[0-9]+[.)\s]*/, "")
+    .replace(/^price\s+as\s+per\s+(?:your\s+)?quotations?\s*(?:no\.?)?\s*[:\s]*/i, "")
+    .replace(/^quotations?\s*(?:no\.?)?\s*[:\s]*/i, "")
+    .replace(/^remarks?\s*[:\s]*/i, "")
+    .replace(/^[:\s\-]+/, "")
+    .trim();
+
+  return cleaned;
+}
+
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
@@ -276,10 +304,19 @@ export async function POST(req: NextRequest) {
         }
 
         // QUOTATION / REMARKS (Price As per Your Quotations)
-        if (valUpper.includes("PRICE AS PER YOUR QUOTATION")) {
-          const m = valStr.match(/Price As per Your Quotations?\s*[:\s]*(.*)/i);
-          if (m && m[1]) quotationRemarks = m[1].trim();
-          else quotationRemarks = valStr.replace(/^1\.?\s*/, "").trim();
+        if (valUpper.includes("PRICE AS PER YOUR QUOTATION") || valUpper.includes("QUOTATION")) {
+          let combinedQuote = valStr;
+          for (let offset = 1; offset <= 8; offset++) {
+            const rawVal = row.getCell(c + offset).value;
+            const v = rawVal !== null && rawVal !== undefined ? String(rawVal).trim() : "";
+            if (v && ![":", ""].includes(v)) {
+              combinedQuote = `${combinedQuote} ${v}`.trim();
+            }
+          }
+          const extracted = extractQuotationRemarks(combinedQuote);
+          if (extracted) {
+            quotationRemarks = extracted;
+          }
         }
 
         // LOCATION / WAREHOUSE

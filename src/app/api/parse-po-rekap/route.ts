@@ -137,6 +137,34 @@ function parseDeliverySchedule(raw: string): { dateStr: string; type: "DATE" | "
   return null;
 }
 
+function extractQuotationRemarks(raw: string): string {
+  if (!raw) return "";
+  const s = raw.trim();
+
+  // 1. Ambil bagian tanda kurung (beserta kurungnya), contoh: "(2026/SNI/VI/0303, 0304, 0305)"
+  const parenMatch = s.match(/(\([^)]+\))/);
+  if (parenMatch && parenMatch[1]) {
+    return parenMatch[1].trim();
+  }
+
+  // 2. Jika tidak ada kurung, ambil nomor quotation (misal: "2026/SNI/VI/0303, 0304, 0305")
+  const slashMatch = s.match(/\b([0-9A-Za-z]{2,8}\/[0-9A-Za-z\/\-_.,\s]+)/);
+  if (slashMatch && slashMatch[1]) {
+    return slashMatch[1].trim();
+  }
+
+  // 3. Fallback: buang prefix "1. Price As per Your Quotations :", "Remarks :", dll.
+  let cleaned = s
+    .replace(/^[0-9]+[.)\s]*/, "")
+    .replace(/^price\s+as\s+per\s+(?:your\s+)?quotations?\s*(?:no\.?)?\s*[:\s]*/i, "")
+    .replace(/^quotations?\s*(?:no\.?)?\s*[:\s]*/i, "")
+    .replace(/^remarks?\s*[:\s]*/i, "")
+    .replace(/^[:\s\-]+/, "")
+    .trim();
+
+  return cleaned;
+}
+
 /** Port of clean_value */
 function cleanValue(val: any, isQty = false): string | number | null {
   if (val === null || val === undefined) return null;
@@ -741,9 +769,17 @@ function extractPoDataFromSheet(
 
       // QUOTATION / REMARKS
       if (!notes && (valUpper.includes("PRICE AS PER YOUR QUOTATION") || valUpper.includes("QUOTATION") || valUpper.includes("REMARKS:"))) {
-        const m = cellVal.match(/Price As per Your Quotations?\s*[:\s]*(.*)/i);
-        if (m && m[1]) notes = m[1].trim();
-        else notes = cellVal.replace(/^[0-9.]+\s*/, "").replace(/^[:\s]+/, "").trim();
+        let combinedQuote = cellVal;
+        for (let offset = 1; offset <= 8; offset++) {
+          const v = getCellStr(worksheet, r, c + offset);
+          if (v && ![":", ""].includes(v)) {
+            combinedQuote = `${combinedQuote} ${v}`.trim();
+          }
+        }
+        const extracted = extractQuotationRemarks(combinedQuote);
+        if (extracted) {
+          notes = extracted;
+        }
       }
     }
   }
