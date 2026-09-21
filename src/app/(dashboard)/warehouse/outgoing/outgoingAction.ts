@@ -29,6 +29,7 @@ export async function submitOutgoing(
   cart: CartItem[],
   purpose?: string,
   department?: string,
+  overrideWarehouseId?: string,
 ): Promise<{
   error?: string;
   createdOutgoings?: SubmittedOutgoingResult[];
@@ -39,7 +40,7 @@ export async function submitOutgoing(
   const { user, dbUser } = await getSessionUser();
   if (!user || user.role !== "WAREHOUSE") return { error: "Unauthorized" };
 
-  const warehouseId = dbUser?.warehouseId;
+  const warehouseId = overrideWarehouseId || dbUser?.warehouseId;
   if (!warehouseId) return { error: "Anda tidak terhubung ke warehouse manapun" };
 
   if (!cart.length) return { error: "Keranjang pengeluaran masih kosong" };
@@ -160,9 +161,6 @@ export async function cancelOutgoing(
   const { user, dbUser } = await getSessionUser();
   if (!user || user.role !== "WAREHOUSE") return { error: "Unauthorized" };
 
-  const warehouseId = dbUser?.warehouseId;
-  if (!warehouseId) return { error: "Anda tidak terhubung ke warehouse manapun" };
-
   const outgoing = await prisma.stockOutgoing.findUnique({
     where: { id: outgoingId },
     include: { details: true },
@@ -170,10 +168,6 @@ export async function cancelOutgoing(
 
   if (!outgoing) {
     return { error: "Transaksi outgoing tidak ditemukan" };
-  }
-
-  if (outgoing.warehouseId !== warehouseId) {
-    return { error: "Anda tidak memiliki akses ke transaksi gudang ini" };
   }
 
   if (outgoing.status === "CANCELLED") {

@@ -79,6 +79,71 @@ export async function GET(request: Request) {
 
   const balancePkg = Math.max(0, totalIncomingPkg - totalOutgoingPkg);
 
+  // Jika gudang spesifik dipilih, cari juga ketersediaan di gudang lain
+  const otherWarehouses: Array<{
+    warehouseId: string;
+    warehouseName: string;
+    balancePkgQty: number;
+  }> = [];
+
+  if (warehouseId && warehouseId !== "all") {
+    const allReceivings = await prisma.receivingDetail.findMany({
+      where: {
+        itemId: item.id,
+        receiving: {
+          status: { in: ["VERIFIED", "RECEIVED", "CLOSED"] },
+          warehouseId: { not: warehouseId },
+        },
+      },
+      select: {
+        qtyReceived: true,
+        receiving: { select: { warehouseId: true, warehouse: { select: { name: true } } } },
+      },
+    });
+
+    const allOutgoings = await prisma.stockOutgoingDetail.findMany({
+      where: {
+        itemId: item.id,
+        stockOutgoing: {
+          status: "COMPLETED",
+          warehouseId: { not: warehouseId },
+        },
+      },
+      select: {
+        packageQty: true,
+        stockOutgoing: { select: { warehouseId: true, warehouse: { select: { name: true } } } },
+      },
+    });
+
+    const whMap = new Map<string, { name: string; incoming: number; outgoing: number }>();
+    for (const r of allReceivings) {
+      const wid = r.receiving.warehouseId;
+      const wname = r.receiving.warehouse?.name || "Gudang Lain";
+      const cur = whMap.get(wid) || { name: wname, incoming: 0, outgoing: 0 };
+      cur.incoming += Number(r.qtyReceived || 0);
+      whMap.set(wid, cur);
+    }
+    for (const o of allOutgoings) {
+      const wid = o.stockOutgoing.warehouseId;
+      const wname = o.stockOutgoing.warehouse?.name || "Gudang Lain";
+      const cur = whMap.get(wid) || { name: wname, incoming: 0, outgoing: 0 };
+      cur.outgoing += Number(o.packageQty || 0);
+      whMap.set(wid, cur);
+    }
+
+    for (const [wid, stats] of whMap.entries()) {
+      const inPkg = stats.incoming / pkgSize;
+      const bal = Math.max(0, inPkg - stats.outgoing);
+      if (bal > 0) {
+        otherWarehouses.push({
+          warehouseId: wid,
+          warehouseName: stats.name,
+          balancePkgQty: bal,
+        });
+      }
+    }
+  }
+
   return NextResponse.json({
     item: {
       id: item.id,
@@ -93,5 +158,6 @@ export async function GET(request: Request) {
     outgoingPkgQty: totalOutgoingPkg,
     balancePkgQty: balancePkg,
     balanceBaseQty: balancePkg * pkgSize,
+    otherWarehouses,
   });
 }

@@ -23,6 +23,12 @@ import {
 import { Card } from "@/components/ui";
 import { submitOutgoing, cancelOutgoing } from "./outgoingAction";
 
+type OtherWarehouseStock = {
+  warehouseId: string;
+  warehouseName: string;
+  balancePkgQty: number;
+};
+
 type BalanceData = {
   item: {
     id: string;
@@ -36,6 +42,7 @@ type BalanceData = {
   balanceBaseQty: number;
   incomingPkgQty: number;
   outgoingPkgQty: number;
+  otherWarehouses?: OtherWarehouseStock[];
 };
 
 type CartItem = {
@@ -63,13 +70,15 @@ type RecentTx = {
 const SCANNER_ID = "fast-outgoing-qr-scanner";
 
 export default function OutgoingPageClient({
-  warehouseId,
-  warehouseName,
+  warehouses,
+  initialWarehouseId,
 }: {
-  warehouseId: string;
-  warehouseName: string;
+  warehouses: Array<{ id: string; name: string; code: string }>;
+  initialWarehouseId: string;
 }) {
+  const [selectedWarehouseId, setSelectedWarehouseId] = useState(initialWarehouseId);
   const [inputCode, setInputCode] = useState("");
+  const [detectedCode, setDetectedCode] = useState<string | null>(null);
   const [lookupLoading, setLookupLoading] = useState(false);
   const [itemData, setItemData] = useState<BalanceData | null>(null);
   const [qty, setQty] = useState(1);
@@ -88,19 +97,17 @@ export default function OutgoingPageClient({
   const [cancellingId, setCancellingId] = useState<string | null>(null);
 
   // QR Scanner State
-  const [scanMode, setScanMode] = useState<"camera" | "manual">("camera");
   const [scanning, setScanning] = useState(false);
   const [starting, setStarting] = useState(false);
   const [cameras, setCameras] = useState<CameraDevice[]>([]);
   const [selectedCameraId, setSelectedCameraId] = useState<string>("");
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const lastScannedRef = useRef<{ code: string; time: number }>({ code: "", time: 0 });
 
-  useEffect(() => {
-    if (scanMode === "manual") {
-      inputRef.current?.focus();
-    }
-  }, [scanMode]);
+  const activeWarehouse =
+    warehouses.find((w) => w.id === selectedWarehouseId) || warehouses[0];
+  const warehouseName = activeWarehouse?.name || "Gudang";
 
   useEffect(() => {
     return () => {
@@ -137,7 +144,7 @@ export default function OutgoingPageClient({
         console.warn("Could not enumerate cameras:", err);
       }
 
-      await new Promise((r) => setTimeout(r, 80));
+      await new Promise((r) => setTimeout(r, 60));
 
       const el = document.getElementById(SCANNER_ID);
       if (!el) {
@@ -174,10 +181,24 @@ export default function OutgoingPageClient({
           aspectRatio: 1.0,
         },
         (decoded) => {
-          stopScanner();
           const cleanCode = decoded.trim();
+          if (!cleanCode) return;
+
+          // Anti-spam debounce: cegah trigger berulang dalam 2 detik untuk kode yang sama
+          const now = Date.now();
+          if (
+            cleanCode === lastScannedRef.current.code &&
+            now - lastScannedRef.current.time < 2000
+          ) {
+            return;
+          }
+          lastScannedRef.current = { code: cleanCode, time: now };
+
+          // Isi input & jalankan pencarian tanpa mematikan kamera
           setInputCode(cleanCode);
-          handleLookup(cleanCode);
+          setDetectedCode(cleanCode);
+          handleLookup(cleanCode, selectedWarehouseId);
+          // CATATAN: Kamera tetap menyala terus sampai user klik Stop Kamera
         },
         () => {},
       );
@@ -191,7 +212,7 @@ export default function OutgoingPageClient({
       setErrorMsg(
         err?.message?.includes("Permission") || err?.name === "NotAllowedError"
           ? "Izin kamera ditolak oleh browser. Mohon izinkan akses kamera di pengaturan browser Anda."
-          : "Gagal menghubungkan ke kamera. Silakan gunakan tab 'Ketik Manual' di atas."
+          : "Gagal menghubungkan ke kamera. Silakan gunakan form pencarian manual di bawah."
       );
     }
   }
@@ -218,21 +239,39 @@ export default function OutgoingPageClient({
     startScanner(newCamId);
   }
 
+  function handleWarehouseChange(newWhId: string) {
+    if (cart.length > 0) {
+      if (
+        !confirm(
+          "Mengganti gudang akan mengosongkan keranjang saat ini. Lanjutkan mengganti gudang?"
+        )
+      ) {
+        return;
+      }
+      setCart([]);
+    }
+    setSelectedWarehouseId(newWhId);
+    if (inputCode.trim()) {
+      handleLookup(inputCode.trim(), newWhId);
+    }
+  }
+
   // Lookup Part by Code
-  async function handleLookup(code: string) {
+  async function handleLookup(code: string, overrideWhId?: string) {
     if (!code.trim()) return;
+    const targetWhId = overrideWhId || selectedWarehouseId;
     setLookupLoading(true);
     setErrorMsg(null);
     setSuccessMsg(null);
-    setItemData(null);
 
     try {
       const res = await fetch(
-        `/api/stock/balance?itemCode=${encodeURIComponent(code.trim())}&warehouseId=${warehouseId}`,
+        `/api/stock/balance?itemCode=${encodeURIComponent(code.trim())}&warehouseId=${targetWhId}`,
       );
       const data = await res.json();
       if (!res.ok) {
         setErrorMsg(data.error || "Kode part tidak ditemukan di sistem");
+        setItemData(null);
       } else {
         setItemData(data as BalanceData);
         setQty(1);
@@ -247,6 +286,7 @@ export default function OutgoingPageClient({
   function handleFormLookup(e: React.FormEvent) {
     e.preventDefault();
     if (inputCode.trim()) {
+      setDetectedCode(inputCode.trim());
       handleLookup(inputCode.trim());
     }
   }
@@ -254,6 +294,10 @@ export default function OutgoingPageClient({
   // Tambahkan item ke Keranjang Sementara (Belum Simpan ke Database)
   function handleAddToCart() {
     if (!itemData) return;
+    if (itemData.balancePkgQty <= 0) {
+      setErrorMsg(`Stok ${itemData.item.name} di ${warehouseName} kosong (0 ${itemData.item.packageUnit || "kemasan"}).`);
+      return;
+    }
     if (qty <= 0) {
       setErrorMsg("Jumlah pengeluaran minimal 1");
       return;
@@ -272,12 +316,12 @@ export default function OutgoingPageClient({
       return;
     }
 
-    setErrorMsg(null);
-
     if (inCart) {
       setCart((prev) =>
         prev.map((c) =>
-          c.itemId === itemData.item.id ? { ...c, packageQty: totalDesired } : c,
+          c.itemId === itemData.item.id
+            ? { ...c, packageQty: c.packageQty + qty }
+            : c,
         ),
       );
     } else {
@@ -287,43 +331,53 @@ export default function OutgoingPageClient({
           itemId: itemData.item.id,
           itemCode: itemData.item.code,
           itemName: itemData.item.name,
-          packageUnit: itemData.item.packageUnit || "Pail",
-          packageSize: itemData.item.packageSize || 1,
+          packageUnit: itemData.item.packageUnit || "Kemasan",
+          packageSize: itemData.item.packageSize,
           packageQty: qty,
-          unit: itemData.item.unit || "kg",
+          unit: itemData.item.unit || "satuan",
           availableStock: itemData.balancePkgQty,
         },
       ]);
     }
 
-    // Reset scan form siap untuk scan item berikutnya
+    // Reset pilihan form
     setItemData(null);
     setInputCode("");
-    setQty(1);
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 100);
+    setDetectedCode(null);
+    setErrorMsg(null);
+    setSuccessMsg({
+      text: `Item ${itemData.item.name} (+${qty} ${itemData.item.packageUnit || "kemasan"}) ditambahkan ke keranjang.`,
+    });
   }
 
-  // Hapus item dari Keranjang Sementara
+  function handleUpdateCartQty(itemId: string, newQty: number) {
+    if (newQty <= 0) {
+      handleRemoveFromCart(itemId);
+      return;
+    }
+    const target = cart.find((c) => c.itemId === itemId);
+    if (!target) return;
+
+    if (newQty > target.availableStock) {
+      setErrorMsg(
+        `Maksimal kuantitas untuk ${target.itemName} adalah ${target.availableStock} ${target.packageUnit}`,
+      );
+      return;
+    }
+
+    setErrorMsg(null);
+    setCart((prev) =>
+      prev.map((c) => (c.itemId === itemId ? { ...c, packageQty: newQty } : c)),
+    );
+  }
+
   function handleRemoveFromCart(itemId: string) {
     setCart((prev) => prev.filter((c) => c.itemId !== itemId));
   }
 
-  // Ubah qty item di Keranjang Sementara
-  function handleUpdateCartQty(itemId: string, delta: number) {
-    setCart((prev) =>
-      prev.map((c) => {
-        if (c.itemId !== itemId) return c;
-        const newQty = Math.max(1, Math.min(c.availableStock, c.packageQty + delta));
-        return { ...c, packageQty: newQty };
-      }),
-    );
-  }
-
-  // Submit Semua Item di Keranjang ke Database & Potong Stok
+  // Simpan Semua Item di Keranjang ke Database
   async function handleSubmitAll() {
-    if (cart.length === 0) {
+    if (!cart.length) {
       setErrorMsg("Keranjang masih kosong");
       return;
     }
@@ -341,6 +395,9 @@ export default function OutgoingPageClient({
           packageSize: c.packageSize,
           packageQty: c.packageQty,
         })),
+        undefined,
+        undefined,
+        selectedWarehouseId,
       );
 
       if (res.error) {
@@ -369,7 +426,7 @@ export default function OutgoingPageClient({
 
         const numbersText = created.map((c) => c.outgoingNumber).join(", ");
         setSuccessMsg({
-          text: `Berhasil mengeluarkan ${created.length} item material!`,
+          text: `Berhasil mengeluarkan ${created.length} item material dari ${warehouseName}!`,
           details: `Nomor Transaksi: ${numbersText} (Tercatat sebagai baris tersendiri)`,
         });
 
@@ -378,54 +435,56 @@ export default function OutgoingPageClient({
         }, 100);
       }
     } catch {
-      setErrorMsg("Terjadi kesalahan saat memproses pengeluaran stok");
+      setErrorMsg("Terjadi kesalahan jaringan saat menyimpan pengeluaran");
     } finally {
       setSubmitting(false);
     }
   }
 
-  // Batalkan transaksi yang sudah tersimpan
-  async function handleCancelRecent(tx: RecentTx) {
-    if (!tx.outgoingId) return;
-    const ok = window.confirm(
-      `Batalkan transaksi ${tx.outgoingNumber} (${tx.qty} ${tx.unit} ${tx.itemName})?\n\nStok material akan langsung dikembalikan ke saldo gudang.`,
-    );
-    if (!ok) return;
+  // Batalkan Transaksi Outgoing
+  async function handleCancelOutgoing(outgoingId: string, outgoingNumber: string) {
+    if (
+      !confirm(
+        `Yakin ingin membatalkan transaksi ${outgoingNumber}? Stok barang akan dikembalikan ke saldo gudang ${warehouseName}.`
+      )
+    ) {
+      return;
+    }
 
-    setCancellingId(tx.outgoingId);
+    setCancellingId(outgoingId);
     setErrorMsg(null);
 
     try {
-      const res = await cancelOutgoing(tx.outgoingId, "Dibatalkan langsung di sesi scan");
+      const res = await cancelOutgoing(outgoingId);
       if (res.error) {
         setErrorMsg(res.error);
       } else {
         setRecentList((prev) =>
-          prev.map((item) =>
-            item.outgoingId === tx.outgoingId ? { ...item, isCancelled: true } : item,
-          ),
+          prev.map((r) =>
+            r.outgoingId === outgoingId ? { ...r, isCancelled: true } : r
+          )
         );
         setSuccessMsg({
-          text: `Transaksi ${tx.outgoingNumber} berhasil dibatalkan.`,
-          details: `Stok ${tx.qty} ${tx.unit} ${tx.itemName} telah kembali ke gudang.`,
+          text: `Transaksi ${outgoingNumber} berhasil dibatalkan.`,
+          details: `Stok barang telah dikembalikan ke saldo gudang ${warehouseName}.`,
         });
 
-        if (itemData && itemData.item.code === tx.itemCode) {
-          handleLookup(tx.itemCode);
+        if (itemData) {
+          handleLookup(itemData.item.code);
         }
       }
     } catch {
-      setErrorMsg("Gagal membatalkan transaksi pengeluaran");
+      setErrorMsg("Gagal membatalkan transaksi");
     } finally {
       setCancellingId(null);
     }
   }
 
-  const totalCartPackages = cart.reduce((acc, c) => acc + c.packageQty, 0);
+  const totalCartPackages = cart.reduce((acc, cur) => acc + cur.packageQty, 0);
 
   return (
-    <div className="max-w-3xl mx-auto space-y-5">
-      {/* Alert Sukses */}
+    <div className="space-y-6">
+      {/* Alert Berhasil */}
       {successMsg && (
         <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-900 flex items-start gap-3 shadow-xs animate-in fade-in duration-200">
           <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0 mt-0.5" />
@@ -448,192 +507,198 @@ export default function OutgoingPageClient({
         </div>
       )}
 
-      {/* TAB SELECTOR: KAMERA VS MANUAL */}
-      <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200">
-        <button
-          type="button"
-          onClick={() => setScanMode("camera")}
-          className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg font-bold text-sm transition-all cursor-pointer ${
-            scanMode === "camera"
-              ? "bg-white text-blue-600 shadow-xs"
-              : "text-slate-600 hover:text-slate-900"
-          }`}
-        >
-          <Camera className="w-4 h-4" />
-          <span>Scan Kamera (QR / Barcode)</span>
-        </button>
+      {/* STEP 1: SCAN QR / CARI PART - LAYOUT IDENTIK DENGAN INCOMING */}
+      <Card bodyClassName="!p-5 bg-white border border-slate-200 shadow-sm space-y-4">
+        {/* Header Step 1 dengan Dropdown Gudang */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+          <label className="text-sm font-bold text-slate-900 flex items-center gap-2">
+            <ScanLine className="w-4 h-4 text-blue-600" />
+            <span>Pemindai QR / Barcode Part Keluar</span>
+          </label>
 
-        <button
-          type="button"
-          onClick={() => {
-            setScanMode("manual");
-            stopScanner();
-          }}
-          className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg font-bold text-sm transition-all cursor-pointer ${
-            scanMode === "manual"
-              ? "bg-white text-blue-600 shadow-xs"
-              : "text-slate-600 hover:text-slate-900"
-          }`}
-        >
-          <Keyboard className="w-4 h-4" />
-          <span>Ketik Manual / Barcode Scanner</span>
-        </button>
-      </div>
-
-      {/* STEP 1: SCAN / INPUT PART */}
-      {scanMode === "camera" ? (
-        <Card bodyClassName="!p-5 bg-white border border-slate-200 shadow-sm space-y-4">
-          <div className="flex items-center justify-between">
-            <label className="text-sm font-bold text-slate-800 flex items-center gap-2">
-              <ScanLine className="w-4 h-4 text-blue-600" />
-              <span>Pemindai QR / Barcode Part</span>
-            </label>
-            <span className="text-xs text-slate-500">
-              Gudang: <strong className="text-slate-700">{warehouseName}</strong>
-            </span>
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-slate-500 font-medium">Gudang:</span>
+            <select
+              value={selectedWarehouseId}
+              onChange={(e) => handleWarehouseChange(e.target.value)}
+              className="px-3 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-300 focus:border-blue-600 rounded-lg text-xs sm:text-sm font-bold text-slate-800 cursor-pointer focus:outline-none"
+            >
+              {warehouses.map((w) => (
+                <option key={w.id} value={w.id}>
+                  {w.name} ({w.code})
+                </option>
+              ))}
+            </select>
           </div>
+        </div>
 
-          {/* Scanner Box Container - Guaranteed DOM Mounting */}
-          <div className="relative w-full rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 shadow-md">
-            {/* The actual element used by Html5Qrcode */}
-            <div
-              id={SCANNER_ID}
-              className="w-full min-h-[280px] sm:min-h-[320px] flex items-center justify-center relative overflow-hidden"
-            />
+        {/* Scanner Box Container - Identik dengan Incoming */}
+        <div className="relative w-full rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 shadow-md">
+          {/* Wadah kamera Html5Qrcode - SELALU TER-MOUNT */}
+          <div
+            id={SCANNER_ID}
+            className="w-full min-h-[300px] sm:min-h-[340px] flex items-center justify-center relative overflow-hidden"
+          />
 
-            {/* Overlay saat kamera BELUM aktif */}
-            {!scanning && !starting && (
-              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-6 bg-slate-900/95 text-center">
-                <div className="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center mb-4">
-                  <ScanLine className="w-8 h-8 stroke-[1.8]" />
-                </div>
-                <h3 className="text-base font-bold text-white mb-1">
-                  Kamera Scan Part Gudang
-                </h3>
-                <p className="text-xs text-slate-400 max-w-xs mb-5 leading-relaxed">
-                  Arahkan kamera ke QR Code atau Barcode pada kemasan part untuk memeriksa stok dan mencatat pengeluaran.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => startScanner()}
-                  className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-6 py-2.5 rounded-xl shadow-lg shadow-blue-600/30 transition-all flex items-center gap-2 cursor-pointer"
-                >
-                  <Camera className="w-4 h-4" />
-                  <span>Aktifkan Kamera Scan Part</span>
-                </button>
+          {/* Overlay saat kamera BELUM aktif */}
+          {!scanning && !starting && (
+            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-6 bg-slate-900/95 text-center">
+              <div className="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center mb-4">
+                <ScanLine className="w-8 h-8 stroke-[1.8]" />
               </div>
-            )}
-
-            {/* Loading Spinner saat inisialisasi kamera */}
-            {starting && (
-              <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-slate-950/90 text-white p-4">
-                <Loader2 className="w-8 h-8 text-blue-500 animate-spin mb-3" />
-                <p className="text-sm font-semibold">Menghubungkan ke kamera...</p>
-                <p className="text-xs text-slate-400 mt-1">Mohon izinkan akses kamera jika diminta browser</p>
-              </div>
-            )}
-
-            {/* Controls Bar saat kamera AKTIF */}
-            {scanning && (
-              <div className="absolute top-3 left-3 right-3 z-30 flex items-center justify-between gap-2 bg-slate-950/75 backdrop-blur-md px-3 py-2 rounded-xl border border-white/10 text-white">
-                <div className="flex items-center gap-2 text-xs font-medium">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                  <span className="hidden sm:inline">Kamera Aktif</span>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  {cameras.length > 1 && (
-                    <select
-                      value={selectedCameraId}
-                      onChange={(e) => handleCameraChange(e.target.value)}
-                      className="bg-slate-800 text-white text-xs px-2 py-1 rounded-lg border border-slate-700 focus:outline-none cursor-pointer max-w-[140px] truncate"
-                    >
-                      {cameras.map((c, i) => (
-                        <option key={c.id} value={c.id}>
-                          {c.label || `Kamera ${i + 1}`}
-                        </option>
-                      ))}
-                    </select>
-                  )}
-
-                  <button
-                    type="button"
-                    onClick={stopScanner}
-                    className="bg-red-600/90 hover:bg-red-700 text-white text-xs font-semibold px-3 py-1 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
-                  >
-                    <StopCircle className="w-3.5 h-3.5" />
-                    <span>Stop Kamera</span>
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {inputCode && (
-            <div className="flex items-center justify-between bg-blue-50 border border-blue-200 rounded-xl p-3 text-sm">
-              <span className="text-slate-600 font-medium">Hasil Scan Terakhir:</span>
-              <span className="font-mono font-bold text-blue-700">{inputCode}</span>
+              <h3 className="text-base font-bold text-white mb-1">
+                Pemindai QR / Barcode Part
+              </h3>
+              <p className="text-xs text-slate-400 max-w-xs mb-5 leading-relaxed">
+                Arahkan kamera ke QR Code atau Barcode pada kemasan part untuk memeriksa stok dan mencatat pengeluaran.
+              </p>
+              <button
+                type="button"
+                onClick={() => startScanner()}
+                className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-6 py-2.5 rounded-xl shadow-lg shadow-blue-600/30 transition-all flex items-center gap-2 cursor-pointer"
+              >
+                <Camera className="w-4 h-4" />
+                <span>Aktifkan Kamera</span>
+              </button>
             </div>
           )}
 
-          <style jsx global>{`
-            #${SCANNER_ID} video {
-              width: 100% !important;
-              height: 100% !important;
-              max-height: 340px !important;
-              object-fit: cover !important;
-              border-radius: 1rem !important;
-            }
-            #${SCANNER_ID} {
-              border: none !important;
-            }
-            #${SCANNER_ID} img[alt="Info icon"] {
-              display: none !important;
-            }
-          `}</style>
-        </Card>
-      ) : (
-        <Card bodyClassName="!p-5 bg-white border border-slate-200 shadow-sm">
-          <form onSubmit={handleFormLookup} className="space-y-3">
-            <div className="flex items-center justify-between">
-              <label className="text-sm font-bold text-slate-800 flex items-center gap-2">
-                <Keyboard className="w-4 h-4 text-blue-600" />
-                <span>Ketik Kode Barang / Barcode Scanner</span>
-              </label>
-              <span className="text-xs text-slate-500">
-                Gudang: <strong className="text-slate-700">{warehouseName}</strong>
-              </span>
+          {/* Loading Spinner saat inisialisasi kamera */}
+          {starting && (
+            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-slate-950/90 text-white p-4">
+              <Loader2 className="w-8 h-8 text-blue-500 animate-spin mb-3" />
+              <p className="text-sm font-semibold">Menghubungkan ke kamera...</p>
+              <p className="text-xs text-slate-400 mt-1">Mohon izinkan akses kamera jika diminta browser</p>
             </div>
+          )}
 
-            <div className="flex items-center gap-2">
-              <div className="relative flex-1">
-                <input
-                  ref={inputRef}
-                  type="text"
-                  value={inputCode}
-                  onChange={(e) => setInputCode(e.target.value)}
-                  placeholder="Scan barcode fisik / ketik kode part lalu tekan Enter..."
-                  className="w-full pl-10 pr-3 py-3 rounded-xl border-2 border-slate-300 focus:border-blue-600 focus:outline-hidden text-base font-semibold placeholder:font-normal placeholder:text-slate-400 shadow-2xs"
-                  disabled={lookupLoading}
-                  autoFocus
-                />
-                <ScanLine className="w-5 h-5 text-slate-400 absolute left-3 top-3.5" />
+          {/* Controls Bar saat kamera AKTIF (Kamera terus menyala sampai tombol Stop diklik) */}
+          {scanning && (
+            <div className="absolute top-3 left-3 right-3 z-30 flex items-center justify-between gap-2 bg-slate-950/75 backdrop-blur-md px-3 py-2 rounded-xl border border-white/10 text-white">
+              <div className="flex items-center gap-2 text-xs font-medium">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span className="hidden sm:inline">Kamera Aktif (Terus Menyala)</span>
               </div>
 
+              <div className="flex items-center gap-2">
+                {cameras.length > 1 && (
+                  <select
+                    value={selectedCameraId}
+                    onChange={(e) => handleCameraChange(e.target.value)}
+                    className="bg-slate-800 text-white text-xs px-2 py-1 rounded-lg border border-slate-700 focus:outline-none cursor-pointer max-w-[140px] truncate"
+                  >
+                    {cameras.map((c, i) => (
+                      <option key={c.id} value={c.id}>
+                        {c.label || `Kamera ${i + 1}`}
+                      </option>
+                    ))}
+                  </select>
+                )}
+
+                <button
+                  type="button"
+                  onClick={stopScanner}
+                  className="bg-red-600/90 hover:bg-red-700 text-white text-xs font-semibold px-3 py-1 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+                >
+                  <StopCircle className="w-3.5 h-3.5" />
+                  <span>Stop Kamera</span>
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Kartu Konfirmasi Hasil Scan (Hijau) - Identik dengan Incoming */}
+        {detectedCode && (
+          <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-950 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="flex items-start sm:items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                <CheckCircle2 className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="text-xs text-emerald-700 font-semibold">QR / Barcode Part Terdeteksi:</div>
+                <div className="text-base font-black text-emerald-900 font-mono tracking-wide">
+                  {detectedCode}
+                </div>
+                {itemData ? (
+                  <div className="text-xs text-emerald-700 font-medium mt-0.5">
+                    {itemData.item.name} &bull; Sisa di {warehouseName}:{" "}
+                    <strong>{itemData.balancePkgQty} {itemData.item.packageUnit || "pail"}</strong>
+                  </div>
+                ) : (
+                  <div className="text-[11px] text-emerald-600">Sedang memuat data stok part...</div>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
               <button
-                type="submit"
-                disabled={lookupLoading || !inputCode.trim()}
-                className="px-5 py-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-xl font-bold text-sm transition shrink-0 cursor-pointer"
+                type="button"
+                onClick={() => {
+                  setDetectedCode(null);
+                  setInputCode("");
+                  setItemData(null);
+                }}
+                className="text-emerald-700 hover:bg-emerald-100 text-xs font-semibold px-3 py-2 rounded-xl transition-colors cursor-pointer"
               >
-                {lookupLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Cari Part"}
+                Scan Part Lain
               </button>
             </div>
-            <p className="text-xs text-slate-500">
-              Mendukung barcode scanner USB / Bluetooth fisik (otomatis submit saat Enter) atau ketik kode manual.
-            </p>
-          </form>
-        </Card>
-      )}
+          </div>
+        )}
+
+        {/* Divider Identik dengan Incoming */}
+        <div className="flex items-center gap-3 text-xs text-slate-400 my-1">
+          <span className="h-px flex-1 bg-slate-200" />
+          <span>atau periksa / masukkan kode part manual di bawah</span>
+          <span className="h-px flex-1 bg-slate-200" />
+        </div>
+
+        {/* Form Input Manual / Barcode Scanner Fisik - Identik dengan Incoming */}
+        <form onSubmit={handleFormLookup} className="flex gap-2">
+          <div className="relative flex-1">
+            <input
+              ref={inputRef}
+              type="text"
+              value={inputCode}
+              onChange={(e) => setInputCode(e.target.value)}
+              placeholder="Contoh kode part: SI115 atau scan barcode fisik..."
+              className="w-full pl-10 pr-3.5 py-2.5 text-sm bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 placeholder:text-slate-400 font-medium"
+              disabled={lookupLoading}
+            />
+            <ScanLine className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+          </div>
+
+          <button
+            type="submit"
+            disabled={lookupLoading || !inputCode.trim()}
+            className="bg-slate-900 hover:bg-slate-800 disabled:opacity-40 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors inline-flex items-center gap-2 cursor-pointer disabled:cursor-not-allowed shadow-xs shrink-0"
+          >
+            {lookupLoading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <QrCode className="w-4 h-4" />
+            )}
+            <span>Cari Part</span>
+          </button>
+        </form>
+
+        <style jsx global>{`
+          #${SCANNER_ID} video {
+            width: 100% !important;
+            height: 100% !important;
+            max-height: 380px !important;
+            object-fit: cover !important;
+            border-radius: 1rem !important;
+          }
+          #${SCANNER_ID} {
+            border: none !important;
+          }
+          #${SCANNER_ID} img[alt="Info icon"] {
+            display: none !important;
+          }
+        `}</style>
+      </Card>
 
       {/* STEP 2: MASUKKAN QTY & TAMBAH KE KERANJANG */}
       {itemData && (
@@ -650,16 +715,68 @@ export default function OutgoingPageClient({
                 </div>
               </div>
 
-              <div className="text-right shrink-0 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-2">
-                <div className="text-[11px] text-emerald-700 font-medium">Stok Tersedia</div>
-                <div className="text-xl font-black text-emerald-800 font-mono">
-                  {itemData.balancePkgQty}
-                  <span className="text-xs font-normal text-emerald-700 ml-1">
-                    {itemData.item.packageUnit || "Pail"}
+              {/* STOK BADGE: HIJAU JIKA TERSEDIA, MERAH JIKA KOSONG */}
+              {itemData.balancePkgQty > 0 ? (
+                <div className="text-right shrink-0 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-2">
+                  <div className="text-[11px] text-emerald-700 font-medium">Stok Tersedia</div>
+                  <div className="text-xl font-black text-emerald-800 font-mono">
+                    {itemData.balancePkgQty}
+                    <span className="text-xs font-normal text-emerald-700 ml-1">
+                      {itemData.item.packageUnit || "Pail"}
+                    </span>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-right shrink-0 bg-red-50 border border-red-200 rounded-xl px-4 py-2">
+                  <div className="text-[11px] text-red-700 font-bold uppercase tracking-wider">Stok Kosong</div>
+                  <div className="text-xl font-black text-red-800 font-mono">
+                    0
+                    <span className="text-xs font-normal text-red-700 ml-1">
+                      {itemData.item.packageUnit || "Pail"}
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* JIKA STOK KOSONG DI GUDANG INI, TAMPILKAN REKOMENDASI GUDANG LAIN */}
+            {itemData.balancePkgQty <= 0 && (
+              <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-300 text-amber-950 text-xs space-y-2">
+                <div className="flex items-center gap-2 font-bold text-amber-900">
+                  <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
+                  <span>
+                    Stok barang ini di <u>{warehouseName}</u> kosong (0 {itemData.item.packageUnit || "kemasan"}).
                   </span>
                 </div>
+                {itemData.otherWarehouses && itemData.otherWarehouses.length > 0 ? (
+                  <div className="pt-1 space-y-1.5">
+                    <p className="text-slate-700 font-medium">
+                      Barang ini tersedia di gudang lain. Klik untuk langsung memindahkan lokasi pengeluaran:
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {itemData.otherWarehouses.map((ow) => (
+                        <button
+                          key={ow.warehouseId}
+                          type="button"
+                          onClick={() => handleWarehouseChange(ow.warehouseId)}
+                          className="px-3 py-1.5 bg-white hover:bg-amber-100 text-amber-900 border border-amber-400 font-bold rounded-lg shadow-2xs transition inline-flex items-center gap-2 cursor-pointer"
+                        >
+                          <span>Pindah ke <strong>{ow.warehouseName}</strong>:</span>
+                          <span className="font-mono text-emerald-700 font-black">
+                            {ow.balancePkgQty} {itemData.item.packageUnit || "pail"}
+                          </span>
+                          <ArrowRight className="w-3.5 h-3.5 text-amber-700" />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-slate-600">
+                    Tidak ada catatan stok untuk part ini di gudang manapun.
+                  </p>
+                )}
               </div>
-            </div>
+            )}
 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
@@ -671,7 +788,8 @@ export default function OutgoingPageClient({
                   <button
                     type="button"
                     onClick={() => setQty((q) => Math.max(1, q - 1))}
-                    className="w-10 h-10 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-base flex items-center justify-center transition cursor-pointer border border-slate-300"
+                    disabled={itemData.balancePkgQty <= 0}
+                    className="w-10 h-10 rounded-lg bg-slate-100 hover:bg-slate-200 disabled:opacity-40 disabled:cursor-not-allowed text-slate-700 font-bold text-base flex items-center justify-center transition cursor-pointer border border-slate-300"
                   >
                     <Minus className="w-4 h-4" />
                   </button>
@@ -679,8 +797,8 @@ export default function OutgoingPageClient({
                   <input
                     type="number"
                     min="1"
-                    max={itemData.balancePkgQty}
-                    value={qty}
+                    max={Math.max(1, itemData.balancePkgQty)}
+                    value={itemData.balancePkgQty <= 0 ? 0 : qty}
                     onChange={(e) => {
                       const val = parseInt(e.target.value, 10);
                       setQty(isNaN(val) || val < 1 ? 1 : val);
@@ -691,20 +809,24 @@ export default function OutgoingPageClient({
                         handleAddToCart();
                       }
                     }}
+                    disabled={itemData.balancePkgQty <= 0}
                     autoFocus
-                    className="w-24 h-10 text-center text-xl font-black font-mono rounded-lg border-2 border-blue-500 bg-white focus:outline-hidden"
+                    className="w-24 h-10 text-center text-xl font-black font-mono rounded-lg border-2 border-blue-500 disabled:border-slate-300 disabled:bg-slate-100 disabled:text-slate-400 bg-white focus:outline-hidden"
                   />
 
                   <button
                     type="button"
                     onClick={() => setQty((q) => Math.min(itemData.balancePkgQty, q + 1))}
-                    className="w-10 h-10 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-base flex items-center justify-center transition cursor-pointer border border-slate-300"
+                    disabled={itemData.balancePkgQty <= 0}
+                    className="w-10 h-10 rounded-lg bg-slate-100 hover:bg-slate-200 disabled:opacity-40 disabled:cursor-not-allowed text-slate-700 font-bold text-base flex items-center justify-center transition cursor-pointer border border-slate-300"
                   >
                     <Plus className="w-4 h-4" />
                   </button>
 
                   <span className="text-xs font-semibold text-slate-600 ml-1">
-                    {itemData.item.packageUnit || "Kemasan"} (= {qty * itemData.item.packageSize} {itemData.item.unit || "kg"})
+                    {itemData.item.packageUnit || "Kemasan"} (={" "}
+                    {(itemData.balancePkgQty <= 0 ? 0 : qty) * itemData.item.packageSize}{" "}
+                    {itemData.item.unit || "kg"})
                   </span>
                 </div>
               </div>
@@ -720,10 +842,13 @@ export default function OutgoingPageClient({
                 <button
                   type="button"
                   onClick={handleAddToCart}
-                  className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition shadow-xs flex items-center gap-1.5 cursor-pointer"
+                  disabled={itemData.balancePkgQty <= 0}
+                  className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-xs transition shadow-xs flex items-center gap-1.5 cursor-pointer"
                 >
                   <Plus className="w-4 h-4" />
-                  <span>+ Tambah ke Keranjang</span>
+                  <span>
+                    {itemData.balancePkgQty <= 0 ? "Stok Kosong" : "+ Tambah ke Keranjang"}
+                  </span>
                 </button>
               </div>
             </div>
@@ -895,7 +1020,7 @@ export default function OutgoingPageClient({
                   {!tx.isCancelled && (
                     <button
                       type="button"
-                      onClick={() => handleCancelRecent(tx)}
+                      onClick={() => handleCancelOutgoing(tx.outgoingId, tx.outgoingNumber)}
                       disabled={cancellingId === tx.outgoingId}
                       className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-red-200 bg-white hover:bg-red-50 text-red-600 font-semibold text-xs transition cursor-pointer disabled:opacity-50 shadow-2xs"
                       title="Batalkan transaksi ini jika salah scan"

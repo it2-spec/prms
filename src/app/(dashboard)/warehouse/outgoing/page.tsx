@@ -11,19 +11,21 @@ export default async function OutgoingPage() {
   const { user, dbUser } = await getSessionUser();
   if (!user || user.role !== "WAREHOUSE") redirect("/");
 
-  const warehouseId = dbUser?.warehouseId;
-  if (!warehouseId) {
+  const warehouses = await prisma.warehouse.findMany({
+    where: { isActive: true },
+    select: { id: true, name: true, code: true },
+    orderBy: { name: "asc" },
+  });
+
+  if (warehouses.length === 0) {
     return (
       <div className="alert alert-warning">
-        Akun Anda tidak terhubung ke gudang manapun. Hubungi administrator.
+        Belum ada data gudang aktif di sistem. Hubungi administrator.
       </div>
     );
   }
 
-  const warehouse = await prisma.warehouse.findUnique({
-    where: { id: warehouseId },
-    select: { name: true },
-  });
+  const defaultWarehouseId = dbUser?.warehouseId || warehouses[0].id;
 
   return (
     <div className="space-y-6">
@@ -42,8 +44,8 @@ export default async function OutgoingPage() {
       </div>
 
       <OutgoingPageClient
-        warehouseId={warehouseId}
-        warehouseName={warehouse?.name ?? "Gudang"}
+        warehouses={warehouses}
+        initialWarehouseId={defaultWarehouseId}
       />
     </div>
   );
