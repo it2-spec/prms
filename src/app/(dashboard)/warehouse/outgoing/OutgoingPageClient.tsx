@@ -103,28 +103,72 @@ export default function OutgoingPageClient({
 
   async function startScanner() {
     setErrorMsg(null);
+    setScanning(true);
+
     try {
-      if (!scannerRef.current) {
-        scannerRef.current = new Html5Qrcode(SCANNER_ID);
+      if (scannerRef.current) {
+        if (scannerRef.current.isScanning) {
+          await scannerRef.current.stop();
+        }
+        scannerRef.current.clear();
+        scannerRef.current = null;
       }
-      await scannerRef.current.start(
-        { facingMode: "environment" },
-        { fps: 10, qrbox: { width: 220, height: 220 } },
+
+      // Wait for React to render the scanner container into the DOM
+      await new Promise((r) => setTimeout(r, 100));
+
+      const el = document.getElementById(SCANNER_ID);
+      if (!el) {
+        throw new Error("Container scanner belum siap.");
+      }
+
+      const scanner = new Html5Qrcode(SCANNER_ID);
+      scannerRef.current = scanner;
+
+      let targetCam: any = { facingMode: "environment" };
+      try {
+        const cams = await Html5Qrcode.getCameras();
+        if (cams && cams.length > 0) {
+          const rear = cams.find((c) => /back|rear|belakang|environment/i.test(c.label));
+          targetCam = rear ? rear.id : cams[0].id;
+        }
+      } catch {}
+
+      await scanner.start(
+        targetCam,
+        {
+          fps: 15,
+          qrbox: (w, h) => {
+            const edge = Math.max(180, Math.floor(Math.min(w, h) * 0.72));
+            return { width: edge, height: edge };
+          },
+          aspectRatio: 1.0,
+        },
         (decoded) => {
           stopScanner();
           handleLookup(decoded.trim());
         },
         () => {},
       );
-      setScanning(true);
-    } catch {
-      setErrorMsg("Tidak dapat mengakses kamera. Silakan ketik kode part langsung.");
+    } catch (err: any) {
+      console.error("Outgoing scanner error:", err);
+      setScanning(false);
+      setErrorMsg("Tidak dapat mengakses kamera. Silakan ketik kode part langsung di bawah.");
     }
   }
 
   async function stopScanner() {
-    if (scannerRef.current?.isScanning) {
-      await scannerRef.current.stop().catch(() => {});
+    try {
+      if (scannerRef.current) {
+        if (scannerRef.current.isScanning) {
+          await scannerRef.current.stop();
+        }
+        scannerRef.current.clear();
+        scannerRef.current = null;
+      }
+    } catch {
+      // ignore
+    } finally {
       setScanning(false);
     }
   }
@@ -411,8 +455,27 @@ export default function OutgoingPageClient({
 
         {scanning && (
           <div className="mt-4 pt-4 border-t border-slate-200 flex flex-col items-center">
-            <div id={SCANNER_ID} className="w-full max-w-sm rounded-xl overflow-hidden border border-slate-300 shadow-inner" />
+            <div
+              id={SCANNER_ID}
+              className="w-full max-w-sm rounded-xl overflow-hidden border border-slate-300 shadow-inner bg-slate-950 min-h-[260px]"
+            />
             <p className="text-xs text-slate-500 mt-2">Arahkan kamera ke QR / Barcode part</p>
+
+            <style jsx global>{`
+              #${SCANNER_ID} video {
+                width: 100% !important;
+                height: 100% !important;
+                max-height: 320px !important;
+                object-fit: cover !important;
+                border-radius: 0.75rem !important;
+              }
+              #${SCANNER_ID} {
+                border: none !important;
+              }
+              #${SCANNER_ID} img[alt="Info icon"] {
+                display: none !important;
+              }
+            `}</style>
           </div>
         )}
       </Card>
