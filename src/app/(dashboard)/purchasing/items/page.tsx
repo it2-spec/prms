@@ -414,6 +414,13 @@ export default function ItemsPage() {
               <Upload className="w-4 h-4 text-blue-600" /> Update Kode via Excel
             </Button>
             <Button
+              onClick={() => router.push("/purchasing/items/reconcile-painting")}
+              variant="secondary"
+              className="gap-2 text-xs border-teal-200 text-teal-800 bg-teal-50/60 hover:bg-teal-100/80"
+            >
+              <Sparkles className="w-4 h-4 text-teal-600" /> Rekonsiliasi Kode Painting
+            </Button>
+            <Button
               onClick={() => router.push("/purchasing/items/import")}
               variant="secondary"
               className="gap-2 text-xs"

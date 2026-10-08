@@ -149,6 +149,18 @@ body {
     background-color: #e2e8f0;
   }
 
+  .btn-outline {
+    background-color: #ffffff;
+    color: #334155;
+    border: 1px solid #cbd5e1;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+  .btn-outline:hover {
+    background-color: #f8fafc;
+    border-color: #94a3b8;
+    color: #0f172a;
+  }
+
   .btn-danger {
     background-color: #dc2626;
     color: #ffffff;

@@ -1,8 +1,9 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { PageTitle } from "@/components/ui";
-import { PackageMinus } from "lucide-react";
+import { History } from "lucide-react";
 import OutgoingPageClient from "./OutgoingPageClient";
 
 export const dynamic = "force-dynamic";
@@ -29,19 +30,20 @@ export default async function OutgoingPage() {
 
   return (
     <div className="mx-auto max-w-xl space-y-4">
-      <div className="flex items-center gap-3">
-        <PageTitle
-          title="Outgoing Material"
-          subtitle="Scan barang untuk mencatat pengeluaran stok dari gudang"
-          breadcrumb={["Warehouse", "Outgoing Material"]}
-        />
-        <a
-          href="/warehouse/history?tab=outgoing"
-          className="btn btn-outline ml-auto inline-flex items-center gap-1 text-xs sm:text-sm"
-        >
-          Riwayat
-        </a>
-      </div>
+      <PageTitle
+        title="Outgoing Material"
+        subtitle="Scan barang untuk mencatat pengeluaran stok dari gudang"
+        breadcrumb={["Warehouse", "Outgoing Material"]}
+        action={
+          <Link
+            href="/warehouse/history?tab=outgoing"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 font-semibold text-xs transition-all shadow-xs cursor-pointer active:scale-95"
+          >
+            <History className="w-4 h-4 text-slate-500" />
+            <span>Riwayat Outgoing</span>
+          </Link>
+        }
+      />
 
       <OutgoingPageClient
         warehouses={warehouses}

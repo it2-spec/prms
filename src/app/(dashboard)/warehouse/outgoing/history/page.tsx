@@ -37,20 +37,20 @@ export default async function OutgoingHistoryPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <PageTitle
-          title="Riwayat Outgoing"
-          subtitle="Daftar pengeluaran material dari gudang"
-          breadcrumb={["Warehouse", "Outgoing Material", "Riwayat"]}
-        />
-        <Link
-          href="/warehouse/outgoing"
-          className="btn btn-primary ml-auto inline-flex items-center gap-1 text-sm"
-        >
-          <PackageMinus className="h-4 w-4" />
-          Outgoing Baru
-        </Link>
-      </div>
+      <PageTitle
+        title="Riwayat Outgoing"
+        subtitle="Daftar pengeluaran material dari gudang"
+        breadcrumb={["Warehouse", "Outgoing Material", "Riwayat"]}
+        action={
+          <Link
+            href="/warehouse/outgoing"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-semibold text-xs transition-all shadow-xs cursor-pointer active:scale-95"
+          >
+            <PackageMinus className="h-4 w-4" />
+            <span>Outgoing Baru</span>
+          </Link>
+        }
+      />
 
       <Card>
         {outgoings.length === 0 ? (

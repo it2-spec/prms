@@ -212,8 +212,11 @@ export default async function PurchaseOrderList({
       approvedById: po.approvedById,
       approvedL2ById: po.approvedL2ById,
       supplier: {
+        id: po.supplier.id,
         name: po.supplier.name,
         code: po.supplier.code,
+        email: po.supplier.email,
+        contactPerson: po.supplier.contactPerson,
       },
       warehouse: po.warehouse ? { name: po.warehouse.name, code: po.warehouse.code } : null,
       details: computedDetails,

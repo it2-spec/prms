@@ -36,20 +36,20 @@ export default async function PurchasingOutgoingDetailPage({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <Link
-          href="/purchasing/outgoing"
-          className="btn btn-outline inline-flex items-center gap-1 text-sm"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Kembali
-        </Link>
-        <PageTitle
-          title={`Outgoing: ${outgoing.outgoingNumber}`}
-          subtitle={formatDate(outgoing.issuedAt)}
-          breadcrumb={["Purchasing", "Outgoing Material", outgoing.outgoingNumber]}
-        />
-      </div>
+      <PageTitle
+        title={`Outgoing: ${outgoing.outgoingNumber}`}
+        subtitle={formatDate(outgoing.issuedAt)}
+        breadcrumb={["Purchasing", "Outgoing Material", outgoing.outgoingNumber]}
+        action={
+          <Link
+            href="/purchasing/outgoing"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition shadow-xs cursor-pointer"
+          >
+            <ArrowLeft className="h-3.5 w-3.5 text-slate-500" />
+            <span>Kembali</span>
+          </Link>
+        }
+      />
 
       {outgoing.status === "CANCELLED" && (
         <div className="p-4 bg-red-50 border border-red-300 rounded-xl text-red-900 flex items-start gap-3 shadow-xs">

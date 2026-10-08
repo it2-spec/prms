@@ -266,3 +266,293 @@ export function findBestMatch<T>(
 
   return null;
 }
+
+/**
+ * Specialized Paint & Chemical Signature Types
+ */
+export type PaintSignature = {
+  brand: "ORIGIN" | "NIPPON" | null;
+  category: "THINNER" | "HARDENER" | "CLEAR" | "PRIMER" | "PAINT_KILLER" | "PAINT";
+  isWashing: boolean;
+  isPrimer: boolean;
+  family: string | null;
+  subType: string | null;
+  colorCodes: Set<string>;
+  catalogNums: Set<string>;
+  specificNums: Set<string>;
+  modelAcronyms: Set<string>;
+  colors: Set<string>;
+};
+
+const PAINT_COLORS = new Set([
+  "BLACK", "HITAM", "RED", "MERAH", "WHITE", "PUTIH", "BLUE", "BIRU",
+  "GREY", "GRAY", "ABU", "YELLOW", "KUNING", "GREEN", "HIJAU", "SILVER",
+  "BROWN", "COKLAT", "DARK", "CLEAR", "BENING"
+]);
+
+function cleanWords(str: string): string[] {
+  return str
+    .toUpperCase()
+    .replace(/[^\w\s]/g, " ")
+    .split(/\s+/)
+    .filter(Boolean);
+}
+
+/**
+ * Extract structured chemical/paint identity features:
+ * - Brand (Origin vs Nippon Paint)
+ * - Category (Thinner, Hardener, Clear, Primer, Paint Killer, Paint)
+ * - Resin Family (R-160, R-241, OPZ, Polyhard, etc.)
+ * - Subtype (HS, MB, TG, CB)
+ * - Exact alphanumeric color codes (NH-731P, NH-904M, NH-902, YR-656, R-575, G-546, 11SV41, ZBC, G01)
+ * - 4-5 digit catalog numbers (10031, 10037, 10705, 56036, 18008)
+ * - Specific thinner & product serial numbers (T-7140, T-801, T-2260, #260, #210, WW-28C, K-780)
+ * - Model acronyms (CKC, CKM, CKY, CMX, CSU, CSW, CMP, CMU, 11BKxx, AC)
+ * - Color descriptors (Black, Red, Yellow, Grey, Silver)
+ */
+export function extractPaintSignature(raw: string): PaintSignature {
+  // Brand detection BEFORE stripping parentheses
+  let brand: PaintSignature["brand"] = null;
+  if (/\b(ORIGIN|ORIGIPLATE|OPZ|ECONET|PLANET)\b/i.test(raw)) brand = "ORIGIN";
+  else if (/\b(R[\-\s]?(?:160|241|261|290|301|255|271)|NIPPON|POLYHARD)/i.test(raw)) brand = "NIPPON";
+
+  const s = raw.toUpperCase().replace(/\s*\([^)]*\)/g, " ").replace(/\s*\[[^\]]*\]/g, " ");
+
+  // 1. Category & functional qualifiers
+  let category: PaintSignature["category"] = "PAINT";
+  const isWashing = /\b(WASHING|WASH|CUCI)\b/.test(s);
+  const isPrimer = /\b(PRIMER|EPOXY)\b/.test(s);
+
+  if (/\b(THINNER|TINER)\b/.test(s)) category = "THINNER";
+  else if (/\b(HARDENER|HARDNER|KATALIS)\b/.test(s)) category = "HARDENER";
+  else if (/\b(CLEAR|VERNIS)\b/.test(s)) category = "CLEAR";
+  else if (isPrimer) category = "PRIMER";
+  else if (/\b(PAINT\s*KILL|PAINT\s*KILLER)\b/.test(s)) category = "PAINT_KILLER";
+
+  // 2. Base model family: R160, R241, R261, R290, R301, OPZ, POLYHARD, PIKANET, ECONET, PLANET, PLANITTO
+  let family: string | null = null;
+  const mFam = s.match(/\b(R[\-\.\s]?(?:160|241|261|290|301|255|271)|OPZ|ORIGIPLATE\s*Z|POLYHARD|POLIHARD|PIKANET|ECONET|PLANET|PLANITTO)/);
+  if (mFam) {
+    const rawFam = mFam[1].replace(/[\-\.\s]/g, "");
+    if (rawFam.startsWith("ORIGIPLATE")) family = "OPZ";
+    else if (rawFam.startsWith("POLIHARD")) family = "POLYHARD";
+    else family = rawFam;
+  }
+  if (!family && brand === "ORIGIN") {
+    family = "OPZ";
+  }
+
+  // 3. SubType
+  let subType: string | null = null;
+  if (/\bHS\b/.test(s)) subType = "HS";
+  else if (/\bMB\b/.test(s)) subType = "MB";
+  else if (/\bTG\b/.test(s)) subType = "TG";
+  else if (/\bCB\b/.test(s)) subType = "CB";
+
+  // 4. Color codes: NH-731P, NH-904M, NH-902, NH-788, NH-797M, NH-830, YR-656, YR-642M, R-575, G-546, D66T, 11SV41, ZBC, G01
+  const colorCodes = new Set<string>();
+  const colorMatches = s.matchAll(/\b(NH|YR|G|R|B|Y|BG|RP)[\s\-\.]*(\d{2,3}[A-Z]*)\b/g);
+  for (const cm of colorMatches) {
+    if (cm[1] === "R" && ["160", "241", "261", "290", "301", "255", "271"].some((f) => cm[2].startsWith(f))) {
+      continue;
+    }
+    colorCodes.add(`${cm[1]}${cm[2]}`.replace(/[\s\-\.]/g, ""));
+  }
+  if (/\b11SV41\b/.test(s)) colorCodes.add("11SV41");
+  if (/\bD66T\b/.test(s)) colorCodes.add("D66T");
+  if (/\bZBC\b/.test(s)) colorCodes.add("ZBC");
+  if (/\bG[\-\s]?01\b/.test(s)) colorCodes.add("G01");
+
+  // 5. Catalog numbers: 4-5 digits (e.g. 10031, 10037, 10705, 56036, 18008)
+  const catalogNums = new Set<string>();
+  const catMatches = s.matchAll(/\b(\d{4,5})\b/g);
+  for (const cm of catMatches) {
+    catalogNums.add(cm[1]);
+  }
+
+  // 6. Specific Thinner or Product Numbers (e.g. T-7140, T-801, T-2260, #260, #210, WW-28C, K-780)
+  const specificNums = new Set<string>();
+  const thinMatches = s.matchAll(/\bT[\s\-\.]*(\d{3,4})\b/g);
+  for (const tm of thinMatches) specificNums.add(tm[1]);
+
+  const hashMatches = s.matchAll(/#\s*P?(\d{2,4})\b/g);
+  for (const hm of hashMatches) specificNums.add(hm[1]);
+
+  const kMatches = s.matchAll(/\bK[\s\-\.]*(\d{3})\b/g);
+  for (const km of kMatches) specificNums.add(km[1]);
+
+  const wwMatches = s.matchAll(/\bWW[\s\-\.]*(\d{2,3}[A-Z]?)\b/g);
+  for (const wm of wwMatches) specificNums.add(wm[1]);
+
+  // 7. Model acronyms (CKC, CKM, CKY, CMX, CSU, CSW, CMP, CMU, 11BKxx, AC)
+  const modelAcronyms = new Set<string>();
+  const acrMatches = s.matchAll(/\b(C[KMPSU][A-Z]|11BK\d{2}|AC)\b/g);
+  for (const am of acrMatches) modelAcronyms.add(am[1]);
+
+  // 8. Basic Color words
+  const colors = new Set<string>();
+  const words = cleanWords(s);
+  for (const w of words) {
+    if (PAINT_COLORS.has(w)) colors.add(w);
+  }
+
+  return {
+    brand,
+    category,
+    isWashing,
+    isPrimer,
+    family,
+    subType,
+    colorCodes,
+    catalogNums,
+    specificNums,
+    modelAcronyms,
+    colors,
+  };
+}
+
+/**
+ * Strict industrial paint matcher. Enforces positive matching rules and strict rejections:
+ * - Brand mismatch (Origin vs Nippon) -> 0%
+ * - Category mismatch (Thinner vs Paint vs Hardener) -> 0%
+ * - Washing solvent vs Primer thinner mismatch -> 0%
+ * - Resin family mismatch (R-160 vs R-241 vs OPZ) -> 0%
+ * - Distinct thinner numbers mismatch (T-2260 vs T-7140) -> 0%
+ * - Color code conflict (G-546 vs NH-902, NH-788 vs NH-902, YR-642M vs NH-902) -> 0%
+ * - Catalog numbers mismatch (10085 vs 10031) -> 0%
+ * - Model acronym conflict (CKY vs CMX) -> 0%
+ * - Contradictory colors (Yellow vs Black) -> 0%
+ */
+export function matchPaintItem(
+  namePainting: string,
+  namePRMS: string
+): { isMatch: boolean; score: number; reason: string } {
+  if (!namePainting || !namePRMS) {
+    return { isMatch: false, score: 0, reason: "Nama item kosong" };
+  }
+
+  const sig1 = extractPaintSignature(namePainting);
+  const sig2 = extractPaintSignature(namePRMS);
+
+  // RULE 0: Brand Mismatch (Origin vs Nippon)
+  if (sig1.brand && sig2.brand && sig1.brand !== sig2.brand) {
+    return { isMatch: false, score: 0, reason: `Beda Brand: ${sig1.brand} vs ${sig2.brand}` };
+  }
+
+  // RULE 1: Category Mismatch
+  if (sig1.category === "THINNER" && sig2.category !== "THINNER") return { isMatch: false, score: 0, reason: "Kategori Beda" };
+  if (sig2.category === "THINNER" && sig1.category !== "THINNER") return { isMatch: false, score: 0, reason: "Kategori Beda" };
+  if (sig1.category === "HARDENER" && sig2.category !== "HARDENER") return { isMatch: false, score: 0, reason: "Kategori Beda" };
+  if (sig2.category === "HARDENER" && sig1.category !== "HARDENER") return { isMatch: false, score: 0, reason: "Kategori Beda" };
+
+  // RULE 1b: Washing vs Primer Thinner
+  if (sig1.isWashing !== sig2.isWashing) {
+    return { isMatch: false, score: 0, reason: "Washing vs Non-Washing" };
+  }
+  if (sig1.isPrimer !== sig2.isPrimer && (sig1.category === "THINNER" || sig2.category === "THINNER")) {
+    return { isMatch: false, score: 0, reason: "Primer Thinner vs Other" };
+  }
+
+  // RULE 2: Family Mismatch
+  if (sig1.family && sig2.family && sig1.family !== sig2.family) {
+    return { isMatch: false, score: 0, reason: `Beda Family: ${sig1.family} vs ${sig2.family}` };
+  }
+
+  // RULE 3: Thinner/Specific Number Mismatch
+  if (sig1.specificNums.size > 0 && sig2.specificNums.size > 0) {
+    const hasOverlap = [...sig1.specificNums].some((n) => sig2.specificNums.has(n));
+    if (!hasOverlap) return { isMatch: false, score: 0, reason: "Beda Nomor Thinner" };
+  }
+
+  // RULE 4: Color Code Conflict
+  if (sig1.colorCodes.size > 0 && sig2.colorCodes.size > 0) {
+    const hasOverlap = [...sig1.colorCodes].some((c1) =>
+      [...sig2.colorCodes].some((c2) => c1 === c2 || (c1.length >= 4 && c2.length >= 4 && (c1.startsWith(c2) || c2.startsWith(c1))))
+    );
+    if (!hasOverlap) return { isMatch: false, score: 0, reason: "Beda Kode Warna" };
+  }
+  if (sig1.colorCodes.size > 0 && sig2.colorCodes.size === 0) {
+    const raw2Clean = namePRMS.toUpperCase().replace(/[\-\.\s]/g, "");
+    const found = [...sig1.colorCodes].some((c) => raw2Clean.includes(c));
+    if (!found) return { isMatch: false, score: 0, reason: "Kode warna tidak ditemukan di PRMS" };
+  }
+  if (sig2.colorCodes.size > 0 && sig1.colorCodes.size === 0) {
+    const raw1Clean = namePainting.toUpperCase().replace(/[\-\.\s]/g, "");
+    const found = [...sig2.colorCodes].some((c) => raw1Clean.includes(c));
+    if (!found) return { isMatch: false, score: 0, reason: "Kode warna tidak ditemukan di Painting" };
+  }
+
+  // RULE 5: Catalog Number Conflict (4-5 digits)
+  if (sig1.catalogNums.size > 0 && sig2.catalogNums.size > 0) {
+    const hasOverlap = [...sig1.catalogNums].some((n) => sig2.catalogNums.has(n));
+    if (!hasOverlap) return { isMatch: false, score: 0, reason: "Beda Nomor Katalog" };
+  }
+  if (sig1.catalogNums.size > 0 && sig2.catalogNums.size === 0) {
+    const raw2 = namePRMS.toUpperCase();
+    const hasNum = [...sig1.catalogNums].some((n) => raw2.includes(n));
+    if (!hasNum) return { isMatch: false, score: 0, reason: "Nomor katalog tidak ditemukan di PRMS" };
+  }
+
+  // RULE 6: Model Acronym Conflict (e.g. CKY vs CMX)
+  if (sig1.modelAcronyms.size > 0 && sig2.modelAcronyms.size > 0) {
+    const hasOverlap = [...sig1.modelAcronyms].some((a) => sig2.modelAcronyms.has(a));
+    if (!hasOverlap) return { isMatch: false, score: 0, reason: "Beda Model Acronym" };
+  }
+
+  // RULE 7: Color Name Conflict (e.g. Yellow vs Black)
+  if (sig1.colors.size > 0 && sig2.colors.size > 0) {
+    const sharedColors = [...sig1.colors].filter((c) => sig2.colors.has(c));
+    if (sharedColors.length === 0) {
+      const diff1 = [...sig1.colors];
+      const diff2 = [...sig2.colors];
+      if (
+        diff1.some((c) => ["YELLOW", "RED", "BLUE", "GREEN"].includes(c)) &&
+        diff2.some((c) => ["BLACK", "WHITE", "GREY"].includes(c))
+      ) {
+        return { isMatch: false, score: 0, reason: "Beda Warna: " + diff1.join(",") + " vs " + diff2.join(",") };
+      }
+    }
+  }
+
+  // POSITIVE MATCH SCORING
+  let score = 0;
+  const sharedColors = [...sig1.colorCodes].filter((c1) =>
+    [...sig2.colorCodes].some((c2) => c1 === c2 || (c1.startsWith(c2) || c2.startsWith(c1)))
+  );
+  const sharedCats = [...sig1.catalogNums].filter((n) => sig2.catalogNums.has(n));
+  const sharedNums = [...sig1.specificNums].filter((n) => sig2.specificNums.has(n));
+
+  if (sharedColors.length > 0) {
+    score = 95;
+    if (sig1.subType === sig2.subType) score = 100;
+  } else if (sharedCats.length > 0) {
+    score = 95;
+    if (sig1.modelAcronyms.size > 0 && sig2.modelAcronyms.size > 0) {
+      const hasAcr = [...sig1.modelAcronyms].some((a) => sig2.modelAcronyms.has(a));
+      if (hasAcr) score = 100;
+    }
+  } else if (sharedNums.length > 0) {
+    score = 95;
+  } else {
+    const w1 = cleanWords(namePainting);
+    const w2 = cleanWords(namePRMS);
+    const set2 = new Set(w2);
+    let matchWords = 0;
+    for (const w of w1) {
+      if (set2.has(w)) matchWords++;
+    }
+    const dice = (2 * matchWords) / (w1.length + w2.length);
+    score = Math.round(dice * 100);
+  }
+
+  return { isMatch: score >= 70, score, reason: "OK" };
+}
+
+/**
+ * Intelligent similarity scoring specially tuned for paint and chemical items
+ */
+export function calculatePaintSimilarity(str1: string, str2: string): number {
+  if (!str1 || !str2) return 0;
+  const res = matchPaintItem(str1, str2);
+  return res.score / 100;
+}

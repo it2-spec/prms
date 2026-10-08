@@ -271,7 +271,18 @@ export default function DashboardShell({
         )}
 
         {/* Main Content Area */}
-        <main className={`flex-1 flex flex-col min-w-0 transition-all duration-300 print:p-0 print:m-0 print:block ${isWarehouse ? "pb-20" : ""}`}>
+        <main
+          className={`flex-1 flex flex-col min-w-0 transition-all duration-300 print:p-0 print:m-0 print:block ${
+            isWarehouse ? "pb-28 sm:pb-24" : ""
+          }`}
+          style={
+            isWarehouse
+              ? {
+                  paddingBottom: "max(6rem, calc(5rem + env(safe-area-inset-bottom, 0px)))",
+                }
+              : undefined
+          }
+        >
           <div className="p-4 sm:p-6 md:p-8 flex-grow print:p-0 print:m-0">{children}</div>
 
           <footer className="print:hidden bg-white border-t border-slate-200 py-4 px-6 text-center text-xs text-slate-400 font-medium">

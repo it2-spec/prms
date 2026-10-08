@@ -45,33 +45,29 @@ export default async function OutgoingDetailPage({
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <Link
-            href="/warehouse/history?tab=outgoing"
-            className="btn btn-outline inline-flex items-center gap-1 text-sm"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Kembali
-          </Link>
-          <PageTitle
-            title={`Outgoing: ${outgoing.outgoingNumber}`}
-            subtitle={formatDate(outgoing.issuedAt)}
-            breadcrumb={["Warehouse", "Riwayat Outgoing", outgoing.outgoingNumber]}
-          />
-        </div>
-
-        {/* Action Button: Batalkan */}
-        {!isCancelled && (
-          <div>
-            <CancelOutgoingButton
-              outgoingId={outgoing.id}
-              outgoingNumber={outgoing.outgoingNumber}
-              totalQty={totalPackageQty}
-            />
+      <PageTitle
+        title={`Outgoing: ${outgoing.outgoingNumber}`}
+        subtitle={formatDate(outgoing.issuedAt)}
+        breadcrumb={["Warehouse", "Riwayat Outgoing", outgoing.outgoingNumber]}
+        action={
+          <div className="flex items-center gap-2">
+            <Link
+              href="/warehouse/history?tab=outgoing"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition shadow-xs cursor-pointer"
+            >
+              <ArrowLeft className="h-3.5 w-3.5 text-slate-500" />
+              <span>Kembali</span>
+            </Link>
+            {!isCancelled && (
+              <CancelOutgoingButton
+                outgoingId={outgoing.id}
+                outgoingNumber={outgoing.outgoingNumber}
+                totalQty={totalPackageQty}
+              />
+            )}
           </div>
-        )}
-      </div>
+        }
+      />
 
       {/* Banner Jika Transaksi Telah Dibatalkan */}
       {isCancelled && (

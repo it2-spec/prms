@@ -34,6 +34,8 @@ import {
   Check,
   ShieldCheck,
   RefreshCw,
+  Send,
+  Mail,
 } from "lucide-react";
 
 export const PO_STATUS_LABEL: Record<string, string> = {
@@ -78,7 +80,7 @@ export type POItem = {
   notes?: string | null;
   approvedById?: string | null;
   approvedL2ById?: string | null;
-  supplier: { name: string; code?: string };
+  supplier: { id?: string; name: string; code?: string; email?: string | null; contactPerson?: string | null };
   warehouse?: { name: string; code?: string } | null;
   deliveriesCount?: number;
   receivingsCount?: number;
@@ -98,6 +100,16 @@ export type POItem = {
     } | null;
   }>;
 };
+
+export interface SupplierEmailBatch {
+  supplierId: string;
+  supplierName: string;
+  supplierEmail: string;
+  contactPerson?: string | null;
+  pos: POItem[];
+  gmailUrl: string;
+  pdfLinks: { poId: string; poNumber: string; url: string }[];
+}
 
 type SortField = "poNumber" | "supplier" | "warehouse" | "poDate" | "progress" | "status";
 type SortOrder = "asc" | "desc";
@@ -167,12 +179,14 @@ export default function PurchaseOrderTableClient({
   const [mainView, setMainView] = useState<MainView>("summary");
   const [detailedSubView, setDetailedSubView] = useState<DetailedSubView>("by-po");
   const [expandedPoIds, setExpandedPoIds] = useState<Set<string>>(new Set());
-  const [expandedSummaryRows, setExpandedSummaryRows] = useState<Set<string>>(new Set());
 
-  // Batch Approval states for Manager L1
+  // Batch Selection states (Approver: Batch Approval, Staff: Batch Send to Supplier)
   const [selectedPoIds, setSelectedPoIds] = useState<Set<string>>(new Set());
   const [isBatchApproving, setIsBatchApproving] = useState(false);
   const [batchApproveModalOpen, setBatchApproveModalOpen] = useState(false);
+  const [isBatchSending, setIsBatchSending] = useState(false);
+  const [batchSendModalOpen, setBatchSendModalOpen] = useState(false);
+  const [sentEmailBatches, setSentEmailBatches] = useState<SupplierEmailBatch[] | null>(null);
   const [successToast, setSuccessToast] = useState<string | null>(null);
   const [incomingUpdateText, setIncomingUpdateText] = useState<string | null>(null);
 
@@ -266,20 +280,27 @@ export default function PurchaseOrderTableClient({
     CANCELLED: "Cancelled",
   };
 
-  // PO yang eligible untuk approval di halaman saat ini (L1: Belum TTD L1, L2: Sudah L1 & Belum L2)
+  // PO yang eligible untuk approval (Approver L1/L2) ATAU untuk kirim bulk ke supplier (Staff Purchasing: sudah TTD & status DRAFT/REVISED)
   const eligiblePOs = useMemo(() => {
-    if (!isApprover) return [];
-    if (userApprovalLevel === 1) {
-      return sortedPOs.filter(
-        (po) => !po.approvedById && po.status !== "CANCELLED"
-      );
+    if (isApprover) {
+      if (userApprovalLevel === 1) {
+        return sortedPOs.filter(
+          (po) => !po.approvedById && po.status !== "CANCELLED"
+        );
+      }
+      if (userApprovalLevel === 2) {
+        return sortedPOs.filter(
+          (po) => po.approvedById && !po.approvedL2ById && po.status !== "CANCELLED"
+        );
+      }
+      return [];
     }
-    if (userApprovalLevel === 2) {
-      return sortedPOs.filter(
-        (po) => po.approvedById && !po.approvedL2ById && po.status !== "CANCELLED"
-      );
-    }
-    return [];
+    // Staff Purchasing: PO yang sudah ditandatangani dan belum dikirim (status DRAFT / REVISED)
+    return sortedPOs.filter(
+      (po) =>
+        (po.approvedL2ById || po.approvedById) &&
+        ["DRAFT", "REVISED"].includes(po.status)
+    );
   }, [sortedPOs, userApprovalLevel, isApprover]);
 
   const isAllEligibleSelected =
@@ -341,15 +362,147 @@ export default function PurchaseOrderTableClient({
       setBatchApproveModalOpen(false);
       setSuccessToast(
         data.message ||
-          (isEnglish
-            ? `Successfully approved ${approvedSet.size} Purchase Orders.`
-            : `Berhasil menyetujui ${approvedSet.size} Purchase Order.`)
+        (isEnglish
+          ? `Successfully approved ${approvedSet.size} Purchase Orders.`
+          : `Berhasil menyetujui ${approvedSet.size} Purchase Order.`)
       );
       router.refresh();
     } catch (err: any) {
       alert(err.message || (isEnglish ? "An error occurred while approving." : "Terjadi kesalahan saat memproses persetujuan PO."));
     } finally {
       setIsBatchApproving(false);
+    }
+  }
+
+  function generateSupplierEmailBatches(targetPOs: POItem[]): SupplierEmailBatch[] {
+    const origin = typeof window !== "undefined" ? window.location.origin : "";
+    const map = new Map<
+      string,
+      {
+        supplierId: string;
+        supplierName: string;
+        supplierEmail: string;
+        contactPerson?: string | null;
+        pos: POItem[];
+      }
+    >();
+
+    for (const po of targetPOs) {
+      const supKey = po.supplier.id || po.supplier.name;
+      if (!map.has(supKey)) {
+        map.set(supKey, {
+          supplierId: supKey,
+          supplierName: po.supplier.name,
+          supplierEmail: po.supplier.email || "",
+          contactPerson: po.supplier.contactPerson,
+          pos: [],
+        });
+      }
+      map.get(supKey)!.pos.push(po);
+    }
+
+    const batches: SupplierEmailBatch[] = [];
+    for (const entry of map.values()) {
+      const { supplierId, supplierName, supplierEmail, contactPerson, pos } = entry;
+      const isSingle = pos.length === 1;
+      const subject = isSingle
+        ? `[PRMS] Purchase Order Resmi: ${pos[0].poNumber} - PT SRI`
+        : `[PRMS] Pengiriman Purchase Order (${pos.length} PO): ${pos.map((p) => p.poNumber).join(", ")} - PT SRI`;
+
+      const poSummaries = pos
+        .map((po, idx) => {
+          const itemsText = po.details
+            .slice(0, 8)
+            .map((d, dIdx) => `   ${dIdx + 1}. ${d.item?.name || "Item"} — ${d.qty} ${d.item?.unit || "kg"}`)
+            .join("\n");
+          const moreItems = po.details.length > 8 ? `\n   ...dan ${po.details.length - 8} item lainnya.` : "";
+          return `PO #${idx + 1}: ${po.poNumber}\nTanggal: ${formatDateOnly(po.poDate)}\nItem Pesanan:\n${itemsText}${moreItems}`;
+        })
+        .join("\n\n");
+
+      const linkSection = pos
+        .map(
+          (po) =>
+            `• PO ${po.poNumber}:\n  - Tautan Cetak / Arsip PDF: ${origin}/purchasing/purchase-orders/${po.id}/print\n  - Tautan Portal Supplier: ${origin}/supplier/purchase-orders/${po.id}`
+        )
+        .join("\n\n");
+
+      const contactLine = contactPerson ? `Up: ${contactPerson}\n` : "";
+      const body = `Kepada Yth.\n${supplierName}\n${contactLine}Dengan hormat,\n\nBersama ini kami kirimkan Purchase Order (PO) resmi berikut yang telah disetujui untuk dapat segera diproses:\n\n${poSummaries}\n\n========================================\n📄 TAUTAN ARSIP PDF & AKSES PORTAL:\n========================================\n${linkSection}\n\nMohon untuk meninjau pesanan di atas, melakukan konfirmasi, serta menjadwalkan pengiriman melalui Portal Supplier PRMS. Dokumen PDF bertanda tangan digital resmi dapat diunduh melalui tautan masing-masing di atas sebagai arsip.\n\nTerima kasih atas kerja samanya.\n\nHormat kami,\nDepartemen Purchasing\nPT Sakae Riken Indonesia`;
+
+      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
+        supplierEmail
+      )}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+      batches.push({
+        supplierId,
+        supplierName,
+        supplierEmail,
+        contactPerson,
+        pos,
+        gmailUrl,
+        pdfLinks: pos.map((p) => ({
+          poId: p.id,
+          poNumber: p.poNumber,
+          url: `${origin}/purchasing/purchase-orders/${p.id}/print`,
+        })),
+      });
+    }
+
+    return batches;
+  }
+
+  async function handleBatchSend() {
+    if (selectedPoIds.size === 0) return;
+    setIsBatchSending(true);
+    try {
+      const targetPOs = sortedPOs.filter((p) => selectedPoIds.has(p.id));
+
+      const res = await fetch("/api/purchase-orders/batch-send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          poIds: Array.from(selectedPoIds),
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Gagal mengirim Purchase Order ke supplier.");
+        return;
+      }
+
+      const emailBatches = generateSupplierEmailBatches(targetPOs);
+
+      const sentSet = new Set(selectedPoIds);
+      setPoList((prev) =>
+        prev.map((po) => {
+          if (!sentSet.has(po.id)) return po;
+          return { ...po, status: "WAITING_DELIVERY" };
+        })
+      );
+      setSelectedPoIds(new Set());
+      setBatchSendModalOpen(false);
+
+      // Jika hanya 1 supplier, buka tab Gmail dan link PDF cetak untuk kemudahan arsip
+      if (emailBatches.length === 1) {
+        const singleBatch = emailBatches[0];
+        window.open(singleBatch.gmailUrl, "_blank");
+        if (singleBatch.pdfLinks.length > 0) {
+          window.open(singleBatch.pdfLinks[0].url, "_blank");
+        }
+      }
+
+      // Tampilkan modal hasil pengiriman & akses Gmail + PDF arsip
+      setSentEmailBatches(emailBatches);
+
+      setSuccessToast(
+        data.message || `Berhasil mengirim ${sentSet.size} Purchase Order ke supplier.`
+      );
+      router.refresh();
+    } catch (err: any) {
+      alert(err.message || "Terjadi kesalahan saat mengirim PO.");
+    } finally {
+      setIsBatchSending(false);
     }
   }
 
@@ -479,11 +632,10 @@ export default function PurchaseOrderTableClient({
                 type="button"
                 disabled={isPending}
                 onClick={() => handlePageChange(p as number)}
-                className={`min-w-8 h-8 px-2 flex items-center justify-center text-xs rounded-lg transition-colors cursor-pointer ${
-                  isCurrent
-                    ? "bg-blue-600 text-white shadow-xs font-bold"
-                    : "border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 font-medium"
-                }`}
+                className={`min-w-8 h-8 px-2 flex items-center justify-center text-xs rounded-lg transition-colors cursor-pointer ${isCurrent
+                  ? "bg-blue-600 text-white shadow-xs font-bold"
+                  : "border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 font-medium"
+                  }`}
               >
                 {p}
               </button>
@@ -617,16 +769,6 @@ export default function PurchaseOrderTableClient({
     setExpandedPoIds(new Set());
   };
 
-  // Accordion helper for Summary Row inline expand
-  const toggleSummaryRow = (poId: string) => {
-    setExpandedSummaryRows((prev) => {
-      const next = new Set(prev);
-      if (next.has(poId)) next.delete(poId);
-      else next.add(poId);
-      return next;
-    });
-  };
-
   // Initial expand when switching to detailed view
   const handleSwitchToDetailed = () => {
     setMainView("detailed");
@@ -737,9 +879,8 @@ export default function PurchaseOrderTableClient({
                 const nextStatus = isSelected && k.key !== "ALL" ? "ALL" : k.key;
                 updateQueryParams({ status: nextStatus, page: 1 });
               }}
-              className={`p-4 rounded-2xl bg-white border cursor-pointer transition-all duration-150 hover:shadow-sm ${
-                isSelected ? k.activeRing : "border-slate-200/80 hover:border-slate-300"
-              }`}
+              className={`p-4 rounded-2xl bg-white border cursor-pointer transition-all duration-150 hover:shadow-sm ${isSelected ? k.activeRing : "border-slate-200/80 hover:border-slate-300"
+                }`}
             >
               <div className="flex items-center justify-between">
                 <div>
@@ -777,20 +918,18 @@ export default function PurchaseOrderTableClient({
             <button
               type="button"
               onClick={() => setMainView("summary")}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                mainView === "summary"
-                  ? "bg-white text-blue-700 shadow-sm"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
+              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${mainView === "summary"
+                ? "bg-white text-blue-700 shadow-sm"
+                : "text-slate-600 hover:text-slate-900"
+                }`}
             >
               <LayoutList className="w-4 h-4" />
               <span>{isEnglish ? "PO Summary" : "Ringkasan PO"}</span>
               <span
-                className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
-                  mainView === "summary"
-                    ? "bg-blue-100 text-blue-800"
-                    : "bg-slate-200/80 text-slate-600"
-                }`}
+                className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${mainView === "summary"
+                  ? "bg-blue-100 text-blue-800"
+                  : "bg-slate-200/80 text-slate-600"
+                  }`}
               >
                 {totalCount.toLocaleString(isEnglish ? "en-US" : "id-ID")}
               </span>
@@ -799,20 +938,18 @@ export default function PurchaseOrderTableClient({
             <button
               type="button"
               onClick={handleSwitchToDetailed}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                mainView === "detailed"
-                  ? "bg-white text-blue-700 shadow-sm"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
+              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${mainView === "detailed"
+                ? "bg-white text-blue-700 shadow-sm"
+                : "text-slate-600 hover:text-slate-900"
+                }`}
             >
               <PackageCheck className="w-4 h-4" />
               <span>{isEnglish ? "PO Details & Progress" : "Detail PO & Progres"}</span>
               <span
-                className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
-                  mainView === "detailed"
-                    ? "bg-blue-100 text-blue-800"
-                    : "bg-slate-200/80 text-slate-600"
-                }`}
+                className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${mainView === "detailed"
+                  ? "bg-blue-100 text-blue-800"
+                  : "bg-slate-200/80 text-slate-600"
+                  }`}
               >
                 {aggregatedStats.totalItemsCount} {isEnglish ? "Items (this page)" : "Barang (hal ini)"}
               </span>
@@ -833,11 +970,10 @@ export default function PurchaseOrderTableClient({
               onClick={() => {
                 updateQueryParams({ tab: "PENDING_L1", status: "ALL", page: 1 });
               }}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                activeFilters.tab === "PENDING_L1"
-                  ? "bg-amber-500 text-white shadow-xs"
-                  : "bg-white text-slate-700 hover:bg-slate-50 border border-slate-200/60"
-              }`}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${activeFilters.tab === "PENDING_L1"
+                ? "bg-amber-500 text-white shadow-xs"
+                : "bg-white text-slate-700 hover:bg-slate-50 border border-slate-200/60"
+                }`}
             >
               {isEnglish ? `Pending Approval (${countPendingL1})` : `Belum Di-TTD (${countPendingL1})`}
             </button>
@@ -847,11 +983,10 @@ export default function PurchaseOrderTableClient({
               onClick={() => {
                 updateQueryParams({ tab: "APPROVED_L1", status: "ALL", page: 1 });
               }}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                activeFilters.tab === "APPROVED_L1"
-                  ? "bg-blue-600 text-white shadow-xs"
-                  : "bg-white text-slate-700 hover:bg-slate-50 border border-slate-200/60"
-              }`}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activeFilters.tab === "APPROVED_L1"
+                ? "bg-blue-600 text-white shadow-xs"
+                : "bg-white text-slate-700 hover:bg-slate-50 border border-slate-200/60"
+                }`}
             >
               {isEnglish ? `Approved (${countApprovedL1})` : `Sudah Di-TTD (${countApprovedL1})`}
             </button>
@@ -861,11 +996,10 @@ export default function PurchaseOrderTableClient({
               onClick={() => {
                 updateQueryParams({ tab: "ALL", status: "ALL", page: 1 });
               }}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                activeFilters.tab === "ALL"
-                  ? "bg-slate-800 text-white shadow-xs"
-                  : "bg-white text-slate-700 hover:bg-slate-50 border border-slate-200/60"
-              }`}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activeFilters.tab === "ALL"
+                ? "bg-slate-800 text-white shadow-xs"
+                : "bg-white text-slate-700 hover:bg-slate-50 border border-slate-200/60"
+                }`}
             >
               {isEnglish ? `All Purchase Orders (${kpis.total.toLocaleString("en-US")})` : `Semua PO (${kpis.total.toLocaleString("id-ID")})`}
             </button>
@@ -885,11 +1019,10 @@ export default function PurchaseOrderTableClient({
               onClick={() => {
                 updateQueryParams({ tab: "PENDING_L2", status: "ALL", page: 1 });
               }}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                activeFilters.tab === "PENDING_L2"
-                  ? "bg-emerald-600 text-white shadow-xs"
-                  : "bg-white text-slate-700 hover:bg-slate-50 border border-slate-200/60"
-              }`}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${activeFilters.tab === "PENDING_L2"
+                ? "bg-emerald-600 text-white shadow-xs"
+                : "bg-white text-slate-700 hover:bg-slate-50 border border-slate-200/60"
+                }`}
             >
               Pending Approval ({countPendingL2})
             </button>
@@ -899,11 +1032,10 @@ export default function PurchaseOrderTableClient({
               onClick={() => {
                 updateQueryParams({ tab: "APPROVED_L2", status: "ALL", page: 1 });
               }}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                activeFilters.tab === "APPROVED_L2"
-                  ? "bg-blue-600 text-white shadow-xs"
-                  : "bg-white text-slate-700 hover:bg-slate-50 border border-slate-200/60"
-              }`}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activeFilters.tab === "APPROVED_L2"
+                ? "bg-blue-600 text-white shadow-xs"
+                : "bg-white text-slate-700 hover:bg-slate-50 border border-slate-200/60"
+                }`}
             >
               Approved ({countApprovedL2})
             </button>
@@ -913,11 +1045,10 @@ export default function PurchaseOrderTableClient({
               onClick={() => {
                 updateQueryParams({ tab: "ALL", status: "ALL", page: 1 });
               }}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                activeFilters.tab === "ALL"
-                  ? "bg-slate-800 text-white shadow-xs"
-                  : "bg-white text-slate-700 hover:bg-slate-50 border border-slate-200/60"
-              }`}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activeFilters.tab === "ALL"
+                ? "bg-slate-800 text-white shadow-xs"
+                : "bg-white text-slate-700 hover:bg-slate-50 border border-slate-200/60"
+                }`}
             >
               All Verified POs ({kpis.total.toLocaleString("en-US")})
             </button>
@@ -1008,11 +1139,10 @@ export default function PurchaseOrderTableClient({
                 <button
                   type="button"
                   onClick={() => setDetailedSubView("by-po")}
-                  className={`flex items-center gap-1.5 px-3 py-1 rounded text-xs font-semibold transition-all cursor-pointer ${
-                    detailedSubView === "by-po"
-                      ? "bg-blue-50 text-blue-700"
-                      : "text-slate-600 hover:text-slate-900"
-                  }`}
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded text-xs font-semibold transition-all cursor-pointer ${detailedSubView === "by-po"
+                    ? "bg-blue-50 text-blue-700"
+                    : "text-slate-600 hover:text-slate-900"
+                    }`}
                 >
                   <Boxes className="w-3.5 h-3.5" />
                   {isEnglish ? "By PO Cards" : "Per PO (Panel Barang)"}
@@ -1020,11 +1150,10 @@ export default function PurchaseOrderTableClient({
                 <button
                   type="button"
                   onClick={() => setDetailedSubView("all-items")}
-                  className={`flex items-center gap-1.5 px-3 py-1 rounded text-xs font-semibold transition-all cursor-pointer ${
-                    detailedSubView === "all-items"
-                      ? "bg-blue-50 text-blue-700"
-                      : "text-slate-600 hover:text-slate-900"
-                  }`}
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded text-xs font-semibold transition-all cursor-pointer ${detailedSubView === "all-items"
+                    ? "bg-blue-50 text-blue-700"
+                    : "text-slate-600 hover:text-slate-900"
+                    }`}
                 >
                   <Layers className="w-3.5 h-3.5" />
                   {isEnglish ? `All Items Flat List (${allFlatItems.length} Rows)` : `Rekap Seluruh Item (${allFlatItems.length} Baris)`}
@@ -1084,36 +1213,36 @@ export default function PurchaseOrderTableClient({
             <table className="w-full text-left text-sm">
               <thead className="bg-slate-50/80 text-xs font-semibold text-slate-500 border-b border-slate-200">
                 <tr>
-                  {isApprover && (
-                    <th className="w-10 px-3 py-3.5 text-center shrink-0">
-                      <input
-                        type="checkbox"
-                        checked={isAllEligibleSelected}
-                        ref={(el) => {
-                          if (el) el.indeterminate = isSomeEligibleSelected;
-                        }}
-                        onChange={toggleSelectAll}
-                        disabled={eligiblePOs.length === 0}
-                        title={
-                          eligiblePOs.length === 0
+                  <th className="w-10 px-3 py-3.5 text-center shrink-0">
+                    <input
+                      type="checkbox"
+                      checked={isAllEligibleSelected}
+                      ref={(el) => {
+                        if (el) el.indeterminate = isSomeEligibleSelected;
+                      }}
+                      onChange={toggleSelectAll}
+                      disabled={eligiblePOs.length === 0}
+                      title={
+                        eligiblePOs.length === 0
+                          ? isApprover
                             ? isEnglish
                               ? "No pending POs awaiting approval on this page"
                               : "Tidak ada PO yang belum di-TTD di halaman ini"
-                            : isAllEligibleSelected
+                            : "Tidak ada PO yang sudah di-TTD untuk dikirim di halaman ini"
+                          : isAllEligibleSelected
                             ? isEnglish
                               ? "Deselect all"
                               : "Batalkan pilihan semua"
-                            : isEnglish
-                            ? "Select all pending POs on this page"
-                            : "Pilih semua PO yang belum di-TTD di halaman ini"
-                        }
-                        className={`w-4 h-4 rounded border-slate-300 cursor-pointer disabled:opacity-30 ${
-                          isL2 ? "text-emerald-600 focus:ring-emerald-500" : "text-blue-600 focus:ring-blue-500"
+                            : isApprover
+                              ? isEnglish
+                                ? "Select all pending POs on this page"
+                                : "Pilih semua PO yang belum di-TTD di halaman ini"
+                              : "Pilih semua PO yang siap dikirim di halaman ini"
+                      }
+                      className={`w-4 h-4 rounded border-slate-300 cursor-pointer disabled:opacity-30 ${isL2 ? "text-emerald-600 focus:ring-emerald-500" : "text-blue-600 focus:ring-blue-500"
                         }`}
-                      />
-                    </th>
-                  )}
-                  <th className="w-8 px-2 py-3.5 text-center"></th>
+                    />
+                  </th>
                   <th
                     onClick={() => handleSort("poNumber")}
                     className="px-4 py-3.5 cursor-pointer hover:bg-slate-100/60 transition-colors whitespace-nowrap"
@@ -1171,20 +1300,20 @@ export default function PurchaseOrderTableClient({
                   const receivedQty = po.details.reduce((s, d) => s + d.receivedQty, 0);
                   const percent = totalQty > 0 ? calculateProgressPercent(receivedQty, totalQty) : 0;
                   const isClosed = po.status === "CLOSED";
-                  const isExpanded = expandedSummaryRows.has(po.id);
+                  const isSigned = Boolean(po.approvedL2ById || po.approvedById);
+                  const isSendable = isSigned && ["DRAFT", "REVISED"].includes(po.status);
 
                   return (
                     <tr key={po.id} className="group">
-                      <td colSpan={isApprover ? 9 : 8} className="p-0">
+                      <td colSpan={8} className="p-0">
                         <div
-                          className={`flex items-center hover:bg-slate-50/60 transition-colors ${
-                            isClosed ? "bg-slate-50/30" : ""
-                          }`}
+                          className={`flex items-center hover:bg-slate-50/60 transition-colors ${isClosed ? "bg-slate-50/30" : ""
+                            }`}
                         >
-                          {/* Checkbox Kolom Approval (L1 & L2) */}
-                          {isApprover && (
-                            <div className="w-10 px-3 py-3.5 text-center shrink-0 flex items-center justify-center">
-                              {userApprovalLevel === 1 ? (
+                          {/* Checkbox Kolom Selection (Approval L1/L2 atau Bulk Kirim Supplier) */}
+                          <div className="w-10 px-3 py-3.5 text-center shrink-0 flex items-center justify-center">
+                            {isApprover ? (
+                              userApprovalLevel === 1 ? (
                                 !po.approvedById && po.status !== "CANCELLED" ? (
                                   <input
                                     type="checkbox"
@@ -1224,24 +1353,33 @@ export default function PurchaseOrderTableClient({
                                 ) : (
                                   <span className="text-slate-300 text-xs font-mono">-</span>
                                 )
-                              )}
-                            </div>
-                          )}
-
-                          {/* Toggle inline row chevron */}
-                          <div className="w-8 px-2 py-3.5 text-center shrink-0">
-                            <button
-                              type="button"
-                              onClick={() => toggleSummaryRow(po.id)}
-                              className="p-1 rounded hover:bg-slate-200/80 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
-                              title={isExpanded ? (isEnglish ? "Collapse item details" : "Tutup rincian item") : (isEnglish ? "Expand item details" : "Buka rincian item di tempat")}
-                            >
-                              {isExpanded ? (
-                                <ChevronDown className="w-4 h-4 text-blue-600" />
+                              )
+                            ) : (
+                              /* Staff Purchasing: Checkbox untuk PO yang sudah di-TTD & siap dikirim ke supplier */
+                              isSendable ? (
+                                <input
+                                  type="checkbox"
+                                  checked={selectedPoIds.has(po.id)}
+                                  onChange={() => toggleSelectPo(po.id)}
+                                  aria-label={`Pilih PO ${po.poNumber} untuk kirim`}
+                                  title="Pilih untuk kirim ke supplier"
+                                  className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 border-slate-300 cursor-pointer"
+                                />
+                              ) : ["WAITING_DELIVERY", "SENT", "PARTIALLY_DELIVERED", "WAITING_RECEIVING", "PARTIALLY_RECEIVED", "RECEIVED", "CLOSED"].includes(po.status) ? (
+                                <span title="Sudah dikirim ke supplier">
+                                  <CheckCircle2 className="w-4 h-4 text-blue-500" />
+                                </span>
+                              ) : !isSigned && po.status !== "CANCELLED" ? (
+                                <span
+                                  className="px-1 py-0.5 rounded text-[9px] font-bold bg-slate-100 text-slate-500 border border-slate-200 whitespace-nowrap"
+                                  title="Menunggu TTD sebelum dapat dikirim"
+                                >
+                                  Belum TTD
+                                </span>
                               ) : (
-                                <ChevronRight className="w-4 h-4" />
-                              )}
-                            </button>
+                                <span className="text-slate-300 text-xs font-mono">-</span>
+                              )
+                            )}
                           </div>
 
                           {/* No. PO */}
@@ -1309,26 +1447,24 @@ export default function PurchaseOrderTableClient({
                                   </span>
                                 </span>
                                 <span
-                                  className={`font-mono text-[11px] font-bold ${
-                                    percent === 100
-                                      ? "text-emerald-600"
-                                      : percent > 0
+                                  className={`font-mono text-[11px] font-bold ${percent === 100
+                                    ? "text-emerald-600"
+                                    : percent > 0
                                       ? "text-blue-600"
                                       : "text-slate-400"
-                                  }`}
+                                    }`}
                                 >
                                   {percent}%
                                 </span>
                               </div>
                               <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
                                 <div
-                                  className={`h-full rounded-full transition-all duration-300 ${
-                                    percent === 100
-                                      ? "bg-emerald-500"
-                                      : percent > 0
+                                  className={`h-full rounded-full transition-all duration-300 ${percent === 100
+                                    ? "bg-emerald-500"
+                                    : percent > 0
                                       ? "bg-blue-600"
                                       : "bg-slate-300"
-                                  }`}
+                                    }`}
                                   style={{ width: `${percent}%` }}
                                 />
                               </div>
@@ -1375,135 +1511,6 @@ export default function PurchaseOrderTableClient({
                             </div>
                           </div>
                         </div>
-
-                        {/* Inline Expanded Items Table */}
-                        {isExpanded && (
-                          <div className="bg-slate-50/70 border-t border-b border-slate-200/80 px-8 py-4 animate-in fade-in duration-150">
-                            <div className="bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden">
-                              <div className="px-4 py-2.5 bg-slate-100/60 border-b border-slate-200 flex items-center justify-between text-xs">
-                                <span className="font-semibold text-slate-700">
-                                  {isEnglish ? `Details for ${po.details.length} Items in PO ${po.poNumber}` : `Rincian ${po.details.length} Item pada PO ${po.poNumber}`}
-                                </span>
-                                <Link
-                                  href={`/purchasing/purchase-orders/${po.id}`}
-                                  className="text-blue-600 hover:underline flex items-center gap-1 text-[11px] font-medium"
-                                >
-                                  {isEnglish ? "Open PO Details Page" : "Buka Halaman Detail PO"} <ExternalLink className="w-3 h-3" />
-                                </Link>
-                              </div>
-                              <table className="w-full text-left text-xs">
-                                <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200/60">
-                                  <tr>
-                                    <th className="px-4 py-2.5 w-10 text-center">No</th>
-                                    <th className="px-4 py-2.5">{isEnglish ? "Item" : "Barang (Item)"}</th>
-                                    <th className="px-4 py-2.5 text-right">{isEnglish ? "PO Qty" : "Qty PO"}</th>
-                                    <th className="px-4 py-2.5 text-right">{isEnglish ? "Shipped" : "Terkirim"}</th>
-                                    <th className="px-4 py-2.5 text-right">{isEnglish ? "Received" : "Diterima"}</th>
-                                    <th className="px-4 py-2.5 text-right">{isEnglish ? "Remaining" : "Sisa (Outstanding)"}</th>
-                                    <th className="px-4 py-2.5 text-center">{isEnglish ? "Progress" : "Progres"}</th>
-                                    <th className="px-4 py-2.5 text-center">{isEnglish ? "Status" : "Status Item"}</th>
-                                  </tr>
-                                </thead>
-                                <tbody className="divide-y divide-slate-100">
-                                  {po.details.map((d, dIdx) => {
-                                    const pkgUnit = d.item?.packageUnit || "Pail";
-                                    const pkgSize = Number(d.item?.packageSize ?? 1);
-                                    const poPkgQty =
-                                      pkgSize > 0 ? Math.ceil(d.qty / pkgSize) : d.qty;
-                                    const recvPkgQty =
-                                      pkgSize > 0 ? Math.floor(d.receivedQty / pkgSize) : d.receivedQty;
-                                    const sisa = Math.max(0, d.qty - d.receivedQty);
-                                    const sisaPkg =
-                                      pkgSize > 0 ? Math.ceil(sisa / pkgSize) : sisa;
-                                    const itemPct =
-                                      d.qty > 0
-                                        ? calculateProgressPercent(d.receivedQty, d.qty)
-                                        : 0;
-
-                                    let itemStatusBadge = { label: isEnglish ? "Waiting" : "Menunggu", color: "slate" as any };
-                                    if (d.receivedQty >= d.qty && d.qty > 0) {
-                                      itemStatusBadge = { label: isEnglish ? "Completed" : "Tuntas", color: "green" };
-                                    } else if (d.receivedQty > 0) {
-                                      itemStatusBadge = { label: isEnglish ? "Partially Received" : "Diterima Sebagian", color: "blue" };
-                                    } else if ((d.deliveredQty || 0) > 0) {
-                                      itemStatusBadge = { label: isEnglish ? "In Transit" : "Dalam Pengiriman", color: "amber" };
-                                    }
-
-                                    return (
-                                      <tr key={d.id || dIdx} className="hover:bg-slate-50/50">
-                                        <td className="px-4 py-2 text-center text-slate-400 font-mono">
-                                          {dIdx + 1}
-                                        </td>
-                                        <td className="px-4 py-2">
-                                          <div className="font-semibold text-slate-800">
-                                            {d.item?.name || "Item tanpa nama"}
-                                          </div>
-                                          <div className="text-[11px] text-slate-400 font-mono">
-                                            {d.item?.code} · Spek: 1 {pkgUnit} = {pkgSize}{" "}
-                                            {d.item?.unit || "kg"}
-                                          </div>
-                                        </td>
-                                        <td className="px-4 py-2 text-right whitespace-nowrap font-medium text-slate-800">
-                                          <div>{d.qty} {d.item?.unit || "kg"}</div>
-                                          <div className="text-[11px] text-slate-400 font-normal">
-                                            ({poPkgQty} {pkgUnit})
-                                          </div>
-                                        </td>
-                                        <td className="px-4 py-2 text-right whitespace-nowrap text-slate-600">
-                                          {d.deliveredQty || 0} {d.item?.unit || "kg"}
-                                        </td>
-                                        <td className="px-4 py-2 text-right whitespace-nowrap font-semibold text-emerald-600">
-                                          <div>{d.receivedQty} {d.item?.unit || "kg"}</div>
-                                          <div className="text-[11px] text-emerald-500 font-normal">
-                                            ({recvPkgQty} {pkgUnit})
-                                          </div>
-                                        </td>
-                                        <td className="px-4 py-2 text-right whitespace-nowrap font-semibold">
-                                          {sisa === 0 ? (
-                                            <span className="text-emerald-600 flex items-center justify-end gap-1">
-                                              <Check className="w-3.5 h-3.5" /> 0 {d.item?.unit || "kg"}
-                                            </span>
-                                          ) : (
-                                            <div className="text-amber-600">
-                                              <div>{sisa} {d.item?.unit || "kg"}</div>
-                                              <div className="text-[11px] text-amber-500 font-normal">
-                                                ({sisaPkg} {pkgUnit})
-                                              </div>
-                                            </div>
-                                          )}
-                                        </td>
-                                        <td className="px-4 py-2 text-center min-w-[120px]">
-                                          <div className="flex items-center gap-2 justify-center">
-                                            <div className="w-16 h-2 bg-slate-100 rounded-full overflow-hidden">
-                                              <div
-                                                className={`h-full rounded-full ${
-                                                  itemPct === 100
-                                                    ? "bg-emerald-500"
-                                                    : itemPct > 0
-                                                    ? "bg-blue-600"
-                                                    : "bg-slate-200"
-                                                }`}
-                                                style={{ width: `${itemPct}%` }}
-                                              />
-                                            </div>
-                                            <span className="font-mono text-[11px] font-bold text-slate-700">
-                                              {itemPct}%
-                                            </span>
-                                          </div>
-                                        </td>
-                                        <td className="px-4 py-2 text-center">
-                                          <Badge color={itemStatusBadge.color}>
-                                            {itemStatusBadge.label}
-                                          </Badge>
-                                        </td>
-                                      </tr>
-                                    );
-                                  })}
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        )}
                       </td>
                     </tr>
                   );
@@ -1549,10 +1556,10 @@ export default function PurchaseOrderTableClient({
                     activeFilters.tab === "PENDING_L1"
                       ? "Belum Di-TTD Manager"
                       : activeFilters.tab === "APPROVED_L1"
-                      ? "Sudah Di-TTD Manager"
-                      : activeFilters.tab === "PENDING_L2"
-                      ? "Menunggu TTD Presdir"
-                      : "Disetujui Presdir"
+                        ? "Sudah Di-TTD Manager"
+                        : activeFilters.tab === "PENDING_L2"
+                          ? "Menunggu TTD Presdir"
+                          : "Disetujui Presdir"
                   }
                 </span>
               )}
@@ -1689,8 +1696,8 @@ export default function PurchaseOrderTableClient({
                                     percent === 100
                                       ? "text-emerald-600"
                                       : percent > 0
-                                      ? "text-blue-600"
-                                      : "text-slate-400"
+                                        ? "text-blue-600"
+                                        : "text-slate-400"
                                   }
                                 >
                                   {percent}%
@@ -1698,13 +1705,12 @@ export default function PurchaseOrderTableClient({
                               </div>
                               <div className="w-full h-2 bg-slate-200/80 rounded-full overflow-hidden">
                                 <div
-                                  className={`h-full rounded-full transition-all duration-300 ${
-                                    percent === 100
-                                      ? "bg-emerald-500"
-                                      : percent > 0
+                                  className={`h-full rounded-full transition-all duration-300 ${percent === 100
+                                    ? "bg-emerald-500"
+                                    : percent > 0
                                       ? "bg-blue-600"
                                       : "bg-slate-300"
-                                  }`}
+                                    }`}
                                   style={{ width: `${percent}%` }}
                                 />
                               </div>
@@ -1826,13 +1832,12 @@ export default function PurchaseOrderTableClient({
                                       <div className="flex items-center gap-2 justify-center">
                                         <div className="w-20 h-2 bg-slate-100 rounded-full overflow-hidden">
                                           <div
-                                            className={`h-full rounded-full transition-all ${
-                                              itemPct === 100
-                                                ? "bg-emerald-500"
-                                                : itemPct > 0
+                                            className={`h-full rounded-full transition-all ${itemPct === 100
+                                              ? "bg-emerald-500"
+                                              : itemPct > 0
                                                 ? "bg-blue-600"
                                                 : "bg-slate-200"
-                                            }`}
+                                              }`}
                                             style={{ width: `${itemPct}%` }}
                                           />
                                         </div>
@@ -1974,13 +1979,12 @@ export default function PurchaseOrderTableClient({
                               <div className="flex items-center gap-1.5 justify-center">
                                 <div className="w-14 h-2 bg-slate-100 rounded-full overflow-hidden">
                                   <div
-                                    className={`h-full rounded-full ${
-                                      row.percent === 100
-                                        ? "bg-emerald-500"
-                                        : row.percent > 0
+                                    className={`h-full rounded-full ${row.percent === 100
+                                      ? "bg-emerald-500"
+                                      : row.percent > 0
                                         ? "bg-blue-600"
                                         : "bg-slate-200"
-                                    }`}
+                                      }`}
                                     style={{ width: `${row.percent}%` }}
                                   />
                                 </div>
@@ -2095,11 +2099,10 @@ export default function PurchaseOrderTableClient({
           <div className="pointer-events-auto bg-slate-900/95 text-white backdrop-blur-md rounded-2xl shadow-2xl border border-slate-700/80 px-5 py-3.5 flex flex-wrap items-center gap-4 max-w-2xl w-full justify-between">
             <div className="flex items-center gap-3">
               <div
-                className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${
-                  isL2
-                    ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30"
-                    : "bg-amber-500/20 text-amber-400 border-amber-500/30"
-                }`}
+                className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${isL2
+                  ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30"
+                  : "bg-amber-500/20 text-amber-400 border-amber-500/30"
+                  }`}
               >
                 <ShieldCheck className="w-5 h-5" />
               </div>
@@ -2111,11 +2114,10 @@ export default function PurchaseOrderTableClient({
                       : `${selectedPoIds.size} PO Terpilih`}
                   </span>
                   <span
-                    className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full ${
-                      isL2
-                        ? "bg-emerald-500 text-slate-950"
-                        : "bg-amber-500 text-slate-950"
-                    }`}
+                    className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full ${isL2
+                      ? "bg-emerald-500 text-slate-950"
+                      : "bg-amber-500 text-slate-950"
+                      }`}
                   >
                     {isL2 ? "President Director (L2)" : isEnglish ? "Purchasing Manager (L1)" : "Manager L1"}
                   </span>
@@ -2124,8 +2126,8 @@ export default function PurchaseOrderTableClient({
                   {isL2
                     ? "Ready for batch digital signature authorization"
                     : isEnglish
-                    ? "Ready for batch manager digital approval"
-                    : "Siap disetujui (TTD digital) secara bersamaan"}
+                      ? "Ready for batch manager digital approval"
+                      : "Siap disetujui (TTD digital) secara bersamaan"}
                 </p>
               </div>
             </div>
@@ -2141,11 +2143,10 @@ export default function PurchaseOrderTableClient({
               <button
                 type="button"
                 onClick={() => setBatchApproveModalOpen(true)}
-                className={`inline-flex items-center gap-1.5 px-4 py-2 text-white font-bold text-xs rounded-xl shadow-lg transition-all cursor-pointer ${
-                  isL2
-                    ? "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 shadow-emerald-950/40"
-                    : "bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 shadow-amber-950/40"
-                }`}
+                className={`inline-flex items-center gap-1.5 px-4 py-2 text-white font-bold text-xs rounded-xl shadow-lg transition-all cursor-pointer ${isL2
+                  ? "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 shadow-emerald-950/40"
+                  : "bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 shadow-amber-950/40"
+                  }`}
               >
                 <Check className="w-4 h-4" />
                 <span>
@@ -2165,11 +2166,10 @@ export default function PurchaseOrderTableClient({
           <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-4 animate-in zoom-in-95 duration-200">
             <div className="flex items-center gap-3">
               <div
-                className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${
-                  isL2
-                    ? "bg-emerald-50 text-emerald-600 border-emerald-200"
-                    : "bg-amber-50 text-amber-600 border-amber-200"
-                }`}
+                className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${isL2
+                  ? "bg-emerald-50 text-emerald-600 border-emerald-200"
+                  : "bg-amber-50 text-amber-600 border-amber-200"
+                  }`}
               >
                 <ShieldCheck className="w-6 h-6" />
               </div>
@@ -2178,25 +2178,24 @@ export default function PurchaseOrderTableClient({
                   {isL2
                     ? "Batch Authorization — President Director (L2)"
                     : isEnglish
-                    ? "Batch Approval — Purchasing Manager (L1)"
-                    : "Persetujuan Massal (Batch Approval)"}
+                      ? "Batch Approval — Purchasing Manager (L1)"
+                      : "Persetujuan Massal (Batch Approval)"}
                 </h3>
                 <p className="text-xs text-slate-500">
                   {isL2
                     ? "Digital Signature & SHA-256 Cryptographic Verification"
                     : isEnglish
-                    ? "Digital Signature & Manager Authorization"
-                    : "Verifikasi tanda tangan digital Manager Purchasing (L1)"}
+                      ? "Digital Signature & Manager Authorization"
+                      : "Verifikasi tanda tangan digital Manager Purchasing (L1)"}
                 </p>
               </div>
             </div>
 
             <div
-              className={`p-3 rounded-xl text-xs space-y-1 border ${
-                isL2
-                  ? "bg-emerald-50/70 border-emerald-200 text-emerald-950"
-                  : "bg-amber-50/70 border-amber-200 text-amber-900"
-              }`}
+              className={`p-3 rounded-xl text-xs space-y-1 border ${isL2
+                ? "bg-emerald-50/70 border-emerald-200 text-emerald-950"
+                : "bg-amber-50/70 border-amber-200 text-amber-900"
+                }`}
             >
               <p className="font-semibold">
                 {isEnglish
@@ -2209,9 +2208,8 @@ export default function PurchaseOrderTableClient({
                   .map((p) => (
                     <div
                       key={p.id}
-                      className={`flex items-center justify-between py-1 border-b ${
-                        isL2 ? "border-emerald-200/60" : "border-amber-200/50"
-                      }`}
+                      className={`flex items-center justify-between py-1 border-b ${isL2 ? "border-emerald-200/60" : "border-amber-200/50"
+                        }`}
                     >
                       <span className="font-bold">{p.poNumber}</span>
                       <span className="text-slate-600 font-sans truncate max-w-[220px]">
@@ -2226,8 +2224,8 @@ export default function PurchaseOrderTableClient({
               {isL2
                 ? "Upon confirmation, a cryptographic SHA-256 verification hash will be sealed for each Purchase Order, marking them fully authorized and ready for delivery/processing. This approval action will be permanently recorded in the system audit trail."
                 : isEnglish
-                ? "Upon confirmation, your digital signature and approval timestamp will be recorded for each Purchase Order, advancing them to the President Director for final authorization. This approval action will be permanently recorded in the system audit trail."
-                : "Setelah disetujui, Purchase Order akan diteruskan ke tahap persetujuan Presdir (L2) atau siap dikirimkan ke supplier. Seluruh tindakan persetujuan akan dicatat secara otomatis ke dalam audit log sistem."}
+                  ? "Upon confirmation, your digital signature and approval timestamp will be recorded for each Purchase Order, advancing them to the President Director for final authorization. This approval action will be permanently recorded in the system audit trail."
+                  : "Setelah disetujui, Purchase Order akan diteruskan ke tahap persetujuan Presdir (L2) atau siap dikirimkan ke supplier. Seluruh tindakan persetujuan akan dicatat secara otomatis ke dalam audit log sistem."}
             </p>
 
             <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
@@ -2260,6 +2258,232 @@ export default function PurchaseOrderTableClient({
                     </span>
                   </>
                 )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─── FLOATING ACTION DOCK: KIRIM MASSAL KE SUPPLIER (PURCHASING STAFF) ─── */}
+      {!isApprover && selectedPoIds.size > 0 && (
+        <div className="fixed bottom-6 inset-x-0 z-40 flex justify-center pointer-events-none px-4 animate-in slide-in-from-bottom-5 duration-200">
+          <div className="pointer-events-auto bg-slate-900/95 text-white backdrop-blur-md rounded-2xl shadow-2xl border border-blue-500/30 px-5 py-3.5 flex flex-wrap items-center gap-4 max-w-2xl w-full justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border bg-blue-500/20 text-blue-400 border-blue-500/30">
+                <Send className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-sm font-bold text-white flex items-center gap-2">
+                  <span>{selectedPoIds.size} PO Terpilih</span>
+                  <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-blue-500 text-white">
+                    Siap Dikirim ke Supplier
+                  </span>
+                </p>
+                <p className="text-[11px] text-slate-300">
+                  PO sudah ditandatangani dan siap diteruskan ke supplier terkait
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setSelectedPoIds(new Set())}
+                className="px-3 py-1.5 text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
+              >
+                Batal
+              </button>
+              <button
+                type="button"
+                onClick={() => setBatchSendModalOpen(true)}
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-white font-bold text-xs rounded-xl shadow-lg transition-all cursor-pointer bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 shadow-blue-950/40"
+              >
+                <Send className="w-4 h-4" />
+                <span>Kirim Terpilih ({selectedPoIds.size})</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─── MODAL KONFIRMASI BATCH SEND KE SUPPLIER ─── */}
+      {batchSendModalOpen && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-4 animate-in zoom-in-95 duration-200">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border bg-blue-50 text-blue-600 border-blue-200">
+                <Send className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-slate-900">
+                  Kirim Purchase Order ke Supplier
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Pengiriman massal PO yang telah ditandatangani / diapprove
+                </p>
+              </div>
+            </div>
+
+            <div className="p-3 rounded-xl text-xs space-y-1 border bg-blue-50/70 border-blue-200 text-blue-950">
+              <p className="font-semibold">
+                Anda akan mengirimkan {selectedPoIds.size} Purchase Order berikut ke supplier masing-masing:
+              </p>
+              <div className="max-h-36 overflow-y-auto space-y-1 pr-1 font-mono text-[11px] pt-1">
+                {sortedPOs
+                  .filter((p) => selectedPoIds.has(p.id))
+                  .map((p) => (
+                    <div
+                      key={p.id}
+                      className="flex items-center justify-between py-1 border-b border-blue-200/60"
+                    >
+                      <span className="font-bold">{p.poNumber}</span>
+                      <span className="text-slate-600 font-sans truncate max-w-[220px]">
+                        {p.supplier.name}
+                      </span>
+                    </div>
+                  ))}
+              </div>
+            </div>
+
+            <p className="text-xs text-slate-600 leading-relaxed">
+              Setelah dikonfirmasi, status Purchase Order akan otomatis diperbarui menjadi <strong>Menunggu Pengiriman (Waiting Delivery)</strong>, notifikasi dikirimkan ke portal supplier, dan sistem akan langsung <strong>membuka draf email Gmail</strong> dengan rincian PO beserta tautan unduh dokumen PDF resmi bertanda tangan digital sebagai arsip.
+            </p>
+
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+              <button
+                type="button"
+                disabled={isBatchSending}
+                onClick={() => setBatchSendModalOpen(false)}
+                className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
+              >
+                Batal
+              </button>
+              <button
+                type="button"
+                disabled={isBatchSending}
+                onClick={handleBatchSend}
+                className="inline-flex items-center gap-2 px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-xl shadow-xs transition-colors cursor-pointer"
+              >
+                {isBatchSending ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Mengirim...</span>
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4" />
+                    <span>Kirim & Buka Gmail ({selectedPoIds.size} PO)</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─── MODAL SUKSES PENGIRIMAN DENGAN AKSES GMAIL & PDF ARSIP ─── */}
+      {sentEmailBatches && sentEmailBatches.length > 0 && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
+          <div className="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 space-y-4 animate-in zoom-in-95 duration-200">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border bg-emerald-50 text-emerald-600 border-emerald-200">
+                  <CheckCircle2 className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-slate-900">
+                    Purchase Order Berhasil Diproses!
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Status PO telah diperbarui ke Menunggu Pengiriman & draf email disiapkan
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSentEmailBatches(null)}
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="bg-amber-50/80 border border-amber-200/80 rounded-xl p-3 text-xs text-amber-900 space-y-1">
+              <div className="flex items-center gap-1.5 font-bold text-amber-800">
+                <AlertTriangle className="w-4 h-4 shrink-0 text-amber-600" />
+                <span>Informasi Pengiriman Email & Arsip Dokumen PDF:</span>
+              </div>
+              <p className="text-[11px] leading-relaxed">
+                Tautan unduh dokumen PDF resmi bertanda tangan digital sudah otomatis disertakan di dalam badan pesan email Gmail. Anda juga dapat mengklik tombol <strong>Cetak / PDF</strong> di bawah ini jika ingin mengunduh berkasnya secara manual dan melampirkannya ke Gmail sebagai arsip.
+              </p>
+            </div>
+
+            {/* List Supplier Email Cards */}
+            <div className="max-h-72 overflow-y-auto space-y-3 pr-1">
+              {sentEmailBatches.map((batch, idx) => (
+                <div
+                  key={batch.supplierId || idx}
+                  className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/60 space-y-2.5"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <p className="font-bold text-slate-800 text-xs flex items-center gap-1.5">
+                        <Building2 className="w-3.5 h-3.5 text-slate-500" />
+                        <span>{batch.supplierName}</span>
+                      </p>
+                      <p className="text-[11px] text-slate-500 flex items-center gap-1 mt-0.5 font-mono">
+                        <Mail className="w-3 h-3 text-slate-400" />
+                        {batch.supplierEmail ? (
+                          <span className="text-blue-600 font-sans">{batch.supplierEmail}</span>
+                        ) : (
+                          <span className="text-amber-600 italic font-sans">(Email belum terdaftar di data supplier)</span>
+                        )}
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => window.open(batch.gmailUrl, "_blank")}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-lg shadow-2xs transition-colors cursor-pointer shrink-0"
+                      title="Buka draf email di Google Gmail"
+                    >
+                      <Mail className="w-3.5 h-3.5" />
+                      <span>Buka Gmail</span>
+                      <ExternalLink className="w-3 h-3 text-rose-200" />
+                    </button>
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-200/60">
+                    <p className="text-[11px] font-semibold text-slate-600 mb-1">
+                      Dokumen PO Terkait ({batch.pos.length} PO):
+                    </p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {batch.pdfLinks.map((pdf) => (
+                        <button
+                          key={pdf.poId}
+                          type="button"
+                          onClick={() => window.open(pdf.url, "_blank")}
+                          className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-mono font-medium text-slate-700 bg-white hover:bg-slate-100 border border-slate-300 rounded-md transition-colors cursor-pointer"
+                          title={`Buka cetak / simpan PDF untuk ${pdf.poNumber}`}
+                        >
+                          <Printer className="w-3 h-3 text-slate-500" />
+                          <span>{pdf.poNumber}</span>
+                          <ExternalLink className="w-2.5 h-2.5 text-slate-400" />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex items-center justify-end pt-2 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={() => setSentEmailBatches(null)}
+                className="px-4 py-2 text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors cursor-pointer"
+              >
+                Selesai / Tutup
               </button>
             </div>
           </div>

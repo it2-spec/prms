@@ -121,7 +121,7 @@ async function createDelivery(
   revalidatePath("/supplier");
   revalidatePath("/supplier/deliveries");
   revalidatePath(`/purchasing/purchase-orders/${po.id}`);
-  return { redirect: `/supplier/deliveries/${deliveryId}/qr` };
+  return { redirect: `/supplier/deliveries/${deliveryId}/qr?autoprint=1` };
 }
 
 export default async function NewDeliveryPage({

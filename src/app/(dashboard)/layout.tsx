@@ -29,11 +29,10 @@ const NAV: Record<string, NavItem[]> = {
   ],
   WAREHOUSE: [
     { href: "/warehouse", label: "Dashboard", icon: "stroke-home" },
-    { href: "/warehouse/scan", label: "Scan QR (Incoming)", icon: "stroke-search" },
-    { href: "/warehouse/outgoing", label: "Outgoing Material", icon: "stroke-progress-delivery" },
-    { href: "/warehouse/manual", label: "Manual Receiving", icon: "stroke-form" },
-    { href: "/warehouse/history", label: "Riwayat Transaksi", icon: "stroke-delivered" },
+    { href: "/warehouse/scan", label: "Scan Incoming", icon: "stroke-search" },
+    { href: "/warehouse/outgoing", label: "Scan Outgoing", icon: "stroke-progress-delivery" },
     { href: "/warehouse/stock", label: "Stok Material", icon: "stroke-package" },
+    { href: "/warehouse/settings", label: "Setting", icon: "stroke-widget" },
   ],
   SUPPLIER: [
     { href: "/supplier", label: "Dashboard", icon: "stroke-home" },
