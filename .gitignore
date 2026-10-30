@@ -46,3 +46,7 @@ next-env.d.ts
 # custom ignored directories
 /PO/
 /template/
+
+# database backups
+backups/*.sql
+backups/*.dump
