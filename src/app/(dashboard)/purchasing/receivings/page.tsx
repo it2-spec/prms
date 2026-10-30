@@ -1,76 +1,144 @@
 import { redirect } from "next/navigation";
-import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/auth";
-import { Card, Badge, statusColor, EmptyState, PageTitle } from "@/components/ui";
-import { RECEIVING_STATUS_LABEL, formatDateOnly } from "@/lib/utils";
+import { PageTitle } from "@/components/ui";
+import { normalizeDepartment } from "@/lib/format";
+import ReceivingTableClient, {
+  ReceivingItemRow,
+} from "@/components/receiving/ReceivingTableClient";
 
 export const dynamic = "force-dynamic";
 
 export default async function ReceivingsPage() {
   const { user } = await getSessionUser();
-  if (!user || user.role !== "PURCHASING") redirect("/login");
+  const allowedRoles = [
+    "PURCHASING",
+    "WAREHOUSE",
+    "ADMIN_PRODUKSI",
+    "ADMIN_INDIRECT",
+    "DEPT_APPROVER",
+  ];
+  if (!user || !allowedRoles.includes(user.role)) {
+    redirect("/login");
+  }
+
+  // Batasan Hak Akses Harga:
+  // Hanya role PURCHASING yang berhak melihat harga satuan (unit price) dan total nominal.
+  // Role Admin Produksi, Admin Indirect, Dept Approver, dan Warehouse TIDAK DAPAT melihat harga.
+  const canViewPrice = user.role === "PURCHASING";
 
   const receivings = await prisma.receiving.findMany({
     orderBy: { receivedAt: "desc" },
     include: {
-      purchaseOrder: true,
-      delivery: true,
-      warehouse: true,
-      receivedBy: true,
-      details: true,
+      purchaseOrder: {
+        include: {
+          supplier: { select: { id: true, name: true } },
+          createdBy: { select: { name: true } },
+          purchaseRequest: {
+            select: {
+              department: true,
+              requestedBy: { select: { name: true } },
+            },
+          },
+          details: {
+            select: {
+              id: true,
+              itemId: true,
+              unitPrice: true,
+            },
+          },
+        },
+      },
+      delivery: {
+        include: {
+          supplier: { select: { id: true, name: true } },
+        },
+      },
+      warehouse: { select: { id: true, name: true, code: true } },
+      receivedBy: { select: { id: true, name: true } },
+      details: {
+        include: {
+          item: true,
+          deliveryDetail: {
+            select: {
+              id: true,
+              unitPrice: true,
+              purchaseOrderDetailId: true,
+            },
+          },
+        },
+      },
     },
+  });
+
+  // Susun data baris per item
+  const rows: ReceivingItemRow[] = receivings.flatMap((r) => {
+    const dnNumber = r.delivery?.suratJalan || r.delivery?.deliveryNumber || "-";
+    const supplierName =
+      r.purchaseOrder?.supplier?.name || r.delivery?.supplier?.name || "-";
+    const rawDept =
+      r.purchaseOrder?.department ||
+      r.purchaseOrder?.purchaseRequest?.department ||
+      r.purchaseOrder?.purchaseRequest?.requestedBy?.name ||
+      r.purchaseOrder?.createdBy?.name ||
+      "-";
+    const userDept = normalizeDepartment(rawDept);
+
+    return r.details.map((dt) => {
+      let price = 0;
+      if (canViewPrice) {
+        if (dt.deliveryDetail?.unitPrice && Number(dt.deliveryDetail.unitPrice) > 0) {
+          price = Number(dt.deliveryDetail.unitPrice);
+        } else if (dt.deliveryDetail?.purchaseOrderDetailId) {
+          const pod = r.purchaseOrder?.details?.find(
+            (p) => p.id === dt.deliveryDetail?.purchaseOrderDetailId
+          );
+          if (pod?.unitPrice) price = Number(pod.unitPrice);
+        } else if (dt.itemId) {
+          const pod = r.purchaseOrder?.details?.find((p) => p.itemId === dt.itemId);
+          if (pod?.unitPrice) price = Number(pod.unitPrice);
+        }
+
+        if (price === 0 && dt.item?.lastUnitPrice) {
+          price = Number(dt.item.lastUnitPrice);
+        }
+      }
+
+      const qty = dt.qtyReceived || 0;
+      const totalAmount = canViewPrice ? Math.round(qty * price * 100) / 100 : 0;
+
+      return {
+        id: dt.id,
+        receivingId: r.id,
+        receivingNumber: r.receivingNumber,
+        receivedAt: r.receivedAt.toISOString(),
+        supplierName,
+        dnNumber,
+        poNumber: r.purchaseOrder?.poNumber || "-",
+        poId: r.purchaseOrderId,
+        userDept,
+        itemCode: dt.item?.code || "-",
+        partName: dt.item?.name || "-",
+        unit: dt.item?.unit || "Pcs",
+        qty,
+        unitPrice: canViewPrice ? price : 0,
+        totalAmount,
+        picReceiving: r.receivedBy?.name || "-",
+        warehouseName: r.warehouse?.name || "-",
+        status: r.status,
+      };
+    });
   });
 
   return (
     <div className="space-y-4">
       <PageTitle
         title="Receivings"
-        subtitle="Histori penerimaan barang"
+        subtitle="Daftar laporan penerimaan barang (incoming material & part)"
         breadcrumb={["Receivings"]}
       />
 
-      <Card className="overflow-hidden">
-        <table className="w-full text-left text-sm">
-          <thead className="bg-slate-50 text-xs text-slate-500">
-            <tr>
-              <th className="px-5 py-3 font-medium">Receiving</th>
-              <th className="px-5 py-3 font-medium">PO</th>
-              <th className="px-5 py-3 font-medium">Delivery</th>
-              <th className="px-5 py-3 font-medium">Warehouse</th>
-              <th className="px-5 py-3 font-medium">Diterima Oleh</th>
-              <th className="px-5 py-3 font-medium">Tanggal</th>
-              <th className="px-5 py-3 font-medium">Items</th>
-              <th className="px-5 py-3 font-medium">Status</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
-            {receivings.map((r) => (
-              <tr key={r.id} className="hover:bg-slate-50">
-                <td className="px-5 py-3 font-medium">
-                  <Link href={`/purchasing/receivings/${r.id}`} className="text-blue-600 font-mono hover:underline">
-                    {r.receivingNumber}
-                  </Link>
-                </td>
-                <td className="px-5 py-3">{r.purchaseOrder.poNumber}</td>
-                <td className="px-5 py-3">
-                  <Link href={`/purchasing/deliveries/${r.deliveryId}`} className="text-slate-700 hover:underline font-mono">
-                    {r.delivery.deliveryNumber}
-                  </Link>
-                </td>
-                <td className="px-5 py-3">{r.warehouse.name}</td>
-                <td className="px-5 py-3">{r.receivedBy.name}</td>
-                <td className="px-5 py-3 text-slate-500">{formatDateOnly(r.receivedAt)}</td>
-                <td className="px-5 py-3">{r.details.length}</td>
-                <td className="px-5 py-3">
-                  <Badge color={statusColor(r.status)}>{RECEIVING_STATUS_LABEL[r.status]}</Badge>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {receivings.length === 0 && <EmptyState message="Belum ada receiving." />}
-      </Card>
+      <ReceivingTableClient initialRows={rows} canViewPrice={canViewPrice} />
     </div>
   );
 }

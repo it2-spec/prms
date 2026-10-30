@@ -1,7 +1,21 @@
 import { prisma } from "@/lib/prisma";
 import { sendPushToUser, sendPushToUsers } from "@/lib/webpush";
 
-export type NotificationType = "NEW_PO" | "PO_APPROVED_L1" | "PO_APPROVED_L2" | "PO_SENT" | "PO_ACCEPTED_SUPPLIER" | "PO_CANCELLED" | "INFO";
+export type NotificationType =
+  | "NEW_PO"
+  | "PO_APPROVED_L1"
+  | "PO_APPROVED_L2"
+  | "PO_SENT"
+  | "PO_ACCEPTED_SUPPLIER"
+  | "PO_CANCELLED"
+  | "PR_PENDING_APPROVAL"
+  | "PR_APPROVED"
+  | "PR_REJECTED"
+  | "PR_PARTIAL_PO"
+  | "PR_ORDERED"
+  | "PR_PARTIAL_RECEIVED"
+  | "PR_COMPLETED"
+  | "INFO";
 
 interface CreateNotificationParams {
   userId: string;
@@ -519,6 +533,295 @@ export async function notifyPoCancelledToSupplier(params: {
     ).catch(() => {});
   } catch (err) {
     console.error("[notifyPoCancelledToSupplier] Error notifying supplier:", err);
+  }
+}
+
+/**
+ * Kirim notifikasi saat PR baru diajukan (PENDING_APPROVAL) ke Supervisor Departemen terkait.
+ * Sesuai aturan bisnis, HANYA supervisor departemen yang berwenang menyetujui PR ini.
+ */
+export async function notifyPrSubmitted(params: {
+  prId: string;
+  prNumber: string;
+  department: string;
+  requesterName: string;
+}) {
+  try {
+    const link = `/purchasing/purchase-requests/${params.prId}`;
+
+    // Supervisor yang bertanggung jawab khusus atas departemen PR ini
+    const approvers = await prisma.user.findMany({
+      where: {
+        role: { name: "DEPT_APPROVER" },
+        departments: { has: params.department },
+        isActive: true,
+      },
+      select: { id: true, name: true, departments: true },
+    });
+
+    const relevantApproverIds = approvers.map((a) => a.id);
+
+    const title = `PR Baru Menunggu Persetujuan (${params.department})`;
+    const message = `PR ${params.prNumber} diajukan oleh ${params.requesterName} dan membutuhkan persetujuan Anda sebagai Supervisor ${params.department}.`;
+
+    if (relevantApproverIds.length > 0) {
+      const notifs = relevantApproverIds.map((userId) => ({
+        userId,
+        title,
+        message,
+        type: "PR_PENDING_APPROVAL" as NotificationType,
+        link,
+      }));
+
+      await prisma.notification.createMany({ data: notifs });
+      sendPushToUsers(relevantApproverIds, { title, body: message, url: link }).catch(() => {});
+    }
+  } catch (err) {
+    console.error("[notifyPrSubmitted] Error:", err);
+  }
+}
+
+/**
+ * Kirim notifikasi saat PR disetujui Head Dept ke Pemohon (Admin Produksi/Indirect) & Tim Purchasing
+ */
+export async function notifyPrApproved(params: {
+  prId: string;
+  prNumber: string;
+  department: string;
+  approverName: string;
+  requesterId: string;
+}) {
+  try {
+    const link = `/purchasing/purchase-requests/${params.prId}`;
+
+    // 1. Notifikasi ke pemohon & admin departemen yang sama
+    const deptAdmins = await prisma.user.findMany({
+      where: {
+        isActive: true,
+        OR: [
+          { id: params.requesterId },
+          {
+            departments: { has: params.department },
+            role: { name: { in: ["ADMIN_PRODUKSI", "ADMIN_INDIRECT"] } },
+          },
+        ],
+      },
+      select: { id: true },
+    });
+
+    const targetUserIds = Array.from(new Set(deptAdmins.map((u) => u.id).concat(params.requesterId)));
+
+    const reqTitle = `PR ${params.prNumber} Disetujui Head Dept`;
+    const reqMsg = `Purchase Request ${params.prNumber} (${params.department}) telah disetujui oleh ${params.approverName} dan siap diproses Purchasing.`;
+
+    if (targetUserIds.length > 0) {
+      await prisma.notification.createMany({
+        data: targetUserIds.map((userId) => ({
+          userId,
+          title: reqTitle,
+          message: reqMsg,
+          type: "PR_APPROVED" as NotificationType,
+          link,
+        })),
+      });
+      sendPushToUsers(targetUserIds, { title: reqTitle, body: reqMsg, url: link }).catch(() => {});
+    }
+
+    // 2. Notifikasi ke tim Purchasing (staff operasional) untuk diproses ke PO
+    const purchasingUsers = await prisma.user.findMany({
+      where: {
+        role: { name: "PURCHASING" },
+        approvalLevel: 0,
+        isActive: true,
+      },
+      select: { id: true },
+    });
+
+    if (purchasingUsers.length > 0) {
+      const pTitle = `PR Siap Dibuatkan PO`;
+      const pMsg = `PR ${params.prNumber} (${params.department}) telah disetujui Head Dept dan siap diterbitkan Purchase Order.`;
+      const pUids = purchasingUsers.map((u) => u.id);
+
+      await prisma.notification.createMany({
+        data: pUids.map((userId) => ({
+          userId,
+          title: pTitle,
+          message: pMsg,
+          type: "PR_APPROVED" as NotificationType,
+          link,
+        })),
+      });
+      sendPushToUsers(pUids, { title: pTitle, body: pMsg, url: link }).catch(() => {});
+    }
+  } catch (err) {
+    console.error("[notifyPrApproved] Error:", err);
+  }
+}
+
+/**
+ * Kirim notifikasi saat PR ditolak Head Dept ke Pemohon (Admin Produksi/Indirect)
+ */
+export async function notifyPrRejected(params: {
+  prId: string;
+  prNumber: string;
+  department: string;
+  rejectorName: string;
+  requesterId: string;
+  reason: string;
+}) {
+  try {
+    const link = `/purchasing/purchase-requests/${params.prId}`;
+
+    const deptAdmins = await prisma.user.findMany({
+      where: {
+        isActive: true,
+        OR: [
+          { id: params.requesterId },
+          {
+            departments: { has: params.department },
+            role: { name: { in: ["ADMIN_PRODUKSI", "ADMIN_INDIRECT"] } },
+          },
+        ],
+      },
+      select: { id: true },
+    });
+
+    const targetUserIds = Array.from(new Set(deptAdmins.map((u) => u.id).concat(params.requesterId)));
+
+    const title = `PR ${params.prNumber} Ditolak`;
+    const message = `Purchase Request ${params.prNumber} (${params.department}) ditolak oleh ${params.rejectorName}. Alasan: "${params.reason}".`;
+
+    if (targetUserIds.length > 0) {
+      await prisma.notification.createMany({
+        data: targetUserIds.map((userId) => ({
+          userId,
+          title,
+          message,
+          type: "PR_REJECTED" as NotificationType,
+          link,
+        })),
+      });
+      sendPushToUsers(targetUserIds, { title, body: message, url: link }).catch(() => {});
+    }
+  } catch (err) {
+    console.error("[notifyPrRejected] Error:", err);
+  }
+}
+
+/**
+ * Kirim notifikasi saat PO diterbitkan untuk PR ke Pemohon (Admin Produksi/Indirect)
+ */
+export async function notifyPrPoCreated(params: {
+  prId: string;
+  prNumber: string;
+  poNumber: string;
+  isPartial: boolean;
+  requesterId: string;
+  department?: string;
+}) {
+  try {
+    const link = `/purchasing/purchase-requests/${params.prId}`;
+
+    const whereOr: any[] = [{ id: params.requesterId }];
+    if (params.department) {
+      whereOr.push({
+        departments: { has: params.department },
+        role: { name: { in: ["ADMIN_PRODUKSI", "ADMIN_INDIRECT"] } },
+      });
+    }
+
+    const deptAdmins = await prisma.user.findMany({
+      where: {
+        isActive: true,
+        OR: whereOr,
+      },
+      select: { id: true },
+    });
+
+    const targetUserIds = Array.from(new Set(deptAdmins.map((u) => u.id).concat(params.requesterId)));
+
+    const title = params.isPartial
+      ? `PO Sebagian Terbit (${params.prNumber})`
+      : `PO Terbit untuk PR ${params.prNumber}`;
+
+    const message = params.isPartial
+      ? `Sebagian item pada PR ${params.prNumber} telah dibuatkan PO (${params.poNumber}).`
+      : `Seluruh item pada PR ${params.prNumber} telah dibuatkan PO (${params.poNumber}) dan sedang diproses pengiriman oleh vendor.`;
+
+    const type: NotificationType = params.isPartial ? "PR_PARTIAL_PO" : "PR_ORDERED";
+
+    if (targetUserIds.length > 0) {
+      await prisma.notification.createMany({
+        data: targetUserIds.map((userId) => ({
+          userId,
+          title,
+          message,
+          type,
+          link,
+        })),
+      });
+      sendPushToUsers(targetUserIds, { title, body: message, url: link }).catch(() => {});
+    }
+  } catch (err) {
+    console.error("[notifyPrPoCreated] Error:", err);
+  }
+}
+
+/**
+ * Kirim notifikasi saat barang dari PR tiba & diterima di Warehouse (PARTIAL_RECEIVED / COMPLETED)
+ */
+export async function notifyPrReceived(params: {
+  prId: string;
+  prNumber: string;
+  isCompleted: boolean;
+  requesterId: string;
+  department?: string;
+}) {
+  try {
+    const link = `/purchasing/purchase-requests/${params.prId}`;
+
+    const whereOr: any[] = [{ id: params.requesterId }];
+    if (params.department) {
+      whereOr.push({
+        departments: { has: params.department },
+        role: { name: { in: ["ADMIN_PRODUKSI", "ADMIN_INDIRECT"] } },
+      });
+    }
+
+    const deptAdmins = await prisma.user.findMany({
+      where: {
+        isActive: true,
+        OR: whereOr,
+      },
+      select: { id: true },
+    });
+
+    const targetUserIds = Array.from(new Set(deptAdmins.map((u) => u.id).concat(params.requesterId)));
+
+    const title = params.isCompleted
+      ? `PR ${params.prNumber} Selesai (Barang Lengkap)`
+      : `Barang Tiba Sebagian (${params.prNumber})`;
+
+    const message = params.isCompleted
+      ? `Seluruh barang pada Purchase Request ${params.prNumber} telah selesai diterima lengkap di Gudang oleh Warehouse.`
+      : `Sebagian barang pada Purchase Request ${params.prNumber} telah tiba dan diverifikasi oleh tim Warehouse.`;
+
+    const type: NotificationType = params.isCompleted ? "PR_COMPLETED" : "PR_PARTIAL_RECEIVED";
+
+    if (targetUserIds.length > 0) {
+      await prisma.notification.createMany({
+        data: targetUserIds.map((userId) => ({
+          userId,
+          title,
+          message,
+          type,
+          link,
+        })),
+      });
+      sendPushToUsers(targetUserIds, { title, body: message, url: link }).catch(() => {});
+    }
+  } catch (err) {
+    console.error("[notifyPrReceived] Error:", err);
   }
 }
 

@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/auth";
 import { nextNumber, writeAuditLog } from "@/lib/utils";
+import { syncPurchaseRequestFromPo } from "@/lib/pr-sync";
 import { Card, PageTitle } from "@/components/ui";
 import ManualReceivingForm from "./ManualReceivingForm";
 
@@ -136,6 +137,9 @@ async function createManualReceiving(
       where: { id: po.id },
       data: { status: allReceived ? "CLOSED" : "PARTIALLY_RECEIVED" },
     });
+
+    // Sinkronisasi status Purchase Request jika PO berasal dari PR
+    await syncPurchaseRequestFromPo(po.id, tx);
 
     return receiving.id;
   });

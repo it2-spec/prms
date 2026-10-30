@@ -23,10 +23,18 @@ import {
   Check,
   PenTool,
   FileSignature,
+  Factory,
+  Users as UsersIcon,
 } from "lucide-react";
 import SignatureModal from "@/components/SignatureModal";
 
-type RoleName = "PURCHASING" | "WAREHOUSE" | "SUPPLIER";
+type RoleName =
+  | "PURCHASING"
+  | "WAREHOUSE"
+  | "SUPPLIER"
+  | "ADMIN_PRODUKSI"
+  | "ADMIN_INDIRECT"
+  | "DEPT_APPROVER";
 
 type UserData = {
   id: string;
@@ -39,6 +47,7 @@ type UserData = {
   supplierName: string | null;
   warehouseId: string | null;
   warehouseName: string | null;
+  departments?: string[];
   isActive: boolean;
   approvalLevel?: number;
   signatureImage?: string | null;
@@ -73,6 +82,27 @@ const ROLE_META: Record<
     icon: Building2,
     desc: "Cetak surat jalan, QR & pantau PO",
   },
+  ADMIN_PRODUKSI: {
+    label: "Admin Produksi",
+    badgeClass: "bg-orange-50 text-orange-700 border-orange-200",
+    activeClass: "border-orange-500 bg-orange-50/60 text-orange-900 ring-2 ring-orange-500/20",
+    icon: Factory,
+    desc: "Buat PR departemen produksi (Molding, Plating, Painting)",
+  },
+  ADMIN_INDIRECT: {
+    label: "Admin Indirect",
+    badgeClass: "bg-purple-50 text-purple-700 border-purple-200",
+    activeClass: "border-purple-500 bg-purple-50/60 text-purple-900 ring-2 ring-purple-500/20",
+    icon: UsersIcon,
+    desc: "Buat PR departemen indirect (PP, QC, QA, Assy, PPIC)",
+  },
+  DEPT_APPROVER: {
+    label: "Dept Approver",
+    badgeClass: "bg-rose-50 text-rose-700 border-rose-200",
+    activeClass: "border-rose-500 bg-rose-50/60 text-rose-900 ring-2 ring-rose-500/20",
+    icon: CheckCircle,
+    desc: "SPV / Manager Dept untuk approval PR internal",
+  },
 };
 
 export default function UsersPage() {
@@ -95,6 +125,7 @@ export default function UsersPage() {
     role: "PURCHASING" as RoleName,
     supplierId: "",
     warehouseId: "",
+    departments: [] as string[],
     isActive: true,
     approvalLevel: 0,
   });
@@ -142,6 +173,7 @@ export default function UsersPage() {
       role: "PURCHASING",
       supplierId: "",
       warehouseId: "",
+      departments: [],
       isActive: true,
       approvalLevel: 0,
     });
@@ -160,6 +192,7 @@ export default function UsersPage() {
       role: u.role,
       supplierId: u.supplierId ?? "",
       warehouseId: u.warehouseId ?? "",
+      departments: u.departments ?? [],
       isActive: u.isActive,
       approvalLevel: u.approvalLevel ?? 0,
     });
@@ -181,8 +214,14 @@ export default function UsersPage() {
         roleName: form.role,
         supplierId: form.role === "SUPPLIER" ? form.supplierId || null : null,
         warehouseId: form.role === "WAREHOUSE" ? form.warehouseId || null : null,
+        departments:
+          form.role === "ADMIN_PRODUKSI" ||
+          form.role === "ADMIN_INDIRECT" ||
+          form.role === "DEPT_APPROVER"
+            ? form.departments
+            : [],
         isActive: form.isActive,
-        approvalLevel: form.role === "PURCHASING" ? form.approvalLevel : 0,
+        approvalLevel: form.role === "PURCHASING" ? form.approvalLevel : (form.role === "DEPT_APPROVER" ? 1 : 0),
       };
 
       const res = await fetch("/api/master/users", {
@@ -321,10 +360,20 @@ export default function UsersPage() {
           </div>
           <div className="flex gap-1.5 flex-wrap items-center">
             <span className="text-xs font-medium text-slate-500 mr-1">Filter Role:</span>
-            {(["ALL", "PURCHASING", "WAREHOUSE", "SUPPLIER"] as const).map((r) => (
+            {(
+              [
+                "ALL",
+                "PURCHASING",
+                "WAREHOUSE",
+                "SUPPLIER",
+                "ADMIN_PRODUKSI",
+                "ADMIN_INDIRECT",
+                "DEPT_APPROVER",
+              ] as const
+            ).map((r) => (
               <button
                 key={r}
-                onClick={() => setFilterRole(r)}
+                onClick={() => setFilterRole(r as any)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                   filterRole === r
                     ? "bg-slate-900 text-white shadow-sm font-semibold"
@@ -448,6 +497,17 @@ export default function UsersPage() {
                           <WarehouseIcon className="w-3.5 h-3.5 text-amber-600" />
                           {u.warehouseName}
                         </span>
+                      ) : u.departments && u.departments.length > 0 ? (
+                        <div className="flex flex-wrap gap-1 max-w-[220px]">
+                          {u.departments.map((d) => (
+                            <span
+                              key={d}
+                              className="px-1.5 py-0.5 bg-slate-100 text-slate-700 rounded text-[10px] font-medium border border-slate-200"
+                            >
+                              {d}
+                            </span>
+                          ))}
+                        </div>
                       ) : (
                         <span className="text-xs text-slate-400">—</span>
                       )}
@@ -542,8 +602,17 @@ export default function UsersPage() {
                 <label className="block text-xs font-semibold text-slate-700 mb-2">
                   Role & Hak Akses <span className="text-rose-500">*</span>
                 </label>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                  {(["PURCHASING", "WAREHOUSE", "SUPPLIER"] as RoleName[]).map((r) => {
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                  {(
+                    [
+                      "PURCHASING",
+                      "WAREHOUSE",
+                      "SUPPLIER",
+                      "ADMIN_PRODUKSI",
+                      "ADMIN_INDIRECT",
+                      "DEPT_APPROVER",
+                    ] as RoleName[]
+                  ).map((r) => {
                     const isSelected = form.role === r;
                     const meta = ROLE_META[r];
                     const IconComp = meta.icon;
@@ -552,7 +621,20 @@ export default function UsersPage() {
                         key={r}
                         type="button"
                         onClick={() =>
-                          setForm({ ...form, role: r, supplierId: "", warehouseId: "" })
+                          setForm({
+                            ...form,
+                            role: r,
+                            supplierId: "",
+                            warehouseId: "",
+                            departments:
+                              r === "ADMIN_PRODUKSI"
+                                ? ["Molding", "Plating", "Painting 1", "Painting 2"]
+                                : r === "ADMIN_INDIRECT"
+                                ? ["PP", "QC", "QA", "Assembly", "PPIC"]
+                                : r === "DEPT_APPROVER"
+                                ? ["Molding", "Painting 1"]
+                                : [],
+                          })
                         }
                         className={`group p-3.5 rounded-xl text-left border text-xs transition-all relative flex flex-col justify-between h-full ${
                           isSelected
@@ -761,6 +843,67 @@ export default function UsersPage() {
                   <p className="text-[11px] text-amber-700/90 leading-relaxed">
                     Akun ini akan dialokasikan ke gudang yang dipilih saat memindai QR Code dan mengonfirmasi penerimaan fisik barang di lapangan.
                   </p>
+                </div>
+              )}
+
+              {/* Linked Departments for Admin Produksi / Admin Indirect / Dept Approver */}
+              {(form.role === "ADMIN_PRODUKSI" ||
+                form.role === "ADMIN_INDIRECT" ||
+                form.role === "DEPT_APPROVER") && (
+                <div className="p-4 rounded-xl border border-indigo-200/90 bg-indigo-50/40 space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold text-indigo-900 flex items-center gap-1.5">
+                      <Factory className="w-4 h-4 text-indigo-600" />
+                      Departemen yang Dibawahi <span className="text-rose-500">*</span>
+                    </label>
+                    <span className="text-[11px] text-indigo-700 font-medium">Bisa memilih lebih dari 1</span>
+                  </div>
+                  <p className="text-[11px] text-slate-500">
+                    Tentukan departemen mana saja yang dapat dibuatkan Purchase Request (PR) atau di-approve oleh pengguna ini:
+                  </p>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1">
+                    {(form.role === "ADMIN_PRODUKSI"
+                      ? ["Molding", "Plating", "Painting 1", "Painting 2"]
+                      : form.role === "ADMIN_INDIRECT"
+                      ? ["PP", "QC", "QA", "Assembly", "PPIC"]
+                      : [
+                          "Molding",
+                          "Plating",
+                          "Painting 1",
+                          "Painting 2",
+                          "PP",
+                          "QC",
+                          "QA",
+                          "Assembly",
+                          "PPIC",
+                        ]
+                    ).map((dept) => {
+                      const isChecked = form.departments.includes(dept);
+                      return (
+                        <label
+                          key={dept}
+                          className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-xs cursor-pointer transition-all ${
+                            isChecked
+                              ? "bg-white border-indigo-500 text-indigo-950 font-semibold ring-1 ring-indigo-500/20 shadow-2xs"
+                              : "bg-white/60 border-slate-200 text-slate-700 hover:bg-white"
+                          }`}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={isChecked}
+                            onChange={(e) => {
+                              const next = e.target.checked
+                                ? [...form.departments, dept]
+                                : form.departments.filter((d) => d !== dept);
+                              setForm({ ...form, departments: next });
+                            }}
+                            className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                          />
+                          <span>{dept}</span>
+                        </label>
+                      );
+                    })}
+                  </div>
                 </div>
               )}
 

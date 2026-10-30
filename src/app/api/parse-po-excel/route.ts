@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import ExcelJS from "exceljs";
 import { prisma } from "@/lib/prisma";
-import { normalizeName } from "@/lib/utils";
+import { normalizeName, normalizeDepartment } from "@/lib/utils";
 
 function parseDeliverySchedule(raw: string): { dateStr: string; type: "DATE" | "MONTH" } | null {
   if (!raw) return null;
@@ -272,7 +272,7 @@ export async function POST(req: NextRequest) {
             if (valR) {
               const cleaned = String(valR).replace(/^[:\s]+/, "").trim();
               if (cleaned && cleaned !== ":") {
-                department = cleaned;
+                department = normalizeDepartment(cleaned);
                 break;
               }
             }

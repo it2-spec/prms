@@ -23,12 +23,17 @@ export function formatMoney(n: number | { toString(): string } | null | undefine
   }).format(Number(n));
 }
 
+export { formatCompactRupiah } from "@/lib/format";
+
 export function toRomanMonth(month: number): string {
   const romans = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
   return romans[Math.max(0, Math.min(11, month - 1))] || "I";
 }
 
-export async function nextPoNumber(targetDate: Date | string = new Date()): Promise<string> {
+export async function nextPoNumber(
+  targetDate: Date | string = new Date(),
+  client: any = prisma
+): Promise<string> {
   const d = new Date(targetDate);
   const validDate = isNaN(d.getTime()) ? new Date() : d;
   const year = validDate.getFullYear();
@@ -36,7 +41,7 @@ export async function nextPoNumber(targetDate: Date | string = new Date()): Prom
   const romanMonth = toRomanMonth(month);
 
   // Ambil semua PO untuk menghitung no urut tertinggi pada tahun yang sama
-  const pos = await prisma.purchaseOrder.findMany({
+  const pos = await client.purchaseOrder.findMany({
     select: { poNumber: true },
   });
 
@@ -63,9 +68,10 @@ export async function nextPoNumber(targetDate: Date | string = new Date()): Prom
 export async function nextNumber(
   model: "purchaseOrder" | "delivery" | "receiving" | "stockOutgoing",
   dateParam?: Date | string | null,
+  client: any = prisma
 ): Promise<string> {
   if (model === "purchaseOrder") {
-    return nextPoNumber(dateParam || new Date());
+    return nextPoNumber(dateParam || new Date(), client);
   }
 
   const prefixMap = {
@@ -165,6 +171,83 @@ export const RECEIVING_STATUS_LABEL: Record<string, string> = {
   CLOSED: "Closed",
 };
 
+export const PR_STATUS_LABEL: Record<string, string> = {
+  DRAFT: "Draft",
+  PENDING_APPROVAL: "Menunggu Approval",
+  APPROVED: "Disetujui (Siap PO)",
+  REJECTED: "Ditolak",
+  PARTIAL_PO: "Sebagian Masuk PO",
+  ORDERED: "Sudah PO (Menunggu Barang)",
+  PARTIAL_RECEIVED: "Diterima Sebagian",
+  COMPLETED: "Selesai (Barang Diterima)",
+  CONVERTED: "Sudah Jadi PO",
+  CANCELLED: "Dibatalkan",
+};
+
+export const DEPT_CODE_MAP: Record<string, string> = {
+  "Molding": "MLD",
+  "Painting 1": "PA",
+  "Painting 2": "PB",
+  "Plating": "PL",
+  "PP": "PP",
+  "QC": "QC",
+  "QA": "QA",
+  "Assembly": "ASSY",
+  "PPIC": "PPIC",
+  "Maintenance": "MTC",
+  "GA / HR": "GA",
+};
+
+export function getDeptCode(deptName?: string | null): string {
+  if (!deptName) return "GEN";
+  const trimmed = deptName.trim();
+  if (DEPT_CODE_MAP[trimmed]) return DEPT_CODE_MAP[trimmed];
+  const upper = trimmed.toUpperCase();
+  if (["MLD", "PA", "PB", "PL", "PP", "QC", "QA", "ASSY", "PPIC", "MTC", "GA"].includes(upper)) {
+    return upper;
+  }
+  return upper.replace(/[^A-Z0-9]/g, "").slice(0, 4) || "GEN";
+}
+
+export async function nextPrNumber(
+  department?: string | null,
+  targetDate: Date | string = new Date()
+): Promise<string> {
+  const d = new Date(targetDate);
+  const validDate = isNaN(d.getTime()) ? new Date() : d;
+  const year = validDate.getFullYear();
+  const deptCode = getDeptCode(department);
+
+  const suffix = `/${deptCode}/${year}`;
+
+  const prs = await prisma.purchaseRequest.findMany({
+    where: {
+      prNumber: {
+        endsWith: suffix,
+      },
+    },
+    select: { prNumber: true },
+  });
+
+  let maxNum = 0;
+  for (const p of prs) {
+    if (!p.prNumber) continue;
+    // Format: PR/001/MLD/2026 -> parts: ["PR", "001", "MLD", "2026"]
+    const parts = p.prNumber.trim().split("/");
+    if (parts.length >= 4 && parts[0] === "PR" && parts[2] === deptCode && parts[3] === String(year)) {
+      const parsed = parseInt(parts[1], 10);
+      if (!isNaN(parsed) && parsed > maxNum) {
+        maxNum = parsed;
+      }
+    }
+  }
+
+  const nextSeq = maxNum + 1;
+  const seqPadded = String(nextSeq).padStart(3, "0");
+  return `PR/${seqPadded}/${deptCode}/${year}`;
+}
+
+
 /**
  * Normalize item/supplier name for matching:
  * - collapse multiple spaces/tabs to single space
@@ -178,4 +261,5 @@ export function normalizeName(name: string): string {
 }
 
 export { calculateProgressPercent } from "./progress";
+export { normalizeDepartment } from "./format";
 

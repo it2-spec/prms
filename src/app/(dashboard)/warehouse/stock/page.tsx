@@ -9,8 +9,13 @@ export default async function WarehouseStockPage() {
   const { user, dbUser } = await getSessionUser();
   if (!user || user.role !== "WAREHOUSE") redirect("/login");
 
+  const whereWh: any = { isActive: true };
+  if (dbUser?.warehouseId) {
+    whereWh.id = dbUser.warehouseId;
+  }
+
   const warehouses = await prisma.warehouse.findMany({
-    where: { isActive: true },
+    where: whereWh,
     select: { id: true, name: true, code: true },
     orderBy: { name: "asc" },
   });
@@ -18,8 +23,9 @@ export default async function WarehouseStockPage() {
   return (
     <MaterialStockView
       warehouses={warehouses}
-      initialWarehouseId={dbUser?.warehouseId || "all"}
+      initialWarehouseId={dbUser?.warehouseId || warehouses[0]?.id || "all"}
       userRole="WAREHOUSE"
     />
   );
 }
+

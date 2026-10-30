@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { ChevronDown, X } from "lucide-react";
+import { ChevronDown, X, Plus } from "lucide-react";
 
 export type SelectOption = {
   value: string;
@@ -16,9 +16,12 @@ interface SearchableSelectProps {
   searchPlaceholder?: string;
   disabled?: boolean;
   required?: boolean;
-  name?: string;        // for hidden input (form submission)
+  name?: string; // for hidden input (form submission)
   className?: string;
   triggerClassName?: string;
+  creatable?: boolean;
+  onCreateNew?: (customValue: string) => void;
+  creatableText?: (query: string) => string;
 }
 
 export default function SearchableSelect({
@@ -31,11 +34,15 @@ export default function SearchableSelect({
   name,
   className = "",
   triggerClassName = "",
+  creatable = false,
+  onCreateNew,
+  creatableText,
 }: SearchableSelectProps) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
+  const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
 
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -47,6 +54,42 @@ export default function SearchableSelect({
   const filtered = isTyping && search.trim()
     ? options.filter((o) => o.label.toLowerCase().includes(search.toLowerCase()))
     : options;
+
+  const hasExactMatch = options.some(
+    (o) => o.label.toLowerCase() === search.trim().toLowerCase()
+  );
+  const showCreatable = Boolean(creatable && search.trim() && !hasExactMatch);
+
+  // Calculate fixed floating position so dropdown never gets clipped by overflow-hidden / tables
+  const updateDropdownPos = () => {
+    if (containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const openUpwards = spaceBelow < 240 && rect.top > 240;
+
+      setDropdownStyle({
+        position: "fixed",
+        top: openUpwards ? undefined : `${rect.bottom + 4}px`,
+        bottom: openUpwards ? `${window.innerHeight - rect.top + 4}px` : undefined,
+        left: `${rect.left}px`,
+        width: `${Math.max(rect.width, 280)}px`,
+        maxWidth: "calc(100vw - 24px)",
+        zIndex: 9999,
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (open) {
+      updateDropdownPos();
+      window.addEventListener("scroll", updateDropdownPos, true);
+      window.addEventListener("resize", updateDropdownPos);
+      return () => {
+        window.removeEventListener("scroll", updateDropdownPos, true);
+        window.removeEventListener("resize", updateDropdownPos);
+      };
+    }
+  }, [open]);
 
   // Keep highlightedIndex in bounds when filtered options change
   useEffect(() => {
@@ -83,6 +126,17 @@ export default function SearchableSelect({
     setSearch("");
   }
 
+  function handleCreateNew(customText: string) {
+    if (onCreateNew) {
+      onCreateNew(customText);
+    } else {
+      onChange(customText);
+    }
+    setOpen(false);
+    setIsTyping(false);
+    setSearch("");
+  }
+
   function handleClear(e: React.MouseEvent) {
     e.stopPropagation();
     onChange("");
@@ -110,6 +164,8 @@ export default function SearchableSelect({
       e.preventDefault();
       if (filtered[highlightedIndex]) {
         handleSelect(filtered[highlightedIndex].value);
+      } else if (showCreatable) {
+        handleCreateNew(search.trim());
       }
     } else if (e.key === "Escape") {
       setOpen(false);
@@ -118,7 +174,11 @@ export default function SearchableSelect({
     }
   }
 
-  const displayValue = isTyping ? search : (selected ? selected.label : "");
+  const displayValue = isTyping
+    ? search
+    : selected
+    ? selected.label
+    : value || "";
 
   return (
     <div ref={containerRef} className={`relative w-full ${className}`}>
@@ -161,7 +221,6 @@ export default function SearchableSelect({
           onFocus={(e) => {
             if (!disabled) {
               setOpen(true);
-              // Select all on focus for easy replacement
               e.target.select();
             }
           }}
@@ -205,11 +264,29 @@ export default function SearchableSelect({
         </div>
       </div>
 
-      {/* Pure Dropdown List (No Nested Search Box!) */}
+      {/* Floating Dropdown List (Fixed position to never get cut off by overflow-hidden/tables) */}
       {open && (
-        <div className="absolute z-50 mt-1 w-full bg-white border border-slate-200 rounded-xl shadow-xl overflow-hidden animate-in fade-in-50 zoom-in-98 duration-100">
+        <div
+          style={dropdownStyle}
+          className="bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden animate-in fade-in-50 zoom-in-98 duration-100"
+        >
+          {showCreatable && (
+            <div
+              onMouseDown={(e) => {
+                e.preventDefault();
+                handleCreateNew(search.trim());
+              }}
+              className="px-3.5 py-2.5 text-xs cursor-pointer flex items-center gap-2 bg-blue-50/90 hover:bg-blue-100 text-blue-700 font-semibold border-b border-blue-100 transition-colors"
+            >
+              <Plus className="w-4 h-4 text-blue-600 shrink-0" />
+              <span className="truncate">
+                {creatableText ? creatableText(search.trim()) : `+ Gunakan "${search.trim()}" sebagai Barang Baru`}
+              </span>
+            </div>
+          )}
+
           <ul ref={listRef} className="max-h-56 overflow-y-auto py-1">
-            {filtered.length === 0 ? (
+            {filtered.length === 0 && !showCreatable ? (
               <li className="px-4 py-3 text-xs text-slate-400 text-center">
                 Tidak ada hasil yang cocok dengan &ldquo;{search}&rdquo;
               </li>
@@ -221,7 +298,6 @@ export default function SearchableSelect({
                   <li
                     key={opt.value}
                     onMouseDown={(e) => {
-                      // use onMouseDown to trigger before blur
                       e.preventDefault();
                       handleSelect(opt.value);
                     }}
@@ -244,8 +320,9 @@ export default function SearchableSelect({
           </ul>
 
           {options.length > 5 && (
-            <div className="px-3.5 py-1.5 border-t border-slate-100 text-[10px] text-slate-400 font-medium bg-slate-50/50">
-              {filtered.length} dari {options.length} opsi tersedia
+            <div className="px-3.5 py-1.5 border-t border-slate-100 text-[10px] text-slate-400 font-medium bg-slate-50/50 flex items-center justify-between">
+              <span>{filtered.length} dari {options.length} item master</span>
+              {creatable && <span className="text-slate-400 italic">Ketik nama lain untuk buat baru</span>}
             </div>
           )}
         </div>

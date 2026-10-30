@@ -2,7 +2,22 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Bell, Check, CheckCheck, ExternalLink, FileText, ShieldCheck, Clock, XCircle, X, RefreshCw } from "lucide-react";
+import {
+  Bell,
+  Check,
+  CheckCheck,
+  CheckCircle2,
+  ExternalLink,
+  FileText,
+  ShieldCheck,
+  Clock,
+  XCircle,
+  X,
+  RefreshCw,
+  ShoppingBag,
+  Truck,
+  Package,
+} from "lucide-react";
 
 interface NotificationItem {
   id: string;
@@ -16,6 +31,63 @@ interface NotificationItem {
 
 interface NotificationBellProps {
   isApprover?: boolean;
+}
+
+function getNotificationVisual(type: string) {
+  switch (type) {
+    case "PR_PENDING_APPROVAL":
+      return {
+        icon: Clock,
+        bgClass: "bg-amber-100 text-amber-600",
+        label: "Persetujuan PR",
+      };
+    case "PR_APPROVED":
+      return {
+        icon: ShieldCheck,
+        bgClass: "bg-emerald-100 text-emerald-600",
+        label: "PR Disetujui",
+      };
+    case "PR_REJECTED":
+    case "PO_CANCELLED":
+      return {
+        icon: XCircle,
+        bgClass: "bg-rose-100 text-rose-600",
+        label: "Ditolak / Batal",
+      };
+    case "PR_ORDERED":
+    case "PR_PARTIAL_PO":
+      return {
+        icon: ShoppingBag,
+        bgClass: "bg-indigo-100 text-indigo-600",
+        label: "PO Diterbitkan",
+      };
+    case "PR_PARTIAL_RECEIVED":
+      return {
+        icon: Truck,
+        bgClass: "bg-amber-100 text-amber-600",
+        label: "Diterima Sebagian",
+      };
+    case "PR_COMPLETED":
+      return {
+        icon: CheckCircle2,
+        bgClass: "bg-emerald-100 text-emerald-600",
+        label: "Barang Lengkap",
+      };
+    case "PO_APPROVED_L1":
+    case "PO_APPROVED_L2":
+      return {
+        icon: ShieldCheck,
+        bgClass: "bg-emerald-100 text-emerald-600",
+        label: "PO Disetujui",
+      };
+    case "NEW_PO":
+    default:
+      return {
+        icon: FileText,
+        bgClass: "bg-blue-100 text-blue-600",
+        label: "Info",
+      };
+  }
 }
 
 function playGentleChime() {
@@ -148,16 +220,29 @@ export default function NotificationBell({ isApprover = false }: NotificationBel
     }
   }, [showFloatingToast]);
 
-  // Initial fetch and periodic polling (every 15s for fast responsive feel)
+  // Initial fetch and smart periodic polling (pauses when tab is in background)
   useEffect(() => {
     fetchNotifications();
-    const interval = setInterval(fetchNotifications, 15000);
+    const interval = setInterval(() => {
+      if (typeof document !== "undefined" && document.visibilityState === "hidden") {
+        return; // Lewatkan polling jika tab sedang tidak aktif/di-minimize
+      }
+      fetchNotifications();
+    }, 30000);
 
+    const onVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        fetchNotifications();
+      }
+    };
     const onFocus = () => fetchNotifications();
+
+    document.addEventListener("visibilitychange", onVisibilityChange);
     window.addEventListener("focus", onFocus);
 
     return () => {
       clearInterval(interval);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
       window.removeEventListener("focus", onFocus);
       if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
     };
@@ -296,8 +381,8 @@ export default function NotificationBell({ isApprover = false }: NotificationBel
                 </div>
               ) : (
                 notifications.map((notif) => {
-                  const isApprovedL1 = notif.type === "PO_APPROVED_L1";
-                  const isNewPo = notif.type === "NEW_PO";
+                  const visual = getNotificationVisual(notif.type);
+                  const Icon = visual.icon;
 
                   return (
                     <div
@@ -311,23 +396,9 @@ export default function NotificationBell({ isApprover = false }: NotificationBel
                     >
                       {/* Icon based on notification type */}
                       <div className="mt-0.5 shrink-0">
-                        {notif.type === "PO_CANCELLED" ? (
-                          <div className="w-8 h-8 rounded-xl bg-red-100 text-red-600 flex items-center justify-center">
-                            <XCircle className="w-4 h-4" />
-                          </div>
-                        ) : isApprovedL1 ? (
-                          <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center">
-                            <ShieldCheck className="w-4 h-4" />
-                          </div>
-                        ) : isNewPo ? (
-                          <div className="w-8 h-8 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center">
-                            <FileText className="w-4 h-4" />
-                          </div>
-                        ) : (
-                          <div className="w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center">
-                            <Bell className="w-4 h-4" />
-                          </div>
-                        )}
+                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${visual.bgClass}`}>
+                          <Icon className="w-4 h-4" />
+                        </div>
                       </div>
 
                       {/* Content */}
@@ -356,7 +427,11 @@ export default function NotificationBell({ isApprover = false }: NotificationBel
                             <>
                               <span>·</span>
                               <span className="text-blue-600 hover:underline flex items-center gap-0.5 font-semibold">
-                                {isApprover ? "Review" : "Lihat"}
+                                {isApprover
+                                  ? "Review"
+                                  : notif.link.includes("/purchase-requests")
+                                  ? "Buka PR"
+                                  : "Lihat"}
                                 <ExternalLink className="w-2.5 h-2.5" />
                               </span>
                             </>
@@ -378,19 +453,15 @@ export default function NotificationBell({ isApprover = false }: NotificationBel
           <div className="flex items-start gap-3.5">
             {/* Icon */}
             <div className="shrink-0 mt-0.5">
-              {toastNotif.type === "PO_APPROVED_L1" ? (
-                <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shadow-xs">
-                  <ShieldCheck className="w-5 h-5" />
-                </div>
-              ) : toastNotif.type === "PO_CANCELLED" ? (
-                <div className="w-10 h-10 rounded-xl bg-red-100 text-red-600 flex items-center justify-center shadow-xs">
-                  <XCircle className="w-5 h-5" />
-                </div>
-              ) : (
-                <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-xs">
-                  <FileText className="w-5 h-5" />
-                </div>
-              )}
+              {(() => {
+                const tVisual = getNotificationVisual(toastNotif.type);
+                const TIcon = tVisual.icon;
+                return (
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-xs ${tVisual.bgClass}`}>
+                    <TIcon className="w-5 h-5" />
+                  </div>
+                );
+              })()}
             </div>
 
             {/* Content */}
@@ -424,7 +495,15 @@ export default function NotificationBell({ isApprover = false }: NotificationBel
                   onClick={() => handleToastAction(toastNotif)}
                   className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-3.5 py-1.5 rounded-xl transition-all shadow-xs flex items-center gap-1.5 cursor-pointer"
                 >
-                  <span>{isApprover ? "Review PO" : "Buka / Muat Ulang"}</span>
+                  <span>
+                    {isApprover
+                      ? "Review PO"
+                      : toastNotif.link?.includes("/purchase-requests")
+                      ? "Lihat Detail PR"
+                      : toastNotif.link?.includes("/purchase-orders")
+                      ? "Lihat PO"
+                      : "Buka / Muat Ulang"}
+                  </span>
                   <ExternalLink className="w-3 h-3" />
                 </button>
                 <button

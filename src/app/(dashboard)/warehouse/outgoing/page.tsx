@@ -12,11 +12,17 @@ export default async function OutgoingPage() {
   const { user, dbUser } = await getSessionUser();
   if (!user || user.role !== "WAREHOUSE") redirect("/");
 
+  const whereWh: any = { isActive: true };
+  if (dbUser?.warehouseId) {
+    whereWh.id = dbUser.warehouseId;
+  }
+
   const warehouses = await prisma.warehouse.findMany({
-    where: { isActive: true },
+    where: whereWh,
     select: { id: true, name: true, code: true },
     orderBy: { name: "asc" },
   });
+
 
   if (warehouses.length === 0) {
     return (

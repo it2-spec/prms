@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/auth";
 import { nextNumber, writeAuditLog } from "@/lib/utils";
+import { syncPurchaseRequestFromPo } from "@/lib/pr-sync";
 
 export async function createReceiving(
   deliveryId: string,
@@ -114,6 +115,9 @@ export async function createReceiving(
         status: allReceived ? "CLOSED" : anyReceived ? "PARTIALLY_RECEIVED" : "WAITING_RECEIVING",
       },
     });
+
+    // Sinkronisasi status Purchase Request jika PO berasal dari PR
+    await syncPurchaseRequestFromPo(delivery.purchaseOrderId, tx);
 
     return receiving.id;
   });

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/auth";
-import { writeAuditLog, normalizeName } from "@/lib/utils";
+import { writeAuditLog, normalizeName, normalizeDepartment } from "@/lib/utils";
 import { notifyBatchPoImported } from "@/lib/notifications";
 
 export async function POST(req: NextRequest) {
@@ -302,7 +302,7 @@ export async function POST(req: NextRequest) {
             poDate: isNaN(poDate.getTime()) ? new Date() : poDate,
             expectedDelivery,
             deliveryDateType: group.deliveryDateType === "MONTH" ? "MONTH" : "DATE",
-            department: group.department || null,
+            department: group.department ? normalizeDepartment(group.department) : null,
             purposeProject: group.purposeProject || null,
             notes: group.notes || null,
             status: "SENT",

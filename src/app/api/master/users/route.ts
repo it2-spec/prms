@@ -33,6 +33,7 @@ export async function GET() {
         supplierName: u.supplier?.name ?? null,
         warehouseId: u.warehouseId,
         warehouseName: u.warehouse?.name ?? null,
+        departments: u.departments ?? [],
         isActive: u.isActive,
         approvalLevel: u.approvalLevel,
         signatureImage: u.signatureImage,
@@ -53,7 +54,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { username, name, email, password, roleName, supplierId, warehouseId } = body;
+    const { username, name, email, password, roleName, supplierId, warehouseId, departments } = body;
 
     if (!username || !name || !password || !roleName) {
       return NextResponse.json(
@@ -85,6 +86,7 @@ export async function POST(req: NextRequest) {
         roleId: role.id,
         supplierId: roleName === "SUPPLIER" ? (supplierId || null) : null,
         warehouseId: roleName === "WAREHOUSE" ? (warehouseId || null) : null,
+        departments: Array.isArray(departments) ? departments : [],
         isActive: true,
       },
     });
@@ -112,7 +114,7 @@ export async function PUT(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { id, username, name, email, password, roleName, supplierId, warehouseId, isActive, approvalLevel, signatureImage } = body;
+    const { id, username, name, email, password, roleName, supplierId, warehouseId, departments, isActive, approvalLevel, signatureImage } = body;
 
     if (!id || !username || !name || !roleName) {
       return NextResponse.json({ error: "Data user tidak lengkap" }, { status: 400 });
@@ -139,6 +141,7 @@ export async function PUT(req: NextRequest) {
       roleId: role.id,
       supplierId: roleName === "SUPPLIER" ? (supplierId || null) : null,
       warehouseId: roleName === "WAREHOUSE" ? (warehouseId || null) : null,
+      departments: Array.isArray(departments) ? departments : [],
       isActive: Boolean(isActive),
       ...(approvalLevel !== undefined ? { approvalLevel: Number(approvalLevel) } : {}),
       ...(signatureImage !== undefined ? { signatureImage: signatureImage || null } : {}),

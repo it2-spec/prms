@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import {
   Plus,
@@ -14,6 +14,8 @@ import {
   Calendar,
   Building2,
   Lock,
+  X,
+  FileText,
 } from "lucide-react";
 import SearchableSelect from "@/components/SearchableSelect";
 import MultiSelect from "@/components/MultiSelect";
@@ -55,6 +57,17 @@ interface PoFormProps {
   items: ItemOption[];
   suppliers: SupplierOption[];
   warehouses: WarehouseOption[];
+  initialPurchaseRequestId?: string;
+  initialPrNumber?: string;
+  initialDepartment?: string;
+  initialPurposeProject?: string;
+  initialRows?: Array<{
+    prDetailId?: string;
+    itemId: string;
+    qty: number | string;
+    packageQty: number | string;
+    unitPrice: number | string;
+  }>;
   createPo: (formData: FormData) => Promise<{ error?: string; redirect?: string }>;
 }
 
@@ -102,6 +115,11 @@ export default function PoForm({
   items,
   suppliers,
   warehouses,
+  initialPurchaseRequestId,
+  initialPrNumber,
+  initialDepartment,
+  initialPurposeProject,
+  initialRows,
   createPo,
 }: PoFormProps) {
   // Semua inputan default dibuat KOSONG agar terlihat jelas mana yg sudah diinput & belum
@@ -109,35 +127,163 @@ export default function PoForm({
   const [poDate, setPoDate] = useState("");
   const [supplierId, setSupplierId] = useState("");
   const [warehouseId, setWarehouseId] = useState("");
-  const [selectedDepts, setSelectedDepts] = useState<string[]>([]);
-  const [purposeProject, setPurposeProject] = useState("");
+  const [selectedDepts, setSelectedDepts] = useState<string[]>(
+    initialDepartment ? [initialDepartment] : []
+  );
+  const [purposeProject, setPurposeProject] = useState(initialPurposeProject || "");
   const [expectedDelivery, setExpectedDelivery] = useState("");
   const [deliveryDateType, setDeliveryDateType] = useState<"DATE" | "MONTH">("DATE");
   const [notes, setNotes] = useState("");
   const [includeVat, setIncludeVat] = useState(true);
 
-  // Baris item pertama dimulai dalam kondisi kosong
+  // Keterhubungan dengan Purchase Request (PR)
+  const [linkedPrId, setLinkedPrId] = useState(initialPurchaseRequestId || "");
+  const [linkedPrNumber, setLinkedPrNumber] = useState(initialPrNumber || "");
+
+  // Modal Tarik dari PR
+  const [showPrModal, setShowPrModal] = useState(false);
+  const [loadingPrs, setLoadingPrs] = useState(false);
+  const [availablePrs, setAvailablePrs] = useState<any[]>([]);
+  const [prCount, setPrCount] = useState<number>(0);
+  const [selectedPrForImport, setSelectedPrForImport] = useState<any | null>(null);
+  const [selectedPrDetailChecklist, setSelectedPrDetailChecklist] = useState<string[]>([]);
+
+  // Baris item pertama dimulai dalam kondisi kosong atau dari PR
   const [rows, setRows] = useState<
     {
+      prDetailId?: string;
       itemId: string;
       qty: number | string;
       packageQty: number | string;
       unitPrice: number | string;
     }[]
-  >([
-    {
-      itemId: "",
-      qty: "",
-      packageQty: "",
-      unitPrice: 0,
-    },
-  ]);
+  >(
+    initialRows && initialRows.length > 0
+      ? initialRows
+      : [
+          {
+            itemId: "",
+            qty: "",
+            packageQty: "",
+            unitPrice: 0,
+          },
+        ]
+  );
 
   const [error, setError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [extracting, setExtracting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Ambil jumlah PR berstatus siap PO saat pertama kali membuka form
+  useEffect(() => {
+    fetch("/api/purchase-requests?status=READY_FOR_PO")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setPrCount(data.length);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  async function openPrSelectorModal() {
+    setShowPrModal(true);
+    setLoadingPrs(true);
+    try {
+      const res = await fetch("/api/purchase-requests?status=READY_FOR_PO");
+      if (res.ok) {
+        const data = await res.json();
+        setAvailablePrs(data);
+        setPrCount(data.length);
+        if (data.length > 0) {
+          const current = data.find((p: any) => p.id === linkedPrId) || data[0];
+          setSelectedPrForImport(current);
+          const pendingIds = (current.details || [])
+            .filter((d: any) => d.status === "PENDING" && !(d.poDetails && d.poDetails.length > 0))
+            .map((d: any) => d.id);
+          setSelectedPrDetailChecklist(pendingIds);
+        }
+      }
+    } catch (err) {
+      console.error("Gagal memuat daftar PR:", err);
+    } finally {
+      setLoadingPrs(false);
+    }
+  }
+
+  function handleSelectPrInModal(prItem: any) {
+    setSelectedPrForImport(prItem);
+    const pendingIds = (prItem.details || [])
+      .filter((d: any) => d.status === "PENDING" && !(d.poDetails && d.poDetails.length > 0))
+      .map((d: any) => d.id);
+    setSelectedPrDetailChecklist(pendingIds);
+  }
+
+  function togglePrDetailItemInModal(detailId: string) {
+    setSelectedPrDetailChecklist((prev) =>
+      prev.includes(detailId) ? prev.filter((id) => id !== detailId) : [...prev, detailId]
+    );
+  }
+
+  function toggleSelectAllPrDetailsInModal() {
+    if (!selectedPrForImport) return;
+    const pendingIds = (selectedPrForImport.details || [])
+      .filter((d: any) => d.status === "PENDING" && !(d.poDetails && d.poDetails.length > 0))
+      .map((d: any) => d.id);
+
+    if (selectedPrDetailChecklist.length === pendingIds.length) {
+      setSelectedPrDetailChecklist([]);
+    } else {
+      setSelectedPrDetailChecklist(pendingIds);
+    }
+  }
+
+  function handleConfirmImportPr() {
+    if (!selectedPrForImport) return;
+    const chosenDetails = (selectedPrForImport.details || []).filter(
+      (d: any) => d.status === "PENDING" && selectedPrDetailChecklist.includes(d.id)
+    );
+
+    if (chosenDetails.length === 0) {
+      alert("Silakan pilih minimal 1 item untuk ditarik ke PO.");
+      return;
+    }
+
+    setLinkedPrId(selectedPrForImport.id);
+    setLinkedPrNumber(selectedPrForImport.prNumber);
+
+    if (selectedPrForImport.department) {
+      setSelectedDepts([selectedPrForImport.department]);
+    }
+
+    if (selectedPrForImport.purposeNotes && !purposeProject) {
+      setPurposeProject(selectedPrForImport.purposeNotes);
+    }
+
+    const newRows = chosenDetails.map((d: any) => {
+      const dbItem = items.find((it) => it.id === d.itemId) || d.item;
+      const pkgSize = dbItem?.packageSize ? Number(dbItem.packageSize) : null;
+      const rawQty = Number(d.qty) || 1;
+      const pkgQty = pkgSize && pkgSize > 0 ? Math.ceil(rawQty / pkgSize) : 1;
+      const calculatedBaseQty = pkgSize && pkgSize > 0 ? pkgQty * pkgSize : rawQty;
+
+      return {
+        prDetailId: d.id,
+        itemId: d.itemId || "",
+        qty: calculatedBaseQty,
+        packageQty: pkgQty,
+        unitPrice: Number(d.estimatedPrice || dbItem?.lastUnitPrice || 0),
+      };
+    });
+
+    setRows(newRows);
+    setShowPrModal(false);
+    setSuccessMsg(
+      `Berhasil menarik ${chosenDetails.length} item dari PR ${selectedPrForImport.prNumber} (${selectedPrForImport.department}). Silakan pilih Supplier dan periksa harga.`
+    );
+  }
 
   // Hitung format nomor PO otomatis sesuai tanggal yang dipilih ([noUrut]/SRI/PUD/[BulanRomawi]/[Tahun])
   const displaySuggestedPo = (() => {
@@ -472,6 +618,7 @@ export default function PoForm({
         itemId: r.itemId,
         qty: Math.max(1, Number(r.qty) || 1),
         unitPrice: Math.max(0, Number(r.unitPrice) || 0),
+        prDetailId: r.prDetailId || undefined,
       }));
 
     if (details.length === 0) {
@@ -481,6 +628,9 @@ export default function PoForm({
     }
 
     const fd = new FormData();
+    if (linkedPrId) {
+      fd.set("purchaseRequestId", linkedPrId);
+    }
     fd.set("poNumber", poNumber.trim());
     fd.set("poDate", poDate);
     fd.set("supplierId", supplierId);
@@ -508,39 +658,100 @@ export default function PoForm({
 
   return (
     <form className="space-y-6" onSubmit={onSubmit}>
-      {/* ─── TOOLBAR CEPAT: Ekstrak Excel PO (Opsional) ─── */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 rounded-xl border border-dashed border-blue-300 bg-blue-50/50 p-3.5 text-xs">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center shrink-0">
-            <FileSpreadsheet className="w-4 h-4" />
+      {/* ─── 2 CARA / PINTU MASUK PRAKTIS PEMBUATAN PO ─── */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {/* PINTU MASUK 1: Tarik dari Purchase Request */}
+        <div className="flex items-center justify-between p-3.5 rounded-xl border border-indigo-200 bg-indigo-50/70 shadow-xs text-xs">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+              <Sparkles className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="font-bold text-indigo-950 flex items-center gap-1.5">
+                Tarik dari Purchase Request (PR)
+                {prCount > 0 && (
+                  <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-indigo-200 text-indigo-800 font-bold">
+                    {prCount} Siap
+                  </span>
+                )}
+              </div>
+              <p className="text-[11px] text-indigo-700/80 mt-0.5">
+                Pilih PR departemen yang disetujui &amp; centang item kebutuhan.
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={openPrSelectorModal}
+            className="btn btn-primary btn-sm text-xs !bg-indigo-600 hover:!bg-indigo-700 border-none shrink-0 cursor-pointer shadow-xs"
+          >
+            Pilih PR
+          </button>
+        </div>
+
+        {/* PINTU MASUK 2: Import dari File Excel */}
+        <div className="flex items-center justify-between p-3.5 rounded-xl border border-blue-200 bg-blue-50/70 shadow-xs text-xs">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+              <FileSpreadsheet className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="font-bold text-blue-950">Import dari Excel PO</div>
+              <p className="text-[11px] text-blue-700/80 mt-0.5">
+                Unggah file template untuk auto-fill seluruh isian form di bawah.
+              </p>
+            </div>
           </div>
           <div>
-            <span className="font-semibold text-slate-800">Punya File Excel PO?</span>
-            <span className="text-slate-500 ml-1.5 hidden sm:inline">
-              Unggah file template untuk auto-fill seluruh isian form di bawah.
-            </span>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".xlsx, .xls"
+              onChange={handleFileUpload}
+              className="hidden"
+              id="excel-po-deck-upload"
+            />
+            <label
+              htmlFor="excel-po-deck-upload"
+              className={`btn btn-secondary btn-sm text-xs gap-1.5 border-blue-300 text-blue-800 hover:bg-blue-100 cursor-pointer ${
+                extracting ? "opacity-50 pointer-events-none" : ""
+              }`}
+            >
+              <Upload className="w-3.5 h-3.5" />
+              {extracting ? "Mengekstrak..." : "Upload Excel"}
+            </label>
           </div>
         </div>
-        <div>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".xlsx, .xls"
-            onChange={handleFileUpload}
-            className="hidden"
-            id="excel-po-deck-upload"
-          />
-          <label
-            htmlFor="excel-po-deck-upload"
-            className={`btn btn-light btn-sm text-xs gap-1.5 border-blue-300 text-blue-700 hover:bg-blue-100 cursor-pointer ${
-              extracting ? "opacity-50 pointer-events-none" : ""
-            }`}
-          >
-            <Upload className="w-3.5 h-3.5" />
-            {extracting ? "Mengekstrak..." : "Upload Excel Template"}
-          </label>
-        </div>
       </div>
+
+      {/* ─── BANNER KETERHUBUNGAN DENGAN PURCHASE REQUEST (JIKA TERHUBUNG) ─── */}
+      {linkedPrId && (
+        <div className="flex items-center justify-between p-4 rounded-xl border border-indigo-200 bg-indigo-50/80 text-indigo-900 text-xs font-medium shadow-xs">
+          <div className="flex items-center gap-3">
+            <Sparkles className="w-5 h-5 text-indigo-600 shrink-0" />
+            <div>
+              <span className="font-bold">
+                Terhubung dengan Purchase Request: {linkedPrNumber || linkedPrId}
+              </span>
+              <p className="text-[11px] text-indigo-700 mt-0.5">
+                Departemen dan item telah dimuat dari PR yang disetujui. Saat PO disimpan, status item PR ini akan otomatis diperbarui.
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              if (confirm("Lepaskan keterhubungan dengan PR ini?")) {
+                setLinkedPrId("");
+                setLinkedPrNumber("");
+              }
+            }}
+            className="text-xs text-indigo-700 hover:text-indigo-950 font-semibold underline shrink-0 cursor-pointer"
+          >
+            Lepas Tautan PR
+          </button>
+        </div>
+      )}
 
       {successMsg && (
         <div className="alert alert-success flex items-center gap-2 py-2.5 text-sm" role="alert">
@@ -792,11 +1003,18 @@ export default function PoForm({
                           placeholder="Pilih item barang..."
                           searchPlaceholder="Ketik kode atau nama..."
                         />
-                        {currentItem?.code && (
-                          <div className="text-[10px] text-slate-500 font-mono mt-0.5">
-                            Kode: {currentItem.code}
-                          </div>
-                        )}
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                          {currentItem?.code && (
+                            <span className="text-[10px] text-slate-500 font-mono">
+                              Kode: {currentItem.code}
+                            </span>
+                          )}
+                          {row.prDetailId && (
+                            <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-indigo-100 text-indigo-700 border border-indigo-200">
+                              Dari PR
+                            </span>
+                          )}
+                        </div>
                         {!row.itemId && (
                           <span className="text-[10px] text-amber-600 italic block mt-0.5">
                             * Item belum dipilih
@@ -1138,6 +1356,208 @@ export default function PoForm({
           {submitting ? "Menyimpan PO & Update Master Item..." : "Simpan Purchase Order (PO)"}
         </button>
       </div>
+
+      {/* ─── MODAL: PILIH PURCHASE REQUEST (PINTU MASUK TARIK PR) ─── */}
+      {showPrModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-xs p-3 sm:p-4 overflow-y-auto">
+          <div className="bg-white rounded-2xl max-w-3xl w-full shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-150">
+            {/* Modal Header */}
+            <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold shadow-xs">
+                  <Sparkles className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm text-slate-900">
+                    Tarik Data dari Purchase Request (PR)
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Pilih PR yang sudah disetujui, lalu centang item yang ingin dimasukkan ke PO ini.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowPrModal(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-4 sm:p-6 overflow-y-auto space-y-4 flex-1">
+              {loadingPrs ? (
+                <div className="text-center py-12 text-slate-400 text-xs">
+                  Memuat daftar Purchase Request yang siap diproses...
+                </div>
+              ) : availablePrs.length === 0 ? (
+                <div className="text-center py-12 space-y-2">
+                  <AlertCircle className="w-9 h-9 text-amber-500 mx-auto" />
+                  <div className="font-bold text-sm text-slate-800">
+                    Tidak Ada PR yang Menunggu Dibuatkan PO
+                  </div>
+                  <p className="text-xs text-slate-500 max-w-md mx-auto">
+                    Semua Purchase Request telah diproses menjadi PO atau belum memperoleh persetujuan dari Supervisor/Manager departemen.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {/* Daftar Card PR */}
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-700">
+                      Pilih Dokumen Purchase Request:
+                    </label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto p-0.5">
+                      {availablePrs.map((p) => {
+                        const isSelected = selectedPrForImport?.id === p.id;
+                        const pendingCount = (p.details || []).filter(
+                          (d: any) =>
+                            d.status === "PENDING" && !(d.poDetails && d.poDetails.length > 0)
+                        ).length;
+
+                        return (
+                          <div
+                            key={p.id}
+                            onClick={() => handleSelectPrInModal(p)}
+                            className={`p-3 rounded-xl border text-left cursor-pointer transition-all ${
+                              isSelected
+                                ? "border-indigo-600 bg-indigo-50/70 shadow-xs ring-1 ring-indigo-600"
+                                : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/60"
+                            }`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="font-mono font-bold text-xs text-slate-900">
+                                {p.prNumber}
+                              </span>
+                              {p.urgency === "URGENT" && (
+                                <span className="text-[10px] font-bold text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded border border-rose-200">
+                                  URGENT
+                                </span>
+                              )}
+                            </div>
+                            <div className="text-xs font-semibold text-slate-700 mt-1">
+                              {p.department}
+                            </div>
+                            <div className="text-[11px] text-slate-500 flex items-center justify-between mt-1">
+                              <span>Pemohon: {p.requestedBy?.name || "Admin"}</span>
+                              <span className="font-semibold text-indigo-700">
+                                {pendingCount} item sisa
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Checklist Item dari PR yang dipilih */}
+                  {selectedPrForImport && (
+                    <div className="space-y-2 pt-2 border-t border-slate-100">
+                      <div className="flex items-center justify-between">
+                        <div className="text-xs font-bold text-slate-800">
+                          Item yang Tersedia di {selectedPrForImport.prNumber}:
+                        </div>
+                        <button
+                          type="button"
+                          onClick={toggleSelectAllPrDetailsInModal}
+                          className="text-xs text-indigo-600 hover:text-indigo-800 font-semibold cursor-pointer"
+                        >
+                          Pilih Semua / Batal Semua
+                        </button>
+                      </div>
+
+                      <div className="border border-slate-200 rounded-xl overflow-hidden max-h-56 overflow-y-auto">
+                        <table className="w-full text-left text-xs">
+                          <thead className="bg-slate-50 text-slate-600 border-b border-slate-200">
+                            <tr>
+                              <th className="p-2.5 w-10 text-center">#</th>
+                              <th className="p-2.5">Nama Barang</th>
+                              <th className="p-2.5 text-center w-20">Qty</th>
+                              <th className="p-2.5 w-16">Satuan</th>
+                              <th className="p-2.5 text-right w-28">Est. Harga</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-100">
+                            {(selectedPrForImport.details || [])
+                              .filter(
+                                (d: any) =>
+                                  d.status === "PENDING" &&
+                                  !(d.poDetails && d.poDetails.length > 0)
+                              )
+                              .map((d: any) => {
+                                const isChecked = selectedPrDetailChecklist.includes(d.id);
+                                return (
+                                  <tr
+                                    key={d.id}
+                                    onClick={() => togglePrDetailItemInModal(d.id)}
+                                    className={`cursor-pointer transition-colors ${
+                                      isChecked ? "bg-indigo-50/60" : "hover:bg-slate-50"
+                                    }`}
+                                  >
+                                    <td className="p-2.5 text-center">
+                                      <input
+                                        type="checkbox"
+                                        checked={isChecked}
+                                        onChange={() => togglePrDetailItemInModal(d.id)}
+                                        className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+                                      />
+                                    </td>
+                                    <td className="p-2.5">
+                                      <div className="font-semibold text-slate-800">
+                                        {d.item ? `${d.item.code} — ${d.item.name}` : d.customItemName}
+                                      </div>
+                                      {d.specifications && (
+                                        <div className="text-[10px] text-slate-500 mt-0.5">
+                                          Spek: {d.specifications}
+                                        </div>
+                                      )}
+                                    </td>
+                                    <td className="p-2.5 text-center font-bold text-slate-800">
+                                      {d.qty}
+                                    </td>
+                                    <td className="p-2.5 text-slate-600">
+                                      {d.unit || d.item?.unit || "Pcs"}
+                                    </td>
+                                    <td className="p-2.5 text-right font-mono text-slate-700">
+                                      {d.estimatedPrice
+                                        ? `Rp ${Number(d.estimatedPrice).toLocaleString("id-ID")}`
+                                        : "—"}
+                                    </td>
+                                  </tr>
+                                );
+                              })}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 border-t border-slate-100 flex items-center justify-between bg-slate-50/70">
+              <button
+                type="button"
+                onClick={() => setShowPrModal(false)}
+                className="btn btn-light text-xs cursor-pointer"
+              >
+                Batal
+              </button>
+              <button
+                type="button"
+                disabled={!selectedPrForImport || selectedPrDetailChecklist.length === 0}
+                onClick={handleConfirmImportPr}
+                className="btn btn-primary text-xs !bg-indigo-600 hover:!bg-indigo-700 border-none gap-1.5 shadow-sm disabled:opacity-50 cursor-pointer"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                Tarik {selectedPrDetailChecklist.length} Item ke PO
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </form>
   );
 }

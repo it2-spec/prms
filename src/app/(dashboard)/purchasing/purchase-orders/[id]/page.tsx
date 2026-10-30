@@ -12,6 +12,7 @@ import SendPoButton from "@/components/purchasing/SendPoButton";
 import DeletePoButton from "./DeletePoButton";
 import CancelPoButton from "./CancelPoButton";
 import crypto from "crypto";
+import { syncPurchaseRequestFromPo } from "@/lib/pr-sync";
 
 export const dynamic = "force-dynamic";
 
@@ -156,6 +157,7 @@ async function closePo(poId: string) {
   const po = await prisma.purchaseOrder.findUnique({ where: { id: poId } });
   if (!po || po.status === "CLOSED") return;
   await prisma.purchaseOrder.update({ where: { id: poId }, data: { status: "CLOSED" } });
+  await syncPurchaseRequestFromPo(poId);
   await writeAuditLog(user, "CLOSE_PO", "PurchaseOrder", poId, `PO ${po.poNumber} ditutup manual`);
   revalidatePath(`/purchasing/purchase-orders/${poId}`);
 }

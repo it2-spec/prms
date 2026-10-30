@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { writeAuditLog } from "@/lib/utils";
+import { syncPurchaseRequestFromPo } from "@/lib/pr-sync";
 
 export const runtime = "nodejs";
 export const maxDuration = 120;
@@ -169,6 +170,9 @@ export async function POST(req: NextRequest) {
               data: { status: newStatus as any },
             });
           }
+
+          // Sinkronisasi status Purchase Request jika PO berasal dari PR
+          await syncPurchaseRequestFromPo(d.poId, tx);
         });
 
         successCount++;

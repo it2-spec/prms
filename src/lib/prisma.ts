@@ -8,7 +8,7 @@ const globalForPrisma = globalThis as unknown as {
   pgPool?: Pool;
 };
 
-const SCHEMA_VERSION = "2026-09-18-v11-outgoing-status";
+const SCHEMA_VERSION = "2026-10-09-v12-item-departments";
 
 function getPool(): Pool {
   if (!globalForPrisma.pgPool) {

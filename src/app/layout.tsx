@@ -39,6 +39,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900&display=swap"
           rel="stylesheet"
         />
+        {process.env.NODE_ENV !== "production" && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                if (typeof window !== 'undefined' && window.performance && window.performance.measure) {
+                  const _measure = window.performance.measure.bind(window.performance);
+                  window.performance.measure = function (name, startOrOptions, end) {
+                    try {
+                      return _measure(name, startOrOptions, end);
+                    } catch (e) {
+                      if (e instanceof TypeError && e.message && e.message.includes('negative')) {
+                        return;
+                      }
+                      throw e;
+                    }
+                  };
+                }
+              `,
+            }}
+          />
+        )}
       </head>
       <body className="h-full min-h-screen font-sans antialiased bg-slate-50 text-slate-900">
         <PwaRegister />

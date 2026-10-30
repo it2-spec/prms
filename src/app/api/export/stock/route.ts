@@ -47,6 +47,30 @@ export async function GET(request: Request) {
     orderBy: { code: "asc" },
   });
 
+  // 1b. Ambil Saldo Awal Fisik (ItemInitialStock) yang tercatat di gudang
+  let initialStockRecords: Array<{ itemId: string; packageQty: any; baseQty: any }> = [];
+  try {
+    initialStockRecords = await prisma.itemInitialStock.findMany({
+      where: warehouseFilter,
+      select: {
+        itemId: true,
+        packageQty: true,
+        baseQty: true,
+      },
+    });
+  } catch (err) {
+    console.warn("Peringatan: Gagal membaca tabel ItemInitialStock pada export:", err);
+  }
+
+  const initialStockMap = new Map<string, { packageQty: number; baseQty: number }>();
+  for (const is of initialStockRecords) {
+    const existing = initialStockMap.get(is.itemId) || { packageQty: 0, baseQty: 0 };
+    initialStockMap.set(is.itemId, {
+      packageQty: existing.packageQty + Number(is.packageQty || 0),
+      baseQty: existing.baseQty + Number(is.baseQty || 0),
+    });
+  }
+
   // 2. Hitung Stok Awal historis sebelum startDate
   const incomingBefore = await prisma.receivingDetail.findMany({
     where: {
@@ -147,8 +171,12 @@ export async function GET(request: Request) {
     const pkgSize = Number(item.packageSize ?? 1);
     const inB = incomingBeforeMap.get(item.id) || 0;
     const outB = outgoingBeforeMap.get(item.id) || 0;
-    const initialStock = Math.max(0, Math.round((inB - outB) * 100) / 100);
-    const initialStockBase = Math.round(initialStock * pkgSize * 100) / 100;
+    const initRec = initialStockMap.get(item.id);
+    const initPkg = initRec ? initRec.packageQty : 0;
+    const initBase = initRec ? (initRec.baseQty || initPkg * pkgSize) : 0;
+
+    const initialStock = Math.max(0, Math.round((initPkg + inB - outB) * 100) / 100);
+    const initialStockBase = Math.max(0, Math.round((initBase + (inB - outB) * pkgSize) * 100) / 100);
 
     itemMap.set(item.id, {
       itemId: item.id,

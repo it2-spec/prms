@@ -32,7 +32,16 @@ export async function POST(req: NextRequest) {
 
     // Cari header row
     let headerRowIdx = -1;
-    let colMap: { id?: number; currentCode?: number; paintingCode?: number; newCode?: number; name?: number } = {};
+    let colMap: {
+      id?: number;
+      currentCode?: number;
+      paintingCode?: number;
+      newCode?: number;
+      name?: number;
+      unit?: number;
+      packageUnit?: number;
+      packageSize?: number;
+    } = {};
 
     for (let r = 1; r <= 15; r++) {
       const row = worksheet.getRow(r);
@@ -43,6 +52,9 @@ export async function POST(req: NextRequest) {
         if (val.includes("KODE PAINTING") || val.includes("PAINTING") || val.includes("KODE GUDANG")) colMap.paintingCode = c;
         if (val.includes("KODE BARU") || val.includes("KODE STANDAR") || val === "NEW CODE") colMap.newCode = c;
         if (val.includes("NAMA BARANG") || val.includes("DESCRIPTION")) colMap.name = c;
+        if (val.includes("SATUAN DASAR") || val === "SATUAN" || val === "UNIT") colMap.unit = c;
+        if (val === "KEMASAN" || val.includes("PACKAGE UNIT") || val.includes("SATUAN KEMASAN")) colMap.packageUnit = c;
+        if (val.includes("ISI KEMASAN") || val.includes("PACKAGE SIZE") || val === "ISI") colMap.packageSize = c;
       }
       if (colMap.newCode || (colMap.id && colMap.name)) {
         headerRowIdx = r;
@@ -70,6 +82,9 @@ export async function POST(req: NextRequest) {
       oldCode: string;
       newCode: string;
       paintingCode?: string;
+      unit?: string;
+      packageUnit?: string;
+      packageSize?: number;
       status: "VALID" | "DUPLICATE" | "UNCHANGED" | "NOT_FOUND";
       message?: string;
     }[] = [];
@@ -106,57 +121,81 @@ export async function POST(req: NextRequest) {
         continue;
       }
 
-      if (!rawNewCode || rawNewCode === matchedItem.code.toUpperCase().trim()) {
+      const rawPaintingCode = colMap.paintingCode ? String(row.getCell(colMap.paintingCode).value || "").trim() : undefined;
+      const rawUnit = colMap.unit ? String(row.getCell(colMap.unit).value || "").trim() : undefined;
+      const rawPkgUnitStr = colMap.packageUnit ? String(row.getCell(colMap.packageUnit).value || "").trim() : undefined;
+      const rawPkgSizeVal = colMap.packageSize ? row.getCell(colMap.packageSize).value : undefined;
+
+      const rawPkgUnit = rawPkgUnitStr && rawPkgUnitStr !== "-" ? rawPkgUnitStr : undefined;
+      let rawPkgSize: number | undefined = undefined;
+      if (rawPkgSizeVal !== null && rawPkgSizeVal !== undefined && String(rawPkgSizeVal).trim() !== "") {
+        const parsedSize = parseFloat(String(rawPkgSizeVal).replace(/[^0-9.]/g, ""));
+        if (!isNaN(parsedSize) && parsedSize > 0) {
+          rawPkgSize = parsedSize;
+        }
+      }
+
+      const isCodeChanged = Boolean(rawNewCode && rawNewCode !== matchedItem.code.toUpperCase().trim());
+      const isPaintingCodeChanged = rawPaintingCode !== undefined && rawPaintingCode !== (matchedItem.paintingCode || "");
+      const isUnitChanged = Boolean(rawUnit && rawUnit !== (matchedItem.unit || ""));
+      const isPkgUnitChanged = Boolean(rawPkgUnit !== undefined && rawPkgUnit !== (matchedItem.packageUnit || ""));
+      const isPkgSizeChanged = Boolean(rawPkgSize !== undefined && rawPkgSize !== Number(matchedItem.packageSize || 0));
+
+      const hasAnyChanges = isCodeChanged || isPaintingCodeChanged || isUnitChanged || isPkgUnitChanged || isPkgSizeChanged;
+
+      if (!hasAnyChanges) {
         parsedUpdates.push({
           itemId: matchedItem.id,
           itemName: matchedItem.name,
           oldCode: matchedItem.code,
           newCode: rawNewCode || matchedItem.code,
           status: "UNCHANGED",
-          message: "Tidak ada perubahan kode",
+          message: "Tidak ada perubahan",
         });
         continue;
       }
 
-      // Cek apakah kode baru sudah dipakai oleh item lain di DB
-      const existingWithNewCode = codeMap.get(rawNewCode);
-      if (existingWithNewCode && existingWithNewCode.id !== matchedItem.id) {
-        parsedUpdates.push({
-          itemId: matchedItem.id,
-          itemName: matchedItem.name,
-          oldCode: matchedItem.code,
-          newCode: rawNewCode,
-          status: "DUPLICATE",
-          message: `Kode "${rawNewCode}" sudah digunakan oleh item: ${existingWithNewCode.name}`,
-        });
-        continue;
+      // Jika kode diubah, cek duplikat di DB
+      if (isCodeChanged) {
+        const existingWithNewCode = codeMap.get(rawNewCode);
+        if (existingWithNewCode && existingWithNewCode.id !== matchedItem.id) {
+          parsedUpdates.push({
+            itemId: matchedItem.id,
+            itemName: matchedItem.name,
+            oldCode: matchedItem.code,
+            newCode: rawNewCode,
+            status: "DUPLICATE",
+            message: `Kode "${rawNewCode}" sudah digunakan oleh item: ${existingWithNewCode.name}`,
+          });
+          continue;
+        }
+
+        // Cek duplikat dalam file
+        if (usedNewCodes.has(rawNewCode)) {
+          parsedUpdates.push({
+            itemId: matchedItem.id,
+            itemName: matchedItem.name,
+            oldCode: matchedItem.code,
+            newCode: rawNewCode,
+            status: "DUPLICATE",
+            message: `Kode "${rawNewCode}" muncul lebih dari satu kali di file Excel`,
+          });
+          continue;
+        }
+        usedNewCodes.add(rawNewCode);
       }
-
-      // Cek apakah kode baru duplikat di dalam file yang sama
-      if (usedNewCodes.has(rawNewCode)) {
-        parsedUpdates.push({
-          itemId: matchedItem.id,
-          itemName: matchedItem.name,
-          oldCode: matchedItem.code,
-          newCode: rawNewCode,
-          status: "DUPLICATE",
-          message: `Kode "${rawNewCode}" muncul lebih dari satu kali di file Excel`,
-        });
-        continue;
-      }
-
-      usedNewCodes.add(rawNewCode);
-
-      const rawPaintingCode = colMap.paintingCode ? String(row.getCell(colMap.paintingCode).value || "").trim() : undefined;
 
       parsedUpdates.push({
         itemId: matchedItem.id,
         itemName: matchedItem.name,
         oldCode: matchedItem.code,
-        newCode: rawNewCode,
+        newCode: rawNewCode || matchedItem.code,
         paintingCode: rawPaintingCode,
+        unit: isUnitChanged ? rawUnit : undefined,
+        packageUnit: isPkgUnitChanged ? rawPkgUnit : undefined,
+        packageSize: isPkgSizeChanged ? rawPkgSize : undefined,
         status: "VALID",
-        message: "Siap diupdate",
+        message: isCodeChanged ? "Siap update kode & spesifikasi" : "Siap update spesifikasi kemasan",
       });
     }
 
@@ -181,19 +220,35 @@ export async function POST(req: NextRequest) {
     // Jika mode commit, eksekusi pembaruan ke database
     if (validUpdates.length === 0) {
       return NextResponse.json({
-        error: "Tidak ada kode baru yang valid untuk diperbarui.",
+        error: "Tidak ada data pembaruan yang valid untuk disimpan.",
       }, { status: 400 });
     }
 
     await prisma.$transaction(async (tx) => {
       for (const update of validUpdates) {
-        await tx.item.update({
-          where: { id: update.itemId },
-          data: {
-            code: update.newCode,
-            ...(update.paintingCode !== undefined ? { paintingCode: update.paintingCode || null } : {}),
-          },
-        });
+        const updateData: any = {};
+        if (update.newCode && update.newCode !== update.oldCode) {
+          updateData.code = update.newCode;
+        }
+        if (update.paintingCode !== undefined) {
+          updateData.paintingCode = update.paintingCode || null;
+        }
+        if (update.unit !== undefined) {
+          updateData.unit = update.unit;
+        }
+        if (update.packageUnit !== undefined) {
+          updateData.packageUnit = update.packageUnit || null;
+        }
+        if (update.packageSize !== undefined) {
+          updateData.packageSize = update.packageSize;
+        }
+
+        if (Object.keys(updateData).length > 0) {
+          await tx.item.update({
+            where: { id: update.itemId },
+            data: updateData,
+          });
+        }
       }
     });
 

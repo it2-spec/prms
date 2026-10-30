@@ -220,7 +220,19 @@ export default function HistoryTabsClient({
 
       {/* TAB 1: BARANG MASUK (RECEIVING) */}
       {activeTab === "receiving" && (
-        <Card className="overflow-hidden border border-slate-200">
+        <div className="space-y-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-blue-50/70 p-2.5 rounded-xl border border-blue-200/70 text-xs">
+            <span className="text-blue-900 font-medium">
+              Ingin melihat tabel rincian per baris material (NO, PO, Part Name, Qty, Harga Satuan)?
+            </span>
+            <Link
+              href="/purchasing/receivings"
+              className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold shadow-xs transition shrink-0"
+            >
+              Buka Tabel Rinci Receiving <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+          <Card className="overflow-hidden border border-slate-200">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 select-none">
@@ -291,6 +303,7 @@ export default function HistoryTabsClient({
             </div>
           )}
         </Card>
+        </div>
       )}
 
       {/* TAB 2: BARANG KELUAR (OUTGOING) */}

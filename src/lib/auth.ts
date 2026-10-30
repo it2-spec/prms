@@ -13,6 +13,7 @@ export type SessionUser = {
   name: string;
   role: RoleName;
   approvalLevel?: number; // 0=none, 1=Manager Purchasing, 2=Presdir
+  departments?: string[];
   supplierId?: string | null;
   warehouseId?: string | null;
 };
@@ -65,6 +66,7 @@ export async function getSessionUser(): Promise<{
     user: {
       ...session,
       approvalLevel: dbUser.approvalLevel ?? session.approvalLevel ?? 0,
+      departments: dbUser.departments ?? [],
       name: dbUser.name,
       role: dbUser.role.name,
     },

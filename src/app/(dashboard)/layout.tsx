@@ -14,6 +14,7 @@ type NavItem = {
 const NAV: Record<string, NavItem[]> = {
   PURCHASING: [
     { href: "/purchasing", label: "Dashboard", icon: "stroke-home" },
+    { href: "/purchasing/purchase-requests", label: "Purchase Requests (PR)", icon: "stroke-file" },
     { href: "/purchasing/purchase-orders", label: "Purchase Orders", icon: "stroke-file" },
     { href: "/purchasing/deliveries", label: "Deliveries", icon: "stroke-progress-delivery" },
     { href: "/purchasing/receivings", label: "Receivings", icon: "stroke-package" },
@@ -27,9 +28,26 @@ const NAV: Record<string, NavItem[]> = {
     { href: "/purchasing/users", label: "Account Management", icon: "stroke-user" },
     { href: "/purchasing/devices", label: "Perangkat Terdaftar", icon: "stroke-device" },
   ],
+  ADMIN_PRODUKSI: [
+    { href: "/department", label: "Dashboard", icon: "stroke-home" },
+    { href: "/purchasing/purchase-requests", label: "Purchase Requests (PR)", icon: "stroke-file" },
+    { href: "/purchasing/receivings", label: "Receivings", icon: "stroke-package" },
+    { href: "/purchasing/stock", label: "Stok Material Produksi", icon: "stroke-package" },
+  ],
+  ADMIN_INDIRECT: [
+    { href: "/department", label: "Dashboard", icon: "stroke-home" },
+    { href: "/purchasing/purchase-requests", label: "Purchase Requests (PR)", icon: "stroke-file" },
+    { href: "/purchasing/receivings", label: "Receivings", icon: "stroke-package" },
+  ],
+  DEPT_APPROVER: [
+    { href: "/department", label: "Dashboard", icon: "stroke-home" },
+    { href: "/purchasing/purchase-requests", label: "Approval Request (PR)", icon: "stroke-file" },
+    { href: "/purchasing/receivings", label: "Receivings", icon: "stroke-package" },
+  ],
   WAREHOUSE: [
     { href: "/warehouse", label: "Dashboard", icon: "stroke-home" },
     { href: "/warehouse/scan", label: "Scan Incoming", icon: "stroke-search" },
+    { href: "/purchasing/receivings", label: "Receivings", icon: "stroke-package" },
     { href: "/warehouse/outgoing", label: "Scan Outgoing", icon: "stroke-progress-delivery" },
     { href: "/warehouse/stock", label: "Stok Material", icon: "stroke-package" },
     { href: "/warehouse/settings", label: "Setting", icon: "stroke-widget" },
@@ -43,14 +61,15 @@ const NAV: Record<string, NavItem[]> = {
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user } = await getSessionUser();
-  if (!user) redirect("/login");
+  if (!user) redirect("/login?msg=session_expired");
 
   const role = user.role as keyof typeof NAV;
   let items = NAV[role] ?? [];
-  const isApprover = user.approvalLevel === 1 || user.approvalLevel === 2;
+  const isPurchasingApprover =
+    role === "PURCHASING" && (user.approvalLevel === 1 || user.approvalLevel === 2);
 
   // Presdir L2 dan Manager L1 hanya melihat menu Purchase Orders
-  if (isApprover) {
+  if (isPurchasingApprover) {
     items = [
       { href: "/purchasing/purchase-orders", label: "Purchase Orders", icon: "stroke-file" },
     ];
@@ -61,6 +80,12 @@ export default async function DashboardLayout({ children }: { children: React.Re
       ? "Warehouse"
       : role === "SUPPLIER"
       ? "Supplier"
+      : role === "ADMIN_PRODUKSI"
+      ? "Admin Produksi"
+      : role === "ADMIN_INDIRECT"
+      ? "Admin Indirect"
+      : role === "DEPT_APPROVER"
+      ? "Dept Approver (SPV/Manager)"
       : user.approvalLevel === 2
       ? "President Director"
       : user.approvalLevel === 1

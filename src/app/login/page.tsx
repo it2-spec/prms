@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getSession } from "@/lib/auth";
+import { getSessionUser } from "@/lib/auth";
 import LoginForm from "./LoginForm";
 
 export const dynamic = "force-dynamic";
@@ -10,9 +10,11 @@ export default async function LoginPage({
   searchParams: Promise<{ error?: string; msg?: string }>;
 }) {
   const params = await searchParams;
-  const session = await getSession();
-  if (session) {
-    redirect(roleHome(session.role));
+  if (!params.msg) {
+    const { user } = await getSessionUser();
+    if (user) {
+      redirect(roleHome(user.role));
+    }
   }
 
   return (
@@ -38,5 +40,17 @@ export default async function LoginPage({
 }
 
 function roleHome(role: string) {
-  return role === "PURCHASING" ? "/purchasing" : role === "WAREHOUSE" ? "/warehouse" : "/supplier";
+  switch (role) {
+    case "PURCHASING":
+      return "/purchasing";
+    case "WAREHOUSE":
+      return "/warehouse";
+    case "ADMIN_PRODUKSI":
+    case "ADMIN_INDIRECT":
+    case "DEPT_APPROVER":
+      return "/purchasing/purchase-requests";
+    case "SUPPLIER":
+    default:
+      return "/supplier";
+  }
 }

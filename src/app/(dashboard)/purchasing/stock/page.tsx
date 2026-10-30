@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export default async function PurchasingStockPage() {
   const { user } = await getSessionUser();
-  if (!user || user.role !== "PURCHASING") redirect("/login");
+  if (!user || (user.role !== "PURCHASING" && user.role !== "ADMIN_PRODUKSI")) redirect("/login");
 
   const warehouses = await prisma.warehouse.findMany({
     where: { isActive: true },
@@ -19,7 +19,7 @@ export default async function PurchasingStockPage() {
     <MaterialStockView
       warehouses={warehouses}
       initialWarehouseId="all"
-      userRole="PURCHASING"
+      userRole={user.role as any}
     />
   );
 }

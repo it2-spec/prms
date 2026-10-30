@@ -6,20 +6,80 @@ import { writeAuditLog } from "@/lib/utils";
 export async function GET(req: NextRequest) {
   try {
     const { user } = await getSessionUser();
-    if (!user || user.role !== "PURCHASING") {
+    const allowedRoles = ["PURCHASING", "ADMIN_PRODUKSI", "ADMIN_INDIRECT", "DEPT_APPROVER", "WAREHOUSE"];
+    if (!user || !allowedRoles.includes(user.role)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+
+    const { searchParams } = new URL(req.url);
+    const scopeParam = searchParams.get("scope"); // "PRODUCTION" | "INDIRECT" | "GENERAL"
+    const departmentParam = searchParams.get("department")?.trim(); // e.g. "Molding", "Painting 1", "Painting 2", "Plating"
+
+    const where: any = { isActive: true };
+
+    if (departmentParam) {
+      where.AND = [
+        ...(where.AND || []),
+        {
+          OR: [
+            { departments: { has: departmentParam } },
+            { departments: { isEmpty: true } },
+          ],
+        },
+      ];
+    }
+
+    if (user.role === "ADMIN_PRODUKSI" || scopeParam === "PRODUCTION") {
+      where.AND = [
+        ...(where.AND || []),
+        {
+          OR: [
+            { departmentScope: "PRODUCTION" },
+            { departmentScope: "GENERAL" },
+            { departmentScope: null },
+          ],
+        },
+      ];
+    } else if (user.role === "ADMIN_INDIRECT" || scopeParam === "INDIRECT") {
+      where.AND = [
+        ...(where.AND || []),
+        {
+          OR: [
+            { departmentScope: "INDIRECT" },
+            { departmentScope: "GENERAL" },
+            { departmentScope: null },
+          ],
+        },
+      ];
+    }
+
     const items = await prisma.item.findMany({
+      where,
       orderBy: { code: "asc" },
       include: {
         _count: { select: { priceHistories: true } },
       },
     });
-    return NextResponse.json(items);
+
+    const isPurchasing = user.role === "PURCHASING";
+    const sanitizedItems = items.map((item) => {
+      if (!isPurchasing) {
+        return {
+          ...item,
+          lastUnitPrice: null,
+        };
+      }
+      return item;
+    });
+
+    return NextResponse.json(sanitizedItems);
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error("GET /api/master/items error:", err);
+    return NextResponse.json({ error: err.message || "Internal server error" }, { status: 500 });
   }
 }
+
+
 
 export async function POST(req: NextRequest) {
   try {
@@ -28,7 +88,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     const body = await req.json();
-    const { code, paintingCode, name, unit, packageUnit, packageSize, lastUnitPrice, description } = body;
+    const { code, paintingCode, name, unit, packageUnit, packageSize, lastUnitPrice, description, departmentScope, departments } = body;
 
     if (!code || !name) {
       return NextResponse.json({ error: "Kode & Nama Item wajib diisi" }, { status: 400 });
@@ -49,6 +109,8 @@ export async function POST(req: NextRequest) {
         packageSize: packageSize ? Number(packageSize) : null,
         lastUnitPrice: lastUnitPrice ? Number(lastUnitPrice) : null,
         description: description?.trim() || null,
+        departmentScope: departmentScope || "GENERAL",
+        departments: Array.isArray(departments) ? departments : [],
         isActive: true,
       },
     });
@@ -79,7 +141,7 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     const body = await req.json();
-    const { id, code, paintingCode, name, unit, packageUnit, packageSize, lastUnitPrice, description, isActive } = body;
+    const { id, code, paintingCode, name, unit, packageUnit, packageSize, lastUnitPrice, description, isActive, departmentScope, departments } = body;
 
     if (!id || !code || !name) {
       return NextResponse.json({ error: "Data item tidak lengkap" }, { status: 400 });
@@ -106,9 +168,12 @@ export async function PUT(req: NextRequest) {
         packageSize: packageSize ? Number(packageSize) : null,
         lastUnitPrice: lastUnitPrice !== undefined ? newPrice : undefined,
         description: description?.trim() || null,
+        departmentScope: departmentScope !== undefined ? departmentScope : undefined,
+        departments: departments !== undefined ? (Array.isArray(departments) ? departments : []) : undefined,
         isActive: Boolean(isActive),
       },
     });
+
 
     // Record price change history if price is updated manually
     if (newPrice != null && (oldPrice === null || Math.abs(oldPrice - newPrice) > 0.01)) {

@@ -86,6 +86,7 @@ type RawShipment = {
   qty: number;
   unit: string;
   unitPrice: number;
+  alreadyInDB?: boolean;
 };
 
 type ReconciledPO = {
@@ -97,6 +98,11 @@ type ReconciledPO = {
   warehouseName: string;
   inIncoming: boolean;
   reconcileStatus: "CLOSED" | "PARTIAL" | "PENDING" | "NO_INCOMING";
+  dbStatus?: string;
+  isAlreadyInputted?: boolean;
+  alreadyInputtedReason?: string | null;
+  existingDeliveryCount?: number;
+  dbReceivedQtyTotal?: number;
   items: ReconcileItem[];
   unmatchedIncomingItems?: UnmatchedIncomingItem[];
   allIncomingItems?: IncomingPhysicalItem[];
@@ -119,6 +125,9 @@ type Summary = {
   discrepancyPOs: number;
   fuzzyMatchedCount?: number;
   unmatchedIncomingCount?: number;
+  pendingInputPOs?: number;
+  alreadyInputtedPOs?: number;
+  discrepancyPendingCount?: number;
 };
 
 type ReconcileResult = {
@@ -145,6 +154,7 @@ export default function ReconcilePOPage() {
   const [result, setResult] = useState<ReconcileResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [expandedPOs, setExpandedPOs] = useState<Record<string, boolean>>({});
+  const [mainTab, setMainTab] = useState<"PENDING" | "ALREADY_INPUTTED" | "ALL">("PENDING");
   const [filter, setFilter] = useState<"ALL" | "DISCREPANCY" | "CLOSED" | "PARTIAL" | "PENDING">("ALL");
   const [poSubTabs, setPoSubTabs] = useState<Record<string, "COMPARISON" | "INCOMING_LIST">>({});
   const [aliasSavedNotice, setAliasSavedNotice] = useState<string | null>(null);
@@ -192,17 +202,31 @@ export default function ReconcilePOPage() {
       }
 
       setResult(data);
+      setFilter("ALL");
+
+      const pendingList = (data.reconciled || []).filter((r: ReconciledPO) => !r.isAlreadyInputted);
       const expanded: Record<string, boolean> = {};
-      data.reconciled.forEach((r: ReconciledPO) => {
-        if ((r.unmatchedIncomingItems && r.unmatchedIncomingItems.length > 0) || r.reconcileStatus === "PARTIAL") {
-          expanded[r.poNumber] = true;
+
+      if (pendingList.length > 0) {
+        setMainTab("PENDING");
+        pendingList.forEach((r: ReconciledPO) => {
+          if ((r.unmatchedIncomingItems && r.unmatchedIncomingItems.length > 0) || r.reconcileStatus === "PARTIAL") {
+            expanded[r.poNumber] = true;
+          }
+        });
+        if (Object.keys(expanded).length === 0) {
+          pendingList.slice(0, 5).forEach((r: ReconciledPO) => {
+            expanded[r.poNumber] = true;
+          });
         }
-      });
-      if (Object.keys(expanded).length === 0) {
-        data.reconciled.forEach((r: ReconciledPO) => {
+      } else {
+        // Jika seluruh incoming dalam file sudah pernah diinput sebelumnya, tampilkan tab arsip
+        setMainTab("ALREADY_INPUTTED");
+        (data.reconciled || []).slice(0, 3).forEach((r: ReconciledPO) => {
           expanded[r.poNumber] = true;
         });
       }
+
       setExpandedPOs(expanded);
     } catch {
       setError("Gagal terhubung ke server.");
@@ -475,11 +499,22 @@ export default function ReconcilePOPage() {
   async function handleCommitIncoming(targetPoNumbers?: string[]) {
     if (!result) return;
 
-    const posToCommit = targetPoNumbers
-      ? result.reconciled.filter((p) => targetPoNumbers.includes(p.poNumber))
-      : result.reconciled;
+    let posToCommit: ReconciledPO[] = [];
+    if (targetPoNumbers && targetPoNumbers.length > 0) {
+      posToCommit = result.reconciled.filter((p) => targetPoNumbers.includes(p.poNumber));
+    } else if (mainTab === "PENDING") {
+      // Fokus HANYA commit PO yang belum terinput ke database dan belum dicommit di sesi ini
+      posToCommit = result.reconciled.filter(
+        (p) => !p.isAlreadyInputted && !committedPoMap[p.poNumber]
+      );
+    } else {
+      posToCommit = result.reconciled.filter((p) => !committedPoMap[p.poNumber]);
+    }
 
-    if (posToCommit.length === 0) return;
+    if (posToCommit.length === 0) {
+      alert("Tidak ada incoming baru yang perlu diinput ke database.");
+      return;
+    }
 
     const hasDiscrepancies = posToCommit.some(
       (p) => (p.unmatchedIncomingItems?.length ?? 0) > 0
@@ -536,14 +571,34 @@ export default function ReconcilePOPage() {
     }
   }
 
-  const filteredPOs = result?.reconciled.filter((po) => {
+  // 1. Kategorisasi PO: Belum Terinput vs Sudah Selesai/Pernah Diinput
+  const pendingInputList = (result?.reconciled ?? []).filter(
+    (p) => !p.isAlreadyInputted && !committedPoMap[p.poNumber]
+  );
+  const alreadyInputtedList = (result?.reconciled ?? []).filter(
+    (p) => p.isAlreadyInputted || committedPoMap[p.poNumber]
+  );
+
+  const pendingInputCount = pendingInputList.length;
+  const alreadyInputtedCount = alreadyInputtedList.length;
+
+  // 2. Daftar PO berdasarkan Sub Menu / Tab Utama yang aktif
+  const tabScopedPOs =
+    mainTab === "PENDING"
+      ? pendingInputList
+      : mainTab === "ALREADY_INPUTTED"
+      ? alreadyInputtedList
+      : (result?.reconciled ?? []);
+
+  // 3. Filter sekunder di dalam tab aktif
+  const filteredPOs = tabScopedPOs.filter((po) => {
     if (filter === "ALL") return true;
     if (filter === "DISCREPANCY") return (po.unmatchedIncomingItems && po.unmatchedIncomingItems.length > 0) || (po.discrepancyCount || 0) > 0;
     if (filter === "CLOSED") return po.reconcileStatus === "CLOSED";
     if (filter === "PARTIAL") return po.reconcileStatus === "PARTIAL";
     if (filter === "PENDING") return po.reconcileStatus === "PENDING";
     return true;
-  }) ?? [];
+  });
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
@@ -562,12 +617,24 @@ export default function ReconcilePOPage() {
             {result && (
               <button
                 type="button"
-                disabled={committing}
+                disabled={committing || (mainTab === "PENDING" && pendingInputCount === 0)}
                 onClick={() => handleCommitIncoming()}
-                className="btn btn-primary text-xs gap-1.5 shadow-sm bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-3.5 rounded-lg flex items-center transition-all cursor-pointer"
+                className={`text-xs gap-1.5 shadow-sm font-semibold py-2 px-3.5 rounded-lg flex items-center transition-all cursor-pointer ${
+                  pendingInputCount === 0 && mainTab === "PENDING"
+                    ? "bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed"
+                    : "bg-emerald-600 hover:bg-emerald-700 text-white"
+                }`}
               >
                 <Save className="w-4 h-4" />
-                {committing ? "Menyimpan..." : `Input Semua Incoming (${result.reconciled.length} PO) ke Database`}
+                {committing
+                  ? "Menyimpan..."
+                  : mainTab === "PENDING"
+                  ? pendingInputCount > 0
+                    ? `Input Incoming Belum Terinput (${pendingInputCount} PO) ke Database`
+                    : "Semua Incoming Sudah Diinput"
+                  : mainTab === "ALREADY_INPUTTED"
+                  ? `Input Terpilih ke Database`
+                  : `Input Semua Incoming (${result.reconciled.length} PO) ke Database`}
               </button>
             )}
           </div>
@@ -623,118 +690,285 @@ export default function ReconcilePOPage() {
       {result && (
         <div className="space-y-6 animate-in fade-in duration-200">
           {/* Incoming Focus & DB Note Banner */}
-          <div className="p-3.5 rounded-xl border bg-slate-50 border-slate-200 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-slate-600">
-            <div className="flex items-center gap-2">
-              <Info className="w-4 h-4 text-indigo-500 shrink-0" />
-              <span>
-                Menampilkan <strong>{result.summary.totalInIncoming} PO aktif</strong> yang terdaftar di file Incoming ini.
-                {result.summary.dbPOsWithoutIncoming > 0 && (
-                  <span className="text-slate-500 ml-1">
-                    ({result.summary.dbPOsWithoutIncoming} PO lainnya di database belum ada kiriman dan disembunyikan agar fokus).
-                  </span>
-                )}
-              </span>
+          <div className="p-4 rounded-xl border bg-gradient-to-r from-indigo-50/70 via-slate-50 to-emerald-50/40 border-slate-200 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-slate-700">
+            <div className="flex items-start sm:items-center gap-2.5">
+              <div className="p-1.5 bg-indigo-100 text-indigo-700 rounded-lg shrink-0 mt-0.5 sm:mt-0">
+                <Info className="w-4 h-4" />
+              </div>
+              <div className="space-y-0.5">
+                <div className="font-semibold text-slate-900">
+                  {pendingInputCount > 0 ? (
+                    <span>
+                      Fokus: Menampilkan <strong className="text-indigo-600">{pendingInputCount} PO</strong> dengan incoming yang <span className="underline decoration-indigo-400 font-bold">belum terinput</span> ke database.
+                    </span>
+                  ) : (
+                    <span className="text-emerald-700 font-bold flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> Semua incoming dari file ini sudah selesai / pernah diinput sebelumnya ke database.
+                    </span>
+                  )}
+                </div>
+                <div className="text-[11px] text-slate-500">
+                  {alreadyInputtedCount > 0 && (
+                    <span>
+                      Sebanyak <strong>{alreadyInputtedCount} PO</strong> yang sebelumnya sudah selesai / sudah pernah diinput dipisahkan ke sub-menu terpisah agar Anda dapat fokus.
+                    </span>
+                  )}
+                  {result.summary.dbPOsWithoutIncoming > 0 && (
+                    <span className="ml-1">
+                      ({result.summary.dbPOsWithoutIncoming} PO lain di DB tanpa incoming disembunyikan).
+                    </span>
+                  )}
+                </div>
+              </div>
             </div>
-            <button
-              type="button"
-              disabled={committing}
-              onClick={() => handleCommitIncoming()}
-              className="py-1.5 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 shadow-2xs"
-            >
-              <Save className="w-3.5 h-3.5" />
-              {committing ? "Menyimpan..." : "Input Semua ke Database"}
-            </button>
+
+            {pendingInputCount > 0 && (
+              <button
+                type="button"
+                disabled={committing}
+                onClick={() => handleCommitIncoming()}
+                className="py-2 px-3.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 shadow-xs"
+              >
+                <Save className="w-3.5 h-3.5" />
+                {committing ? "Menyimpan..." : `Input ${pendingInputCount} PO Belum Terinput`}
+              </button>
+            )}
           </div>
 
           {/* Summary Cards */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {/* Card 1: Fokus Belum Terinput */}
             <div
-              className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:border-indigo-300 transition-colors"
-              onClick={() => setFilter("ALL")}
+              className={`p-4 rounded-xl border shadow-xs cursor-pointer transition-all ${
+                mainTab === "PENDING"
+                  ? "bg-indigo-50/80 border-indigo-300 ring-2 ring-indigo-200"
+                  : "bg-white border-slate-200 hover:border-indigo-300"
+              }`}
+              onClick={() => {
+                setMainTab("PENDING");
+                setFilter("ALL");
+              }}
             >
-              <div className="flex items-center gap-2 text-slate-500 text-xs font-semibold mb-2">
-                <FileSpreadsheet className="w-4 h-4 text-indigo-600" /> PO di Incoming
+              <div className="flex items-center justify-between text-indigo-700 text-xs font-semibold mb-2">
+                <span className="flex items-center gap-1.5">
+                  <Clock className="w-4 h-4 text-indigo-600" /> Belum Terinput (Fokus)
+                </span>
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-indigo-100 text-indigo-800">
+                  Prioritas
+                </span>
               </div>
-              <p className="text-2xl font-bold text-slate-900">{result.summary.totalInIncoming}</p>
-              <p className="text-[11px] text-slate-400 mt-1">{result.summary.matchedInDB} terdaftar di DB</p>
+              <p className="text-2xl font-bold text-indigo-950">{pendingInputCount}</p>
+              <p className="text-[11px] text-indigo-600 mt-1 font-medium">
+                {pendingInputCount > 0 ? "Perlu diinput ke sistem" : "Semua sudah terinput"}
+              </p>
             </div>
 
+            {/* Card 2: Perlu Koreksi Nama */}
             <div
-              className={`p-4 rounded-xl border shadow-sm cursor-pointer transition-colors ${
-                (result.summary.discrepancyPOs ?? 0) > 0
-                  ? "bg-rose-50 border-rose-200 hover:bg-rose-100/80"
-                  : "bg-slate-50 border-slate-200"
+              className={`p-4 rounded-xl border shadow-xs cursor-pointer transition-all ${
+                filter === "DISCREPANCY" && mainTab === "PENDING"
+                  ? "bg-rose-100/90 border-rose-300 ring-2 ring-rose-200"
+                  : (result.summary.discrepancyPendingCount ?? 0) > 0 || (result.summary.discrepancyPOs ?? 0) > 0
+                  ? "bg-rose-50 border-rose-200 hover:bg-rose-100/70"
+                  : "bg-white border-slate-200 hover:border-slate-300"
               }`}
-              onClick={() => setFilter(filter === "DISCREPANCY" ? "ALL" : "DISCREPANCY")}
+              onClick={() => {
+                setMainTab("PENDING");
+                setFilter("DISCREPANCY");
+              }}
             >
               <div className="flex items-center gap-2 text-rose-700 text-xs font-semibold mb-2">
                 <AlertTriangle className="w-4 h-4 text-rose-600" /> Perlu Koreksi Nama
               </div>
-              <p className="text-2xl font-bold text-rose-800">{result.summary.discrepancyPOs}</p>
+              <p className="text-2xl font-bold text-rose-800">
+                {pendingInputList.filter((p) => (p.unmatchedIncomingItems?.length || 0) > 0 || (p.discrepancyCount || 0) > 0).length}
+              </p>
               <p className="text-[11px] text-rose-600 mt-1">Item incoming tak cocok</p>
             </div>
 
+            {/* Card 3: Siap Input Lengkap */}
             <div
-              className="bg-emerald-50 p-4 rounded-xl border border-emerald-200 shadow-sm cursor-pointer hover:bg-emerald-100 transition-colors"
-              onClick={() => setFilter(filter === "CLOSED" ? "ALL" : "CLOSED")}
+              className={`p-4 rounded-xl border shadow-xs cursor-pointer transition-all ${
+                filter === "CLOSED" && mainTab === "PENDING"
+                  ? "bg-emerald-100 border-emerald-300 ring-2 ring-emerald-200"
+                  : "bg-white border-slate-200 hover:border-emerald-300"
+              }`}
+              onClick={() => {
+                setMainTab("PENDING");
+                setFilter("CLOSED");
+              }}
             >
               <div className="flex items-center gap-2 text-emerald-700 text-xs font-semibold mb-2">
-                <CheckCircle2 className="w-4 h-4" /> Selesai / CLOSED
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Siap Input Lengkap
               </div>
-              <p className="text-2xl font-bold text-emerald-800">{result.summary.closedPOs}</p>
-              <p className="text-[11px] text-emerald-600 mt-1">Semua pesanan lengkap</p>
+              <p className="text-2xl font-bold text-emerald-800">
+                {pendingInputList.filter((p) => p.reconcileStatus === "CLOSED").length}
+              </p>
+              <p className="text-[11px] text-emerald-600 mt-1">100% item terpenuhi</p>
             </div>
 
+            {/* Card 4: Sudah Selesai / Terinput Sebelumnya */}
             <div
-              className="bg-amber-50 p-4 rounded-xl border border-amber-200 shadow-sm cursor-pointer hover:bg-amber-100 transition-colors"
-              onClick={() => setFilter(filter === "PARTIAL" ? "ALL" : "PARTIAL")}
+              className={`p-4 rounded-xl border shadow-xs cursor-pointer transition-all ${
+                mainTab === "ALREADY_INPUTTED"
+                  ? "bg-slate-100 border-slate-400 ring-2 ring-slate-300"
+                  : "bg-slate-50 border-slate-200 hover:border-slate-300"
+              }`}
+              onClick={() => {
+                setMainTab("ALREADY_INPUTTED");
+                setFilter("ALL");
+              }}
             >
-              <div className="flex items-center gap-2 text-amber-700 text-xs font-semibold mb-2">
-                <TrendingUp className="w-4 h-4" /> Sebagian
+              <div className="flex items-center justify-between text-slate-600 text-xs font-semibold mb-2">
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 className="w-4 h-4 text-slate-500" /> Sudah Selesai / Terinput
+                </span>
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-200 text-slate-700">
+                  Sub Menu
+                </span>
               </div>
-              <p className="text-2xl font-bold text-amber-800">{result.summary.partialPOs}</p>
-              <p className="text-[11px] text-amber-600 mt-1">Pengiriman bertahap</p>
+              <p className="text-2xl font-bold text-slate-800">{alreadyInputtedCount}</p>
+              <p className="text-[11px] text-slate-500 mt-1">Tersimpan di sub menu terpisah</p>
             </div>
           </div>
 
-          {/* Filter Tabs */}
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xs text-slate-500 font-medium">Filter:</span>
-            {[
-              { id: "ALL", label: `Semua di Incoming (${result.reconciled.length})` },
-              { id: "DISCREPANCY", label: `Perlu Koreksi Nama (${result.summary.discrepancyPOs})`, alert: (result.summary.discrepancyPOs || 0) > 0 },
-              { id: "CLOSED", label: `Selesai (${result.summary.closedPOs})` },
-              { id: "PARTIAL", label: `Sebagian (${result.summary.partialPOs})` },
-              { id: "PENDING", label: `Belum Terpenuhi (${result.summary.pendingPOs})` },
-            ].map((tab) => (
+          {/* Sub Menu Navigasi Utama */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between border-b border-slate-200 pb-3 gap-3">
+            <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-xl overflow-x-auto">
               <button
-                key={tab.id}
-                onClick={() => setFilter(tab.id as any)}
-                className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-colors flex items-center gap-1.5 ${
-                  filter === tab.id
-                    ? tab.alert
-                      ? "bg-rose-600 text-white"
-                      : "bg-indigo-600 text-white"
-                    : tab.alert
-                    ? "bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100"
-                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                type="button"
+                onClick={() => {
+                  setMainTab("PENDING");
+                  setFilter("ALL");
+                }}
+                className={`text-xs px-3.5 py-2 rounded-lg font-bold transition-all flex items-center gap-2 shrink-0 cursor-pointer ${
+                  mainTab === "PENDING"
+                    ? "bg-white text-indigo-700 shadow-xs ring-1 ring-slate-200"
+                    : "text-slate-600 hover:text-slate-900"
                 }`}
               >
-                {tab.alert && <AlertTriangle className="w-3 h-3 shrink-0" />}
-                {tab.label}
+                <Clock className="w-3.5 h-3.5 text-indigo-600" />
+                <span>Incoming Belum Terinput</span>
+                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                  mainTab === "PENDING"
+                    ? "bg-indigo-100 text-indigo-800"
+                    : "bg-slate-200 text-slate-700"
+                }`}>
+                  {pendingInputCount} PO
+                </span>
               </button>
-            ))}
-            {filter !== "ALL" && (
-              <button onClick={() => setFilter("ALL")} className="text-xs text-slate-400 hover:text-slate-600 flex items-center gap-1 ml-2">
-                <RefreshCw className="w-3 h-3" /> Reset Filter
+
+              <button
+                type="button"
+                onClick={() => {
+                  setMainTab("ALREADY_INPUTTED");
+                  setFilter("ALL");
+                }}
+                className={`text-xs px-3.5 py-2 rounded-lg font-bold transition-all flex items-center gap-2 shrink-0 cursor-pointer ${
+                  mainTab === "ALREADY_INPUTTED"
+                    ? "bg-white text-emerald-800 shadow-xs ring-1 ring-slate-200"
+                    : "text-slate-600 hover:text-slate-900"
+                }`}
+              >
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Sudah Pernah Diinput / Selesai</span>
+                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                  mainTab === "ALREADY_INPUTTED"
+                    ? "bg-emerald-100 text-emerald-800"
+                    : "bg-slate-200 text-slate-700"
+                }`}>
+                  {alreadyInputtedCount} PO
+                </span>
               </button>
-            )}
+
+              <button
+                type="button"
+                onClick={() => {
+                  setMainTab("ALL");
+                  setFilter("ALL");
+                }}
+                className={`text-xs px-3 py-2 rounded-lg font-medium transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
+                  mainTab === "ALL"
+                    ? "bg-white text-slate-900 shadow-xs ring-1 ring-slate-200"
+                    : "text-slate-500 hover:text-slate-700"
+                }`}
+              >
+                <span>Semua ({result.reconciled.length})</span>
+              </button>
+            </div>
+
+            {/* Filter Sekunder (Status PO di Tab Aktif) */}
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="text-[11px] text-slate-400 font-medium">Filter:</span>
+              {[
+                { id: "ALL", label: `Semua (${tabScopedPOs.length})` },
+                {
+                  id: "DISCREPANCY",
+                  label: `Beda Nama (${tabScopedPOs.filter((p) => (p.unmatchedIncomingItems?.length || 0) > 0 || (p.discrepancyCount || 0) > 0).length})`,
+                  alert: tabScopedPOs.some((p) => (p.unmatchedIncomingItems?.length || 0) > 0 || (p.discrepancyCount || 0) > 0),
+                },
+                { id: "CLOSED", label: `Lengkap (${tabScopedPOs.filter((p) => p.reconcileStatus === "CLOSED").length})` },
+                { id: "PARTIAL", label: `Sebagian (${tabScopedPOs.filter((p) => p.reconcileStatus === "PARTIAL").length})` },
+                { id: "PENDING", label: `Belum Ada (${tabScopedPOs.filter((p) => p.reconcileStatus === "PENDING").length})` },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setFilter(tab.id as any)}
+                  className={`text-[11px] px-2.5 py-1.5 rounded-lg font-medium transition-colors flex items-center gap-1 cursor-pointer ${
+                    filter === tab.id
+                      ? tab.alert
+                        ? "bg-rose-600 text-white font-semibold"
+                        : "bg-slate-800 text-white font-semibold"
+                      : tab.alert
+                      ? "bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100"
+                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  }`}
+                >
+                  {tab.alert && <AlertTriangle className="w-3 h-3 shrink-0" />}
+                  {tab.label}
+                </button>
+              ))}
+              {filter !== "ALL" && (
+                <button
+                  onClick={() => setFilter("ALL")}
+                  className="text-[11px] text-slate-400 hover:text-slate-600 flex items-center gap-1 ml-1 cursor-pointer"
+                >
+                  <RefreshCw className="w-3 h-3" /> Reset
+                </button>
+              )}
+            </div>
           </div>
 
           {/* PO List */}
           <div className="space-y-3">
             {filteredPOs.length === 0 && (
-              <div className="text-center py-12 text-slate-400 text-sm">Tidak ada PO dengan filter ini.</div>
+              mainTab === "PENDING" && pendingInputCount === 0 ? (
+                <div className="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-8 text-center space-y-3 animate-in fade-in">
+                  <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
+                    <CheckCircle2 className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-emerald-950 text-sm">Semua Incoming Sudah Selesai / Terinput!</h4>
+                    <p className="text-xs text-emerald-700 max-w-md mx-auto mt-1">
+                      Seluruh pengiriman barang pada file ini sebelumnya sudah tercatat atau sudah berstatus selesai di database.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMainTab("ALREADY_INPUTTED");
+                      setFilter("ALL");
+                    }}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-xs transition-colors cursor-pointer"
+                  >
+                    <Eye className="w-3.5 h-3.5" /> Buka Sub Menu: Sudah Pernah Diinput ({alreadyInputtedCount} PO)
+                  </button>
+                </div>
+              ) : (
+                <div className="text-center py-12 text-slate-400 text-sm bg-white rounded-xl border border-slate-200">
+                  Tidak ada PO dengan filter ini.
+                </div>
+              )
             )}
             {filteredPOs.map((po) => {
               const cfg = STATUS_CONFIG[po.reconcileStatus];
@@ -752,9 +986,11 @@ export default function ReconcilePOPage() {
                   className={`bg-white rounded-xl border shadow-xs transition-all overflow-hidden ${
                     isCommitted
                       ? "border-emerald-400 ring-1 ring-emerald-200 bg-emerald-50/10"
+                      : po.isAlreadyInputted
+                      ? "border-slate-200 bg-slate-50/30"
                       : unmatchedCount > 0
                       ? "border-rose-300 ring-1 ring-rose-100"
-                      : "border-slate-200"
+                      : "border-slate-200 hover:border-indigo-300"
                   }`}
                 >
                   {/* PO Header */}
@@ -774,10 +1010,23 @@ export default function ReconcilePOPage() {
                         <Badge color="slate">{po.supplierName}</Badge>
                         <span className="text-xs text-slate-400">{po.warehouseName}</span>
 
-                        {isCommitted && (
+                        {isCommitted ? (
                           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
                             <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                            Sudah Diinput ke Database
+                            Baru Saja Diinput ke Database
+                          </span>
+                        ) : po.isAlreadyInputted ? (
+                          <span
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 text-slate-700 border border-slate-300"
+                            title={po.alreadyInputtedReason || "Sudah pernah diinput sebelumnya"}
+                          >
+                            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                            {po.alreadyInputtedReason || "Sudah Pernah Diinput"}
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
+                            <Clock className="w-3 h-3 text-indigo-500" />
+                            Belum Terinput ke DB
                           </span>
                         )}
 
@@ -831,12 +1080,18 @@ export default function ReconcilePOPage() {
                         className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs ${
                           isCommitted
                             ? "bg-slate-100 text-slate-400 cursor-not-allowed"
+                            : po.isAlreadyInputted
+                            ? "bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300"
                             : "bg-emerald-600 hover:bg-emerald-700 text-white"
                         }`}
-                        title={`Input penerimaan PO ${po.poNumber} ke database`}
+                        title={
+                          po.isAlreadyInputted
+                            ? `PO ini sebelumnya sudah selesai/tercatat di database. Klik jika ingin sinkronisasi / input ulang.`
+                            : `Input penerimaan PO ${po.poNumber} ke database`
+                        }
                       >
                         <Save className="w-3.5 h-3.5" />
-                        {isCommitted ? "Tersimpan" : "Input PO Ini"}
+                        {isCommitted ? "Tersimpan" : po.isAlreadyInputted ? "Input Ulang" : "Input PO Ini"}
                       </button>
                       <div className="text-slate-400 pl-1">
                         {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}

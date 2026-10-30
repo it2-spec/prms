@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import ExcelJS from "exceljs";
 import { prisma } from "@/lib/prisma";
-import { normalizeName } from "@/lib/utils";
+import { normalizeName, normalizeDepartment } from "@/lib/utils";
 
 // ─── Cell helpers ─────────────────────────────────────────────────────────────
 
@@ -394,7 +394,7 @@ function extractPoDataFromSheet(
         for (const offset of [1, 2, 3]) {
           const v = getCellStr(worksheet, r, c + offset);
           if (v && ![":", ""].includes(v)) {
-            department = v.replace(/^:\s*/, "").trim();
+            department = normalizeDepartment(v.replace(/^:\s*/, "").trim());
             break;
           }
         }

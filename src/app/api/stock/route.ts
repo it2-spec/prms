@@ -1,46 +1,86 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getSession } from "@/lib/auth";
+import { getSessionUser } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
-  const session = await getSession();
-  if (!session || (session.role !== "PURCHASING" && session.role !== "WAREHOUSE")) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  try {
+    const { user, dbUser } = await getSessionUser();
+    const allowedRoles = ["PURCHASING", "WAREHOUSE", "ADMIN_PRODUKSI"];
+    if (!user || !allowedRoles.includes(user.role)) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
-  const { searchParams } = new URL(request.url);
-  const monthParam = searchParams.get("month"); // "YYYY-MM"
-  const warehouseId = searchParams.get("warehouseId");
-  const search = searchParams.get("search")?.toLowerCase().trim();
+    const { searchParams } = new URL(request.url);
+    const monthParam = searchParams.get("month"); // "YYYY-MM"
+    let warehouseId = searchParams.get("warehouseId");
+    const search = searchParams.get("search")?.toLowerCase().trim();
 
-  // Tentukan periode bulan terpilih
-  const now = new Date();
-  let year = now.getFullYear();
-  let month = now.getMonth(); // 0-indexed
+    // Isolasi role WAREHOUSE: jika user warehouse punya warehouseId terikat, kunci ke gudang miliknya
+    if (user.role === "WAREHOUSE" && dbUser?.warehouseId) {
+      warehouseId = dbUser.warehouseId;
+    }
 
-  if (monthParam && /^\d{4}-\d{2}$/.test(monthParam)) {
-    const [y, m] = monthParam.split("-").map(Number);
-    year = y;
-    month = m - 1;
-  }
+    // Tentukan periode bulan terpilih
+    const now = new Date();
+    let year = now.getFullYear();
+    let month = now.getMonth(); // 0-indexed
 
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const startDate = new Date(Date.UTC(year, month, 1, 0, 0, 0, 0));
-  const endDate = new Date(Date.UTC(year, month + 1, 0, 23, 59, 59, 999));
+    if (monthParam && /^\d{4}-\d{2}$/.test(monthParam)) {
+      const [y, m] = monthParam.split("-").map(Number);
+      year = y;
+      month = m - 1;
+    }
 
-  // Filter gudang
-  const warehouseFilter = warehouseId && warehouseId !== "all" ? { warehouseId } : {};
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const startDate = new Date(Date.UTC(year, month, 1, 0, 0, 0, 0));
+    const endDate = new Date(Date.UTC(year, month + 1, 0, 23, 59, 59, 999));
 
-  // 1. Ambil semua Item aktif
-  const allItems = await prisma.item.findMany({
-    where: { isActive: true },
-    orderBy: { code: "asc" },
-  });
+    // Filter gudang
+    const warehouseFilter = warehouseId && warehouseId !== "all" ? { warehouseId } : {};
 
-  // 2. Hitung Stok Awal Historis (sebelum startDate)
-  // 2a. Total Incoming historis (receivedAt < startDate)
+    // 1. Ambil semua Item aktif (difilter jika ADMIN_PRODUKSI)
+    const itemWhere: any = { isActive: true };
+    if (user.role === "ADMIN_PRODUKSI") {
+      itemWhere.OR = [
+        { departmentScope: "PRODUCTION" },
+        { departmentScope: "GENERAL" },
+        { departmentScope: null },
+      ];
+    }
+
+    const allItems = await prisma.item.findMany({
+      where: itemWhere,
+      orderBy: { code: "asc" },
+    });
+
+    // 2. Ambil Saldo Awal Fisik (ItemInitialStock) yang tercatat di gudang
+    let initialStockRecords: Array<{ itemId: string; packageQty: any; baseQty: any }> = [];
+    try {
+      initialStockRecords = await prisma.itemInitialStock.findMany({
+        where: warehouseFilter,
+        select: {
+          itemId: true,
+          packageQty: true,
+          baseQty: true,
+        },
+      });
+    } catch (err) {
+      console.warn("Peringatan: Gagal membaca tabel ItemInitialStock:", err);
+    }
+
+    const initialStockMap = new Map<string, { packageQty: number; baseQty: number }>();
+    for (const is of initialStockRecords) {
+      const existing = initialStockMap.get(is.itemId) || { packageQty: 0, baseQty: 0 };
+      initialStockMap.set(is.itemId, {
+        packageQty: existing.packageQty + Number(is.packageQty || 0),
+        baseQty: existing.baseQty + Number(is.baseQty || 0),
+      });
+    }
+
+  // 3. Hitung Mutasi Historis (sebelum startDate)
+  // 3a. Total Incoming historis (receivedAt < startDate)
   const incomingBefore = await prisma.receivingDetail.findMany({
     where: {
       receiving: {
@@ -85,7 +125,7 @@ export async function GET(request: Request) {
     outgoingBeforeMap.set(ob.itemId, (outgoingBeforeMap.get(ob.itemId) || 0) + ob.packageQty);
   }
 
-  // 3. Ambil Mutasi Incoming Bulan Berjalan (startDate s.d. endDate)
+  // 4. Ambil Mutasi Incoming Bulan Berjalan (startDate s.d. endDate)
   const receivings = await prisma.receiving.findMany({
     where: {
       status: { in: ["VERIFIED", "RECEIVED", "CLOSED"] },
@@ -107,7 +147,7 @@ export async function GET(request: Request) {
     },
   });
 
-  // 4. Ambil Mutasi Outgoing Bulan Berjalan (startDate s.d. endDate)
+  // 5. Ambil Mutasi Outgoing Bulan Berjalan (startDate s.d. endDate)
   const outgoings = await prisma.stockOutgoing.findMany({
     where: {
       status: "COMPLETED",
@@ -124,7 +164,7 @@ export async function GET(request: Request) {
     },
   });
 
-  // 5. Strukturkan per Item
+  // 6. Strukturkan per Item
   interface ItemStockAggregate {
     itemId: string;
     itemCode: string;
@@ -174,8 +214,12 @@ export async function GET(request: Request) {
     const pkgSize = Number(item.packageSize ?? 1);
     const inBefore = incomingBeforeMap.get(item.id) || 0;
     const outBefore = outgoingBeforeMap.get(item.id) || 0;
-    const initialStock = Math.max(0, Math.round((inBefore - outBefore) * 100) / 100);
-    const initialStockBase = Math.round(initialStock * pkgSize * 100) / 100;
+    const initRec = initialStockMap.get(item.id);
+    const initPkg = initRec ? initRec.packageQty : 0;
+    const initBase = initRec ? (initRec.baseQty || initPkg * pkgSize) : 0;
+
+    const initialStock = Math.max(0, Math.round((initPkg + inBefore - outBefore) * 100) / 100);
+    const initialStockBase = Math.max(0, Math.round((initBase + (inBefore - outBefore) * pkgSize) * 100) / 100);
 
     itemMap.set(item.id, {
       itemId: item.id,
@@ -345,4 +389,12 @@ export async function GET(request: Request) {
     dailyGrandTotal,
     items: activeItems,
   });
+  } catch (err: any) {
+    console.error("Error in GET /api/stock:", err);
+    return NextResponse.json(
+      { error: err?.message || "Terjadi kesalahan pada server saat memproses data stok." },
+      { status: 500 }
+    );
+  }
 }
+

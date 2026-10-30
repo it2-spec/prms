@@ -18,8 +18,10 @@ import {
   TrendingUp,
   Scale,
   ArrowRightLeft,
+  AlertCircle,
 } from "lucide-react";
 import { Card, PageTitle } from "@/components/ui";
+import InitialStockModal from "@/components/stock/InitialStockModal";
 
 interface WarehouseOption {
   id: string;
@@ -98,7 +100,7 @@ interface StockResponse {
 interface MaterialStockViewProps {
   warehouses: WarehouseOption[];
   initialWarehouseId?: string;
-  userRole: "PURCHASING" | "WAREHOUSE";
+  userRole: "PURCHASING" | "WAREHOUSE" | "ADMIN_PRODUKSI";
 }
 
 export default function MaterialStockView({
@@ -117,9 +119,11 @@ export default function MaterialStockView({
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [stockData, setStockData] = useState<StockResponse | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Toggle Mode Satuan: "package" (Kemasan: Pail/Can/Drum) vs "base" (Satuan Dasar: kg/ltr/pcs)
   const [unitMode, setUnitMode] = useState<"package" | "base">("package");
+  const [showInitialStockModal, setShowInitialStockModal] = useState<boolean>(false);
 
   // Navigasi bulan (Prev / Next)
   const changeMonth = (offset: number) => {
@@ -133,6 +137,7 @@ export default function MaterialStockView({
   // Fetch data
   const fetchData = async (m: string, wId: string) => {
     setLoading(true);
+    setErrorMessage(null);
     try {
       const res = await fetch(
         `/api/stock?month=${encodeURIComponent(m)}&warehouseId=${encodeURIComponent(wId)}`
@@ -140,9 +145,15 @@ export default function MaterialStockView({
       if (res.ok) {
         const data = await res.json();
         setStockData(data);
+      } else {
+        const errJson = await res.json().catch(() => null);
+        setErrorMessage(
+          errJson?.error || `Gagal memuat data stok (Status ${res.status}: ${res.statusText})`
+        );
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Gagal mengambil data stok material:", err);
+      setErrorMessage(err?.message || "Terjadi kesalahan jaringan saat memuat data stok.");
     } finally {
       setLoading(false);
     }
@@ -212,6 +223,18 @@ export default function MaterialStockView({
                 Ubah ke: <strong className="text-blue-700">{isBase ? "Qty Kemasan" : "Qty Satuan"}</strong>
               </span>
             </button>
+
+            {/* Tombol Atur Saldo Awal Gudang */}
+            {(userRole === "WAREHOUSE" || userRole === "PURCHASING") && (
+              <button
+                onClick={() => setShowInitialStockModal(true)}
+                className="inline-flex items-center gap-2 px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition shadow-sm cursor-pointer"
+                title="Buka form atur saldo awal / stock opname gudang"
+              >
+                <Package className="w-4 h-4" />
+                <span>Atur Saldo Awal</span>
+              </button>
+            )}
 
             <button
               onClick={handleExportExcel}
@@ -466,16 +489,37 @@ export default function MaterialStockView({
         {loading ? (
           <div className="py-20 text-center text-slate-500 flex flex-col items-center justify-center gap-3">
             <RefreshCw className="w-6 h-6 animate-spin text-blue-600" />
-            <span className="text-sm">Memuat data mutasi stok material...</span>
+            <span className="text-sm font-medium">Memuat data mutasi stok material...</span>
+          </div>
+        ) : errorMessage ? (
+          <div className="py-16 text-center text-red-500 flex flex-col items-center justify-center gap-3">
+            <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center text-red-600">
+              <AlertCircle className="w-6 h-6" />
+            </div>
+            <div className="text-sm font-semibold text-slate-800">Gagal Memuat Data Stok</div>
+            <div className="text-xs text-red-600 max-w-md font-mono bg-red-50 p-2.5 rounded border border-red-200">
+              {errorMessage}
+            </div>
+            <button
+              onClick={() => fetchData(selectedMonth, selectedWarehouse)}
+              className="mt-2 inline-flex items-center gap-2 px-4 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-sm"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              Coba Muat Ulang
+            </button>
           </div>
         ) : filteredItems.length === 0 ? (
           <div className="py-16 text-center text-slate-400 flex flex-col items-center justify-center gap-2">
             <Box className="w-10 h-10 stroke-1 text-slate-300" />
             <div className="text-sm font-medium text-slate-600">
-              Tidak ada aktivitas mutasi material pada {formatMonthTitle(selectedMonth)}
+              {searchTerm
+                ? `Tidak ditemukan item yang cocok dengan "${searchTerm}"`
+                : `Tidak ada aktivitas mutasi material pada ${formatMonthTitle(selectedMonth)}`}
             </div>
             <div className="text-xs text-slate-400 max-w-sm">
-              Silakan pilih bulan lain atau ubah filter lokasi gudang.
+              {searchTerm
+                ? "Coba gunakan kata kunci pencarian yang lain."
+                : "Silakan pilih bulan lain atau ubah filter lokasi gudang."}
             </div>
           </div>
         ) : (
@@ -814,6 +858,15 @@ export default function MaterialStockView({
           </div>
         )}
       </Card>
+
+      {/* Modal Atur Saldo Awal Gudang */}
+      <InitialStockModal
+        isOpen={showInitialStockModal}
+        onClose={() => setShowInitialStockModal(false)}
+        onSuccess={() => fetchData(selectedMonth, selectedWarehouse)}
+        warehouses={warehouses}
+        currentWarehouseId={selectedWarehouse}
+      />
     </div>
   );
 }

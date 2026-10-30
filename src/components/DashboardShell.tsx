@@ -190,9 +190,8 @@ export default function DashboardShell({
         {/* Sidebar Navigation */}
         {!isWarehouse && (
           <aside
-            className={`print:hidden fixed md:static inset-y-0 left-0 bg-white border-r border-slate-200 transform md:transform-none transition-all duration-300 ease-in-out z-50 md:z-0 flex flex-col pt-16 md:pt-0 ${
-              sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
-            } ${isCollapsed ? "w-64 md:w-[72px]" : "w-64"}`}
+            className={`print:hidden fixed md:static inset-y-0 left-0 bg-white border-r border-slate-200 transform md:transform-none transition-all duration-300 ease-in-out z-50 md:z-0 flex flex-col pt-16 md:pt-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+              } ${isCollapsed ? "w-64 md:w-[72px]" : "w-64"}`}
           >
             {/* Mobile close button */}
             <div className="flex md:hidden items-center justify-between px-4 py-3 border-b border-slate-100 absolute top-0 left-0 right-0">
@@ -219,20 +218,17 @@ export default function DashboardShell({
                     href={item.href}
                     onClick={() => setSidebarOpen(false)}
                     title={isCollapsed ? item.label : undefined}
-                    className={`relative group flex items-center rounded-xl text-sm font-medium transition-all ${
-                      isCollapsed
+                    className={`relative group flex items-center rounded-xl text-sm font-medium transition-all ${isCollapsed
                         ? "justify-center p-2.5"
                         : "gap-3 px-3.5 py-2.5"
-                    } ${
-                      isActive
+                      } ${isActive
                         ? "bg-blue-50 text-blue-700 font-semibold shadow-xs"
                         : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                    }`}
+                      }`}
                   >
                     <IconComponent
-                      className={`shrink-0 transition-transform group-hover:scale-105 ${
-                        isCollapsed ? "w-5 h-5" : "w-4 h-4"
-                      } ${isActive ? "text-blue-700" : "text-slate-400 group-hover:text-slate-700"}`}
+                      className={`shrink-0 transition-transform group-hover:scale-105 ${isCollapsed ? "w-5 h-5" : "w-4 h-4"
+                        } ${isActive ? "text-blue-700" : "text-slate-400 group-hover:text-slate-700"}`}
                     />
 
                     {!isCollapsed && <span className="truncate">{item.label}</span>}
@@ -255,9 +251,8 @@ export default function DashboardShell({
                 type="button"
                 onClick={toggleCollapse}
                 title={isCollapsed ? "Perluas Sidebar" : "Ciutkan Sidebar"}
-                className={`w-full flex items-center rounded-xl text-xs font-semibold text-slate-500 hover:text-slate-900 hover:bg-white hover:shadow-xs border border-transparent hover:border-slate-200 transition-all cursor-pointer ${
-                  isCollapsed ? "justify-center p-2" : "justify-between px-3 py-2"
-                }`}
+                className={`w-full flex items-center rounded-xl text-xs font-semibold text-slate-500 hover:text-slate-900 hover:bg-white hover:shadow-xs border border-transparent hover:border-slate-200 transition-all cursor-pointer ${isCollapsed ? "justify-center p-2" : "justify-between px-3 py-2"
+                  }`}
               >
                 {!isCollapsed && <span>Ciutkan Sidebar</span>}
                 {isCollapsed ? (
@@ -272,21 +267,20 @@ export default function DashboardShell({
 
         {/* Main Content Area */}
         <main
-          className={`flex-1 flex flex-col min-w-0 transition-all duration-300 print:p-0 print:m-0 print:block ${
-            isWarehouse ? "pb-28 sm:pb-24" : ""
-          }`}
+          className={`flex-1 flex flex-col min-w-0 transition-all duration-300 print:p-0 print:m-0 print:block ${isWarehouse ? "pb-28 sm:pb-24" : ""
+            }`}
           style={
             isWarehouse
               ? {
-                  paddingBottom: "max(6rem, calc(5rem + env(safe-area-inset-bottom, 0px)))",
-                }
+                paddingBottom: "max(6rem, calc(5rem + env(safe-area-inset-bottom, 0px)))",
+              }
               : undefined
           }
         >
           <div className="p-4 sm:p-6 md:p-8 flex-grow print:p-0 print:m-0">{children}</div>
 
           <footer className="print:hidden bg-white border-t border-slate-200 py-4 px-6 text-center text-xs text-slate-400 font-medium">
-            Copyright © {new Date().getFullYear()} PRMS — Procurement Receiving Management System
+            Copyright © {new Date().getFullYear()} PRMS — Procurement Receiving Management System (Maulana Malik Ibrahim)
           </footer>
         </main>
       </div>

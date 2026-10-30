@@ -37,6 +37,21 @@ async function main() {
     update: {},
     create: { name: RoleName.SUPPLIER },
   });
+  const adminProduksiRole = await prisma.role.upsert({
+    where: { name: RoleName.ADMIN_PRODUKSI },
+    update: {},
+    create: { name: RoleName.ADMIN_PRODUKSI, description: "Admin Departemen Produksi (Molding, Plating, Painting)" },
+  });
+  const adminIndirectRole = await prisma.role.upsert({
+    where: { name: RoleName.ADMIN_INDIRECT },
+    update: {},
+    create: { name: RoleName.ADMIN_INDIRECT, description: "Admin Departemen Indirect (PP, QC, QA, Assembly, PPIC)" },
+  });
+  const deptApproverRole = await prisma.role.upsert({
+    where: { name: RoleName.DEPT_APPROVER },
+    update: {},
+    create: { name: RoleName.DEPT_APPROVER, description: "Approver Departemen (SPV / Manager Dept)" },
+  });
 
   // Supplier
   const supl = await prisma.supplier.upsert({
@@ -205,6 +220,84 @@ async function main() {
     },
   });
 
+  const adminProduksiUser = await prisma.user.upsert({
+    where: { username: "admin_produksi" },
+    update: {
+      departments: ["Molding", "Plating", "Painting 1", "Painting 2"],
+    },
+    create: {
+      username: "admin_produksi",
+      password,
+      name: "Admin Produksi",
+      email: "produksi@prms.local",
+      roleId: adminProduksiRole.id,
+      departments: ["Molding", "Plating", "Painting 1", "Painting 2"],
+    },
+  });
+
+  const adminIndirectUser = await prisma.user.upsert({
+    where: { username: "admin_indirect" },
+    update: {
+      departments: ["PP", "QC", "QA", "Assembly", "PPIC"],
+    },
+    create: {
+      username: "admin_indirect",
+      password,
+      name: "Admin Indirect",
+      email: "indirect@prms.local",
+      roleId: adminIndirectRole.id,
+      departments: ["PP", "QC", "QA", "Assembly", "PPIC"],
+    },
+  });
+
+  await prisma.user.upsert({
+    where: { username: "dept_approver" },
+    update: {
+      departments: ["Molding", "Plating", "Painting 1", "Painting 2", "PP", "QC", "QA", "Assembly", "PPIC"],
+      approvalLevel: 1,
+    },
+    create: {
+      username: "dept_approver",
+      password,
+      name: "Supervisor Dept Pemohon",
+      email: "spv.dept@prms.local",
+      roleId: deptApproverRole.id,
+      approvalLevel: 1,
+      departments: ["Molding", "Plating", "Painting 1", "Painting 2", "PP", "QC", "QA", "Assembly", "PPIC"],
+    },
+  });
+
+  // Supervisor Spesifik per Departemen
+  const deptSupervisors = [
+    { username: "spv_molding", name: "Supervisor Molding", depts: ["Molding"], email: "spv.molding@prms.local" },
+    { username: "spv_plating", name: "Supervisor Plating", depts: ["Plating"], email: "spv.plating@prms.local" },
+    { username: "spv_painting1", name: "Supervisor Painting 1", depts: ["Painting 1"], email: "spv.painting1@prms.local" },
+    { username: "spv_painting2", name: "Supervisor Painting 2", depts: ["Painting 2"], email: "spv.painting2@prms.local" },
+    { username: "spv_pp", name: "Supervisor Production Prep (PP)", depts: ["PP"], email: "spv.pp@prms.local" },
+    { username: "spv_qc", name: "Supervisor QC & QA", depts: ["QC", "QA"], email: "spv.qc@prms.local" },
+    { username: "spv_assy", name: "Supervisor Assembly", depts: ["Assembly"], email: "spv.assy@prms.local" },
+    { username: "spv_ppic", name: "Supervisor PPIC", depts: ["PPIC"], email: "spv.ppic@prms.local" },
+  ];
+
+  for (const spv of deptSupervisors) {
+    await prisma.user.upsert({
+      where: { username: spv.username },
+      update: {
+        name: spv.name,
+        departments: spv.depts,
+        approvalLevel: 1,
+      },
+      create: {
+        username: spv.username,
+        password,
+        name: spv.name,
+        email: spv.email,
+        roleId: deptApproverRole.id,
+        approvalLevel: 1,
+        departments: spv.depts,
+      },
+    });
+  }
 
   // Sample Purchase Request
   const purchasingUser = await prisma.user.findUniqueOrThrow({ where: { username: "purchasing" } });
@@ -213,15 +306,17 @@ async function main() {
     const pr = await prisma.purchaseRequest.create({
       data: {
         prNumber: "PR0001",
+        department: "Painting 1",
+        requestedById: adminProduksiUser.id,
         supplierId: supl.id,
         requestDate: new Date(),
         status: "APPROVED",
-        notes: "Sample purchase request",
+        purposeNotes: "Sample purchase request lini Painting",
         details: {
           create: [
-            { itemId: (await prisma.item.findFirstOrThrow({ where: { code: "BLT-12" } })).id, qty: 100, unitPrice: 15000 },
-            { itemId: (await prisma.item.findFirstOrThrow({ where: { code: "NUT-12" } })).id, qty: 200, unitPrice: 5000 },
-            { itemId: (await prisma.item.findFirstOrThrow({ where: { code: "BRG-6204" } })).id, qty: 50, unitPrice: 45000 },
+            { itemId: (await prisma.item.findFirstOrThrow({ where: { code: "BLT-12" } })).id, qty: 100, estimatedPrice: 15000 },
+            { itemId: (await prisma.item.findFirstOrThrow({ where: { code: "NUT-12" } })).id, qty: 200, estimatedPrice: 5000 },
+            { itemId: (await prisma.item.findFirstOrThrow({ where: { code: "BRG-6204" } })).id, qty: 50, estimatedPrice: 45000 },
           ],
         },
       },

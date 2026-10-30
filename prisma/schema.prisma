@@ -14,6 +14,9 @@ enum RoleName {
   PURCHASING
   WAREHOUSE
   SUPPLIER
+  ADMIN_PRODUKSI
+  ADMIN_INDIRECT
+  DEPT_APPROVER
 }
 
 enum POStatus {
@@ -45,9 +48,34 @@ enum ReceivingStatus {
 
 enum PRStatus {
   DRAFT
+  PENDING_APPROVAL
   APPROVED
+  REJECTED
+  PARTIAL_PO
+  ORDERED
+  PARTIAL_RECEIVED
+  COMPLETED
   CONVERTED
   CANCELLED
+}
+
+enum PRUrgency {
+  NORMAL
+  URGENT
+}
+
+enum PRItemStatus {
+  PENDING
+  ORDERED
+  PARTIAL_RECEIVED
+  RECEIVED
+  CANCELLED
+}
+
+enum ItemDeptScope {
+  PRODUCTION
+  INDIRECT
+  GENERAL
 }
 
 model Role {
@@ -71,6 +99,7 @@ model User {
   warehouse   Warehouse? @relation(fields: [warehouseId], references: [id])
   isActive    Boolean    @default(true)
   approvalLevel Int      @default(0) // 0=none, 1=Manager Purchasing, 2=Presdir
+  departments    String[]   @default([]) // Daftar sub-departemen yang dibawahi user (e.g. Molding, Plating)
   signatureImage String? @db.Text // Base64 image atau URL scan tanda tangan
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
@@ -79,11 +108,15 @@ model User {
   purchaseOrders   PurchaseOrder[] @relation("POByCreator")
   approvedOrders   PurchaseOrder[] @relation("POByApprover")
   approvedL2Orders PurchaseOrder[] @relation("POByApproverL2")
+  requestedPRs     PurchaseRequest[] @relation("PRByRequester")
+  approvedPRs      PurchaseRequest[] @relation("PRByApprover")
+  rejectedPRs      PurchaseRequest[] @relation("PRByRejector")
   deliveries       Delivery[]      @relation("DeliveryUser")
   receivings       Receiving[]     @relation("ReceivedBy")
   notifications    Notification[]
   pushSubscriptions PushSubscription[]
   stockOutgoings   StockOutgoing[]
+  initialStocksCreated ItemInitialStock[] @relation("InitialStockCreatedBy")
 }
 
 model Supplier {
@@ -116,6 +149,7 @@ model Warehouse {
   receivings     Receiving[]
   purchaseOrders PurchaseOrder[]
   stockOutgoings StockOutgoing[]
+  initialStocks  ItemInitialStock[]
 }
 
 model Item {
@@ -128,6 +162,8 @@ model Item {
   packageSize   Decimal? @default(1) @db.Decimal(10, 2) // Conversion factor e.g. 15 (1 Pail = 15 kg)
   lastUnitPrice Decimal? @db.Decimal(15, 2) // Harga /unit terkini (auto-update dari PO)
   description   String?
+  departmentScope ItemDeptScope? @default(GENERAL) // PRODUCTION, INDIRECT, GENERAL
+  departments   String[] @default([]) // e.g. ["Molding"], ["Painting 1"], ["Painting 1", "Painting 2"], ["Plating"]
   isActive      Boolean  @default(true)
   createdAt     DateTime @default(now())
 
@@ -138,6 +174,7 @@ model Item {
   items              SupplierItemQuality[]
   priceHistories     ItemPriceHistory[]
   outgoingDetails    StockOutgoingDetail[]
+  initialStocks      ItemInitialStock[]
 
   @@index([paintingCode])
 }
@@ -168,28 +205,70 @@ model ItemPriceHistory {
 }
 
 model PurchaseRequest {
-  id          String   @id @default(cuid())
-  prNumber    String   @unique
-  supplierId  String
-  supplier    Supplier @relation(fields: [supplierId], references: [id])
-  requestDate DateTime @default(now())
-  status      PRStatus @default(DRAFT)
-  notes       String?
-  createdAt   DateTime @default(now())
+  id                 String          @id @default(cuid())
+  prNumber           String          @unique
+  department         String          // e.g. "Molding", "Plating", "Painting 1", "QC", "PPIC"
+  requestedById      String
+  requestedBy        User            @relation("PRByRequester", fields: [requestedById], references: [id])
+  requestDate        DateTime        @default(now())
+  requiredDate       DateTime?       // Target tanggal barang dibutuhkan
+  urgency            PRUrgency       @default(NORMAL)
+  status             PRStatus        @default(DRAFT)
+  purposeNotes       String?         // Keperluan / project / no mesin
+  attachmentUrl      String?         // File / photo pendukung
+  
+  // Approval internal departemen
+  approvedById       String?
+  approvedBy         User?           @relation("PRByApprover", fields: [approvedById], references: [id])
+  approvedAt         DateTime?
+  rejectedById       String?
+  rejectedBy         User?           @relation("PRByRejector", fields: [rejectedById], references: [id])
+  rejectedAt         DateTime?
+  rejectReason       String?
+
+  // Relasi opsional ke supplier (ditentukan Purchasing saat PO)
+  supplierId         String?
+  supplier           Supplier?       @relation(fields: [supplierId], references: [id])
+  notes              String?
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
 
   details        PurchaseRequestDetail[]
   purchaseOrders PurchaseOrder[]
+
+  @@index([status])
+  @@index([prNumber])
+  @@index([department])
+  @@index([requestedById])
+  @@index([createdAt])
 }
 
 model PurchaseRequestDetail {
   id                String          @id @default(cuid())
   purchaseRequestId String
   purchaseRequest   PurchaseRequest @relation(fields: [purchaseRequestId], references: [id], onDelete: Cascade)
-  itemId            String
-  item              Item            @relation(fields: [itemId], references: [id])
+  
+  // Master Item (opsional jika item custom belum ada di master)
+  itemId            String?
+  item              Item?           @relation(fields: [itemId], references: [id])
+
+  // Custom / Ad-hoc Item
+  customItemName    String?         // Nama barang jika belum ada di master
+  specifications    String?         // Spesifikasi teknis barang
+
   qty               Int
-  unitPrice         Decimal         @default(0) @db.Decimal(15, 2)
+  unit              String?         // e.g. "Pcs", "kg", "Can", "Set"
+  estimatedPrice    Decimal?        @default(0) @db.Decimal(15, 2)
   notes             String?
+
+  status            PRItemStatus    @default(PENDING)
+  orderedQty        Int             @default(0)
+
+  poDetails         PurchaseOrderDetail[]
+
+  @@index([purchaseRequestId])
+  @@index([itemId])
+  @@index([status])
 }
 
 model PurchaseOrder {
@@ -256,11 +335,14 @@ model PurchaseOrderDetail {
   receivedQty     Int           @default(0)
   deliveredQty    Int           @default(0)
   notes           String?
+  purchaseRequestDetailId String?
+  purchaseRequestDetail   PurchaseRequestDetail? @relation(fields: [purchaseRequestDetailId], references: [id])
 
   deliveryDetails DeliveryDetail[]
 
   @@index([purchaseOrderId])
   @@index([itemId])
+  @@index([purchaseRequestDetailId])
 }
 
 model Delivery {
@@ -430,6 +512,27 @@ model StockOutgoingDetail {
   notes           String?
 
   @@index([stockOutgoingId])
+  @@index([itemId])
+}
+
+// Saldo Awal / Stock Opname per Item per Gudang
+model ItemInitialStock {
+  id          String    @id @default(cuid())
+  itemId      String
+  item        Item      @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  warehouseId String
+  warehouse   Warehouse @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
+  packageQty  Decimal   @default(0) @db.Decimal(12, 2) // Stok awal dalam kemasan (Pail/Drum/Can/Pcs)
+  baseQty     Decimal   @default(0) @db.Decimal(12, 2) // Stok awal dalam satuan dasar (kg/ltr/pcs)
+  cutoffDate  DateTime  @default(now()) // Tanggal saldo awal ditetapkan
+  notes       String?   // Catatan (misal "Stock opname awal implementasi PRMS")
+  createdById String?
+  createdBy   User?     @relation("InitialStockCreatedBy", fields: [createdById], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([itemId, warehouseId])
+  @@index([warehouseId])
   @@index([itemId])
 }
 

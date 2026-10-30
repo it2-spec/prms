@@ -150,6 +150,14 @@ export async function POST(req: NextRequest) {
       include: {
         supplier: { select: { id: true, name: true } },
         warehouse: { select: { id: true, name: true } },
+        deliveries: {
+          select: {
+            id: true,
+            suratJalan: true,
+            status: true,
+            shipDate: true,
+          },
+        },
         details: {
           select: {
             id: true,
@@ -159,6 +167,9 @@ export async function POST(req: NextRequest) {
             packageUnit: true,
             packageQty: true,
             unitPrice: true,
+            receivedQty: true,
+            deliveredQty: true,
+            receivedPackageQty: true,
             item: { select: { name: true, code: true, unit: true, packageUnit: true, packageSize: true } },
           },
           orderBy: { id: "asc" },
@@ -353,6 +364,49 @@ export async function POST(req: NextRequest) {
       const discrepancyCount = unmatchedIncomingItems.length +
         itemReconcile.filter((i) => i.matchType === "FUZZY" || (i.status === "PENDING" && unmatchedIncomingItems.length > 0)).length;
 
+      // ── Deteksi apakah PO / Incoming ini sudah pernah diinput sebelumnya / selesai di database ──
+      const existingSJSet = new Set(
+        (dbPO.deliveries || []).map((d) => (d.suratJalan || "").trim().toUpperCase()).filter(Boolean)
+      );
+
+      const incomingSJList = Array.from(
+        new Set(
+          inPO.rawShipments
+            .map((s) => (s.suratJalan || "").trim().toUpperCase())
+            .filter(Boolean)
+        )
+      );
+
+      const totalDbOrdered = dbPO.details.reduce((sum, d) => sum + (d.qty || 0), 0);
+      const totalDbReceived = dbPO.details.reduce((sum, d) => sum + (d.receivedQty || 0), 0);
+
+      const isDbClosed = dbPO.status === "CLOSED" || dbPO.status === "RECEIVED";
+      const isDbFullyReceived = totalDbOrdered > 0 && dbPO.details.every((d) => (d.receivedQty ?? 0) >= d.qty);
+      const allIncomingSJsInDB =
+        incomingSJList.length > 0 && incomingSJList.every((sj) => existingSJSet.has(sj));
+
+      // Sudah pernah diinput jika PO sudah CLOSED di DB, atau barang sudah lengkap di DB, atau seluruh Surat Jalan sudah ada di DB
+      const isAlreadyInputted = isDbClosed || isDbFullyReceived || (allIncomingSJsInDB && totalDbReceived > 0);
+
+      let alreadyInputtedReason = "";
+      if (isDbClosed) {
+        alreadyInputtedReason = "PO sudah berstatus CLOSED di database";
+      } else if (isDbFullyReceived) {
+        alreadyInputtedReason = "Semua item PO sudah diterima lengkap di database";
+      } else if (allIncomingSJsInDB) {
+        alreadyInputtedReason = `Semua surat jalan (${incomingSJList.length} SJ) sudah tercatat di sistem`;
+      }
+
+      // Tandai masing-masing raw shipment apakah sudah pernah masuk di DB
+      const rawShipmentsWithDBStatus = inPO.rawShipments.map((s) => {
+        const sjNorm = (s.suratJalan || "").trim().toUpperCase();
+        const alreadyInDB = (sjNorm && existingSJSet.has(sjNorm)) || isDbClosed || isDbFullyReceived;
+        return {
+          ...s,
+          alreadyInDB,
+        };
+      });
+
       // Daftar semua baris fisik yang tercatat di Incoming untuk PO ini
       const allIncomingItems = availableIncoming.map((inc) => ({
         code: inc.code,
@@ -372,10 +426,15 @@ export async function POST(req: NextRequest) {
         warehouseName: dbPO.warehouse?.name ?? "-",
         inIncoming: true,
         reconcileStatus,
+        dbStatus: dbPO.status,
+        isAlreadyInputted,
+        alreadyInputtedReason: alreadyInputtedReason || null,
+        existingDeliveryCount: dbPO.deliveries?.length || 0,
+        dbReceivedQtyTotal: totalDbReceived,
         items: itemReconcile,
         unmatchedIncomingItems,
         allIncomingItems,
-        rawShipments: inPO.rawShipments,
+        rawShipments: rawShipmentsWithDBStatus,
         discrepancyCount,
         totalOrderedItems: totalItems,
         completedItems,
@@ -383,18 +442,25 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    const pendingInputPOs = reconciled.filter((r) => !r.isAlreadyInputted).length;
+    const alreadyInputtedPOs = reconciled.filter((r) => r.isAlreadyInputted).length;
+    const discrepancyPendingCount = reconciled.filter((r) => !r.isAlreadyInputted && (r.discrepancyCount ?? 0) > 0).length;
+
     const summary = {
       totalInDB: dbPOs.length,
       totalInIncoming: incomingPOMap.size,
       matchedInDB: reconciled.length,
       notInDB: notInDB.length,
-      dbPOsWithoutIncoming: dbPOs.length - reconciled.length, // 124 PO di DB yang tidak ada di file incoming
+      dbPOsWithoutIncoming: dbPOs.length - reconciled.length, // PO di DB yang tidak ada di file incoming
       closedPOs: reconciled.filter((r) => r.reconcileStatus === "CLOSED").length,
       partialPOs: reconciled.filter((r) => r.reconcileStatus === "PARTIAL").length,
       pendingPOs: reconciled.filter((r) => r.reconcileStatus === "PENDING").length,
-      discrepancyPOs: reconciled.filter((r) => r.discrepancyCount > 0).length,
+      discrepancyPOs: reconciled.filter((r) => (r.discrepancyCount ?? 0) > 0).length,
       fuzzyMatchedCount: reconciled.reduce((acc, po) => acc + po.items.filter((i) => i.matchType === "FUZZY").length, 0),
       unmatchedIncomingCount: reconciled.reduce((acc, po) => acc + (po.unmatchedIncomingItems?.length || 0), 0),
+      pendingInputPOs,
+      alreadyInputtedPOs,
+      discrepancyPendingCount,
     };
 
     return NextResponse.json({
